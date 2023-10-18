@@ -1,0 +1,5 @@
+appConfig:
+  cors:
+    allowedOrigins: http://localhost:3000 # ?? ??
+    corsMapping: "/**"
+    maxAge: 3600
