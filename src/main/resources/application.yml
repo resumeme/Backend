@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    open-in-view: false
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/resumeme
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: secret/dev/application-db.yml
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: secret/prod/application-db.yml
