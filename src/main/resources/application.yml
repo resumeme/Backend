@@ -1,6 +1,12 @@
 spring:
   jpa:
     open-in-view: false
+
+appConfig:
+  cors:
+    allowedOrigins: http://localhost:3000 # 변경 예정
+    corsMapping: "/**"
+    maxAge: 3600
 ---
 spring:
   config:
