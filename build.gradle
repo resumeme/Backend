@@ -13,6 +13,7 @@ java {
 }
 
 configurations {
+	asciidoctorExt
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -47,4 +48,25 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
+}
+
+tasks.register('copyDocument', Copy) {
+	dependsOn asciidoctor
+	doFirst {
+		delete file('src/main/resources/static/docs')
+	}
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+asciidoctor {
+	dependsOn test
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+
+	baseDirFollowsSourceFile()
+}
+
+build {
+	dependsOn copyDocument
 }
