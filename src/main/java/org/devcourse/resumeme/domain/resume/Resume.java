@@ -8,9 +8,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "RESUME")
 public class Resume {
 
