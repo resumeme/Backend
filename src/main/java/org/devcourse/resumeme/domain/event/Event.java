@@ -33,6 +33,8 @@ public class Event {
 
     private Position position;
 
+    private EventStatus status;
+
     private Long mentorId;
 
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
