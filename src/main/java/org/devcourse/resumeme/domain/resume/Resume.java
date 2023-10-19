@@ -20,6 +20,8 @@ public class Resume {
 
     private String title;
 
+    private Long MenteeId;
+
     @Enumerated(EnumType.STRING)
     private Position position;
 
