@@ -20,7 +20,7 @@ public class Resume {
 
     private String title;
 
-    private Long MenteeId;
+    private Long menteeId;
 
     @Enumerated(EnumType.STRING)
     private Position position;
@@ -32,7 +32,7 @@ public class Resume {
     private Training training;
 
     @Embedded
-    private Career carrer;
+    private Career career;
 
     @Embedded
     private Project project;
