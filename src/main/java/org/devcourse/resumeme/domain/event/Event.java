@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.domain.event;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -8,7 +7,7 @@ import jakarta.persistence.OneToMany;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +22,15 @@ public class Event {
     @GeneratedValue
     private Long id;
 
-    private long maximumAttendee;
+    private int maximumAttendee;
 
     private String title;
 
     private String content;
 
-    private LocalDate finishedDate;
+    private LocalDateTime openDateTime;
+
+    private LocalDateTime endDate;
 
     private Position position;
 
@@ -40,11 +41,12 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> attendedMentees = new ArrayList<>();
 
-    public Event(long maximumAttendee, String title, String content, LocalDate finishedDate, Position position, Long mentorId) {
+    public Event(int maximumAttendee, String title, String content, LocalDateTime openDateTime, LocalDateTime endDate, Position position, Long mentorId) {
         this.maximumAttendee = maximumAttendee;
         this.title = title;
         this.content = content;
-        this.finishedDate = finishedDate;
+        this.openDateTime = openDateTime;
+        this.endDate = endDate;
         this.position = position;
         this.mentorId = mentorId;
     }
