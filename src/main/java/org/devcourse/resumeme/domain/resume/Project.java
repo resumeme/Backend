@@ -7,10 +7,10 @@ import java.time.LocalDate;
 @Embeddable
 public class Project {
 
-    private String name;
+    private String projectName;
 
-    private LocalDate startDate;
+    private LocalDate projectStartDate;
 
-    private String content;
+    private String projectContent;
 
 }

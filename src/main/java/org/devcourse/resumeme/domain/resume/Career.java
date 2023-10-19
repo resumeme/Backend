@@ -9,18 +9,18 @@ import org.devcourse.resumeme.common.domain.Position;
 import java.time.LocalDate;
 
 @Embeddable
-public class Carrer {
+public class Career {
 
     private String companyName;
 
     @Enumerated(EnumType.STRING)
-    private Position position;
+    private Position careerPosition;
 
-    private LocalDate startDate;
+    private LocalDate careerStartDate;
 
     @Column(nullable = true)
     private LocalDate endDate;
 
-    private String content;
+    private String careerContent;
 
 }

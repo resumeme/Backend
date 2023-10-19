@@ -8,13 +8,13 @@ import java.time.LocalDate;
 @Embeddable
 public class Training {
 
-    private String name;
+    private String trainingName;
 
     private LocalDate enterDate;
 
     @Column(nullable = true)
     private LocalDate graduateDate;
 
-    private String content;
+    private String trainingContent;
 
 }

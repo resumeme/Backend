@@ -32,7 +32,7 @@ public class Resume {
     private Training training;
 
     @Embedded
-    private Carrer carrer;
+    private Career carrer;
 
     @Embedded
     private Project project;
