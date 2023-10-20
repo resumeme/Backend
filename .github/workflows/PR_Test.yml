@@ -9,7 +9,7 @@ name: Test Application
 
 on:
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "develop" ]
 
 permissions:
   contents: read
