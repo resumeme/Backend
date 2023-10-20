@@ -7,11 +7,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.domain.mentee.Mentee;
 
 @Entity
 @NoArgsConstructor
@@ -25,7 +27,9 @@ public class Resume {
 
     private String title;
 
-    private Long menteeId;
+    @ManyToOne
+    @JoinColumn(name = "mentee_id")
+    private Mentee mentee;
 
     @Enumerated(EnumType.STRING)
     private Position position;
