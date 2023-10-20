@@ -2,13 +2,13 @@ name: Execute CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
     
 permissions:
   contents: read
 
 env: 
-  BUCKET_NAME: resumeme
+  BUCKET_NAME: team-11-resumeme-bucket
   DIRECTORY_NAME: execute-jar-bucket
   CODE_DEPLOY_APP_NAME: resumeme-deploy
   DEPLOYMENT_GROUP_NAME: resumeme-deploy-group
