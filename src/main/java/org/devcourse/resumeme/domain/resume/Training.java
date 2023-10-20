@@ -14,7 +14,6 @@ public class Training {
 
     private LocalDate enterDate;
 
-    @Column(nullable = true)
     private LocalDate graduateDate;
 
     private String trainingContent;

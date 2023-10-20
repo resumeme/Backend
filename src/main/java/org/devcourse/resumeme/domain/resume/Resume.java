@@ -16,7 +16,6 @@ import org.devcourse.resumeme.common.domain.Position;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RESUME")
 public class Resume {
 
     @Id

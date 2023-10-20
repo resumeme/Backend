@@ -20,7 +20,6 @@ public class Career {
 
     private LocalDate careerStartDate;
 
-    @Column(nullable = true)
     private LocalDate endDate;
 
     private String careerContent;
