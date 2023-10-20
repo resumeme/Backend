@@ -27,6 +27,10 @@ public class Resume {
 
     private String title;
 
+    private boolean isWriting;
+
+    private boolean isRepresentative;
+
     @ManyToOne
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
