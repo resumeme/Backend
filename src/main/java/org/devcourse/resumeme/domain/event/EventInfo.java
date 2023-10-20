@@ -35,4 +35,28 @@ public class EventInfo {
         return new EventInfo(maximumAttendee, title, content, EventStatus.BOOK);
     }
 
+    public void checkAvailableApplication() {
+        if (status.isClosed()) {
+            throw new EventException("NO_REMAIN_SEATS", "이미 모든 신청이 마감되었습니다");
+        }
+    }
+
+    public void close(int attendeeCount) {
+        if (attendeeCount == maximumAttendee) {
+            status = EventStatus.CLOSE;
+        }
+    }
+
+    public void reOpen(int attendeeCount) {
+        if (attendeeCount >= maximumAttendee) {
+            throw new EventException("NO_AVAILABLE_SEATS", "잔여 자리가 없어서 재 오픈이 불가능합니다");
+        }
+
+        status = EventStatus.REOPEN;
+    }
+
+    public void open() {
+        this.status = EventStatus.OPEN;
+    }
+
 }
