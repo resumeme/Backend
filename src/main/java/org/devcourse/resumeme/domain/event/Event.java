@@ -21,6 +21,7 @@ public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "event_id")
     private Long id;
 
     @Embedded
