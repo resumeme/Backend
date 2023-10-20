@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ./properties.sh
+
 PROJECT_NAME=resumeme
 REPOSITORY=/home/ubuntu/code
 PACKAGE=$REPOSITORY/build/libs/
@@ -25,4 +27,4 @@ fi
 echo "> 배포 - $JAR_PATH"
 chmod +x $JAR_PATH
 
-sudo nohup java -jar $JAR_PATH --spring.profiles.active=prod > /home/ubuntu/log/nohup_log.out 2> /home/ec2-user/log/nohup_error.out &
+sudo nohup java -jar $JAR_PATH --spring.profiles.active=dev --jasypt.encryptor.password=${encrypt} > /home/ubuntu/log/nohup_log.out 2> /home/ec2-user/log/nohup_error.out &

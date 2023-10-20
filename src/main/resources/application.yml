@@ -22,10 +22,13 @@ spring:
   config:
     activate:
       on-profile: dev
-    import: secret/dev/application-db.yml
+  datasource:
+    url: ENC(nVr6D913Em2RKc2pl9G9uhj96NzWG2/w83OahFWq9X2Iak2ibpzazL2uWSvcr10dWGNyqh7gx504dMX2zMc2VJEXabv4yt7pblm/gGZchkbk4/7MJC3yflpKPhZBZl+9st48D6wVW9XEXoKQBjj/5xwHF5FSbgOG6wWwIPKcFEuLmASP623e3XERgx7cBBn+)
+    username: ENC(gtmvbXzNgrsKobqRpp5+gw==)
+    password: ENC(lPhG9/DaZ2r5T8Bx3/WDXqS+YE9ch3YD)
 ---
 spring:
   config:
     activate:
       on-profile: prod
-    import: secret/prod/application-db.yml
+    import: secret/application-db.yml
