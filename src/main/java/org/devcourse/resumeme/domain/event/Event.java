@@ -1,11 +1,17 @@
 package org.devcourse.resumeme.domain.event;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.domain.event.exception.EventException;
+import org.devcourse.resumeme.domain.metor.Mentor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,14 +46,38 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> attendedMentees = new ArrayList<>();
 
-    public Event(int maximumAttendee, String title, String content, LocalDateTime openDateTime, LocalDateTime endDate, Position position, Long mentorId) {
-        this.maximumAttendee = maximumAttendee;
-        this.title = title;
-        this.content = content;
-        this.openDateTime = openDateTime;
-        this.endDate = endDate;
-        this.position = position;
-        this.mentorId = mentorId;
+    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<EventPosition> positions) {
+        this.eventInfo = eventInfo;
+        this.eventTimeInfo = eventTimeInfo;
+        this.mentor = mentor;
+        this.positions = positions;
+    }
+
+    public void applicationToEvent(Long menteeId) {
+        checkDuplicateApplicationEvent(menteeId);
+        eventInfo.checkAvailableApplication();
+        attendedMentees.add(new MenteeToEvent(this, menteeId));
+        eventInfo.close(attendedMentees.size());
+    }
+
+    private void checkDuplicateApplicationEvent(Long menteeId) {
+        for (MenteeToEvent attendedMentee : attendedMentees) {
+            if (attendedMentee.isSameMentee(menteeId)) {
+                throw new EventException("DUPLICATE_APPLICATION_EVENT", "이미 신청한 이력이 있습니다");
+            }
+        }
+    }
+
+    public void reOpenEvent() {
+        eventInfo.reOpen(attendedMentees.size());
+    }
+
+    public void openReservationEvent() {
+        if (!eventTimeInfo.isAfterOpenTime(LocalDateTime.now())) {
+            throw new EventException("NOT_OPEN_TIME", "예약한 오픈 시간이 아닙니다");
+        }
+
+        eventInfo.open();
     }
 
 }

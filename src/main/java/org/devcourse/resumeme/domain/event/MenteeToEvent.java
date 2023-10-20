@@ -31,4 +31,8 @@ public class MenteeToEvent extends BaseEntity {
         this.menteeId = menteeId;
     }
 
+    public boolean isSameMentee(Long menteeId) {
+        return this.menteeId.equals(menteeId);
+    }
+
 }
