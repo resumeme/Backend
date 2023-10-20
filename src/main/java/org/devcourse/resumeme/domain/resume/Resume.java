@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.domain.resume;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +21,7 @@ public class Resume {
 
     @Id
     @GeneratedValue
+    @Column(name = "resume_id")
     private Long id;
 
     private String title;
