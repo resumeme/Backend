@@ -13,30 +13,28 @@ import java.util.List;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private int maximumAttendee;
+    @Embedded
+    private EventInfo eventInfo;
 
-    private String title;
+    @Embedded
+    private EventTimeInfo eventTimeInfo;
 
-    private String content;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "mentor_id")
+    private Mentor mentor;
 
-    private LocalDateTime openDateTime;
-
-    private LocalDateTime endDate;
-
-    private Position position;
-
-    private EventStatus status;
-
-    private Long mentorId;
+    @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<EventPosition> positions = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> attendedMentees = new ArrayList<>();
