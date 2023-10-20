@@ -1,0 +1,2 @@
+endpoint:
+  permitAll: /api/v1/permitAll, /api/v1/test
