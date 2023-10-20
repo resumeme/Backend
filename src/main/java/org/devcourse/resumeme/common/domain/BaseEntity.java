@@ -18,6 +18,9 @@ public abstract class BaseEntity {
     @LastModifiedDate
     protected LocalDateTime lastModifiedDate;
 
+    protected BaseEntity() {
+    }
+
     protected BaseEntity(LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
