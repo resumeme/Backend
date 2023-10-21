@@ -20,6 +20,8 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+import static org.devcourse.resumeme.common.util.Validator.validate;
 
 @Entity
 @NoArgsConstructor
@@ -46,14 +48,23 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> attendedMentees = new ArrayList<>();
 
-    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<EventPosition> positions) {
+    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
+        validateInput(eventInfo, eventTimeInfo, mentor, positions);
+
         this.eventInfo = eventInfo;
         this.eventTimeInfo = eventTimeInfo;
         this.mentor = mentor;
         this.positions = positions;
     }
 
-    public void applicationToEvent(Long menteeId) {
+    private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
+        validate(eventInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        validate(eventTimeInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        validate(mentor == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        validate(positions == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+    }
+
+    public int applicationToEvent(Long menteeId) {
         checkDuplicateApplicationEvent(menteeId);
         eventInfo.checkAvailableApplication();
         attendedMentees.add(new MenteeToEvent(this, menteeId));
