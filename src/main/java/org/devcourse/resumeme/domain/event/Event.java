@@ -83,12 +83,20 @@ public class Event extends BaseEntity {
         }
     }
 
-    public void reOpenEvent() {
-        eventInfo.reOpen(attendedMentees.size());
+    public int reject(Long menteeId) {
+        attendedMentees.removeIf(attendedMentee -> attendedMentee.isSameMentee(menteeId));
+
+        return eventInfo.remainSeats(attendedMentees.size());
     }
 
-    public void openReservationEvent() {
-        if (!eventTimeInfo.isAfterOpenTime(LocalDateTime.now())) {
+    public int reOpenEvent() {
+        eventInfo.reOpen(attendedMentees.size());
+
+        return eventInfo.remainSeats(attendedMentees.size());
+    }
+
+    public void openReservationEvent(LocalDateTime nowDateTime) {
+        if (!eventTimeInfo.isAfterOpenTime(nowDateTime)) {
             throw new EventException("NOT_OPEN_TIME", "예약한 오픈 시간이 아닙니다");
         }
 
