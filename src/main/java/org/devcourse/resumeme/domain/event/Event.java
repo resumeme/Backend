@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.event.exception.EventException;
 import org.devcourse.resumeme.domain.metor.Mentor;
 
@@ -24,7 +25,7 @@ import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.validate;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class Event extends BaseEntity {
 
     @Id
@@ -54,7 +55,9 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.eventTimeInfo = eventTimeInfo;
         this.mentor = mentor;
-        this.positions = positions;
+        this.positions = positions.stream()
+                .map(position -> new EventPosition(position, this))
+                .toList();
     }
 
     private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
@@ -68,7 +71,8 @@ public class Event extends BaseEntity {
         checkDuplicateApplicationEvent(menteeId);
         eventInfo.checkAvailableApplication();
         attendedMentees.add(new MenteeToEvent(this, menteeId));
-        eventInfo.close(attendedMentees.size());
+
+        return eventInfo.close(attendedMentees.size());
     }
 
     private void checkDuplicateApplicationEvent(Long menteeId) {
