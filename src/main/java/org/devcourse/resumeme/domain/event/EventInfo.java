@@ -76,4 +76,8 @@ public class EventInfo {
         status = EventStatus.OPEN;
     }
 
+    public int remainSeats(int attendedMenteeCount) {
+        return maximumAttendee - attendedMenteeCount;
+    }
+
 }
