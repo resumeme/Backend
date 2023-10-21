@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.event.exception.EventException;
 import org.devcourse.resumeme.domain.metor.Mentor;
 
@@ -20,9 +21,10 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class Event extends BaseEntity {
 
     @Id
@@ -46,18 +48,21 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> attendedMentees = new ArrayList<>();
 
-    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<EventPosition> positions) {
+    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
         this.eventInfo = eventInfo;
         this.eventTimeInfo = eventTimeInfo;
         this.mentor = mentor;
-        this.positions = positions;
+        this.positions = positions.stream()
+                .map(position -> new EventPosition(position, this))
+                .toList();
     }
 
-    public void applicationToEvent(Long menteeId) {
+    public int applicationToEvent(Long menteeId) {
         checkDuplicateApplicationEvent(menteeId);
         eventInfo.checkAvailableApplication();
         attendedMentees.add(new MenteeToEvent(this, menteeId));
-        eventInfo.close(attendedMentees.size());
+
+        return eventInfo.close(attendedMentees.size());
     }
 
     private void checkDuplicateApplicationEvent(Long menteeId) {
