@@ -30,4 +30,7 @@ public enum EventStatus implements DocsEnumType {
         return this.equals(CLOSE);
     }
 
+    public boolean isBook() {
+        return this.equals(BOOK);
+    }
 }
