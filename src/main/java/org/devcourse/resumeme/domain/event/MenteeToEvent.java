@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+import static org.devcourse.resumeme.common.util.Validator.validate;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class MenteeToEvent extends BaseEntity {
 
     @Id
@@ -27,6 +29,9 @@ public class MenteeToEvent extends BaseEntity {
     private Long menteeId;
 
     public MenteeToEvent(Event event, Long menteeId) {
+        validate(event == null, "NOT_EMPTY_VALUE", "이벤트는 빈 값일 수 없습니다");
+        validate(menteeId == null, "NOT_EMPTY_VALUE", "멘티는 빈 값일 수 없습니다");
+
         this.event = event;
         this.menteeId = menteeId;
     }
