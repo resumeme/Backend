@@ -1,0 +1,6 @@
+endpoint:
+  permitAll:
+  roles:
+    user:
+    mento:
+    mentee:

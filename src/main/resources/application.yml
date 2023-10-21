@@ -1,6 +1,8 @@
 spring:
   jpa:
     open-in-view: false
+  config:
+    import: application-endpoint.yml
 ---
 spring:
   config:
