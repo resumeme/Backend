@@ -9,7 +9,7 @@ public enum Role {
     ROLE_ADMIN;
 
     public void checkSignUpRequest() {
-        if (this != Role.ROLE_PENDING && this != Role.ROLE_MENTEE) {
+        if (this != Role.ROLE_TEMP && this != Role.ROLE_MENTEE) {
             throw new IllegalArgumentException("잘못된 요청입니다.");
         }
     }
