@@ -13,6 +13,7 @@ public class ResumeService {
 
     public Long create(Resume resume) {
         Resume saved = resumeRepository.save(resume);
+
         return saved.getId();
     }
 
