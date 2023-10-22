@@ -23,7 +23,7 @@ public class ResumeController {
     private final MenteeService menteeService;
 
     @PostMapping("/{menteeId}")
-    public ResumeCreateResponse createResume(
+    public Long createResume(
             @PathVariable Long menteeId,
             @RequestBody ResumeCreateRequest request) {
 
@@ -31,7 +31,8 @@ public class ResumeController {
         Resume resume = request.toEntity(mentee);
 
         Long savedId = resumeService.create(resume);
-        return new ResumeCreateResponse("이력서 등록을 성공했습니다.", savedId);
+
+        return savedId;
     }
 
 }
