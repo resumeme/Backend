@@ -47,7 +47,7 @@ public class EventInfo {
     }
 
     public void checkAvailableApplication() {
-        if (status.isClosed()) {
+        if (!status.canApply()) {
             throw new EventException("NO_REMAIN_SEATS", "이미 모든 신청이 마감되었습니다");
         }
     }
