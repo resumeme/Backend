@@ -26,8 +26,8 @@ public enum EventStatus implements DocsEnumType {
         return description;
     }
 
-    public boolean isClosed() {
-        return this.equals(CLOSE);
+    public boolean canApply() {
+        return this.equals(OPEN) || this.equals(REOPEN);
     }
 
     public boolean isReady() {
