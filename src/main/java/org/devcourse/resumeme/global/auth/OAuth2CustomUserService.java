@@ -50,6 +50,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
                     .imageUrl(userInfo.getImageUrl())
                     .role(Role.ROLE_GUEST)
                     .password("resumeme")
+                    .nickname(userInfo.getNickname())
                     .email(userInfo.getEmail())
                     .provider(socialType)
                     .build();
