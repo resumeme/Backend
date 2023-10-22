@@ -13,6 +13,11 @@ public class CustomException extends RuntimeException {
         this.message = message;
     }
 
+    public CustomException(ExceptionCode exceptionCode) {
+        this.code = exceptionCode.name();
+        this.message = exceptionCode.getMessage();
+    }
+
     @Override
     public String getMessage() {
         return message;
