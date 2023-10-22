@@ -48,8 +48,8 @@ public class User {
     private String refreshToken;
 
     @Builder
-    public User(Long userId, String username, String password, String email, Role role, Provider provider, String imageUrl, String nickname, String realName, String phoneNumber, String refreshToken) {
-        this.id = userId;
+    public User(Long id, String username, String password, String email, Role role, Provider provider, String imageUrl, String nickname, String realName, String phoneNumber, String refreshToken) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
