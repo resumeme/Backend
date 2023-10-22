@@ -10,17 +10,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 public class Resume {
 
     @Id
+    @Getter
     @GeneratedValue
     @Column(name = "resume_id")
     private Long id;
@@ -50,8 +50,18 @@ public class Resume {
     @Embedded
     private Project project;
 
+    private String email;
+
     private String githubAddress;
 
+    private String blogAddress;
+
     private String phoneNumber;
+
+    public Resume(String title,  Mentee mentee, String introduce) {
+        this.title = title;
+        this.mentee = mentee;
+        this.introduce = introduce;
+    }
 
 }
