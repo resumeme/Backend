@@ -3,7 +3,7 @@ package org.devcourse.resumeme.domain.event;
 import org.devcourse.resumeme.common.domain.DocsEnumType;
 
 public enum EventStatus implements DocsEnumType {
-    BOOK("첨삭 이벤트 오픈 예약"),
+    READY("첨삭 이벤트 오픈 예약"),
     OPEN("첨삭 이벤트 오픈"),
     REOPEN("재 신청 시작"),
     CLOSE("이벤트 신청 마감"),
@@ -30,7 +30,7 @@ public enum EventStatus implements DocsEnumType {
         return this.equals(CLOSE);
     }
 
-    public boolean isBook() {
-        return this.equals(BOOK);
+    public boolean isReady() {
+        return this.equals(READY);
     }
 }

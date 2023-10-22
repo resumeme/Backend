@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -29,7 +28,7 @@ class EventTest {
     @Test
     void 이벤트_신청에_성공후_잔여석을_반환한다() {
         // when
-        int remainSeats = event.applicationToEvent(1L);
+        int remainSeats = event.acceptMentee(1L);
 
         // then
         assertThat(remainSeats).isEqualTo(2);
@@ -38,30 +37,30 @@ class EventTest {
     @Test
     void 잔여석이_남지않아서_이벤트신청에_실패한다() {
         // given
-        event.applicationToEvent(1L);
-        event.applicationToEvent(2L);
-        event.applicationToEvent(3L);
+        event.acceptMentee(1L);
+        event.acceptMentee(2L);
+        event.acceptMentee(3L);
 
         // when & then
-        assertThatThrownBy(() -> event.applicationToEvent(4L))
+        assertThatThrownBy(() -> event.acceptMentee(4L))
                 .isInstanceOf(EventException.class);
     }
 
     @Test
     void 중복신청으로_이벤트신청에_실패한다() {
         // given
-        event.applicationToEvent(1L);
+        event.acceptMentee(1L);
 
         // when & then
-        assertThatThrownBy(() -> event.applicationToEvent(1L))
+        assertThatThrownBy(() -> event.acceptMentee(1L))
                 .isInstanceOf(EventException.class);
     }
 
     @Test
     void 멘토는_멘티의_신청을_반려할수있다() {
         // given
-        event.applicationToEvent(1L);
-        event.applicationToEvent(2L);
+        event.acceptMentee(1L);
+        event.acceptMentee(2L);
 
         // when
         int remainSeats = event.reject(1L);
@@ -73,9 +72,9 @@ class EventTest {
     @Test
     void 잔여석이_생겨서_재오픈에_성공한다() {
         // given
-        event.applicationToEvent(1L);
-        event.applicationToEvent(2L);
-        event.applicationToEvent(3L);
+        event.acceptMentee(1L);
+        event.acceptMentee(2L);
+        event.acceptMentee(3L);
         event.reject(1L);
 
         // when
@@ -88,9 +87,9 @@ class EventTest {
     @Test
     void 잔여석이_없어_재오픈_신청에_실패한다() {
         // given
-        event.applicationToEvent(1L);
-        event.applicationToEvent(2L);
-        event.applicationToEvent(3L);
+        event.acceptMentee(1L);
+        event.acceptMentee(2L);
+        event.acceptMentee(3L);
 
         // when & then
         assertThatThrownBy(() -> event.reOpenEvent())
