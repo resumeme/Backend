@@ -43,7 +43,7 @@ public class EventInfo {
     }
 
     public static EventInfo book(int maximumAttendee, String title, String content) {
-        return new EventInfo(maximumAttendee, title, content, EventStatus.BOOK);
+        return new EventInfo(maximumAttendee, title, content, EventStatus.READY);
     }
 
     public void checkAvailableApplication() {
@@ -69,8 +69,8 @@ public class EventInfo {
     }
 
     public void open() {
-        if (!status.isBook()) {
-            throw new EventException("CANNOT_OPEN", "예약한 이벤트에 한에서만 오픈 신청읋 할 수 있습니다");
+        if (!status.isReady()) {
+            throw new EventException("CANNOT_OPEN", "예약한 이벤트에 한에서만 오픈 신청을 할 수 있습니다");
         }
 
         status = EventStatus.OPEN;

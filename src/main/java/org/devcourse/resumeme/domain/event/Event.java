@@ -47,7 +47,7 @@ public class Event extends BaseEntity {
     private List<EventPosition> positions = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
-    private List<MenteeToEvent> attendedMentees = new ArrayList<>();
+    private List<MenteeToEvent> applicants = new ArrayList<>();
 
     public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
         validateInput(eventInfo, eventTimeInfo, mentor, positions);
@@ -67,16 +67,16 @@ public class Event extends BaseEntity {
         validate(positions == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
     }
 
-    public int applicationToEvent(Long menteeId) {
+    public int acceptMentee(Long menteeId) {
         checkDuplicateApplicationEvent(menteeId);
         eventInfo.checkAvailableApplication();
-        attendedMentees.add(new MenteeToEvent(this, menteeId));
+        applicants.add(new MenteeToEvent(this, menteeId));
 
-        return eventInfo.close(attendedMentees.size());
+        return eventInfo.close(applicants.size());
     }
 
     private void checkDuplicateApplicationEvent(Long menteeId) {
-        for (MenteeToEvent attendedMentee : attendedMentees) {
+        for (MenteeToEvent attendedMentee : applicants) {
             if (attendedMentee.isSameMentee(menteeId)) {
                 throw new EventException("DUPLICATE_APPLICATION_EVENT", "이미 신청한 이력이 있습니다");
             }
@@ -84,15 +84,15 @@ public class Event extends BaseEntity {
     }
 
     public int reject(Long menteeId) {
-        attendedMentees.removeIf(attendedMentee -> attendedMentee.isSameMentee(menteeId));
+        applicants.removeIf(attendedMentee -> attendedMentee.isSameMentee(menteeId));
 
-        return eventInfo.remainSeats(attendedMentees.size());
+        return eventInfo.remainSeats(applicants.size());
     }
 
     public int reOpenEvent() {
-        eventInfo.reOpen(attendedMentees.size());
+        eventInfo.reOpen(applicants.size());
 
-        return eventInfo.remainSeats(attendedMentees.size());
+        return eventInfo.remainSeats(applicants.size());
     }
 
     public void openReservationEvent(LocalDateTime nowDateTime) {
