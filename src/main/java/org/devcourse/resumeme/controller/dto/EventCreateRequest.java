@@ -4,7 +4,7 @@ import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
-import org.devcourse.resumeme.domain.metor.Mentor;
+import org.devcourse.resumeme.domain.mentor.Mentor;
 
 import java.time.LocalDateTime;
 import java.util.List;

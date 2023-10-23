@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.domain.event.Event;
-import org.devcourse.resumeme.domain.metor.Mentor;
+import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.service.EventService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

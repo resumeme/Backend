@@ -5,7 +5,7 @@ import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventTimeRequest;
 import org.devcourse.resumeme.domain.event.Event;
-import org.devcourse.resumeme.domain.metor.Mentor;
+import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
