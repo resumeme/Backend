@@ -31,10 +31,9 @@ public record EventCreateRequest(EventInfoRequest info, EventTimeRequest time, L
 
     }
 
-    public record EventTimeRequest(LocalDateTime openDateTime, LocalDateTime endDate) {
+    public record EventTimeRequest(LocalDateTime now, LocalDateTime openDateTime, LocalDateTime endDate) {
 
         public EventTimeInfo toEntity() {
-            LocalDateTime now = LocalDateTime.now();
             if (openDateTime == null) {
                 return EventTimeInfo.onStart(now, endDate);
             }
