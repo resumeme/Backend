@@ -10,14 +10,28 @@ import java.util.Map;
 public class EndpointProperties {
 
     @Getter
-    private List<String> permitAll;
+    private Map<String, List<String>> permitAll;
 
     @Getter
-    private Map<String, List<String>> roles;
+    private List<Matcher> roles;
 
-    public EndpointProperties(List<String> permitAll, Map<String, List<String>> roles) {
+    public EndpointProperties(Map<String, List<String>> permitAll, List<Matcher> roles) {
         this.permitAll = permitAll;
         this.roles = roles;
     }
 
+    public static class Matcher {
+
+        @Getter
+        private Map<String, List<String>> matcher;
+
+        @Getter
+        private List<String> role;
+
+        public Matcher(Map<String, List<String>> matcher, List<String> role) {
+            this.matcher = matcher;
+            this.role = role;
+        }
+
+    }
 }
