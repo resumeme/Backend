@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.common;
 
 import org.devcourse.resumeme.common.controller.EnumController.EnumDocsResponse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.Operation;
@@ -27,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EnumControllerTest extends ControllerUnitTest {
 
     @Test
-    @Disabled
     void 상태_코드값들을_api문서에_나타낸다() throws Exception {
         //when
         ResultActions result = mvc.perform(get("/enums")
@@ -39,7 +37,8 @@ class EnumControllerTest extends ControllerUnitTest {
         result.andExpect(status().isOk())
                 .andDo(
                         document("enum-response",
-                                customResponseFields("test", enumConvertFieldDescriptor(null))
+                                customResponseFields("position", enumConvertFieldDescriptor(response.position())),
+                                customResponseFields("eventStatus", enumConvertFieldDescriptor(response.eventStatus()))
                         )
                 );
 
