@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
@@ -29,6 +30,7 @@ import static org.devcourse.resumeme.common.util.Validator.validate;
 public class Event extends BaseEntity {
 
     @Id
+    @Getter
     @GeneratedValue
     @Column(name = "event_id")
     private Long id;
