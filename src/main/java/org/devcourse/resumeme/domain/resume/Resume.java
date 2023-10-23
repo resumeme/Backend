@@ -12,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
+
+import static org.devcourse.resumeme.common.util.Validator.validate;
 
 @Entity
 @NoArgsConstructor
@@ -31,6 +34,7 @@ public class Resume {
     private boolean isRepresentative;
 
     private Long userId;
+
     @Enumerated(EnumType.STRING)
     private Position position;
 
@@ -55,8 +59,15 @@ public class Resume {
     private String phoneNumber;
 
     public Resume(String title, String introduce) {
+        validateInput(title, introduce);
+
         this.title = title;
         this.introduce = introduce;
+    }
+
+    private void validateInput(String title, String introduce) {
+        validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
+        validate(introduce == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
 }
