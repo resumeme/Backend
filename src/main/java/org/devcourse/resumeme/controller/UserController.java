@@ -18,7 +18,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Long> register(@RequestBody PrimarySignUpInfo primarySignUpInfo) {
-
         User findUser = userService.getOne(primarySignUpInfo.id());
 
         // 필수 추가 정보까지 입력한 경우 -> 토큰 발급 후 전달 로직 추가 필요

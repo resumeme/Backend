@@ -24,21 +24,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username; // google_{고유번호}
+    private String username;
 
     private String password;
 
-    private String email; // 사용자 이메일
+    private String email;
 
     @Enumerated(EnumType.STRING)
-    private Role role; // ROLE_USER, ROLE_ADMIN
+    private Role role;
 
     @Enumerated(EnumType.STRING)
-    private Provider provider; // google
+    private Provider provider;
 
     private String imageUrl;
 
-    // 추가 필수 정보
     private String nickname;
 
     private String realName;

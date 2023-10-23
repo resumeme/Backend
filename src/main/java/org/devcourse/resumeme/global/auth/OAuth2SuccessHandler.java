@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.global.auth;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.devcourse.resumeme.domain.user.Role;
@@ -15,8 +14,7 @@ import java.io.IOException;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         try {
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 

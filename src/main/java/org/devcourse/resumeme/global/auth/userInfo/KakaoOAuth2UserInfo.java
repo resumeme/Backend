@@ -17,12 +17,14 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     public String getNickname() {
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+
         return profile.get("nickname").toString();
     }
 
     @Override
     public String getEmail() {
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+
         return account.get("email").toString();
     }
 
@@ -30,6 +32,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     public String getImageUrl() {
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+
         return profile.get("thumbnail_image_url").toString();
     }
 
