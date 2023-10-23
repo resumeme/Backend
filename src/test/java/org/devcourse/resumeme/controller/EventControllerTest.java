@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.POSITION;
+import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -62,7 +64,7 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("time.now").type(STRING).description("첨삭 이벤트 생성 요청 시간"),
                                         fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간"),
                                         fieldWithPath("time.endDate").type(STRING).description("첨삭 이벤트 신청 종료 시간"),
-                                        fieldWithPath("positions").type(ARRAY).description("포지션")
+                                        fieldWithPath("positions").type(ARRAY).description(generateLinkCode(POSITION))
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 첨삭 이벤트 아이디")
