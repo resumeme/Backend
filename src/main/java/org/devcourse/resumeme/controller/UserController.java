@@ -23,7 +23,7 @@ public class UserController {
         // 필수 추가 정보까지 입력한 경우 -> 토큰 발급 후 전달 로직 추가 필요
         User userWithPrimaryInfo = User.builder()
                 .id(findUser.getId())
-                .oAuthUsername(findUser.getOAuthUsername())
+                .oauthUsername(findUser.getOauthUsername())
                 .email(findUser.getEmail())
                 .password(findUser.getPassword())
                 .provider(findUser.getProvider())

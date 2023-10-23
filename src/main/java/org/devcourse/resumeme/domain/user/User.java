@@ -24,7 +24,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String oAuthUsername;
+    @Column(unique = true)
+    private String oauthUsername;
 
     private String password;
 
@@ -47,9 +48,9 @@ public class User {
     private String refreshToken;
 
     @Builder
-    public User(Long id, String oAuthUsername, String password, String email, Role role, Provider provider, String imageUrl, String nickname, String realName, String phoneNumber, String refreshToken) {
+    public User(Long id, String oauthUsername, String password, String email, Role role, Provider provider, String imageUrl, String nickname, String realName, String phoneNumber, String refreshToken) {
         this.id = id;
-        this.oAuthUsername = oAuthUsername;
+        this.oauthUsername = oauthUsername;
         this.password = password;
         this.email = email;
         this.role = role;
