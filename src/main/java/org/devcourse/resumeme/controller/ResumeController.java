@@ -17,7 +17,7 @@ public class ResumeController {
     private final ResumeService resumeService;
 
 
-    @PostMapping("/{menteeId}")
+    @PostMapping()
     public Long createResume(
             // jwt 유저 파라미터 추가 예정
             @RequestBody ResumeCreateRequest request) {
