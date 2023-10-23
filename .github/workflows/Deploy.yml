@@ -32,7 +32,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Set encrypt Secret key
-      run: echo ${{ secrets.encrypt }} > properties.sh
+      run: echo ${{ secrets.ENCRYPT }} > properties.sh
       shell: bash
 
     - name: Permission for gradlew
