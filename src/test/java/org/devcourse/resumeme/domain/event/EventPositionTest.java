@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.domain.event;
 
 import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.domain.metor.Mentor;
+import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

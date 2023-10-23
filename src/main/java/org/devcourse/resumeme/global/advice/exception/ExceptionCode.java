@@ -1,7 +1,8 @@
 package org.devcourse.resumeme.global.advice.exception;
 
 public enum ExceptionCode {
-    MENTEE_NOT_FOUND("해당 멘티를 찾을 수 없습니다.");
+    MENTEE_NOT_FOUND("해당 멘티를 찾을 수 없습니다."),
+    NO_EMPTY_VALUE("빈 값일 수 없습니다");
 
     private final String message;
 
