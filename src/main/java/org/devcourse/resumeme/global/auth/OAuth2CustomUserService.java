@@ -41,12 +41,12 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
             throw new RuntimeException("지원하지 않는 소셜로그인");
         }
 
-        String username = provider + "_" + userInfo.getId();
-        User userEntity = userRepository.findByUsername(username);
+        String oAuthUsername = provider + "_" + userInfo.getId();
+        User userEntity = userRepository.findByOAuthUsername(oAuthUsername);
 
         if (userEntity == null) { // 최초 로그인
             userEntity = User.builder()
-                    .username(username)
+                    .oAuthUsername(oAuthUsername)
                     .imageUrl(userInfo.getImageUrl())
                     .role(Role.ROLE_GUEST)
                     .password("resumeme")
