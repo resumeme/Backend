@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.event.exception.EventException;
-import org.devcourse.resumeme.domain.metor.Mentor;
+import org.devcourse.resumeme.domain.mentor.Mentor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
