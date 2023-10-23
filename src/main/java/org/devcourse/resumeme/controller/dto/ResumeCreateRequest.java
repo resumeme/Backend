@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.controller.dto;
 
 import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.resume.Resume;
 
 import java.time.LocalDate;
@@ -19,8 +18,8 @@ public record ResumeCreateRequest(
         String phoneNumber
 ) {
 
-    public Resume toEntity(Mentee mentee) {
-        return new Resume(title, mentee, introduce);
+    public Resume toEntity() {
+        return new Resume(title, introduce);
     }
 
     public record Training(

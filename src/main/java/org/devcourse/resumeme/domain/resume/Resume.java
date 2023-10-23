@@ -7,16 +7,15 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.domain.mentee.Mentee;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Resume {
 
     @Id
@@ -31,10 +30,7 @@ public class Resume {
 
     private boolean isRepresentative;
 
-    @ManyToOne
-    @JoinColumn(name = "mentee_id")
-    private Mentee mentee;
-
+    private Long userId;
     @Enumerated(EnumType.STRING)
     private Position position;
 
@@ -58,9 +54,8 @@ public class Resume {
 
     private String phoneNumber;
 
-    public Resume(String title,  Mentee mentee, String introduce) {
+    public Resume(String title, String introduce) {
         this.title = title;
-        this.mentee = mentee;
         this.introduce = introduce;
     }
 
