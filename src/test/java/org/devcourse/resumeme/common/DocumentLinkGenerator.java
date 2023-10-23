@@ -7,6 +7,8 @@ public interface DocumentLinkGenerator {
     }
 
     enum DocUrl {
+        POSITION("position", "포지션"),
+        EVENT_STATUS("eventStatus", "이벤트 상태")
         ;
 
         private final String htmlFileName;
