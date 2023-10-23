@@ -41,14 +41,18 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
         }
 
         String oauthUsername = provider + "_" + userInfo.getId();
-        User userEntity = userRepository.findByOauthUsername(oauthUsername)
-                .orElse(userRepository.save(
+
+        User userEntity;
+        OAuth2UserInfo finalUserInfo = userInfo;
+
+        userEntity = userRepository.findByOauthUsername(oauthUsername)
+                .orElseGet(() -> userRepository.save(
                         User.builder().oauthUsername(oauthUsername)
-                                .imageUrl(userInfo.getImageUrl())
+                                .imageUrl(finalUserInfo.getImageUrl())
                                 .role(Role.ROLE_GUEST)
                                 .password("resumeme")
-                                .nickname(userInfo.getNickname())
-                                .email(userInfo.getEmail())
+                                .nickname(finalUserInfo.getNickname())
+                                .email(finalUserInfo.getEmail())
                                 .provider(socialType)
                                 .build()));
 
