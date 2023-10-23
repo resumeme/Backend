@@ -2,6 +2,7 @@ package org.devcourse.resumeme.common.util;
 
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
+import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 import org.springframework.util.StringUtils;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -12,6 +13,12 @@ public class Validator {
     public static void validate(boolean predicate, String errorCode, String errorMessage) {
         if (predicate) {
             throw new CustomException(errorCode, errorMessage);
+        }
+    }
+
+    public static void validate(boolean predicate, ExceptionCode exceptionCode) {
+        if (predicate) {
+            throw new CustomException(exceptionCode);
         }
     }
 

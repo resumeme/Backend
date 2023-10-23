@@ -1,6 +1,6 @@
 package org.devcourse.resumeme.domain.event;
 
-import org.devcourse.resumeme.domain.metor.Mentor;
+import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
