@@ -24,9 +24,8 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId(); // kakao, google
-        Provider socialType = Provider.valueOf(registrationId.toUpperCase());
-        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
+        String provider = userRequest.getClientRegistration().getRegistrationId();
+        Provider socialType = Provider.valueOf(provider.toUpperCase());
         OAuth2UserInfo userInfo = null;
 
         if (provider.equals("google")) {
@@ -41,24 +40,23 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
             throw new RuntimeException("지원하지 않는 소셜로그인");
         }
 
-        String username = provider + "_" + userInfo.getId();
-        User userEntity = userRepository.findByUsername(username);
+        String oauthUsername = provider + "_" + userInfo.getId();
 
-        if (userEntity == null) { // 최초 로그인
-            userEntity = User.builder()
-                    .username(username)
-                    .imageUrl(userInfo.getImageUrl())
-                    .role(Role.ROLE_GUEST)
-                    .password("resumeme")
-                    .nickname(userInfo.getNickname())
-                    .email(userInfo.getEmail())
-                    .provider(socialType)
-                    .build();
+        User userEntity;
+        OAuth2UserInfo finalUserInfo = userInfo;
 
-            userEntity = userRepository.save(userEntity);
-        }
+        userEntity = userRepository.findByOauthUsername(oauthUsername)
+                .orElseGet(() -> userRepository.save(
+                        User.builder().oauthUsername(oauthUsername)
+                                .imageUrl(finalUserInfo.getImageUrl())
+                                .role(Role.ROLE_GUEST)
+                                .password("resumeme")
+                                .nickname(finalUserInfo.getNickname())
+                                .email(finalUserInfo.getEmail())
+                                .provider(socialType)
+                                .build()));
 
-        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+        return new OAuth2CustomUser(userEntity, oAuth2User.getAttributes());
     }
 
 }
