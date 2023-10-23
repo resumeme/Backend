@@ -1,6 +1,8 @@
 package org.devcourse.resumeme.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.global.auth.OAuth2CustomUserService;
+import org.devcourse.resumeme.global.auth.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,12 +21,21 @@ public class SecurityConfig {
 
     private final EndpointProperties properties;
 
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+
+    private final OAuth2CustomUserService oAuth2CustomUserService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         setEndpoints(http);
         http
                 .cors(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .oauth2Login(configure ->
+                        configure.userInfoEndpoint(userConfig ->
+                                        userConfig.userService(oAuth2CustomUserService))
+                                .successHandler(oAuth2SuccessHandler));
 
         return http.build();
     }
