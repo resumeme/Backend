@@ -52,7 +52,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
                                 .provider(socialType)
                                 .build()));
 
-        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+        return new OAuth2CustomUser(userEntity, oAuth2User.getAttributes());
     }
 
 }

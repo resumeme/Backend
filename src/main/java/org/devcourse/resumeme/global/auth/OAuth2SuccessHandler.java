@@ -16,13 +16,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         try {
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+            OAuth2CustomUser oAuth2CustomUser = (OAuth2CustomUser) authentication.getPrincipal();
 
             response.setCharacterEncoding("UTF-8");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-            if (principalDetails.getUser().getRole() == Role.ROLE_GUEST) {
-                response.setHeader("id", principalDetails.getUser().getId().toString());
+            if (oAuth2CustomUser.getUser().getRole() == Role.ROLE_GUEST) {
+                response.setHeader("id", oAuth2CustomUser.getUser().getId().toString());
                 response.sendRedirect("/primary-info-form");
             }
 
