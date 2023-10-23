@@ -8,6 +8,7 @@ spring:
   config:
     activate:
       on-profile: default
+    import: secret/dev/application-social.yml
   datasource:
     url: jdbc:h2:tcp://localhost/~/resumeme
     username: sa
