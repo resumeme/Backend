@@ -1,6 +1,22 @@
 endpoint:
-  permitAll:
+  permit-all:
+    get: /api/v1/user
+    post:
+    put:
+    patch:
+    delete:
   roles:
-    user:
-    mento:
-    mentee:
+    - matcher:
+        get: /api/v1/user
+        post:
+        put:
+        patch:
+        delete:
+      role: user, mentor
+    - matcher:
+        get: /api/v1/user
+        post:
+        put:
+        patch:
+        delete:
+      role: mentor
