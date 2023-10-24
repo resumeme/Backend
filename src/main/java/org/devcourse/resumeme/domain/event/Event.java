@@ -24,6 +24,7 @@ import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.CAN_NOT_CHANGE_MAX_COUNT;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -60,6 +61,13 @@ public class Event extends BaseEntity {
         this.positions = positions.stream()
                 .map(position -> new EventPosition(position, this))
                 .toList();
+    }
+
+    private Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, List<EventPosition> positions, Mentor mentor) {
+        this.eventInfo = eventInfo;
+        this.eventTimeInfo = eventTimeInfo;
+        this.mentor = mentor;
+        this.positions = positions;
     }
 
     private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
@@ -103,6 +111,18 @@ public class Event extends BaseEntity {
         }
 
         eventInfo.open();
+    }
+
+    public Event updateMaximumCount(int maxCount) {
+        if (this.applicants.size() > maxCount) {
+            throw new EventException(CAN_NOT_CHANGE_MAX_COUNT);
+        }
+
+        return new Event(eventInfo.updateMaximumCount(maxCount), eventTimeInfo, positions, mentor);
+    }
+
+    public int remainSeat() {
+        return eventInfo.remainSeats(applicants.size());
     }
 
 }

@@ -80,4 +80,8 @@ public class EventInfo {
         return maximumAttendee - attendedMenteeCount;
     }
 
+    public EventInfo updateMaximumCount(int maxCount) {
+        return new EventInfo(maxCount, title, content, status);
+    }
+
 }
