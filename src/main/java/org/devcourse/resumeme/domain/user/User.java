@@ -63,10 +63,7 @@ public class User {
     }
 
     public boolean isMentee() {
-        if (this.role == Role.ROLE_MENTEE) {
-            return true;
-        }
-        return false;
+        return role.equals(Role.ROLE_MENTEE);
     }
 
 }
