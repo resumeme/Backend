@@ -25,7 +25,7 @@ class EventPositionTest {
 
     static Stream<Arguments> positionAndEvent() {
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(2L));
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         return Stream.of(
                 Arguments.of(Position.BACK, null),
                 Arguments.of(null, new Event(openEvent, eventTimeInfo, new Mentor(), List.of())),
