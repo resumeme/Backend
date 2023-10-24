@@ -1,6 +1,8 @@
 package org.devcourse.resumeme.domain.user;
 
-public enum Provider {
+import org.devcourse.resumeme.common.domain.DocsEnumType;
+
+public enum Provider implements DocsEnumType {
     KAKAO("kakao"),
     GOOGLE("google");
 
@@ -9,4 +11,15 @@ public enum Provider {
     Provider(String providerName) {
         this.providerName = providerName;
     }
+
+    @Override
+    public String getType() {
+        return name();
+    }
+
+    @Override
+    public String getDescription() {
+        return providerName;
+    }
+
 }

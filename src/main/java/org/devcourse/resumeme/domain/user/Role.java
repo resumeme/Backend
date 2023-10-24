@@ -14,4 +14,5 @@ public enum Role {
             throw new CustomException("ROLE_CHANGE_REFUSED","해당 역할로 변경할 수 없습니다.");
         }
     }
+
 }
