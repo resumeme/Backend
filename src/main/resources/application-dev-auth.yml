@@ -1,0 +1,26 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ENC(Gy3UKwTh9JMVL7BLWPwf49+2RkNjnFI8NfLH86mOR5RLSafjBpqCEaqcxfHbxv7pqhD4lkRcv8xilRA6h71JHcK7MFdqi+EN3I1GCp+EsU8sCs/FOQGaHg==)
+            client-secret: ENC(kFJd1i4vr9jXW2YWd1zslWJzNoqOe4nnPWmo2jvl3zgF3BrKHNjK88wc7ea0PVg2)
+            scope:
+              - email
+              - profile
+          kakao:
+            client-id: ENC(LKU7ZSM56Q3U23PURS6W8oxpM8Trv0/w/JruDE9vtqiHluCy+DaT2hjarjiecVlM)
+            client-secret: ENC(WMDVxqNYaob1Buujlv1gelniClFSbHUKHupWD20KZ5vdmzEXUPleWOxW33ykvIhG)
+            scope: profile_nickname, profile_image, account_email
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            redirect-uri: https://resumeme.kro.kr/login/oauth2/code/kakao
+
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
