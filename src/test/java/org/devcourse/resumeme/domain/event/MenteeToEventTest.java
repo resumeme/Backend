@@ -23,7 +23,7 @@ class MenteeToEventTest {
     void 멘티와_이벤트를_연결하는_연관관계테이블_객체_생성에_성공한다() {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(2L));
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, new Mentor(), List.of()), 1L);
 
         // then
@@ -40,7 +40,7 @@ class MenteeToEventTest {
 
     static Stream<Arguments> eventMenteeID() {
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(2L));
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         return Stream.of(
                 Arguments.of(null, null),
                 Arguments.of(null, 1L),
@@ -53,7 +53,7 @@ class MenteeToEventTest {
     void 현재_신청한_멘티와_일치여부를_확인한다(Long menteeId, boolean result) {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(2L));
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, new Mentor(), List.of()), 1L);
 
         // when

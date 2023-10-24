@@ -21,7 +21,7 @@ class EventTest {
     @BeforeEach
     void init() {
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(2L));
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
     }
 
@@ -100,11 +100,12 @@ class EventTest {
     void 오픈예약한_시간이_아니라서_이벤트_오픈에_실패한다() {
         // given
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
+        LocalDateTime now = LocalDateTime.now();
+        EventTimeInfo eventTimeInfo = EventTimeInfo.book(now, LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         Event bookEvent = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
 
         // when & then
-        assertThatThrownBy(() -> bookEvent.openReservationEvent(LocalDateTime.now()))
+        assertThatThrownBy(() -> bookEvent.openReservationEvent(now))
                 .isInstanceOf(EventException.class);
     }
 
