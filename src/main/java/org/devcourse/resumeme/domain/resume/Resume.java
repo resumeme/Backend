@@ -62,15 +62,16 @@ public class Resume extends BaseEntity {
     private String phoneNumber;
 
     public Resume(String title, User user, Training training) {
-        validateResume(title, user);
+        validateResume(title, user, training);
         this.title = title;
         this.user = user;
         this.training = training;
     }
 
-    private static void validateResume(String title, User user) {
+    private static void validateResume(String title, User user, Training training) {
         validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(user == null, ExceptionCode.MENTEE_NOT_FOUND);
+        validate(training == null, ExceptionCode.NO_EMPTY_VALUE);
         if (!user.isMentee()) {
             throw new CustomException(ExceptionCode.MENTEE_ONLY_RESUME);
         }
