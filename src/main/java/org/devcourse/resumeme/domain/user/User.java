@@ -62,4 +62,8 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
+    public boolean isMentee() {
+        return role.equals(Role.ROLE_MENTEE);
+    }
+
 }
