@@ -20,7 +20,7 @@ public class TrainingTest {
     }
 
     @Test
-    void max_gpa_should_be_greater_than_gpa() {
+    void 최대학점은_내_학점보다_커야한다() {
         double gpa = 5.5;
         double maxGpa = 4.0;
 
