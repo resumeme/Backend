@@ -4,6 +4,7 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventTimeRequest;
+import org.devcourse.resumeme.controller.dto.UpdateEventMaxCountRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -26,6 +28,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class EventControllerTest extends ControllerUnitTest {
@@ -74,5 +77,38 @@ class EventControllerTest extends ControllerUnitTest {
                         )
                 );
     }
+
+    @Test
+    void 첨삭_이벤트_참여인원수를_변경할_수_있다() throws Exception {
+        // given
+        long eventId = 1L;
+        int newMaxCount = 10;
+        UpdateEventMaxCountRequest request = new UpdateEventMaxCountRequest(newMaxCount);
+        given(eventService.updateMaximumAttendeeCount(eventId, request.count())).willReturn(newMaxCount);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", eventId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(
+                        document("event/updateMaxCount",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("count").type(NUMBER).description("새로 지정할 인원 수")
+                                ),
+                                responseFields(
+                                        fieldWithPath("remainCount").type(NUMBER).description("변경된 인원 수 반영한 남은 자리 수"),
+                                        fieldWithPath("maxCount").type(NUMBER).description("새로 변경 된 참여 가능 인원 수")
+                                )
+                        )
+                );
+    }
+
 
 }
