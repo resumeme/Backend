@@ -42,7 +42,7 @@ public class SecurityConfig {
 
     private void setEndpoints(HttpSecurity http) throws Exception {
         for (Map.Entry<String, List<String>> entry : properties.getPermitAll().entrySet()) {
-            String method = entry.getKey();
+            String method = entry.getKey().toUpperCase();
 
             for (String endPoint : entry.getValue()) {
                 http.authorizeHttpRequests(registry ->
@@ -56,7 +56,7 @@ public class SecurityConfig {
                     .toArray(String[]::new);
 
             for (Map.Entry<String, List<String>> entry : role.getMatcher().entrySet()) {
-                String method = entry.getKey();
+                String method = entry.getKey().toUpperCase();
 
                 for (String endPoint : entry.getValue()) {
                     http.authorizeHttpRequests(registry ->
