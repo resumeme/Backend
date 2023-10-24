@@ -31,14 +31,14 @@ public record EventCreateRequest(EventInfoRequest info, EventTimeRequest time, L
 
     }
 
-    public record EventTimeRequest(LocalDateTime now, LocalDateTime openDateTime, LocalDateTime endDate) {
+    public record EventTimeRequest(LocalDateTime now, LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {
 
         public EventTimeInfo toEntity() {
             if (openDateTime == null) {
-                return EventTimeInfo.onStart(now, endDate);
+                return EventTimeInfo.onStart(now, closeDateTime, endDate);
             }
 
-            return EventTimeInfo.book(now, openDateTime, endDate);
+            return EventTimeInfo.book(now, openDateTime, closeDateTime, endDate);
         }
 
     }
