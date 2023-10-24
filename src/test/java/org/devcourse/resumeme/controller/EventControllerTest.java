@@ -37,7 +37,8 @@ class EventControllerTest extends ControllerUnitTest {
         EventTimeRequest eventTimeRequest = new EventTimeRequest(
                 LocalDateTime.of(2023,10,23,12,0),
                 LocalDateTime.of(2023,10,23,12,0),
-                LocalDateTime.of(2023,10,23,23,0)
+                LocalDateTime.of(2023,10,24,12,0),
+                LocalDateTime.of(2023,10,30,23,0)
         );
         EventCreateRequest eventCreateRequest = new EventCreateRequest(eventInfoRequest, eventTimeRequest, List.of("FRONT", "BACK"));
         /* 로그인 기능 완료 후 멘토 주입 값 추후 변경 예정 */
@@ -63,7 +64,8 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("info.maximumAttendee").type(NUMBER).description("최대 첨삭 이벤트 참여 가능 멘티 인원"),
                                         fieldWithPath("time.now").type(STRING).description("첨삭 이벤트 생성 요청 시간"),
                                         fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간"),
-                                        fieldWithPath("time.endDate").type(STRING).description("첨삭 이벤트 신청 종료 시간"),
+                                        fieldWithPath("time.closeDateTime").type(STRING).description("첨삭 이벤트 신청 마감 시간"),
+                                        fieldWithPath("time.endDate").type(STRING).description("첨삭 종료 시간"),
                                         fieldWithPath("positions").type(ARRAY).description(generateLinkCode(POSITION))
                                 ),
                                 responseFields(
