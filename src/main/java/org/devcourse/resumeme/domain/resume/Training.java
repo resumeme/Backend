@@ -24,7 +24,7 @@ public class Training {
     @Column(name = "training_id")
     private Long id;
 
-    private String schoolOrOrganization;
+    private String organization;
 
     private String major;
 
@@ -40,11 +40,11 @@ public class Training {
 
     private String explanation;
 
-    public Training(String schoolOrOrganization, String major, String degree, LocalDate admissionDate,
+    public Training(String organization, String major, String degree, LocalDate admissionDate,
                     LocalDate graduationDate, double gpa, double maxGpa, String explanation) {
-        validateTraining(schoolOrOrganization, major, degree, admissionDate, graduationDate, gpa, maxGpa);
+        validateTraining(organization, major, degree, admissionDate, graduationDate, gpa, maxGpa);
 
-        this.schoolOrOrganization = schoolOrOrganization;
+        this.organization = organization;
         this.major = major;
         this.degree = degree;
         this.admissionDate = admissionDate;
