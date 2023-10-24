@@ -2,13 +2,12 @@ spring:
   jpa:
     open-in-view: false
   config:
-    import: application-endpoint.yml
+    import: application-endpoint.yml, application-auth.yml
 ---
 spring:
   config:
     activate:
       on-profile: default
-    import: secret/dev/application-social.yml
   datasource:
     url: jdbc:h2:tcp://localhost/~/resumeme
     username: sa
