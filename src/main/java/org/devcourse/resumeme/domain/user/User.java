@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.domain.user;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,12 +13,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.domain.BaseEntity;
 
 @Entity
 @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @Column(name = "user_id")
@@ -39,16 +41,16 @@ public class User {
 
     private String imageUrl;
 
-    private String nickname;
+    @Embedded
+    private RequiredInfo requiredInfo;
 
-    private String realName;
-
-    private String phoneNumber;
+    @Embedded
+    private AdditionalInfo additionalInfo;
 
     private String refreshToken;
 
     @Builder
-    public User(Long id, String oauthUsername, String password, String email, Role role, Provider provider, String imageUrl, String nickname, String realName, String phoneNumber, String refreshToken) {
+    public User(Long id, String oauthUsername, String password, String email, Role role, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, AdditionalInfo additionalInfo) {
         this.id = id;
         this.oauthUsername = oauthUsername;
         this.password = password;
@@ -56,10 +58,9 @@ public class User {
         this.role = role;
         this.provider = provider;
         this.imageUrl = imageUrl;
-        this.nickname = nickname;
-        this.realName = realName;
-        this.phoneNumber = phoneNumber;
+        this.requiredInfo = requiredInfo;
         this.refreshToken = refreshToken;
+        this.additionalInfo = additionalInfo;
     }
 
     public boolean isMentee() {
