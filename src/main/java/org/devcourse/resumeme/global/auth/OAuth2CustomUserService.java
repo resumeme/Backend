@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.global.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.domain.user.RequiredInfo;
 import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.domain.user.User;
@@ -51,7 +52,11 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
                                 .imageUrl(finalUserInfo.getImageUrl())
                                 .role(Role.ROLE_GUEST)
                                 .password("resumeme")
-                                .nickname(finalUserInfo.getNickname())
+                                .requiredInfo(
+                                        RequiredInfo.builder()
+                                                .nickname(finalUserInfo.getNickname())
+                                                .build()
+                                )
                                 .email(finalUserInfo.getEmail())
                                 .provider(socialType)
                                 .build()));
