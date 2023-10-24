@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,10 +44,6 @@ public class Resume extends BaseEntity {
     @Lob
     private String introduce;
 
-    @ManyToOne
-    @JoinColumn(name = "training_id")
-    private Training training;
-
     @Embedded
     private Career career;
 
@@ -61,17 +58,15 @@ public class Resume extends BaseEntity {
 
     private String phoneNumber;
 
-    public Resume(String title, User user, Training training) {
-        validateResume(title, user, training);
+    public Resume(String title, User user) {
+        validateResume(title, user);
         this.title = title;
         this.user = user;
-        this.training = training;
     }
 
-    private static void validateResume(String title, User user, Training training) {
+    private static void validateResume(String title, User user) {
         validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(user == null, ExceptionCode.MENTEE_NOT_FOUND);
-        validate(training == null, ExceptionCode.NO_EMPTY_VALUE);
         if (!user.isMentee()) {
             throw new CustomException(ExceptionCode.MENTEE_ONLY_RESUME);
         }
