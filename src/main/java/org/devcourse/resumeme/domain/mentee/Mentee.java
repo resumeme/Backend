@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.domain.mentor;
+package org.devcourse.resumeme.domain.mentee;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -8,19 +8,19 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.domain.mentee.MenteePosition;
-import org.devcourse.resumeme.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.domain.user.Provider;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
-public class Mentor {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Mentee extends BaseEntity {
 
     @Id
     @Getter
@@ -52,14 +52,17 @@ public class Mentor {
     @OneToMany
     private Set<MenteePosition> interestedPositions = new HashSet<>();
 
-    private String careerContent;
-
-    private int careerYear;
+    @OneToMany
+    private Set<MenteeField> interestedFields = new HashSet<>();
 
     private String introduce;
 
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     @Builder
-    public Mentor(Long id, String oauthUsername, String password, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<MenteePosition> interestedPositions, String careerContent, int careerYear, String introduce) {
+    public Mentee(Long id, String oauthUsername, String password, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<MenteePosition> interestedPositions, Set<MenteeField> interestedFields, String introduce) {
         this.id = id;
         this.oauthUsername = oauthUsername;
         this.password = password;
@@ -69,13 +72,8 @@ public class Mentor {
         this.requiredInfo = requiredInfo;
         this.refreshToken = refreshToken;
         this.interestedPositions = interestedPositions;
-        this.careerContent = careerContent;
-        this.careerYear = careerYear;
+        this.interestedFields = interestedFields;
         this.introduce = introduce;
-    }
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
 }

@@ -49,7 +49,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
                 .orElseGet(() -> userRepository.save(
                         User.builder().oauthUsername(oauthUsername)
                                 .imageUrl(finalUserInfo.getImageUrl())
-                                .role(Role.ROLE_GUEST)
+                                .role(Role.ROLE_MENTEE)
                                 .password("resumeme")
                                 .nickname(finalUserInfo.getNickname())
                                 .email(finalUserInfo.getEmail())
