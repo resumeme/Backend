@@ -1,11 +1,13 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
+import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventTimeRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -19,6 +21,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -26,6 +29,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class EventControllerTest extends ControllerUnitTest {
@@ -70,6 +75,37 @@ class EventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 첨삭 이벤트 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 첨삭_이벤트_참여에_성공한다() throws Exception {
+        // given
+        ApplyToEventRequest request = new ApplyToEventRequest(1L);
+        given(eventService.acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L))).willReturn(1);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/apply",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("참여하고 싶은 이벤트 아이디")
+                                ),
+                                requestFields(
+                                        fieldWithPath("resumeId").type(NUMBER).description("이벤트 참여시 사용할 이력서 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("value").type(NUMBER).description("이벤트에 남은 좌석 수")
                                 )
                         )
                 );

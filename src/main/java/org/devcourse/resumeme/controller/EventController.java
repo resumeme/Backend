@@ -2,10 +2,15 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
+import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
+import org.devcourse.resumeme.controller.dto.ValueResponse;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.service.EventService;
+import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +30,14 @@ public class EventController {
         Event event = request.toEntity(mentor);
 
         return new IdResponse(eventService.create(event));
+    }
+
+    @PatchMapping("/{eventId}")
+    public ValueResponse<Integer> applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request /* @AuthenticationPrincipal 인증 유저 */) {
+        /* 인증 유저 아이디 -> 멘티 아이디 찾아오기 */
+        Long menteeId = 1L;
+
+        return new ValueResponse<>(eventService.acceptMentee(new AcceptMenteeToEvent(eventId, request.resumeId(), menteeId)));
     }
 
 }
