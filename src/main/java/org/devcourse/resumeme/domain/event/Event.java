@@ -69,10 +69,10 @@ public class Event extends BaseEntity {
         validate(positions == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
     }
 
-    public int acceptMentee(Long menteeId) {
+    public int acceptMentee(Long menteeId, Long resumeId) {
         checkDuplicateApplicationEvent(menteeId);
         eventInfo.checkAvailableApplication();
-        applicants.add(new MenteeToEvent(this, menteeId));
+        applicants.add(new MenteeToEvent(this, menteeId, resumeId));
 
         return eventInfo.close(applicants.size());
     }

@@ -24,7 +24,7 @@ class MenteeToEventTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, new Mentor(), List.of()), 1L);
+        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, new Mentor(), List.of()), 1L, 1L);
 
         // then
         assertThat(menteeToEvent).isNotNull();
@@ -34,7 +34,7 @@ class MenteeToEventTest {
     @MethodSource("eventMenteeID")
     void 멘티와_이벤트를_연결하는_연관관계테이블_객체_생성에_실패한다_검증조건실패(Event event, Long menteeId) {
         // then
-        assertThatThrownBy(() -> new MenteeToEvent(event, menteeId))
+        assertThatThrownBy(() -> new MenteeToEvent(event, menteeId, 1L))
                 .isInstanceOf(CustomException.class);
     }
 
@@ -54,7 +54,7 @@ class MenteeToEventTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, new Mentor(), List.of()), 1L);
+        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, new Mentor(), List.of()), 1L, 1L);
 
         // when
         boolean sameMentee = menteeToEvent.isSameMentee(menteeId);

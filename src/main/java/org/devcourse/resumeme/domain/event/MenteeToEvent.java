@@ -28,12 +28,16 @@ public class MenteeToEvent extends BaseEntity {
 
     private Long menteeId;
 
-    public MenteeToEvent(Event event, Long menteeId) {
+    private Long resumeId;
+
+    public MenteeToEvent(Event event, Long menteeId, Long resumeId) {
         validate(event == null, "NOT_EMPTY_VALUE", "이벤트는 빈 값일 수 없습니다");
         validate(menteeId == null, "NOT_EMPTY_VALUE", "멘티는 빈 값일 수 없습니다");
+        validate(resumeId == null, "NOT_EMPTY_VALUE", "이력서는 빈 값일 수 없습니다");
 
         this.event = event;
         this.menteeId = menteeId;
+        this.resumeId = resumeId;
     }
 
     public boolean isSameMentee(Long menteeId) {
