@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface MenteeRepository extends JpaRepository<Mentee, Long> {
 
-    Optional<Mentee> findMenteeByOauthUsername(String oauthUsername);
+    Optional<Mentee> findByEmail(String email);
 
 }

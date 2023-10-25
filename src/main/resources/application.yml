@@ -3,6 +3,10 @@ spring:
     open-in-view: false
   config:
     import: application-endpoint.yml, application-auth.yml
+  data:
+    redis:
+      host: localhost
+      port: 6379
 ---
 spring:
   config:
