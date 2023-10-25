@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
+import org.devcourse.resumeme.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.service.EventService;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.service.vo.EventReject;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,11 @@ public class EventController {
         Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, request.resumeId(), menteeId));
 
         return new IdResponse(eventService.getApplicantId(event, menteeId));
+    }
+
+    @PatchMapping("/{eventId}/mentee/{menteeId}")
+    public void rejectApply(@PathVariable Long eventId, @PathVariable Long menteeId, @RequestBody EventRejectRequest request) {
+        eventService.reject(new EventReject(eventId, menteeId, request.rejectMessage()));
     }
 
 }
