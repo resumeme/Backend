@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,7 +43,8 @@ public class Resume extends BaseEntity {
     @Lob
     private String introduce;
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "career_id")
     private Career career;
 
     @Embedded
