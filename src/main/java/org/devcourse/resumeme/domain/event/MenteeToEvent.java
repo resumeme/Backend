@@ -13,6 +13,8 @@ import org.devcourse.resumeme.common.domain.BaseEntity;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.domain.event.Progress.APPLY;
+import static org.devcourse.resumeme.domain.event.Progress.REJECT;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -32,6 +34,10 @@ public class MenteeToEvent extends BaseEntity {
 
     private Long resumeId;
 
+    private Progress progress;
+
+    private String rejectMessage;
+
     public MenteeToEvent(Event event, Long menteeId, Long resumeId) {
         validate(event == null, "NOT_EMPTY_VALUE", "이벤트는 빈 값일 수 없습니다");
         validate(menteeId == null, "NOT_EMPTY_VALUE", "멘티는 빈 값일 수 없습니다");
@@ -40,10 +46,24 @@ public class MenteeToEvent extends BaseEntity {
         this.event = event;
         this.menteeId = menteeId;
         this.resumeId = resumeId;
+        this.progress = APPLY;
+        this.rejectMessage = "";
     }
 
     public boolean isSameMentee(Long menteeId) {
         return this.menteeId.equals(menteeId);
+    }
+
+    public void reject(String rejectMessage) {
+        validate(rejectMessage == null, "NOT_EMPTY_VALUE", "반려 사유를 작성해주세요");
+
+        this.rejectMessage = rejectMessage;
+        this.progress = REJECT;
+        this.event = null;
+    }
+
+    public boolean isRejected() {
+        return this.progress.equals(REJECT);
     }
 
 }

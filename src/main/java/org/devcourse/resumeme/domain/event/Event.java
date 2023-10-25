@@ -18,6 +18,7 @@ import org.devcourse.resumeme.domain.mentor.Mentor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
@@ -78,15 +79,22 @@ public class Event extends BaseEntity {
     }
 
     private void checkDuplicateApplicationEvent(Long menteeId) {
-        for (MenteeToEvent attendedMentee : applicants) {
-            if (attendedMentee.isSameMentee(menteeId)) {
-                throw new EventException("DUPLICATE_APPLICATION_EVENT", "이미 신청한 이력이 있습니다");
-            }
-        }
+        applicants.stream()
+                .filter(applicant -> applicant.isSameMentee(menteeId))
+                .findFirst()
+                .ifPresent(applicant -> {
+                    throw new EventException("DUPLICATE_APPLICATION_EVENT", "이미 신청한 이력이 있습니다");
+                });
     }
 
-    public int reject(Long menteeId) {
-        applicants.removeIf(attendedMentee -> attendedMentee.isSameMentee(menteeId));
+    public int reject(Long menteeId, String message) {
+        applicants.stream()
+                .filter(applicant -> applicant.isSameMentee(menteeId))
+                .findFirst()
+                .ifPresent(applicant -> {
+                    applicant.reject(message);
+                    applicants.remove(applicant);
+                });
 
         return eventInfo.remainSeats(applicants.size());
     }
