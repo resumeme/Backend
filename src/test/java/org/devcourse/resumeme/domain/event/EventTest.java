@@ -130,9 +130,11 @@ class EventTest {
             event.acceptMentee(i, i);
         }
 
-        // when & then
-        assertThatThrownBy(() -> event.reject(3L, "message"))
-                .isInstanceOf(EventException.class);
+        // when
+        int remainSeat = event.reject(3L, "message");
+
+        // then
+        assertThat(remainSeat).isEqualTo(1);
     }
 
 }
