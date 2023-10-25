@@ -47,7 +47,8 @@ public class Resume extends BaseEntity {
     @JoinColumn(name = "career_id")
     private Career career;
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "project_id")
     private Project project;
 
     private String email;
