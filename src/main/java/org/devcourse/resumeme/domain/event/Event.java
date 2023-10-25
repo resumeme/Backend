@@ -85,10 +85,17 @@ public class Event extends BaseEntity {
         }
     }
 
-    public int reject(Long menteeId) {
-        applicants.removeIf(attendedMentee -> attendedMentee.isSameMentee(menteeId));
+    public int reject(Long menteeId, String message) {
+        for (MenteeToEvent applicant : applicants) {
+            if (applicant.isSameMentee(menteeId)) {
+                applicant.reject(message);
+                applicants.remove(applicant);
 
-        return eventInfo.remainSeats(applicants.size());
+                return eventInfo.remainSeats(applicants.size());
+            }
+        }
+
+        throw new EventException("NOT_FOUND", "이력을 찾을 수 없습니다");
     }
 
     public int reOpenEvent() {
