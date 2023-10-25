@@ -18,11 +18,17 @@ public class EventService {
         return eventRepository.save(event).getId();
     }
 
-    public int acceptMentee(AcceptMenteeToEvent ids) {
+    public Event acceptMentee(AcceptMenteeToEvent ids) {
         Event event = eventRepository.findWithLockById(ids.eventId())
                 .orElseThrow();
+        event.acceptMentee(ids.menteeId(), ids.resumeId());
 
-        return event.acceptMentee(ids.menteeId(), ids.resumeId());
+        return event;
+    }
+
+    @Transactional(readOnly = true)
+    public Long getApplicantId(Event event, Long menteeId) {
+        return event.getApplicantId(menteeId);
     }
 
 }

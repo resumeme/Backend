@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 
@@ -18,6 +19,7 @@ import static org.devcourse.resumeme.common.util.Validator.validate;
 public class MenteeToEvent extends BaseEntity {
 
     @Id
+    @Getter
     @GeneratedValue
     @Column(name = "mentee_to_event_id")
     private Long id;

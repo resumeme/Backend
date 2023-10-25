@@ -105,4 +105,14 @@ public class Event extends BaseEntity {
         eventInfo.open();
     }
 
+    public Long getApplicantId(Long menteeId) {
+        for (MenteeToEvent applicant : applicants) {
+            if (applicant.isSameMentee(menteeId)) {
+                return applicant.getId();
+            }
+        }
+
+        throw new EventException("NOT_FOUND", "이력을 찾을 수 없습니다");
+    }
+
 }
