@@ -63,7 +63,7 @@ class EventTest {
         event.acceptMentee(2L, 1L);
 
         // when
-        int remainSeats = event.reject(1L);
+        int remainSeats = event.reject(1L, "message");
 
         // then
         assertThat(remainSeats).isEqualTo(2);
@@ -75,7 +75,7 @@ class EventTest {
         event.acceptMentee(1L, 1L);
         event.acceptMentee(2L, 1L);
         event.acceptMentee(3L, 1L);
-        event.reject(1L);
+        event.reject(1L, "message");
 
         // when
         int remainSeats = event.reOpenEvent();
@@ -106,6 +106,32 @@ class EventTest {
 
         // when & then
         assertThatThrownBy(() -> bookEvent.openReservationEvent(now))
+                .isInstanceOf(EventException.class);
+    }
+
+    @Test
+    void 참여자를_반려시키고_잔여자리가_한자리_늘어난다() {
+        // given
+        for (long i = 0; i < 2; i++) {
+            event.acceptMentee(i, i);
+        }
+
+        // when
+        int remainSeat = event.reject(1L, "message");
+
+        // then
+        assertThat(remainSeat).isEqualTo(2);
+    }
+
+    @Test
+    void 참여하지않은_멘티_아이디로는_반려를_할수없다() {
+        // given
+        for (long i = 0; i < 2; i++) {
+            event.acceptMentee(i, i);
+        }
+
+        // when & then
+        assertThatThrownBy(() -> event.reject(3L, "message"))
                 .isInstanceOf(EventException.class);
     }
 
