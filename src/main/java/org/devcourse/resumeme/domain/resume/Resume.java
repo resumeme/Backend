@@ -51,6 +51,10 @@ public class Resume extends BaseEntity {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    @ManyToOne
+    @JoinColumn(name = "certification_id")
+    private Certification certification;
+
     private String email;
 
     private String githubAddress;
