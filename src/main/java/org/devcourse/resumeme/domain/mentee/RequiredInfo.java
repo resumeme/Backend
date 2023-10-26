@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.domain.user.Role;
@@ -16,7 +17,7 @@ import static org.devcourse.resumeme.domain.user.Role.ROLE_PENDING;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequiredInfo {
 
-    private static final String PHONE_REGEX = "^01(?:0|1|[6-9])(\\\\d{3}|\\\\d{4})(\\\\d{4})$";
+    private static final String PHONE_REGEX = "^01(0|1|[6-9])[0-9]{3,4}[0-9]{4}$";
 
     private String nickname;
 
@@ -28,10 +29,11 @@ public class RequiredInfo {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public RequiredInfo(String nickname, String realName, String phoneNumber, Role role) {
+    @Builder
+    public RequiredInfo(String realName, String nickname, String phoneNumber, Role role) {
         validateRequiredInfo(nickname, realName, phoneNumber, role);
-        this.nickname = nickname;
         this.realName = realName;
+        this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.role = role;
     }

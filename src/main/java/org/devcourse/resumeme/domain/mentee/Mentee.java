@@ -30,12 +30,6 @@ public class Mentee extends BaseEntity {
 
     @Getter
     @Column(unique = true)
-    private String oauthUsername;
-
-    @Getter
-    private String password;
-
-    @Getter
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -62,10 +56,8 @@ public class Mentee extends BaseEntity {
     }
 
     @Builder
-    public Mentee(Long id, String oauthUsername, String password, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<MenteePosition> interestedPositions, Set<MenteeField> interestedFields, String introduce) {
+    public Mentee(Long id,String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<MenteePosition> interestedPositions, Set<MenteeField> interestedFields, String introduce) {
         this.id = id;
-        this.oauthUsername = oauthUsername;
-        this.password = password;
         this.email = email;
         this.provider = provider;
         this.imageUrl = imageUrl;

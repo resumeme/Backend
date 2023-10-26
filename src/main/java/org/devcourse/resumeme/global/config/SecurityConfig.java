@@ -2,6 +2,7 @@ package org.devcourse.resumeme.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.global.auth.OAuth2CustomUserService;
+import org.devcourse.resumeme.global.auth.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class SecurityConfig {
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+
     private final OAuth2CustomUserService oAuth2CustomUserService;
 
     @Bean
@@ -35,7 +38,8 @@ public class SecurityConfig {
                 .oauth2Login(configure ->
                         configure.userInfoEndpoint(userConfig ->
                                         userConfig.userService(oAuth2CustomUserService))
-                                .successHandler(oAuth2SuccessHandler));
+                                .successHandler(oAuth2SuccessHandler)
+                                .failureHandler(oAuth2FailureHandler));
 
         return http.build();
     }

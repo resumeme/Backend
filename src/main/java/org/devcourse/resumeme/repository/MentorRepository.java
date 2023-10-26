@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface MentorRepository extends JpaRepository<Mentor, Long> {
 
-    Optional<Mentor> findMentorByOauthUsername(String oauthUsername);
+    Optional<Mentor> findByEmail(String email);
 
 }
