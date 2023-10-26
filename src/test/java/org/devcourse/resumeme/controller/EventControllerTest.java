@@ -1,15 +1,18 @@
 package org.devcourse.resumeme.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventTimeRequest;
+import org.devcourse.resumeme.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.service.vo.EventReject;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,7 +25,9 @@ import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCo
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
@@ -114,6 +119,34 @@ class EventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("이벤트에 참여 성공후 발급된 이력 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 첨삭_이벤트_신청을_반려한다() throws Exception {
+        // given
+        EventRejectRequest request = new EventRejectRequest("이력서 작성 양이 너무 적습니다");
+        doNothing().when(eventService).reject(new EventReject(1L, 1L, "이력서 작성 양이 너무 적습니다"));
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/mentee/{menteeId}", 1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/reject",
+                                getDocumentRequest(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("이벤트 아이디"),
+                                        parameterWithName("menteeId").description("반려시키고 싶은 멘티 아이디")
+                                ),
+                                requestFields(
+                                        fieldWithPath("rejectMessage").type(STRING).description("이벤트 신청 반려 사유")
                                 )
                         )
                 );
