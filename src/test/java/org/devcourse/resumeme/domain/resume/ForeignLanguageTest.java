@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -20,6 +21,13 @@ class ForeignLanguageTest {
         language = "영어";
         examName = "토익";
         scoreOrGrade = "100";
+    }
+
+    @Test
+    void 외국어_생성에_성공한다() {
+        ForeignLanguage foreignLanguage = new ForeignLanguage(language, examName, scoreOrGrade);
+
+        assertThat(foreignLanguage).isNotNull();
     }
 
 
