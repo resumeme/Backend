@@ -34,6 +34,7 @@ public class Certification {
 
     public Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
         validate(isBlank(certificationTitle), ExceptionCode.NO_EMPTY_VALUE);
+
         this.certificationTitle = certificationTitle;
         this.acquisitionDate = acquisitionDate;
         this.issuingAuthority = issuingAuthority;
