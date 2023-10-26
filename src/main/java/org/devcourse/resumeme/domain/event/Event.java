@@ -91,9 +91,11 @@ public class Event extends BaseEntity {
         applicants.stream()
                 .filter(applicant -> applicant.isSameMentee(menteeId))
                 .findFirst()
-                .ifPresent(applicant -> {
+                .ifPresentOrElse(applicant -> {
                     applicant.reject(message);
                     applicants.remove(applicant);
+                }, () -> {
+                    throw new EventException("NOT_FOUND_MENTEE", "신청한 멘티가 없습니다");
                 });
 
         return eventInfo.remainSeats(applicants.size());
