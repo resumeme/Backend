@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -54,6 +55,14 @@ public class Resume extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "certification_id")
     private Certification certification;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
+
+    @ManyToOne
+    @JoinColumn(name = "foreign_language_id")
+    private ForeignLanguage foreignLanguage;
 
     private String email;
 
