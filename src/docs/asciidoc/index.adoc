@@ -25,3 +25,12 @@ include::{snippets}/event/create/request-fields.adoc[]
 === Response
 include::{snippets}/event/create/http-response.adoc[]
 include::{snippets}/event/create/response-fields.adoc[]
+
+== 이력서
+=== Request
+include::{snippets}/resume/create/http-request.adoc[]
+include::{snippets}/resume/create/request-fields.adoc[]
+
+=== Response
+include::{snippets}/resume/create/http-response.adoc[]
+include::{snippets}/resume/create/response-fields.adoc[]
