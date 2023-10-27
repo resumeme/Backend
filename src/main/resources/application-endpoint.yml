@@ -1,6 +1,6 @@
 endpoint:
   permit-all:
-    get: /docs/index.html
+    get:
     post:
     put:
     patch:
