@@ -1,7 +1,9 @@
 package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
+import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.service.ResumeService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,15 +18,14 @@ public class ResumeController {
 
     private final ResumeService resumeService;
 
-
-    @PostMapping()
-    public Long createResume(
-            // jwt 유저 파라미터 추가 예정
+    @PostMapping
+    public IdResponse createResume(
+            /* @AuthenticationPrincipal 인증 유저 */
             @RequestBody ResumeCreateRequest request) {
-        Resume resume = request.toEntity();
+        Resume resume = request.toEntity(Mentee.builder().build());
         Long savedId = resumeService.create(resume);
 
-        return savedId;
+        return new IdResponse(savedId);
     }
 
 }
