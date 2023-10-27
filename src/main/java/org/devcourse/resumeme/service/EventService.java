@@ -9,6 +9,8 @@ import org.devcourse.resumeme.service.vo.EventReject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -17,6 +19,12 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public Long create(Event event) {
+        List<Event> eventsWithMentor = eventRepository.findAllByMentor(event.getMentor());
+        eventsWithMentor.stream()
+                .filter(Event::isOpen)
+                .forEach(eventWithMentor -> {
+                    throw new EventException("DUPLICATED_EVENT_OPEN", "이미 오픈된 이벤트가 있습니다");
+                });
         return eventRepository.save(event).getId();
     }
 
