@@ -2,21 +2,20 @@ package org.devcourse.resumeme.global.auth.token;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.global.auth.model.Claims;
-import org.devcourse.resumeme.repository.MenteeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-
-    private final MenteeRepository menteeRepository;
 
     private static final String ACCESS_TOKEN_NAME = "access";
 
@@ -35,7 +34,7 @@ public class JwtService {
     private static final String SECRET_KEY = "resumeJWT";
 
     public String createAccessToken(Claims claims) {
-        return JWT.create()
+        return BEARER + JWT.create()
                 .withSubject(ACCESS_TOKEN_NAME)
                 .withExpiresAt(new Date(claims.expiration().getTime() + ACCESS_TOKEN_EXP))
                 .withClaim(ID, claims.id())
@@ -46,7 +45,7 @@ public class JwtService {
 
     public String createRefreshToken() {
         Date now = new Date();
-        return JWT.create()
+        return BEARER + JWT.create()
                 .withSubject(REFRESH_TOKEN_NAME)
                 .withExpiresAt(new Date(now.getTime() + REFRESH_TOKEN_EXP))
                 .sign(Algorithm.HMAC512(SECRET_KEY));
@@ -81,6 +80,32 @@ public class JwtService {
 
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
         response.setHeader(REFRESH_TOKEN_NAME, refreshToken);
+    }
+
+    public void validate(String token) {
+        JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(token);
+    }
+
+    public Claims extractClaim(String accessToken) {
+        Map<String, Claim> claims = JWT.decode(accessToken).getClaims();
+
+        Long id = claims.get(ID).asLong();
+        String role = claims.get(ROLE).toString();
+        System.out.println("role = " + role);
+        Date expiration = claims.get("exp").asDate();
+
+        return new Claims(id, role, expiration);
+    }
+
+    public boolean compareTokens(String refreshTokenSaved, String refreshToken) {
+        return refreshTokenSaved.equals(refreshToken);
+    }
+
+    public Map<String, String> createAndSendNewTokens(Claims claims, HttpServletResponse response) {
+        String accessToken = createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
+        String refreshToken = createRefreshToken();
+        sendAccessAndRefreshToken(response, accessToken, refreshToken);
+        return Map.of("access", accessToken, "refresh", refreshToken);
     }
 
 }
