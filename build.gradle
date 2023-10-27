@@ -83,3 +83,10 @@ asciidoctor {
 build {
 	dependsOn copyDocument
 }
+
+bootJar {
+	dependsOn copyDocument
+	from ("${asciidoctor.outputDir}") {
+		into 'static/docs'
+	}
+}

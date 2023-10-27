@@ -17,7 +17,8 @@ endif::[]
 
 // filename은 src/test/java/o.d.r/common/DocumentLinkGenerator#DocUrl
 // 필드 중 htmlFileName과 동일한 이름을 주면 됩니다
-== 첨삭 이벤트
+= 첨삭 이벤트
+== 생성
 === Request
 include::{snippets}/event/create/http-request.adoc[]
 include::{snippets}/event/create/request-fields.adoc[]
@@ -26,7 +27,25 @@ include::{snippets}/event/create/request-fields.adoc[]
 include::{snippets}/event/create/http-response.adoc[]
 include::{snippets}/event/create/response-fields.adoc[]
 
-== 이력서
+== 신청
+=== Request
+include::{snippets}/event/apply/http-request.adoc[]
+include::{snippets}/event/apply/request-fields.adoc[]
+
+=== Response
+include::{snippets}/event/apply/http-response.adoc[]
+include::{snippets}/event/apply/response-fields.adoc[]
+
+== 반려
+=== Request
+include::{snippets}/event/reject/http-request.adoc[]
+include::{snippets}/event/reject/request-fields.adoc[]
+
+=== Response
+include::{snippets}/event/reject/http-response.adoc[]
+
+= 이력서
+== 생성
 === Request
 include::{snippets}/resume/create/http-request.adoc[]
 include::{snippets}/resume/create/request-fields.adoc[]
