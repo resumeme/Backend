@@ -35,7 +35,7 @@ public enum EventStatus implements DocsEnumType {
     }
 
     public boolean isOpen() {
-        return this.equals(READY) || this.equals(FINISH);
+        return !(this.equals(READY) || this.equals(FINISH));
     }
 
 }
