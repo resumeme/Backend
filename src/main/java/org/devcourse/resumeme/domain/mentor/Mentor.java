@@ -26,7 +26,7 @@ public class Mentor extends BaseEntity {
     @Id
     @Getter
     @GeneratedValue
-    @Column(name = "mentee_id")
+    @Column(name = "mentor_id")
     private Long id;
 
     @Getter
@@ -42,6 +42,7 @@ public class Mentor extends BaseEntity {
     @Embedded
     private RequiredInfo requiredInfo;
 
+    @Getter
     private String refreshToken;
 
     @OneToMany

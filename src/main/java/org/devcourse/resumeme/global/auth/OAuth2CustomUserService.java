@@ -12,7 +12,7 @@ import org.devcourse.resumeme.global.auth.userInfo.KakaoOAuth2UserInfo;
 import org.devcourse.resumeme.global.auth.userInfo.OAuth2UserInfo;
 import org.devcourse.resumeme.repository.MenteeRepository;
 import org.devcourse.resumeme.repository.MentorRepository;
-import org.devcourse.resumeme.repository.OAuth2TempInfoRepository;
+import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -25,8 +25,8 @@ import java.util.Optional;
 import static org.devcourse.resumeme.domain.user.Provider.GOOGLE;
 import static org.devcourse.resumeme.domain.user.Provider.KAKAO;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class OAuth2CustomUserService extends DefaultOAuth2UserService {
 
@@ -34,7 +34,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
 
     private final MenteeRepository menteeRepository;
 
-    private final OAuth2TempInfoRepository oAuth2TempInfoRepository;
+    private final OAuth2InfoRedisRepository oAuth2TempInfoRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

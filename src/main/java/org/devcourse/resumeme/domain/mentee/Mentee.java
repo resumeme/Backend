@@ -41,6 +41,7 @@ public class Mentee extends BaseEntity {
     @Embedded
     private RequiredInfo requiredInfo;
 
+    @Getter
     private String refreshToken;
 
     @OneToMany
