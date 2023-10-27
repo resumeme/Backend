@@ -2,7 +2,7 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.controller.dto.RegisterInfo;
+import org.devcourse.resumeme.controller.dto.RegisterInfoRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.user.Provider;
@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.Map;
 
+import static org.devcourse.resumeme.controller.dto.RegisterInfoRequest.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -33,20 +35,19 @@ public class MenteeController {
     private final JwtService jwtService;
 
     @PostMapping
-    public Map<String, String> register(@RequestBody RegisterInfo registerInfo) {
-
-        log.debug("registerInfo.cacheKey = {}", registerInfo.cacheKey());
-        OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisRepository.findById(registerInfo.cacheKey())
+    public Map<String, String> register(@RequestBody RegisterInfoRequest registerInfoRequest) {
+        log.debug("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
+        OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisRepository.findById(registerInfoRequest.cacheKey())
                 .orElseThrow(() -> new CustomException("REGISTER_FAIL", "회원가입에 실패했습니다."));
 
-        RequiredInfo requiredInfo = registerInfo.requiredInfo();
+        RequiredInfoRequest requiredInfoRequest = registerInfoRequest.requiredInfoRequest();
 
         Mentee mentee = Mentee.builder()
                 .email(oAuth2TempInfo.getEmail())
                 .provider(Provider.of(oAuth2TempInfo.getProvider()))
                 .imageUrl(oAuth2TempInfo.getImageUrl())
                 .requiredInfo(
-                        new RequiredInfo(requiredInfo.getRealName(), requiredInfo.getNickname(), requiredInfo.getPhoneNumber(), requiredInfo.getRole())
+                        new RequiredInfo(requiredInfoRequest.getRealName(), requiredInfoRequest.getNickname(), requiredInfoRequest.getPhoneNumber(), requiredInfoRequest.getRole())
                 ).build();
 
         Mentee savedMentee = menteeService.create(mentee);
