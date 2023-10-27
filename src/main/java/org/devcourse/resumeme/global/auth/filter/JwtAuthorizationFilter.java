@@ -14,7 +14,6 @@ import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.MentorService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.Optional;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
