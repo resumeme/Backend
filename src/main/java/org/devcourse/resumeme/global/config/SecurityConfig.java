@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.global.auth.OAuth2CustomUserService;
 import org.devcourse.resumeme.global.auth.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.OAuth2SuccessHandler;
+import org.devcourse.resumeme.global.auth.OAuthTokenResponseFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -17,6 +20,7 @@ import java.util.Map;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@Import(SecurityServiceConfig.class)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -27,6 +31,8 @@ public class SecurityConfig {
     private final OAuth2FailureHandler oAuth2FailureHandler;
 
     private final OAuth2CustomUserService oAuth2CustomUserService;
+
+    private final OAuthTokenResponseFilter oAuthTokenResponseFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,6 +46,8 @@ public class SecurityConfig {
                                         userConfig.userService(oAuth2CustomUserService))
                                 .successHandler(oAuth2SuccessHandler)
                                 .failureHandler(oAuth2FailureHandler));
+
+        http.addFilterAfter(oAuthTokenResponseFilter, OAuth2AuthorizationRequestRedirectFilter.class);
 
         return http.build();
     }
