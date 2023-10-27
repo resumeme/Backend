@@ -63,6 +63,25 @@ class EventServiceTest {
     }
 
     @Test
+    void 이벤트_생성에_성공한다() {
+        // given
+        EventInfo openEvent = EventInfo.book(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
+        Mentor mentor = new Mentor();
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+
+        given(eventRepository.findAllByMentor(mentor)).willReturn(List.of());
+        given(eventRepository.save(event)).willReturn(event);
+
+        // when
+        Event createEvent = eventService.create(event);
+
+        // then
+        assertThat(createEvent).isEqualTo(event);
+    }
+
+
+    @Test
     void 여러스레드를_이용하여_선착순으로_진행한_이벤트참여신청에_최대_참여수만큼_성공한다() throws InterruptedException {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
