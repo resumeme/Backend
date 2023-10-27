@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
@@ -27,7 +26,6 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRes
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
@@ -96,7 +94,7 @@ class EventControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         ApplyToEventRequest request = new ApplyToEventRequest(1L);
-        given(eventService.acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L))).willReturn(null);
+        given(eventService.acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L))).willReturn(event);
         given(eventService.getApplicantId(event, 1L)).willReturn(1L);
 
         // when

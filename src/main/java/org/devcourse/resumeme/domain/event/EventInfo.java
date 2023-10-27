@@ -80,4 +80,8 @@ public class EventInfo {
         return maximumAttendee - attendedMenteeCount;
     }
 
+    public boolean isOpen() {
+        return this.status.isOpen();
+    }
+
 }

@@ -31,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,6 +62,44 @@ class EventServiceTest {
         successCount = new AtomicInteger();
         failCount = new AtomicInteger();
     }
+
+    @Test
+    void 이벤트_생성에_성공한다() {
+        // given
+        EventInfo openEvent = EventInfo.book(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
+        Mentor mentor = new Mentor();
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+
+        given(eventRepository.findAllByMentor(mentor)).willReturn(List.of());
+        given(eventRepository.save(event)).willReturn(event);
+
+        // when
+        eventService.create(event);
+
+        // then
+        verify(eventRepository, times(1)).save(event);
+    }
+
+    @Test
+    void 이미_오픈되어있는_이벤트가있어_이벤트_생성에_실패한다() {
+        // given
+        EventInfo openEvent = EventInfo.book(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
+        Mentor mentor = new Mentor();
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+
+        EventInfo openEvent1 = EventInfo.open(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo1 = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        Event event1 = new Event(openEvent1, eventTimeInfo1, mentor, List.of());
+
+        given(eventRepository.findAllByMentor(mentor)).willReturn(List.of(event1));
+
+        // when & then
+        assertThatThrownBy(() -> eventService.create(event))
+                .isInstanceOf(EventException.class);
+    }
+
 
     @Test
     void 여러스레드를_이용하여_선착순으로_진행한_이벤트참여신청에_최대_참여수만큼_성공한다() throws InterruptedException {

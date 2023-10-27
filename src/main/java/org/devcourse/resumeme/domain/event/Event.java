@@ -125,4 +125,11 @@ public class Event extends BaseEntity {
         throw new EventException("NOT_FOUND", "이력을 찾을 수 없습니다");
     }
 
+    public Mentor getMentor() {
+        return mentor;
+    }
+
+    public boolean isOpen() {
+        return eventInfo.isOpen();
+    }
 }
