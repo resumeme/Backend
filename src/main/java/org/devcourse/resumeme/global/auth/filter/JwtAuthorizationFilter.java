@@ -35,16 +35,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("JwtAuthorizationFilter active");
-
         Optional<String> accessToken = jwtService.extractAccessToken(request);
         log.info("accessToken from request = {}", accessToken);
 
         try {
             accessToken.ifPresent(token -> {
-                log.info("if present ==========");
                 jwtService.validate(token);
-                log.info("if present222 ==========");
                 saveAuthentication(token);
             });
 
@@ -77,16 +73,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void saveAuthentication(String accessToken) {
-        log.info("saveAuthentication ===========");
         Claims claims = jwtService.extractClaim(accessToken);
-        System.out.println("claims = " + claims);
         SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
-
-        System.out.println("SecurityContextHolder.getContext().getAuthentication() = " + SecurityContextHolder.getContext().getAuthentication());
     }
 
     private UsernamePasswordAuthenticationToken createAuthentication(Claims claims) {
-        System.out.println("claims.role() = " + claims.role());
         return new UsernamePasswordAuthenticationToken(new JwtUser(claims.id()), null, List.of(() -> "ROLE_MENTEE"));
     }
 

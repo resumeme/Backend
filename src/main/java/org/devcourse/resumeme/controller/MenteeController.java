@@ -47,7 +47,7 @@ public class MenteeController {
                 .provider(Provider.of(oAuth2TempInfo.getProvider()))
                 .imageUrl(oAuth2TempInfo.getImageUrl())
                 .requiredInfo(
-                        new RequiredInfo(requiredInfoRequest.getRealName(), requiredInfoRequest.getNickname(), requiredInfoRequest.getPhoneNumber(), requiredInfoRequest.getRole())
+                        new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role())
                 ).build();
 
         Mentee savedMentee = menteeService.create(mentee);
