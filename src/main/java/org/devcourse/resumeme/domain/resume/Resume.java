@@ -1,12 +1,10 @@
 package org.devcourse.resumeme.domain.resume;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -17,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.user.User;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
@@ -36,8 +35,8 @@ public class Resume extends BaseEntity {
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "mentee_id")
+    private Mentee mentee;
 
     @Enumerated(EnumType.STRING)
     private Position position;
@@ -73,23 +72,15 @@ public class Resume extends BaseEntity {
 
     private String phoneNumber;
 
-    public Resume(String title, User user) {
-        validateResume(title, user);
+    public Resume(String title, Mentee mentee) {
+        validateResume(title, mentee);
         this.title = title;
-        this.user = user;
+        this.mentee = mentee;
     }
 
-    private static void validateResume(String title, User user) {
+    private static void validateResume(String title, Mentee mentee) {
         validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(user == null, ExceptionCode.MENTEE_NOT_FOUND);
-        if (!user.isMentee()) {
-            throw new CustomException(ExceptionCode.MENTEE_ONLY_RESUME);
-        }
-    }
-
-    public Resume(String title, String introduce) {
-        this.title = title;
-        this.introduce = introduce;
+        validate(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
     }
 
 }

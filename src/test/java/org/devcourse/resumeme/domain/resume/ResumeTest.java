@@ -25,10 +25,4 @@ public class ResumeTest {
                 .build();
     }
 
-    @Test
-    void 멘티만_이력서를_작성할_수_있다() {
-        assertThatThrownBy(() -> new Resume("title", user))
-                .isInstanceOf(CustomException.class);
-    }
-
 }

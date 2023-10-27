@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.controller.EventController;
 import org.devcourse.resumeme.service.EventService;
+import org.devcourse.resumeme.service.ResumeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -32,6 +33,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected EventService eventService;
+
+    @MockBean
+    protected ResumeService resumeService;
 
     protected MockMvc mvc;
 
