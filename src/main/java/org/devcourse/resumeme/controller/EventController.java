@@ -33,9 +33,9 @@ public class EventController {
     private final MentorService mentorService;
 
     @PostMapping
-    public IdResponse createEvent(@RequestBody EventCreateRequest request /* @AuthenticationPrincipal 인증 유저 */) {
+    public IdResponse createEvent(@RequestBody EventCreateRequest request, @AuthenticationPrincipal JwtUser user) {
         /* 인증 유저 아이디를 통한 멘토 찾아오기 */
-        Mentor mentor = new Mentor();
+        Mentor mentor = mentorService.getOne(user.id());
         Event event = request.toEntity(mentor);
 
         return new IdResponse(eventService.create(event));
