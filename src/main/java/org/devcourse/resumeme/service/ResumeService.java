@@ -1,10 +1,13 @@
 package org.devcourse.resumeme.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.repository.ResumeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Service
 @Transactional
@@ -17,6 +20,16 @@ public class ResumeService {
         Resume saved = resumeRepository.save(resume);
 
         return saved.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Resume getOne(Long id) {
+        return resumeRepository.findById(id)
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
+    }
+
+    public Long copyResume(Long id) {
+        return create(getOne(id).copy());
     }
 
 }

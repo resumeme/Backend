@@ -7,9 +7,13 @@ import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.global.auth.model.JwtUser;
 import org.devcourse.resumeme.service.EventService;
+import org.devcourse.resumeme.service.MentorService;
+import org.devcourse.resumeme.service.ResumeService;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +28,10 @@ public class EventController {
 
     private final EventService eventService;
 
+    private final ResumeService resumeService;
+
+    private final MentorService mentorService;
+
     @PostMapping
     public IdResponse createEvent(@RequestBody EventCreateRequest request /* @AuthenticationPrincipal 인증 유저 */) {
         /* 인증 유저 아이디를 통한 멘토 찾아오기 */
@@ -34,12 +42,11 @@ public class EventController {
     }
 
     @PatchMapping("/{eventId}")
-    public IdResponse applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request /* @AuthenticationPrincipal 인증 유저 */) {
-        /* 인증 유저 아이디 -> 멘티 아이디 찾아오기 */
-        Long menteeId = 1L;
-        Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, request.resumeId(), menteeId));
+    public IdResponse applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request, @AuthenticationPrincipal JwtUser user) {
+        Long copyResumeId = resumeService.copyResume(request.resumeId());
+        Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, copyResumeId, user.id()));
 
-        return new IdResponse(eventService.getApplicantId(event, menteeId));
+        return new IdResponse(eventService.getApplicantId(event, user.id()));
     }
 
     @PatchMapping("/{eventId}/mentee/{menteeId}")
