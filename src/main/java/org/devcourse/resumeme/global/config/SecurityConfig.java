@@ -5,6 +5,7 @@ import org.devcourse.resumeme.global.auth.OAuth2CustomUserService;
 import org.devcourse.resumeme.global.auth.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.OAuthTokenResponseFilter;
+import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.List;
@@ -32,6 +34,8 @@ public class SecurityConfig {
     private final OAuth2FailureHandler oAuth2FailureHandler;
 
     private final OAuth2CustomUserService oAuth2CustomUserService;
+
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     private final OAuthTokenResponseFilter oAuthTokenResponseFilter;
 
@@ -53,6 +57,7 @@ public class SecurityConfig {
                                 .successHandler(oAuth2SuccessHandler)
                                 .failureHandler(oAuth2FailureHandler));
 
+        http.addFilterAfter(jwtAuthorizationFilter, LogoutFilter.class);
         http.addFilterAfter(oAuthTokenResponseFilter, OAuth2AuthorizationRequestRedirectFilter.class);
 
         return http.build();
