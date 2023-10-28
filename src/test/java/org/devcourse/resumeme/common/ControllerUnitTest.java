@@ -6,6 +6,7 @@ import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.controller.EventController;
 import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.service.EventService;
+import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -38,6 +39,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected ResumeService resumeService;
+
+    @MockBean
+    protected MentorService mentorService;
 
     protected MockMvc mvc;
 
