@@ -16,8 +16,6 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.mentee.Mentee;
-import org.devcourse.resumeme.domain.user.User;
-import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.validate;
@@ -81,6 +79,31 @@ public class Resume extends BaseEntity {
     private static void validateResume(String title, Mentee mentee) {
         validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
+    }
+
+    private Resume(Long id, String title, Mentee mentee, Position position, String introduce, Career career, Project project, Certification certification, Activity activity, ForeignLanguage foreignLanguage, String email, String githubAddress, String blogAddress, String phoneNumber) {
+        this.id = id;
+        this.title = title;
+        this.mentee = mentee;
+        this.position = position;
+        this.introduce = introduce;
+        this.career = career;
+        this.project = project;
+        this.certification = certification;
+        this.activity = activity;
+        this.foreignLanguage = foreignLanguage;
+        this.email = email;
+        this.githubAddress = githubAddress;
+        this.blogAddress = blogAddress;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Resume copy() {
+        return new Resume(
+                null, title, mentee, position, introduce,
+                career, project, certification, activity, foreignLanguage,
+                email, githubAddress, blogAddress, phoneNumber
+        );
     }
 
 }
