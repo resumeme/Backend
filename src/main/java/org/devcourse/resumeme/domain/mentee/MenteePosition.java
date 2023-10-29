@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
 
@@ -24,10 +25,12 @@ public class MenteePosition {
     @Column(name = "mentee_position_id")
     private Long id;
 
+    @Getter
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
 
+    @Getter
     @Enumerated(STRING)
     private Position position;
 
