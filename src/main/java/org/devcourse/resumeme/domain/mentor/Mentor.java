@@ -12,12 +12,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
-import org.devcourse.resumeme.domain.mentee.MenteePosition;
+import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.user.Provider;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
@@ -46,7 +47,7 @@ public class Mentor extends BaseEntity {
     private String refreshToken;
 
     @OneToMany
-    private Set<MenteePosition> interestedPositions = new HashSet<>();
+    private Set<MentorPosition> experiencedPositions = new HashSet<>();
 
     private String careerContent;
 
@@ -55,14 +56,14 @@ public class Mentor extends BaseEntity {
     private String introduce;
 
     @Builder
-    public Mentor(Long id, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<MenteePosition> interestedPositions, String careerContent, int careerYear, String introduce) {
+    public Mentor(Long id, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
         this.id = id;
         this.email = email;
         this.provider = provider;
         this.imageUrl = imageUrl;
         this.requiredInfo = requiredInfo;
         this.refreshToken = refreshToken;
-        this.interestedPositions = interestedPositions;
+        this.experiencedPositions = experiencedPositions.stream().map(position -> new MentorPosition(this, Position.valueOf(position.toUpperCase()))).collect(Collectors.toSet());
         this.careerContent = careerContent;
         this.careerYear = careerYear;
         this.introduce = introduce;

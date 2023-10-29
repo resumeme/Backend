@@ -31,12 +31,12 @@ public class MenteeField {
     @Enumerated(STRING)
     private Field field;
 
-    public MenteeField(Field field, Mentee mentee) {
+    public MenteeField(Mentee mentee, Field field) {
         validate(field == null, "NO_EMPTY_VALUE", "분야는 필수 값입니다");
         validate(mentee == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
 
-        this.field = field;
         this.mentee = mentee;
+        this.field = field;
     }
 
 }

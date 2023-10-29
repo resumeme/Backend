@@ -1,26 +1,18 @@
 package org.devcourse.resumeme.domain.review;
 
-import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.domain.event.Event;
-import org.devcourse.resumeme.domain.event.EventInfo;
-import org.devcourse.resumeme.domain.event.EventPosition;
-import org.devcourse.resumeme.domain.event.EventTimeInfo;
 import org.devcourse.resumeme.domain.mentee.Mentee;
-import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +26,14 @@ class ReviewTest {
         // given
         String content = "내용 수정해주세요";
         BlockType type = BlockType.CAREER;
-        Resume resume = new Resume("title", Mentee.builder().build());
+        Mentee mentee = Mentee.builder()
+                .id(1L)
+                .email("email")
+                .provider(Provider.KAKAO)
+                .interestedPositions(Set.of("FRONT", "BACK"))
+                .interestedFields(Set.of("RETAIL"))
+                .build();
+        Resume resume = new Resume("title", mentee);
 
         // when
         Review review = new Review(content, type, resume);
@@ -54,7 +53,14 @@ class ReviewTest {
     static Stream<Arguments> reviewCreate() {
         String content = "내용 수정해주세요";
         BlockType type = BlockType.CAREER;
-        Resume resume = new Resume("title", Mentee.builder().build());
+        Mentee mentee = Mentee.builder()
+                .id(1L)
+                .email("email")
+                .provider(Provider.KAKAO)
+                .interestedPositions(Set.of("FRONT", "BACK"))
+                .interestedFields(Set.of("RETAIL"))
+                .build();
+        Resume resume = new Resume("title", mentee);
 
         return Stream.of(
                 Arguments.of(null, null, null),

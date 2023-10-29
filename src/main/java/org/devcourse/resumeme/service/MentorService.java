@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MentorService {
 
@@ -18,7 +19,10 @@ public class MentorService {
         return mentorRepository.findById(id).orElseThrow(() -> new CustomException("MENTOR_NOT_FOUND", "존재하지 않는 회원입니다."));
     }
 
-    @Transactional
+    public Mentor create(Mentor mentor) {
+        return mentorRepository.save(mentor);
+    }
+
     public void updateRefreshToken(Long id, String refreshToken) {
         Mentor findMentor = getOne(id);
         findMentor.updateRefreshToken(refreshToken);
