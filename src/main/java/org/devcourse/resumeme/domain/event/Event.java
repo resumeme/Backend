@@ -18,7 +18,6 @@ import org.devcourse.resumeme.domain.mentor.Mentor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
@@ -132,4 +131,15 @@ public class Event extends BaseEntity {
     public boolean isOpen() {
         return eventInfo.isOpen();
     }
+
+    public void requestReview(Long menteeId) {
+        applicants.stream()
+                .filter(applicant -> applicant.isSameMentee(menteeId))
+                .findFirst()
+                .ifPresentOrElse(
+                        MenteeToEvent::requestReview,
+                        () -> {throw new EventException("MENTEE_NOT_FOUND", "참여중인 멘티가 없습니다");}
+                );
+    }
+
 }
