@@ -100,8 +100,8 @@ public class Resume extends BaseEntity {
 
     public Resume copy() {
         return new Resume(
-                null, title, mentee,position, introduce,
-                career,project, certification, activity, foreignLanguage,
+                null, title, mentee, position, introduce,
+                career, project, certification, activity, foreignLanguage,
                 email, githubAddress, blogAddress, phoneNumber
         );
     }
