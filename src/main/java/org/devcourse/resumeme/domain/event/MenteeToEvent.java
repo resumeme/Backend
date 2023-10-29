@@ -15,6 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.validate;
 import static org.devcourse.resumeme.domain.event.Progress.APPLY;
 import static org.devcourse.resumeme.domain.event.Progress.REJECT;
+import static org.devcourse.resumeme.domain.event.Progress.REQUEST;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -64,6 +65,10 @@ public class MenteeToEvent extends BaseEntity {
 
     public boolean isRejected() {
         return this.progress.equals(REJECT);
+    }
+
+    public void requestReview() {
+        this.progress = REQUEST;
     }
 
 }

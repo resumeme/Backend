@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.devcourse.resumeme.domain.event.Progress.REQUEST;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class EventTest {
@@ -134,5 +136,32 @@ class EventTest {
         assertThatThrownBy(() -> event.reject(3L, "message"))
                 .isInstanceOf(EventException.class);
     }
+
+    @Test
+    void 리뷰_재요청_성공한다() {
+        // given
+        Long menteeId = 1L;
+        event.acceptMentee(menteeId, 1L);
+
+        // when
+        event.requestReview(1L);
+
+        // then
+        assertThat(event).usingRecursiveComparison()
+                .comparingOnlyFields("applicants.progress")
+                .isEqualTo(REQUEST);
+    }
+
+    @Test
+    void 참여한_멘티가_아니라_재요청에_실패한다() {
+        // given
+        Long menteeId = 1L;
+        event.acceptMentee(menteeId, 1L);
+
+        // when & then
+        assertThatThrownBy(() -> event.requestReview(2L))
+                .isInstanceOf(EventException.class);
+    }
+
 
 }

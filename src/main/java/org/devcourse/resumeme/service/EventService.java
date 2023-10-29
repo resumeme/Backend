@@ -43,10 +43,19 @@ public class EventService {
     }
 
     public void reject(EventReject reject) {
-        Event event = eventRepository.findById(reject.eventId())
-                .orElseThrow(() -> new EventException("NOT_FOUND", "이벤트를 찾을 수 없습니다"));
+        Event event = getOne(reject.eventId());
 
         event.reject(reject.menteeId(), reject.rejectMessage());
+    }
+
+    @Transactional(readOnly = true)
+    public Event getOne(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventException("NOT_FOUND", "이벤트를 찾을 수 없습니다"));
+    }
+
+    public void requestReview(Long eventId, Long menteeId) {
+        getOne(eventId).requestReview(menteeId);
     }
 
 }

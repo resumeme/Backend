@@ -4,6 +4,7 @@ import org.devcourse.resumeme.common.domain.DocsEnumType;
 
 public enum Progress implements DocsEnumType {
     APPLY("참여 중"),
+    REQUEST("재 요청"),
     REJECT("반려 됨"),
     COMPLETE("완료")
     ;
