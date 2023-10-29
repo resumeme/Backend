@@ -4,12 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,11 @@ import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
 import static org.devcourse.resumeme.common.util.Validator.validate;
 
 @Entity
@@ -42,25 +47,20 @@ public class Resume extends BaseEntity {
     @Lob
     private String introduce;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "career_id")
-    private Career career;
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Career> career = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Project> project = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "certification_id")
-    private Certification certification;
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Certification> certification = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Activity> activity = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "foreign_language_id")
-    private ForeignLanguage foreignLanguage;
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<ForeignLanguage> foreignLanguage = new ArrayList<>();
 
     private String email;
 
@@ -81,7 +81,9 @@ public class Resume extends BaseEntity {
         validate(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
     }
 
-    private Resume(Long id, String title, Mentee mentee, Position position, String introduce, Career career, Project project, Certification certification, Activity activity, ForeignLanguage foreignLanguage, String email, String githubAddress, String blogAddress, String phoneNumber) {
+    private Resume(Long id, String title, Mentee mentee, Position position, String introduce, List<Career> career,
+                   List<Project> project, List<Certification> certification, List<Activity> activity,
+                   List<ForeignLanguage> foreignLanguage, String email, String githubAddress, String blogAddress, String phoneNumber) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;

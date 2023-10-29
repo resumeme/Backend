@@ -8,6 +8,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,10 @@ public class Career {
 
     @Enumerated(EnumType.STRING)
     private Position position;
+
+    @ManyToOne
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 
     @ElementCollection
     @CollectionTable(name = "career_skills")
