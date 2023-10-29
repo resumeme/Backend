@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.domain.resume;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -8,6 +9,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +20,7 @@ import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.devcourse.resumeme.common.util.Validator.validate;
@@ -35,13 +40,17 @@ public class Career {
     @Enumerated(EnumType.STRING)
     private Position position;
 
-    @ElementCollection
-    @CollectionTable(name = "career_skills")
-    private List<Skill> skills;
+    @ManyToOne
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 
     @ElementCollection
-    @CollectionTable(name = "career_duties")
-    private List<Duty> duties;
+    @CollectionTable(name = "career_skills")
+    @Column(name = "skill")
+    private List<String> skills;
+
+    @OneToMany(mappedBy = "career", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Duty> duties = new ArrayList<>();
 
     private boolean isCurrentlyEmployed;
 
@@ -52,7 +61,7 @@ public class Career {
     private String careerContent;
 
 
-    public Career(String companyName, Position position, List<Skill> skills, List<Duty> duties, boolean isCurrentlyEmployed,
+    public Career(String companyName, Position position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed,
                   LocalDate careerStartDate, LocalDate endDate, String careerContent) {
         validateCareer(companyName, position, skills, duties, isCurrentlyEmployed, careerStartDate, endDate);
 
@@ -66,7 +75,7 @@ public class Career {
         this.careerContent = careerContent;
     }
 
-    private void validateCareer(String companyName, Position position, List<Skill> skills, List<Duty> duties, boolean isCurrentlyEmployed, LocalDate careerStartDate, LocalDate endDate) {
+    private void validateCareer(String companyName, Position position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed, LocalDate careerStartDate, LocalDate endDate) {
         validate(companyName == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(position == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(skills.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);

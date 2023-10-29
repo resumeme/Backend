@@ -12,6 +12,7 @@ import org.devcourse.resumeme.domain.event.EventTimeInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
+import org.devcourse.resumeme.support.WithMockCustomUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -41,20 +42,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EventControllerTest extends ControllerUnitTest {
 
     @Test
+    @WithMockCustomUser
     void 첨삭_이벤트_생성에_성공한다() throws Exception {
         // given
         EventInfoRequest eventInfoRequest = new EventInfoRequest("title", "content", 3);
         EventTimeRequest eventTimeRequest = new EventTimeRequest(
-                LocalDateTime.of(2023,10,23,12,0),
-                LocalDateTime.of(2023,10,23,12,0),
-                LocalDateTime.of(2023,10,24,12,0),
-                LocalDateTime.of(2023,10,30,23,0)
+                LocalDateTime.of(2023, 10, 23, 12, 0),
+                LocalDateTime.of(2023, 10, 23, 12, 0),
+                LocalDateTime.of(2023, 10, 24, 12, 0),
+                LocalDateTime.of(2023, 10, 30, 23, 0)
         );
         EventCreateRequest eventCreateRequest = new EventCreateRequest(eventInfoRequest, eventTimeRequest, List.of("FRONT", "BACK"));
         /* 로그인 기능 완료 후 멘토 주입 값 추후 변경 예정 */
-        Event event = eventCreateRequest.toEntity(new Mentor());
+        Mentor mentor = new Mentor();
+        Event event = eventCreateRequest.toEntity(mentor);
 
         given(eventService.create(event)).willReturn(1L);
+        given(mentorService.getOne(1L)).willReturn(mentor);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/events")
@@ -86,6 +90,7 @@ class EventControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    @WithMockCustomUser
     void 첨삭_이벤트_참여에_성공한다() throws Exception {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
@@ -146,6 +151,26 @@ class EventControllerTest extends ControllerUnitTest {
                                 requestFields(
                                         fieldWithPath("rejectMessage").type(STRING).description("이벤트 신청 반려 사유")
                                 )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 리뷰_재_요청을_신청한다() throws Exception {
+        // given
+        Long eventId = 1L;
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/mentee", eventId));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/requestReview",
+                                getDocumentRequest(),
+                                getDocumentResponse()
                         )
                 );
     }

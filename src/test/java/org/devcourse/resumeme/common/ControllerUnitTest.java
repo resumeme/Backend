@@ -9,10 +9,12 @@ import org.devcourse.resumeme.controller.MentorController;
 import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
-import org.devcourse.resumeme.service.EventService;
 import org.devcourse.resumeme.service.MenteeService;
+import org.devcourse.resumeme.controller.ReviewController;
+import org.devcourse.resumeme.service.EventService;
 import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ResumeService;
+import org.devcourse.resumeme.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -35,6 +37,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ResumeController.class,
         MenteeController.class,
         MentorController.class
+        ReviewController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -58,6 +61,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected OAuth2InfoRedisRepository oAuth2InfoRedisRepository;
+
+    @MockBean
+    protected ReviewService reviewService;
 
     protected MockMvc mvc;
 

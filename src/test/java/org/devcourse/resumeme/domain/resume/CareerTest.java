@@ -18,7 +18,7 @@ public class CareerTest {
 
     private String companyName;
     private Position position;
-    private List<Skill> skills;
+    private List<String> skills;
     private List<Duty> duties;
     private boolean isCurrentlyEmployed;
     private String careerContent;

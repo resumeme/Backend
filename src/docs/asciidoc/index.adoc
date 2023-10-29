@@ -54,6 +54,15 @@ include::{snippets}/resume/create/request-fields.adoc[]
 include::{snippets}/resume/create/http-response.adoc[]
 include::{snippets}/resume/create/response-fields.adoc[]
 
+= 리뷰
+== 생성
+=== Request
+include::{snippets}/review/create/http-request.adoc[]
+include::{snippets}/review/create/request-fields.adoc[]
+
+=== Response
+include::{snippets}/review/create/http-response.adoc[]
+include::{snippets}/review/create/response-fields.adoc[]
 = 멘토
 == 생성
 === Request
