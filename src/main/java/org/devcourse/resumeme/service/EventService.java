@@ -50,7 +50,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public Event getOne(Long eventId) {
-        return eventRepository.findById(eventId)
+        return eventRepository.findWithApplicantsById(eventId)
                 .orElseThrow(() -> new EventException("NOT_FOUND", "이벤트를 찾을 수 없습니다"));
     }
 
