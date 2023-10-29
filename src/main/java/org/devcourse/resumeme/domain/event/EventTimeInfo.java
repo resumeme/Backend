@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.domain.event;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.domain.event.exception.EventException;
 
@@ -17,6 +18,7 @@ public class EventTimeInfo {
 
     private LocalDateTime closeDateTime;
 
+    @Getter
     private LocalDateTime endDate;
 
     private EventTimeInfo(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {

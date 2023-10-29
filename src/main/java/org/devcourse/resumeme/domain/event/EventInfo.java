@@ -2,6 +2,7 @@ package org.devcourse.resumeme.domain.event;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.domain.event.exception.EventException;
 
@@ -14,8 +15,10 @@ import static org.devcourse.resumeme.common.util.Validator.validate;
 @NoArgsConstructor(access = PROTECTED)
 public class EventInfo {
 
+    @Getter
     private int maximumAttendee;
 
+    @Getter
     private String title;
 
     private String content;
