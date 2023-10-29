@@ -53,3 +53,23 @@ include::{snippets}/resume/create/request-fields.adoc[]
 === Response
 include::{snippets}/resume/create/http-response.adoc[]
 include::{snippets}/resume/create/response-fields.adoc[]
+
+= 멘토
+== 생성
+=== Request
+include::{snippets}/mentor/create/http-request.adoc[]
+include::{snippets}/mentor/create/request-fields.adoc[]
+
+=== Response
+include::{snippets}/mentor/create/http-response.adoc[]
+include::{snippets}/mentor/create/response-fields.adoc[]
+
+= 멘티
+== 생성
+=== Request
+include::{snippets}/mentee/create/http-request.adoc[]
+include::{snippets}/mentee/create/request-fields.adoc[]
+
+=== Response
+include::{snippets}/mentee/create/http-response.adoc[]
+include::{snippets}/mentee/create/response-fields.adoc[]

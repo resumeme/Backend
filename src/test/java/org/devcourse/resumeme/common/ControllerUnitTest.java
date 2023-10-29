@@ -4,8 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.controller.EventController;
+import org.devcourse.resumeme.controller.MenteeController;
+import org.devcourse.resumeme.controller.MentorController;
 import org.devcourse.resumeme.controller.ResumeController;
+import org.devcourse.resumeme.global.auth.token.JwtService;
+import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.EventService;
+import org.devcourse.resumeme.service.MenteeService;
+import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -26,7 +32,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @WebMvcTest({
         EnumController.class,
         EventController.class,
-        ResumeController.class
+        ResumeController.class,
+        MenteeController.class,
+        MentorController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -38,6 +46,18 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected ResumeService resumeService;
+
+    @MockBean
+    protected MentorService mentorService;
+
+    @MockBean
+    protected MenteeService menteeService;
+
+    @MockBean
+    protected JwtService jwtService;
+
+    @MockBean
+    protected OAuth2InfoRedisRepository oAuth2InfoRedisRepository;
 
     protected MockMvc mvc;
 
