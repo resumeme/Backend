@@ -16,6 +16,7 @@ import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -98,6 +99,10 @@ public class Mentor extends BaseEntity {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateRole(Role role) {
+        requiredInfo.updateRole(role);
     }
 
 }

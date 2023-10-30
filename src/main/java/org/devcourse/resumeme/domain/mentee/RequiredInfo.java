@@ -49,4 +49,8 @@ public class RequiredInfo {
         validate(!role.equals(ROLE_MENTEE) && !role.equals(ROLE_PENDING), ExceptionCode.ROLE_NOT_ALLOWED);
     }
 
+    public void updateRole(Role role) {
+        this.role = role;
+    }
+
 }
