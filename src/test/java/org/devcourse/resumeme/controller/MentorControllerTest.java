@@ -3,7 +3,9 @@ package org.devcourse.resumeme.controller;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.controller.dto.RequiredInfoRequest;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.auth.model.Claims;
 import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
@@ -39,10 +41,17 @@ class MentorControllerTest extends ControllerUnitTest {
         OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo("cacheKey", "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
 
         Mentor mentor = mentorRegisterInfoRequest.toEntity(oAuth2TempInfo, "refreshTokenRecentlyIssued");
+
         Mentor savedMentor = Mentor.builder()
                 .id(1L)
-                .requiredInfo(mentor.getRequiredInfo())
+                .imageUrl(oAuth2TempInfo.getImageUrl())
+                .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
+                .email(oAuth2TempInfo.getEmail())
+                .refreshToken(mentor.getRefreshToken())
+                .requiredInfo(new RequiredInfo(mentor.getRequiredInfo().getRealName(),mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRequiredInfo().getRole()))
                 .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
+                .careerContent(mentorRegisterInfoRequest.careerContent())
+                .careerYear(mentorRegisterInfoRequest.careerYear())
                 .build();
 
         given(oAuth2InfoRedisRepository.findById(any())).willReturn(Optional.of(oAuth2TempInfo));
