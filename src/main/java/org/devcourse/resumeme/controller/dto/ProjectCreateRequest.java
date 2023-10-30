@@ -5,7 +5,7 @@ import org.devcourse.resumeme.domain.resume.Resume;
 
 import java.util.List;
 
-public record ProjectCreateDto(
+public record ProjectCreateRequest(
         String projectName,
         Long productionYear,
         boolean isTeam,

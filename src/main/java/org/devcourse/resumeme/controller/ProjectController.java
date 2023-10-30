@@ -2,7 +2,7 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
-import org.devcourse.resumeme.controller.dto.ProjectCreateDto;
+import org.devcourse.resumeme.controller.dto.ProjectCreateRequest;
 import org.devcourse.resumeme.domain.resume.Project;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.service.ProjectService;
@@ -23,7 +23,7 @@ public class ProjectController {
     private final ResumeService resumeService;
 
     @PostMapping("/{resumeId}/projects")
-    public IdResponse createProject(@PathVariable Long resumeId, @RequestBody ProjectCreateDto request) {
+    public IdResponse createProject(@PathVariable Long resumeId, @RequestBody ProjectCreateRequest request) {
         Resume resume = resumeService.getOne(resumeId);
         Project project = request.toEntity(resume);
 

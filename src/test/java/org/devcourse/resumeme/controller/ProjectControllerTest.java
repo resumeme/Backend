@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.controller.dto.ProjectCreateDto;
+import org.devcourse.resumeme.controller.dto.ProjectCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.resume.Project;
 import org.devcourse.resumeme.domain.resume.Resume;
@@ -41,7 +41,7 @@ class ProjectControllerTest extends ControllerUnitTest {
 
     @Test
     void 프로젝트_저장에_성공한다() throws Exception {
-        ProjectCreateDto request = new ProjectCreateDto("프로젝트", 2023L, true, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
+        ProjectCreateRequest request = new ProjectCreateRequest("프로젝트", 2023L, true, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
         Long resumeId = 1L;
         Project project = request.toEntity(resume);
 
