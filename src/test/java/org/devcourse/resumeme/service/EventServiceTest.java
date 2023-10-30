@@ -147,13 +147,13 @@ class EventServiceTest {
         event.acceptMentee(1L, 1L);
 
         EventReject reject = new EventReject(1L, 1L, "이력서 양이 너무 적습니다");
-        lenient().when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        lenient().when(eventRepository.findWithApplicantsById(1L)).thenReturn(Optional.of(event));
 
         // when
         eventService.reject(reject);
 
         // then
-        verify(eventRepository).findById(1L);
+        verify(eventRepository).findWithApplicantsById(1L);
     }
 
     @Test
@@ -165,7 +165,7 @@ class EventServiceTest {
         event.acceptMentee(1L, 1L);
 
         EventReject reject = new EventReject(1L, 2L, "이력서 양이 너무 적습니다");
-        given(eventRepository.findById(1L)).willReturn(Optional.of(event));
+        given(eventRepository.findWithApplicantsById(1L)).willReturn(Optional.of(event));
 
         // when & then
         assertThatThrownBy(() -> eventService.reject(reject)).isInstanceOf(EventException.class);
