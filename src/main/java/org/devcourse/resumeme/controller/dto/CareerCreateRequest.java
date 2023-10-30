@@ -22,7 +22,7 @@ public record CareerCreateRequest(
     public Career toEntity(Resume resume) {
         List<Duty> duties = this.duties.stream()
                 .map(DutyRequest::toEntity)
-                .collect(Collectors.toList());
+                .toList();
 
         return new Career(companyName, Position.valueOf(position), resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent);
     }

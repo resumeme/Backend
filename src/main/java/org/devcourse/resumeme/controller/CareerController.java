@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/careers")
+@RequestMapping("/api/v1/resume")
 public class CareerController {
 
     private final CareerService careerService;
 
     private final ResumeService resumeService;
 
-    @PostMapping("/{resumeId}")
+    @PostMapping("/{resumeId}/careers")
     public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody CareerCreateRequest request) {
         Resume resume = resumeService.getOne(resumeId);
         Career career = request.toEntity(resume);

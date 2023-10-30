@@ -49,7 +49,7 @@ public class CareerControllerTest extends ControllerUnitTest {
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(careerService.create(career)).willReturn(1L);
 
-        ResultActions result = mvc.perform(post("/api/v1/careers/" + resumeId)
+        ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/careers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
