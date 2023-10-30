@@ -26,9 +26,9 @@ public class EndpointProperties {
         private Map<String, List<String>> matcher;
 
         @Getter
-        private List<String> role;
+        private String role;
 
-        public Matcher(Map<String, List<String>> matcher, List<String> role) {
+        public Matcher(Map<String, List<String>> matcher, String role) {
             this.matcher = matcher;
             this.role = role;
         }

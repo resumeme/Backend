@@ -74,16 +74,14 @@ public class SecurityConfig {
         }
 
         for (EndpointProperties.Matcher role : properties.getRoles()) {
-            String[] roles = role.getRole().stream()
-                    .map(String::toUpperCase)
-                    .toArray(String[]::new);
+            String roleName = role.getRole().toUpperCase();
 
             for (Map.Entry<String, List<String>> entry : role.getMatcher().entrySet()) {
                 String method = entry.getKey().toUpperCase();
 
                 for (String endPoint : entry.getValue()) {
                     http.authorizeHttpRequests(registry ->
-                            registry.requestMatchers(new AntPathRequestMatcher(endPoint, method)).hasAnyRole(roles));
+                            registry.requestMatchers(new AntPathRequestMatcher(endPoint, method)).hasRole(roleName));
                 }
             }
         }
