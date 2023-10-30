@@ -5,13 +5,17 @@ import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Set;
+
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -29,16 +33,21 @@ public class ResumeControllerTest extends ControllerUnitTest {
     @BeforeEach
     void init() {
         mentee = Mentee.builder()
+                .id(1L)
                 .email("email")
                 .provider(Provider.KAKAO)
+                .interestedPositions(Set.of("FRONT", "BACK"))
+                .interestedFields(Set.of("RETAIL"))
                 .build();
     }
 
     @Test
+    @WithMockCustomUser
     void 이력서_생성에_성공한다() throws Exception {
         ResumeCreateRequest request = new ResumeCreateRequest("title");
         Resume resume = request.toEntity(mentee);
 
+        given(menteeService.getOne(any())).willReturn(mentee);
         given(resumeService.create(resume)).willReturn(1L);
 
         // when

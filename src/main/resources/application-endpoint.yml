@@ -1,7 +1,7 @@
 endpoint:
   permit-all:
     get:
-    post:
+    post: /api/v1/mentees, /api/v1/mentors
     put:
     patch:
     delete:
