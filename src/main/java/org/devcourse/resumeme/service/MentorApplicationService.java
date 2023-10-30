@@ -6,6 +6,8 @@ import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.repository.MentorApplicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MentorApplicationService {
@@ -16,10 +18,14 @@ public class MentorApplicationService {
         repository.save(mentorApplication);
     }
 
+    public List<MentorApplication> getAll() {
+        return repository.findWithMentorAll();
+    }
+
     public Long delete(Long applicationId) {
         MentorApplication mentorApplication = repository.findById(applicationId)
                 .orElseThrow(() -> new CustomException("NOT_FOUND_APPLICANT", "신청 이력이 없습니다"));
-        Long mentorId = mentorApplication.getMentorId();
+        Long mentorId = mentorApplication.mentorId();
 
         repository.delete(mentorApplication);
 
