@@ -43,16 +43,18 @@ public class Project {
 
     @ElementCollection
     @CollectionTable(name = "career_skills")
-    private List<Skill> skills;
+    @Column(name = "skill")
+    private List<String> skills;
 
     private String projectContent;
 
     private String projectUrl;
 
-    public Project(String projectName, Long productionYear, boolean isTeam, String teamMembers, List<Skill> skills,
+    public Project(Resume resume, String projectName, Long productionYear, boolean isTeam, String teamMembers, List<String> skills,
                    String projectContent, String projectUrl) {
         validateProject(projectName, productionYear);
 
+        this.resume = resume;
         this.projectName = projectName;
         this.productionYear = productionYear;
         this.isTeam = isTeam;
