@@ -41,7 +41,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return web -> web.ignoring().requestMatchers("/docs/index.html");
+        return web -> web.ignoring().requestMatchers(properties.ignores().toArray(new String[]{}));
     }
 
     @Bean
@@ -64,27 +64,19 @@ public class SecurityConfig {
     }
 
     private void setEndpoints(HttpSecurity http) throws Exception {
-        for (Map.Entry<String, List<String>> entry : properties.getPermitAll().entrySet()) {
-            String method = entry.getKey().toUpperCase();
-
-            for (String endPoint : entry.getValue()) {
-                http.authorizeHttpRequests(registry ->
-                        registry.requestMatchers(new AntPathRequestMatcher(endPoint, method)).permitAll());
-            }
-        }
-
-        for (EndpointProperties.Matcher role : properties.getRoles()) {
-            String roleName = role.getRole().toUpperCase();
-
-            for (Map.Entry<String, List<String>> entry : role.getMatcher().entrySet()) {
+        for (EndpointProperties.Matcher matcher : properties.matchers()) {
+            for (Map.Entry<String, List<String>> entry : matcher.matcher().entrySet()) {
                 String method = entry.getKey().toUpperCase();
 
                 for (String endPoint : entry.getValue()) {
                     http.authorizeHttpRequests(registry ->
-                            registry.requestMatchers(new AntPathRequestMatcher(endPoint, method)).hasRole(roleName));
+                            registry.requestMatchers(new AntPathRequestMatcher(endPoint, method))
+                                    .access(matcher.manager())
+                    );
                 }
             }
         }
+
     }
 
 }

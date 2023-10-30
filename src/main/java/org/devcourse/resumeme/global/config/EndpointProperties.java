@@ -1,37 +1,49 @@
 package org.devcourse.resumeme.global.config;
 
-import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 
 import java.util.List;
 import java.util.Map;
 
 @ConfigurationProperties("endpoint")
-public class EndpointProperties {
+public record EndpointProperties(List<Matcher> matchers, List<String> ignores) {
 
-    @Getter
-    private Map<String, List<String>> permitAll;
+    public record Matcher(Map<String, List<String>> matcher, String role) {
 
-    @Getter
-    private List<Matcher> roles;
-
-    public EndpointProperties(Map<String, List<String>> permitAll, List<Matcher> roles) {
-        this.permitAll = permitAll;
-        this.roles = roles;
-    }
-
-    public static class Matcher {
-
-        @Getter
-        private Map<String, List<String>> matcher;
-
-        @Getter
-        private String role;
-
-        public Matcher(Map<String, List<String>> matcher, String role) {
-            this.matcher = matcher;
-            this.role = role;
+        public AuthorizationManager<RequestAuthorizationContext> manager() {
+            return Manager.getManager(role);
         }
 
     }
+
+    enum Manager {
+
+        ALL((a, o) -> new AuthorizationDecision(true)),
+        OWN_MENTEE((a, o) -> new AuthorizationDecision(true)),
+        OWN_MENTOR((a, o) -> new AuthorizationDecision(true));
+
+        final AuthorizationManager<RequestAuthorizationContext> manager;
+
+        Manager(AuthorizationManager<RequestAuthorizationContext> manager) {
+            this.manager = manager;
+        }
+
+        static AuthorizationManager<RequestAuthorizationContext> getManager(String role) {
+            String roleName = role.toUpperCase();
+
+            for (Manager value : values()) {
+                if (value.name().equals(roleName)) {
+                    return value.manager;
+                }
+            }
+
+            return AuthorityAuthorizationManager.hasRole(roleName);
+        }
+
+    }
+
 }
