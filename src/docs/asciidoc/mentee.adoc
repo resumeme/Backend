@@ -1,0 +1,29 @@
+= 멘티
+
+=== 첨삭 참여 신청
+
+*Request*
+include::{snippets}/event/apply/http-request.adoc[]
+include::{snippets}/event/apply/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/apply/http-response.adoc[]
+include::{snippets}/event/apply/response-fields.adoc[]
+
+=== 이력서 작성
+
+*Request*
+include::{snippets}/resume/create/http-request.adoc[]
+include::{snippets}/resume/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/create/http-response.adoc[]
+include::{snippets}/resume/create/response-fields.adoc[]
+
+=== 리뷰 재요청
+
+*Request*
+include::{snippets}/event/requestReview/http-request.adoc[]
+
+*Response*
+include::{snippets}/event/requestReview/http-response.adoc[]
