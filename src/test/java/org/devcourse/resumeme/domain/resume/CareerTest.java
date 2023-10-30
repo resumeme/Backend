@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.domain.resume;
 
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -18,6 +20,7 @@ public class CareerTest {
 
     private String companyName;
     private Position position;
+    private Resume resume;
     private List<String> skills;
     private List<Duty> duties;
     private boolean isCurrentlyEmployed;
@@ -31,6 +34,10 @@ public class CareerTest {
         duties = new ArrayList<>();
         isCurrentlyEmployed = true;
         careerContent = "상세 업무";
+        resume = new Resume("title", Mentee.builder()
+                .interestedPositions(Set.of("BACK"))
+                .interestedFields(Set.of("FINANCE"))
+                .build());
     }
 
     @Test
@@ -38,7 +45,7 @@ public class CareerTest {
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusYears(2);
 
-        assertThatThrownBy(() -> new Career(companyName, position, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
+        assertThatThrownBy(() -> new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
                 .isInstanceOf(CustomException.class);
     }
 
@@ -47,7 +54,7 @@ public class CareerTest {
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().minusYears(1);
 
-        assertThatThrownBy(() -> new Career(companyName, position, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
+        assertThatThrownBy(() -> new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
                 .isInstanceOf(CustomException.class);
     }
 
@@ -57,7 +64,7 @@ public class CareerTest {
         LocalDate endDate = null;
         String careerContent = "상세 업무";
 
-        assertThatThrownBy(() -> new Career(companyName, position, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
+        assertThatThrownBy(() -> new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
                 .isInstanceOf(CustomException.class);
     }
 

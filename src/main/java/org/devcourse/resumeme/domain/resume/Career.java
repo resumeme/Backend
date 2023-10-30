@@ -61,12 +61,13 @@ public class Career {
     private String careerContent;
 
 
-    public Career(String companyName, Position position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed,
+    public Career(String companyName, Position position, Resume resume, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed,
                   LocalDate careerStartDate, LocalDate endDate, String careerContent) {
         validateCareer(companyName, position, skills, duties, isCurrentlyEmployed, careerStartDate, endDate);
 
         this.companyName = companyName;
         this.position = position;
+        this.resume = resume;
         this.skills = skills;
         this.duties = duties;
         this.isCurrentlyEmployed = isCurrentlyEmployed;
