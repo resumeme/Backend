@@ -7,6 +7,7 @@ import org.devcourse.resumeme.controller.CareerController;
 import org.devcourse.resumeme.controller.CertificationController;
 import org.devcourse.resumeme.controller.EventController;
 import org.devcourse.resumeme.controller.MenteeController;
+import org.devcourse.resumeme.controller.MentorApplicationController;
 import org.devcourse.resumeme.controller.MentorController;
 import org.devcourse.resumeme.controller.ProjectController;
 import org.devcourse.resumeme.controller.ResumeController;
@@ -17,6 +18,7 @@ import org.devcourse.resumeme.service.CareerService;
 import org.devcourse.resumeme.service.CertificationService;
 import org.devcourse.resumeme.service.EventService;
 import org.devcourse.resumeme.service.MenteeService;
+import org.devcourse.resumeme.service.MentorApplicationService;
 import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ProjectService;
 import org.devcourse.resumeme.service.ResumeService;
@@ -46,7 +48,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ReviewController.class,
         CareerController.class,
         ProjectController.class,
-        CertificationController.class
+        CertificationController.class,
+        MentorApplicationController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -76,6 +79,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected CareerService careerService;
+
+    @MockBean
+    protected MentorApplicationService mentorApplicationService;
 
     @MockBean
     protected ProjectService projectService;
