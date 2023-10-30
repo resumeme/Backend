@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.controller.CareerController;
-import org.devcourse.resumeme.controller.CareerControllerTest;
 import org.devcourse.resumeme.controller.EventController;
 import org.devcourse.resumeme.controller.MenteeController;
 import org.devcourse.resumeme.controller.MentorController;
+import org.devcourse.resumeme.controller.ProjectController;
 import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.controller.ReviewController;
 import org.devcourse.resumeme.global.auth.token.JwtService;
@@ -16,6 +16,7 @@ import org.devcourse.resumeme.service.CareerService;
 import org.devcourse.resumeme.service.EventService;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.MentorService;
+import org.devcourse.resumeme.service.ProjectService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.devcourse.resumeme.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MenteeController.class,
         MentorController.class,
         ReviewController.class,
-        CareerController.class
+        CareerController.class,
+        ProjectController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -71,6 +73,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected CareerService careerService;
+
+    @MockBean
+    protected ProjectService projectService;
 
     protected MockMvc mvc;
 
