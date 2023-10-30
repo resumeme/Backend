@@ -1,0 +1,40 @@
+= 멘토
+
+=== 첨삭 이벤트 생성
+
+*Request*
+include::{snippets}/event/create/http-request.adoc[]
+include::{snippets}/event/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/create/http-response.adoc[]
+include::{snippets}/event/create/response-fields.adoc[]
+
+=== 참여 신청 반려
+
+*Request*
+include::{snippets}/event/reject/http-request.adoc[]
+include::{snippets}/event/reject/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/reject/http-response.adoc[]
+
+=== 특정 이벤트 관련 정보 보기
+
+*Request*
+include::{snippets}/event/getOwn/http-request.adoc[]
+include::{snippets}/event/getOwn/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/getOwn/http-response.adoc[]
+include::{snippets}/event/getOwn/response-fields.adoc[]
+
+=== 첨삭 관련 리뷰 작성
+
+*Request*
+include::{snippets}/review/create/http-request.adoc[]
+include::{snippets}/review/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/review/create/http-response.adoc[]
+include::{snippets}/review/create/response-fields.adoc[]
