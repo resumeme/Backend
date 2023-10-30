@@ -9,6 +9,6 @@ import java.util.List;
 public interface MentorApplicationRepository extends JpaRepository<MentorApplication, Long>  {
 
     @EntityGraph(attributePaths = "mentor")
-    List<MentorApplication> findWithMentorAll();
+    List<MentorApplication> findAll();
 
 }

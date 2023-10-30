@@ -19,7 +19,7 @@ public class MentorApplicationService {
     }
 
     public List<MentorApplication> getAll() {
-        return repository.findWithMentorAll();
+        return repository.findAll();
     }
 
     public Long delete(Long applicationId) {
