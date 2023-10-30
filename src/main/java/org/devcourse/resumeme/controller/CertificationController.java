@@ -2,10 +2,10 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
-import org.devcourse.resumeme.controller.dto.ProjectCreateRequest;
-import org.devcourse.resumeme.domain.resume.Project;
+import org.devcourse.resumeme.controller.dto.CertificationCreateRequest;
+import org.devcourse.resumeme.domain.resume.Certification;
 import org.devcourse.resumeme.domain.resume.Resume;
-import org.devcourse.resumeme.service.ProjectService;
+import org.devcourse.resumeme.service.CertificationService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resume")
-public class ProjectController {
+public class CertificationController {
 
-    private final ProjectService projectService;
+    private final CertificationService certificationService;
 
     private final ResumeService resumeService;
 
-    @PostMapping("/{resumeId}/projects")
-    public IdResponse createProject(@PathVariable Long resumeId, @RequestBody ProjectCreateRequest request) {
+    @PostMapping("/{resumeId}/certifications")
+    public IdResponse createCertification(@PathVariable Long resumeId, @RequestBody CertificationCreateRequest request) {
         Resume resume = resumeService.getOne(resumeId);
-        Project project = request.toEntity(resume);
+        Certification certification = request.toEntity(resume);
 
-        return new IdResponse(projectService.create(project));
+        return new IdResponse(certificationService.create(certification));
     }
 
 }
