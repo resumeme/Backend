@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -19,6 +20,7 @@ public class MentorApplication {
     @Column(name = "mentor_application_id")
     private Long id;
 
+    @Getter
     private Long mentorId;
 
     public MentorApplication(Long mentorId) {
