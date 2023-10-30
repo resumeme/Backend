@@ -7,14 +7,14 @@ endpoint:
     delete:
   roles:
     - matcher:
-        get:
+        get: /api/v1/mentors/*
         post:
         put:
         patch:
         delete:
       role: user, mentor
     - matcher:
-        get:
+        get: /api/v1/mentors/*
         post: /api/v1/events
         put:
         patch: /api/v1/events/*, /api/v1/events/*/mentee/*
