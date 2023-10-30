@@ -47,6 +47,7 @@ public class Mentor extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
+    @Getter
     private String imageUrl;
 
     @Getter
@@ -59,10 +60,13 @@ public class Mentor extends BaseEntity {
     @OneToMany(fetch = LAZY, mappedBy = "mentor", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<MentorPosition> experiencedPositions = new HashSet<>();
 
+    @Getter
     private String careerContent;
 
+    @Getter
     private int careerYear;
 
+    @Getter
     private String introduce;
 
     @Builder

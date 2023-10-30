@@ -2,6 +2,7 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.controller.dto.MentorInfoResponse;
 import org.devcourse.resumeme.controller.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
@@ -10,6 +11,8 @@ import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.MentorService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +44,13 @@ public class MentorController {
         String accessToken = jwtService.createAccessToken(Claims.of(savedMentor));
 
         return Map.of("access", accessToken, "refresh", refreshToken);
+    }
+
+    @GetMapping("/{mentorId}")
+    public MentorInfoResponse getOne(@PathVariable Long mentorId) {
+        Mentor findMentor = mentorService.getOne(mentorId);
+
+        return MentorInfoResponse.of(findMentor);
     }
 
 }
