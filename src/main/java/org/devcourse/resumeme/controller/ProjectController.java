@@ -23,7 +23,7 @@ public class ProjectController {
     private final ResumeService resumeService;
 
     @PostMapping("/{resumeId}/projects")
-    public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody ProjectCreateDto request) {
+    public IdResponse createProject(@PathVariable Long resumeId, @RequestBody ProjectCreateDto request) {
         Resume resume = resumeService.getOne(resumeId);
         Project project = request.toEntity(resume);
 
