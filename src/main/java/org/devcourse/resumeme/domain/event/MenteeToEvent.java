@@ -31,10 +31,13 @@ public class MenteeToEvent extends BaseEntity {
     @JoinColumn(name = "event_id")
     private Event event;
 
+    @Getter
     private Long menteeId;
 
+    @Getter
     private Long resumeId;
 
+    @Getter
     private Progress progress;
 
     private String rejectMessage;

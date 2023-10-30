@@ -35,6 +35,7 @@ public class Resume extends BaseEntity {
     @Column(name = "resume_id")
     private Long id;
 
+    @Getter
     private String title;
 
     @ManyToOne
@@ -106,6 +107,14 @@ public class Resume extends BaseEntity {
                 career, project, certification, activity, foreignLanguage,
                 email, githubAddress, blogAddress, phoneNumber
         );
+    }
+
+    public Long menteeId() {
+        return this.mentee.getId();
+    }
+
+    public String menteeName() {
+        return this.mentee.getRequiredInfo().getNickname();
     }
 
 }

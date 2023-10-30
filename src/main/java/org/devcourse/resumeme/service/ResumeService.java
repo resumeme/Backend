@@ -7,6 +7,8 @@ import org.devcourse.resumeme.repository.ResumeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Service
@@ -30,6 +32,10 @@ public class ResumeService {
 
     public Long copyResume(Long id) {
         return create(getOne(id).copy());
+    }
+
+    public List<Resume> getAll(List<Long> resumeIds) {
+        return resumeRepository.findAllById(resumeIds);
     }
 
 }

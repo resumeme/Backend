@@ -48,6 +48,7 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<EventPosition> positions = new ArrayList<>();
 
+    @Getter
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> applicants = new ArrayList<>();
 
@@ -140,6 +141,18 @@ public class Event extends BaseEntity {
                         MenteeToEvent::requestReview,
                         () -> {throw new EventException("MENTEE_NOT_FOUND", "참여중인 멘티가 없습니다");}
                 );
+    }
+
+    public String title() {
+        return eventInfo.getTitle();
+    }
+
+    public int maximumCount() {
+        return eventInfo.getMaximumAttendee();
+    }
+
+    public LocalDateTime endDate() {
+        return eventTimeInfo.getEndDate();
     }
 
 }

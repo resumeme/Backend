@@ -9,7 +9,11 @@ import org.devcourse.resumeme.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
+import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
 import org.devcourse.resumeme.support.WithMockCustomUser;
@@ -17,8 +21,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
@@ -27,16 +33,19 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRes
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class EventControllerTest extends ControllerUnitTest {
@@ -173,6 +182,56 @@ class EventControllerTest extends ControllerUnitTest {
                                 getDocumentResponse()
                         )
                 );
+    }
+
+    @Test
+    void 첨삭_이벤트에_참여한_이력서를_조회할수있다() throws Exception {
+        // given
+        Long eventId = 1L;
+        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        event.acceptMentee(1L, 1L);
+        event.acceptMentee(2L, 4L);
+
+        given(eventService.getOne(eventId)).willReturn(event);
+        Resume resume1 = new Resume("title", Mentee.builder().id(1L).interestedPositions(Set.of()).interestedFields(Set.of()).requiredInfo(new RequiredInfo("mentee1", "mentee1", "01012345678", Role.ROLE_MENTEE)).build());
+        Resume resume2 = new Resume("title", Mentee.builder().id(2L).interestedPositions(Set.of()).interestedFields(Set.of()).requiredInfo(new RequiredInfo("mentee2", "mentee2", "01012345678", Role.ROLE_MENTEE)).build());
+        setId(resume1, 1L);
+        setId(resume2, 4L);
+        given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/events/{eventId}", eventId));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("event/getOwn",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("멘토가 생성한 이벤트 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("info").type(OBJECT).description("이벤트 관련 정보"),
+                                        fieldWithPath("info.title").type(STRING).description(""),
+                                        fieldWithPath("info.maximumCount").type(NUMBER).description(""),
+                                        fieldWithPath("info.endDate").type(STRING).description(""),
+                                        fieldWithPath("resumes").type(ARRAY).description(""),
+                                        fieldWithPath("resumes[].resumeId").type(NUMBER).description(""),
+                                        fieldWithPath("resumes[].menteeName").type(STRING).description(""),
+                                        fieldWithPath("resumes[].resumeTitle").type(STRING).description(""),
+                                        fieldWithPath("resumes[].progressStatus").type(STRING).description("")
+                                )
+                        )
+                );
+    }
+
+    private void setId(Resume title, Long injectId) throws NoSuchFieldException, IllegalAccessException {
+        Field field = title.getClass().getDeclaredField("id");
+        field.setAccessible(true);
+        field.set(title, injectId);
     }
 
 }
