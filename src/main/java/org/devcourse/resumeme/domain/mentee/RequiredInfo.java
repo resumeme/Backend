@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.domain.user.Role;
+import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.validate;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
@@ -45,7 +46,7 @@ public class RequiredInfo {
         validate(nickname == null || nickname.isBlank(), "INVALID_TEXT", "닉네임이 유효하지 않습니다." );
         validate(realName == null || nickname.isBlank(), "INVALID_TEXT", "이름이 유효하지 않습니다.");
         validate(phoneNumber == null || !(phoneNumber.matches(PHONE_REGEX)), "INVALID_TEXT", "전화번호가 유효하지 않습니다.");
-        validate(!role.equals(ROLE_MENTEE) && !role.equals(ROLE_PENDING),"INVALID_ROLE", "선택 불가능한 역할입니다");
+        validate(!role.equals(ROLE_MENTEE) && !role.equals(ROLE_PENDING), ExceptionCode.ROLE_NOT_ALLOWED);
     }
 
 }
