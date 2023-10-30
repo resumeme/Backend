@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.controller.dto.ApplicationProcessType;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.repository.MentorRepository;
@@ -26,6 +27,11 @@ public class MentorService {
     public void updateRefreshToken(Long id, String refreshToken) {
         Mentor findMentor = getOne(id);
         findMentor.updateRefreshToken(refreshToken);
+    }
+
+    public void updateRole(Long mentorId, ApplicationProcessType type) {
+        Mentor mentor = getOne(mentorId);
+        mentor.updateRole(type.getRole());
     }
 
 }
