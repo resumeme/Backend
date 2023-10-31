@@ -40,7 +40,7 @@ class TrainingControllerTest extends ControllerUnitTest {
     @Test
     void 트레이닝_저장에_성공한다() throws Exception {
         TrainingCreateRequest request = new TrainingCreateRequest(
-                "인문학과", "학사", "학사 학위", LocalDate.of(2018, 3, 1),
+                "데브대", "컴퓨터공학과", "학사 학위", LocalDate.of(2018, 3, 1),
                 LocalDate.of(2022, 2, 28), 4.0, 4.5, "성적 우수"
         );
         Long resumeId = 1L;
