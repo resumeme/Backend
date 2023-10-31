@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.global.config;
 
+import org.devcourse.resumeme.global.config.authorization.OnlyOwn;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -23,8 +24,8 @@ public record EndpointProperties(List<Matcher> matchers, List<String> ignores) {
     enum Manager {
 
         ALL((a, o) -> new AuthorizationDecision(true)),
-        OWN_MENTEE((a, o) -> new AuthorizationDecision(true)),
-        OWN_MENTOR((a, o) -> new AuthorizationDecision(true));
+        OWN_MENTEE(new OnlyOwn("resumes", "ROLE_MENTEE")),
+        OWN_MENTOR(new OnlyOwn("events", "ROLE_MENTOR"));
 
         final AuthorizationManager<RequestAuthorizationContext> manager;
 
