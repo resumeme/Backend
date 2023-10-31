@@ -1,11 +1,14 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
+import org.devcourse.resumeme.common.DocumentLinkGenerator;
 import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventTimeRequest;
 import org.devcourse.resumeme.controller.dto.EventRejectRequest;
+import org.devcourse.resumeme.controller.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
@@ -13,7 +16,9 @@ import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
+import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
 import org.devcourse.resumeme.support.WithMockCustomUser;
@@ -26,10 +31,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.common.domain.Position.BACK;
+import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTOR;
+import static org.devcourse.resumeme.domain.user.Role.ROLE_PENDING;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -45,7 +55,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class EventControllerTest extends ControllerUnitTest {
@@ -228,10 +237,57 @@ class EventControllerTest extends ControllerUnitTest {
                 );
     }
 
-    private void setId(Resume title, Long injectId) throws NoSuchFieldException, IllegalAccessException {
-        Field field = title.getClass().getDeclaredField("id");
+    @Test
+    void 첨삭_이벤트를_전체_조회한다() throws Exception {
+        // given
+        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        RequiredInfoRequest requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_PENDING);
+        MentorRegisterInfoRequest mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
+        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo( "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
+        String refreshToken = "refreshTokenRecentlyIssued";
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl(oAuth2TempInfo.getImageUrl())
+                .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
+                .email(oAuth2TempInfo.getEmail())
+                .refreshToken(refreshToken)
+                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
+                .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
+                .careerContent(mentorRegisterInfoRequest.careerContent())
+                .careerYear(mentorRegisterInfoRequest.careerYear())
+                .build();
+
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of(BACK, FRONT));
+        setId(event, 1L);
+
+        given(eventService.getAll()).willReturn(List.of(event));
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/events"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("event/getAll",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("[].endDate").type(STRING).description("이벤트 마감 날짜"),
+                                        fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("[].positions").type(ARRAY).description(generateLinkCode(POSITION))
+                                )
+                        )
+                );
+    }
+
+    private void setId(Object target, Long injectId) throws NoSuchFieldException, IllegalAccessException {
+        Field field = target.getClass().getDeclaredField("id");
         field.setAccessible(true);
-        field.set(title, injectId);
+        field.set(target, injectId);
     }
 
 }
