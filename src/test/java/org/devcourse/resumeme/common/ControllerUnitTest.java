@@ -56,6 +56,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ProjectController.class,
         CertificationController.class,
         MentorApplicationController.class,
+        MentorApplicationController.class,
         ActivityController.class,
         ForeignLanguageController.class,
         ResultNoticeController.class
