@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ForeignLanguageController {
 
     private final ForeignLanguageService foreignLanguageService;
+
     private final ResumeService resumeService;
 
     @PostMapping("/{resumeId}/foreign-languages")

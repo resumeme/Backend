@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActivityController {
 
     private final ActivityService activityService;
+
     private final ResumeService resumeService;
 
     @PostMapping("/{resumeId}/activities")
