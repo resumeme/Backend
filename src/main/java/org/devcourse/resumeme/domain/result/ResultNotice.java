@@ -27,6 +27,7 @@ public class ResultNotice {
     @Lob
     private String content;
 
+    @Getter
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
