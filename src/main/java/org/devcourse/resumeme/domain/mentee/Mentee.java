@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Field;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.controller.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.domain.user.Provider;
 
 import java.util.HashSet;
@@ -53,19 +54,15 @@ public class Mentee extends BaseEntity {
     private String refreshToken;
 
     @Getter
-    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<MenteePosition> interestedPositions = new HashSet<>();
 
     @Getter
-    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<MenteeField> interestedFields = new HashSet<>();
 
     @Getter
     private String introduce;
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 
     @Builder
     public Mentee(Long id,String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
@@ -78,6 +75,28 @@ public class Mentee extends BaseEntity {
         this.interestedPositions = interestedPositions.stream().map(position -> new MenteePosition(this, Position.valueOf(position.toUpperCase()))).collect(Collectors.toSet());
         this.interestedFields = interestedFields.stream().map(field -> new MenteeField(this, Field.valueOf(field.toUpperCase()))).collect(Collectors.toSet());
         this.introduce = introduce;
+    }
+
+    public void updateInfos(MenteeInfoUpdateRequest updateRequest) {
+        this.clearPositions();
+        this.clearFields();
+        this.requiredInfo.updateNickname(updateRequest.nickname());
+        this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
+        updateRequest.interestedPositions().forEach(position -> this.interestedPositions.add(new MenteePosition(this, Position.valueOf(position.toUpperCase()))));
+        updateRequest.interestedFields().forEach(field -> this.interestedFields.add(new MenteeField(this, Field.valueOf(field.toUpperCase()))));
+        this.introduce = updateRequest.introduce();
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void clearPositions() {
+        this.getInterestedPositions().clear();
+    }
+
+    public void clearFields() {
+        this.getInterestedFields().clear();
     }
 
 }
