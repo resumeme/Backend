@@ -1,11 +1,16 @@
 package org.devcourse.resumeme.global.config;
 
+import jakarta.annotation.PostConstruct;
+import org.devcourse.resumeme.global.config.authorization.AuthorizationResolver;
 import org.devcourse.resumeme.global.config.authorization.OnlyOwn;
+import org.devcourse.resumeme.repository.EventRepository;
+import org.devcourse.resumeme.repository.ResumeRepository;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -24,10 +29,13 @@ public record EndpointProperties(List<Matcher> matchers, List<String> ignores) {
     enum Manager {
 
         ALL((a, o) -> new AuthorizationDecision(true)),
-        OWN_MENTEE(new OnlyOwn("resumes", "ROLE_MENTEE")),
-        OWN_MENTOR(new OnlyOwn("events", "ROLE_MENTOR"));
+        OWN_MENTEE(),
+        OWN_MENTOR();
 
-        final AuthorizationManager<RequestAuthorizationContext> manager;
+        AuthorizationManager<RequestAuthorizationContext> manager;
+
+        Manager() {
+        }
 
         Manager(AuthorizationManager<RequestAuthorizationContext> manager) {
             this.manager = manager;
@@ -45,6 +53,26 @@ public record EndpointProperties(List<Matcher> matchers, List<String> ignores) {
             return AuthorityAuthorizationManager.hasRole(roleName);
         }
 
+        @Component
+        public static class ManagerInjector {
+
+            private final ResumeRepository resumeRepository;
+
+            private final EventRepository eventRepository;
+
+            public ManagerInjector(EventRepository eventRepository, ResumeRepository resumeRepository) {
+                this.eventRepository = eventRepository;
+                this.resumeRepository = resumeRepository;
+            }
+
+            @PostConstruct
+            public void postConstruct() {
+                AuthorizationResolver resolver = new AuthorizationResolver(resumeRepository, eventRepository);
+                OWN_MENTEE.manager = new OnlyOwn("resumes", "ROLE_MENTEE", resolver);
+                OWN_MENTOR.manager = new OnlyOwn("events", "ROLE_MENTOR", resolver);
+            }
+
+        }
     }
 
 }

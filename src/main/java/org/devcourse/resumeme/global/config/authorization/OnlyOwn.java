@@ -7,6 +7,7 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Supplier;
 
@@ -17,9 +18,12 @@ public class OnlyOwn implements AuthorizationManager<RequestAuthorizationContext
 
     private final String role;
 
-    public OnlyOwn(String target, String role) {
+    private final AuthorizationResolver resolver;
+
+    public OnlyOwn(String target, String role, AuthorizationResolver resolver) {
         this.target = target;
         this.role = role;
+        this.resolver = resolver;
     }
 
     @Override
@@ -31,10 +35,9 @@ public class OnlyOwn implements AuthorizationManager<RequestAuthorizationContext
 
             for (int i = 0; i < parameters.length; i++) {
                 if (parameters[i].equals(target)) {
-                    return new AuthorizationDecision(Long.valueOf(parameters[i + 1]).equals(userId));
+                    return new AuthorizationDecision(resolver.resolve(userId, Long.valueOf(parameters[i + 1]), target));
                 }
             }
-
             log.debug("해당 사용자의 개인 리소스가 아님");
         }
         log.debug("역할이 일치 하지 않음, role : {}", authentication.get().getAuthorities().stream().map(GrantedAuthority::getAuthority).toString());

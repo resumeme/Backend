@@ -20,4 +20,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @EntityGraph(attributePaths = {"applicants"})
     Optional<Event> findWithApplicantsById(Long id);
 
+    List<Event> findAllByMentorId(Long mentorId);
+
 }
