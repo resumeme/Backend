@@ -13,7 +13,7 @@ public abstract class OAuth2UserInfo {
     }
 
     public OAuth2TempInfo toOAuth2TempInfo() {
-        return new OAuth2TempInfo(getProvider(), getNickname(), getEmail(), getImageUrl());
+        return new OAuth2TempInfo(null, getProvider(), getNickname(), getEmail(), getImageUrl());
     }
 
     public abstract String getId();

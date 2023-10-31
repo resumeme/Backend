@@ -6,7 +6,6 @@ import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.domain.user.UserCommonInfo;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
-import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.userInfo.GoogleOAuth2UserInfo;
 import org.devcourse.resumeme.global.auth.userInfo.KakaoOAuth2UserInfo;
 import org.devcourse.resumeme.global.auth.userInfo.OAuth2UserInfo;
@@ -61,8 +60,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
         Optional<Mentee> findMentee = menteeRepository.findByEmail(email);
 
         if (findMentor.isEmpty() && findMentee.isEmpty()) {
-            OAuth2TempInfo oAuth2TempInfo = userInfo.toOAuth2TempInfo();
-            String cacheKey = oAuth2TempInfoRepository.save(oAuth2TempInfo).getId();
+            String cacheKey = oAuth2TempInfoRepository.save(userInfo.toOAuth2TempInfo()).getId();
             log.info("Redis Temporarily saved key : {}", cacheKey);
 
             throw new OAuth2AuthenticationException(new OAuth2Error("NOT_REGISTERED"), cacheKey);
