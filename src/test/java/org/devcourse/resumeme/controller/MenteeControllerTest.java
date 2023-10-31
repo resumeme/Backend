@@ -36,7 +36,7 @@ class MenteeControllerTest extends ControllerUnitTest {
         // given
         RequiredInfoRequest requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
         MenteeRegisterInfoRequest menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
-        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo("cacheKey", "KAKAO", "지롱", "devcoco@naver.com", "image.png");
+        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo("KAKAO", "지롱", "devcoco@naver.com", "image.png");
 
         Mentee mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo, "refreshTokenRecentlyIssued");
         Mentee savedMentee = Mentee.builder()
