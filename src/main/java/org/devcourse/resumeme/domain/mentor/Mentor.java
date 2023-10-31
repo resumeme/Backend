@@ -26,6 +26,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static org.devcourse.resumeme.common.util.Validator.validate;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_ADMIN;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
+import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTOR;
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.ROLE_NOT_ALLOWED;
 
@@ -103,6 +104,10 @@ public class Mentor extends BaseEntity {
 
     public void updateRole(Role role) {
         requiredInfo.updateRole(role);
+    }
+
+    public boolean isApproved() {
+        return ROLE_MENTOR.equals(this.requiredInfo.getRole());
     }
 
 }
