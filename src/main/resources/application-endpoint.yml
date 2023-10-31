@@ -1,22 +1,30 @@
 endpoint:
-  permit-all:
-    get:
-    post: /api/v1/mentees, /api/v1/mentors
-    put:
-    patch: /api/v1/mentees/*
-    delete:
-  roles:
+  matchers:
     - matcher:
         get: /api/v1/mentors/*
-        post:
+        post: /api/v1/mentees, /api/v1/mentors
+      role: all
+    - matcher:
+        get: /api/v1/mentors/*
+        post: /api/v1/resumes, /api/v1/resume/*/**
         put:
-        patch:
+        patch: /api/v1/events/*/mentee
         delete:
-      role: user, mentor
+      role: mentee
     - matcher:
         get: /api/v1/mentors/*
-        post: /api/v1/events
+        post: /api/v1/events, /api/v1/resume/*/reviews
         put:
-        patch: /api/v1/events/*, /api/v1/events/*/mentee/*
+        patch: /api/v1/events/*
         delete:
       role: mentor
+    - matcher:
+        get: /api/v1/admin/applications
+        delete: /api/v1/admin/applications/*/*
+      role: admin
+    - matcher:
+        get: /api/v1/events/*
+        post: /api/v1/events/*/resume/*/reviews
+        patch: /api/v1/events/*/mentee/*
+      role: own_mentor
+  ignores: /docs/**

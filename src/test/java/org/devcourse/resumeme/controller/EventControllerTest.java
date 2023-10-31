@@ -171,7 +171,7 @@ class EventControllerTest extends ControllerUnitTest {
         Long eventId = 1L;
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/mentee", eventId));
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resume/{resumeId}/mentee", eventId, 1L));
 
         // then
         result
