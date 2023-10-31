@@ -6,6 +6,7 @@ import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.controller.dto.EventResponse;
+import org.devcourse.resumeme.controller.dto.EventsResponse;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.MenteeToEvent;
 import org.devcourse.resumeme.domain.mentor.Mentor;
@@ -88,4 +89,11 @@ public class EventController {
                 .toList();
     }
 
+    @GetMapping
+    public List<EventsResponse> getAll() {
+        return eventService.getAll().stream()
+                .map(EventsResponse::new)
+                .toList();
+
+    }
 }

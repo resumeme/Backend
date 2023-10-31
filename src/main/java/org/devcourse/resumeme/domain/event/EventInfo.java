@@ -23,6 +23,7 @@ public class EventInfo {
 
     private String content;
 
+    @Getter
     @Enumerated(STRING)
     private EventStatus status;
 

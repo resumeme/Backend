@@ -58,4 +58,8 @@ public class EventService {
         getOne(eventId).requestReview(menteeId);
     }
 
+    public List<Event> getAll() {
+        return eventRepository.findAll();
+    }
+
 }
