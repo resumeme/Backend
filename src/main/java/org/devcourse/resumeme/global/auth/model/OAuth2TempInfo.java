@@ -13,8 +13,8 @@ public class OAuth2TempInfo {
     private final String email;
     private final String imageUrl;
 
-    public OAuth2TempInfo(String id, String provider, String nickname, String email, String imageUrl) {
-        this.id = id;
+    public OAuth2TempInfo(String provider, String nickname, String email, String imageUrl) {
+        this.id = null;
         this.provider = provider;
         this.nickname = nickname;
         this.email = email;

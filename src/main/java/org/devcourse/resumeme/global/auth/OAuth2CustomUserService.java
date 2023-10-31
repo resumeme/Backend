@@ -61,8 +61,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
         Optional<Mentee> findMentee = menteeRepository.findByEmail(email);
 
         if (findMentor.isEmpty() && findMentee.isEmpty()) {
-
-            OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo(userInfo.getId(), userInfo.getProvider(), userInfo.getNickname(), userInfo.getEmail(), userInfo.getImageUrl());
+            OAuth2TempInfo oAuth2TempInfo = userInfo.toOAuth2TempInfo();
             String cacheKey = oAuth2TempInfoRepository.save(oAuth2TempInfo).getId();
             log.info("Redis Temporarily saved key : {}", cacheKey);
 

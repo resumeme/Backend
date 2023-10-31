@@ -44,6 +44,7 @@ public class MenteeController {
         Mentee mentee = registerInfoRequest.toEntity(oAuth2TempInfo, refreshToken);
         Mentee savedMentee = menteeService.create(mentee);
         String accessToken = jwtService.createAccessToken(Claims.of(savedMentee));
+        oAuth2InfoRedisRepository.delete(oAuth2TempInfo);
 
         return Map.of("access", accessToken, "refresh", refreshToken);
     }
