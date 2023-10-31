@@ -1,5 +1,7 @@
 package org.devcourse.resumeme.global.auth.userInfo;
 
+import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
+
 import java.util.Map;
 
 public abstract class OAuth2UserInfo {
@@ -8,6 +10,10 @@ public abstract class OAuth2UserInfo {
 
     public OAuth2UserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
+    }
+
+    public OAuth2TempInfo toOAuth2TempInfo() {
+        return new OAuth2TempInfo(getProvider(), getNickname(), getEmail(), getImageUrl());
     }
 
     public abstract String getId();
