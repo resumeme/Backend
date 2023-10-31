@@ -11,8 +11,6 @@ import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.validate;
-import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
-import static org.devcourse.resumeme.domain.user.Role.ROLE_PENDING;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -77,7 +75,7 @@ public class RequiredInfo {
     }
 
     public void validateRole(Role role) {
-        validate(!role.equals(ROLE_MENTEE) && !role.equals(ROLE_PENDING), ExceptionCode.ROLE_NOT_ALLOWED);
+        validate(Role.ROLE_ADMIN.equals(role), ExceptionCode.ROLE_NOT_ALLOWED);
     }
 
 }
