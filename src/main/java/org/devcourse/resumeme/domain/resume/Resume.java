@@ -71,6 +71,8 @@ public class Resume extends BaseEntity {
 
     private String phoneNumber;
 
+    private boolean openStatus;
+
     public Resume(String title, Mentee mentee) {
         validateResume(title, mentee);
         this.title = title;
@@ -99,6 +101,7 @@ public class Resume extends BaseEntity {
         this.githubAddress = githubAddress;
         this.blogAddress = blogAddress;
         this.phoneNumber = phoneNumber;
+        this.openStatus = false;
     }
 
     public Resume copy() {
@@ -115,6 +118,10 @@ public class Resume extends BaseEntity {
 
     public String menteeName() {
         return this.mentee.getRequiredInfo().getNickname();
+    }
+
+    public void openStatus() {
+        this.openStatus = true;
     }
 
 }

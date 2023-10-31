@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.controller.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.repository.MenteeRepository;
@@ -26,6 +27,11 @@ public class MenteeService {
     public void updateRefreshToken(Long id, String refreshToken) {
         Mentee findMentee = getOne(id);
         findMentee.updateRefreshToken(refreshToken);
+    }
+
+    public void update(Long id, MenteeInfoUpdateRequest updateRequest) {
+        Mentee findMentee = getOne(id);
+        findMentee.updateInfos(updateRequest);
     }
 
 }
