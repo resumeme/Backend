@@ -33,11 +33,12 @@ public class ForeignLanguage {
 
     private String scoreOrGrade;
 
-    public ForeignLanguage(String language, String examName, String scoreOrGrade) {
+    public ForeignLanguage(String language, String examName, String scoreOrGrade, Resume resume) {
         validate(language == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(examName == null, ExceptionCode.NO_EMPTY_VALUE);
         validate(scoreOrGrade == null, ExceptionCode.NO_EMPTY_VALUE);
 
+        this.resume = resume;
         this.language = language;
         this.examName = examName;
         this.scoreOrGrade = scoreOrGrade;
