@@ -54,7 +54,7 @@ class ReviewControllerTest extends ControllerUnitTest {
         given(reviewService.create(any(Review.class))).willReturn(review);
 
         // when
-        ResultActions result = mvc.perform(post("/api/v1/resume/{resumeId}/reviews",resumeId)
+        ResultActions result = mvc.perform(post("/api/v1/events/{eventId}/resume/{resumeId}/reviews", 1L, resumeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
