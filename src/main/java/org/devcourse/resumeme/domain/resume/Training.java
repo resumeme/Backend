@@ -47,7 +47,7 @@ public class Training {
     private String explanation;
 
     public Training(String organization, String major, String degree, LocalDate admissionDate,
-                    LocalDate graduationDate, double gpa, double maxGpa, String explanation) {
+                    LocalDate graduationDate, double gpa, double maxGpa, String explanation, Resume resume) {
         validateTraining(organization, major, degree, admissionDate, graduationDate, gpa, maxGpa);
 
         this.organization = organization;
@@ -58,6 +58,7 @@ public class Training {
         this.gpa = gpa;
         this.maxGpa = maxGpa;
         this.explanation = explanation;
+        this.resume = resume;
     }
 
     private void validateTraining(String schoolOrOrganization, String major, String degree, LocalDate admissionDate,
