@@ -3,7 +3,7 @@ endpoint:
     get:
     post: /api/v1/mentees, /api/v1/mentors
     put:
-    patch:
+    patch: /api/v1/mentees/*
     delete:
   roles:
     - matcher:
