@@ -10,6 +10,7 @@ import org.devcourse.resumeme.controller.MenteeController;
 import org.devcourse.resumeme.controller.MentorApplicationController;
 import org.devcourse.resumeme.controller.MentorController;
 import org.devcourse.resumeme.controller.ProjectController;
+import org.devcourse.resumeme.controller.ResultNoticeController;
 import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.controller.ReviewController;
 import org.devcourse.resumeme.global.auth.token.JwtService;
@@ -21,6 +22,7 @@ import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.MentorApplicationService;
 import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ProjectService;
+import org.devcourse.resumeme.service.ResultService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.devcourse.resumeme.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +51,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         CareerController.class,
         ProjectController.class,
         CertificationController.class,
-        MentorApplicationController.class
+        MentorApplicationController.class,
+        ResultNoticeController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -88,6 +91,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected CertificationService certificationService;
+
+    @MockBean
+    protected ResultService resultService;
 
     protected MockMvc mvc;
 
