@@ -1,6 +1,8 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
+import org.devcourse.resumeme.controller.dto.MenteeInfoUpdateRequest;
+import org.devcourse.resumeme.controller.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.controller.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
@@ -26,8 +28,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -110,12 +114,48 @@ class MentorControllerTest extends ControllerUnitTest {
 
     @Test
     @WithMockCustomUser
-    void 멘토_정보_조회에_성공한다 () throws Exception {
+    void 멘토_정보_수정에_성공한다() throws Exception {
         // given
         Long mentorId = 1L;
+        MentorInfoUpdateRequest request = new MentorInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), "다양한 도메인에서 일한 경력이 있습니다.", 5, "안녕하세요~");
+        given(menteeService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
 
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/mentees/{mentorId}", mentorId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("mentor/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("mentorId").description("멘토 id")
+                                ),
+                                requestFields(
+                                        fieldWithPath("realName").type(STRING).description("실명"),
+                                        fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
+                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
+                                        fieldWithPath("careerContent").type(STRING).description("경력 사항"),
+                                        fieldWithPath("careerYear").type(NUMBER).description("경력 연차"),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(MAP).description("멘토 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 멘토_정보_조회에_성공한다 () throws Exception {
+        // given
         savedMentor = Mentor.builder()
-                .id(mentorId)
+                .id(1L)
                 .imageUrl(oAuth2TempInfo.getImageUrl())
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
                 .email(oAuth2TempInfo.getEmail())
@@ -130,7 +170,7 @@ class MentorControllerTest extends ControllerUnitTest {
         given(mentorService.getOne(any(Long.class))).willReturn(savedMentor);
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}", mentorId)
+        ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then
@@ -146,6 +186,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("role").type(STRING).description("역할"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
