@@ -17,4 +17,9 @@ public class CareerService {
         return careerRepository.save(career).getId();
     }
 
+    @Transactional(readOnly = true)
+    public Career getOne(Long careerId) {
+        return careerRepository.getReferenceById(careerId);
+    }
+
 }

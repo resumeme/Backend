@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,34 +37,36 @@ public class Career {
     @Column(name = "career_id")
     private Long id;
 
+    @Getter
     private String companyName;
 
-    @Enumerated(EnumType.STRING)
-    private Position position;
+    @Getter
+    private String position;
 
     @ManyToOne
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
+    @Getter
     @ElementCollection
     @CollectionTable(name = "career_skills")
     @Column(name = "skill")
     private List<String> skills;
 
+    @Getter
     @OneToMany(mappedBy = "career", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Duty> duties = new ArrayList<>();
 
-    private boolean isCurrentlyEmployed;
+    @Embedded
+    private CareerPeriod careerPeriod;
 
-    private LocalDate careerStartDate;
-
-    private LocalDate endDate;
-
+    @Getter
     private String careerContent;
 
 
-    public Career(String companyName, Position position, Resume resume, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed,
+    public Career(String companyName, String position, Resume resume, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed,
                   LocalDate careerStartDate, LocalDate endDate, String careerContent) {
+        CareerPeriod careerPeriod = new CareerPeriod(careerStartDate, endDate, isCurrentlyEmployed);
         validateCareer(companyName, position, skills, duties, isCurrentlyEmployed, careerStartDate, endDate);
 
         this.companyName = companyName;
@@ -71,25 +74,27 @@ public class Career {
         this.resume = resume;
         this.skills = skills;
         this.duties = duties;
-        this.isCurrentlyEmployed = isCurrentlyEmployed;
-        this.careerStartDate = careerStartDate;
-        this.endDate = endDate;
+        this.careerPeriod = careerPeriod;
         this.careerContent = careerContent;
     }
 
-    private void validateCareer(String companyName, Position position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed, LocalDate careerStartDate, LocalDate endDate) {
+    private void validateCareer(String companyName, String position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed, LocalDate careerStartDate, LocalDate endDate) {
         Validator.check(companyName == null, ExceptionCode.NO_EMPTY_VALUE);
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
         Validator.check(skills.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
         Validator.check(duties.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(careerStartDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        if (isCurrentlyEmployed) {
-            Validator.check(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        }
+    }
 
-        if (careerStartDate.isAfter(endDate)) {
-            throw new CustomException("TIME_ERROR", "시작일은 종료일보다 먼저여야 합니다.");
-        }
+    public boolean isCurrentlyEmployed() {
+        return careerPeriod.isCurrentlyEmployed();
+    }
+
+    public LocalDate getCareerStartDate() {
+        return careerPeriod.getCareerStartDate();
+    }
+
+    public LocalDate getEndDate() {
+        return careerPeriod.getEndDate();
     }
 
 }

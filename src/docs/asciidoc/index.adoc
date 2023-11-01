@@ -20,4 +20,5 @@ endif::[]
 
 include::mentor.adoc[]
 include::mentee.adoc[]
+include::resume.adoc[]
 include::all.adoc[]
