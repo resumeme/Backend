@@ -3,6 +3,8 @@ package org.devcourse.resumeme.common.controller;
 import org.devcourse.resumeme.common.domain.DocsEnumType;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.domain.event.EventStatus;
+import org.devcourse.resumeme.domain.event.Progress;
+import org.devcourse.resumeme.domain.resume.BlockType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +19,9 @@ public class EnumController {
     public EnumDocsResponse enums() {
         return new EnumDocsResponse(
                 to(Position.values()),
-                to(EventStatus.values())
+                to(EventStatus.values()),
+                to(Progress.values()),
+                to(BlockType.values())
         );
     }
 
@@ -26,7 +30,8 @@ public class EnumController {
                 .collect(Collectors.toMap(DocsEnumType::getType, DocsEnumType::getDescription));
     }
 
-    public record EnumDocsResponse(Map<String, String> position, Map<String, String> eventStatus) {
+    public record EnumDocsResponse(Map<String, String> position, Map<String, String> eventStatus,
+                                   Map<String, String> progress, Map<String, String> blockType) {
 
     }
 
