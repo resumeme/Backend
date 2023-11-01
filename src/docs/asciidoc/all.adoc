@@ -1,5 +1,23 @@
 = 공통
 
+=== 이미 가입된 사용자 로그인
+**Request**
+include::{snippets}/login/alreadyUser/http-request.adoc[]
+include::{snippets}/login/alreadyUser/request-fields.adoc[]
+
+*Response*
+include::{snippets}/login/alreadyUser/http-response.adoc[]
+include::{snippets}/login/alreadyUser/response-headers.adoc[]
+
+=== 새로운 사용자 로그인
+**Request**
+include::{snippets}/login/newUser/http-request.adoc[]
+include::{snippets}/login/newUser/request-fields.adoc[]
+
+*Response*
+include::{snippets}/login/newUser/http-response.adoc[]
+include::{snippets}/login/newUser/response-headers.adoc[]
+
 === 멘토 가입
 
 *Request*

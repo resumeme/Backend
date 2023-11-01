@@ -16,6 +16,7 @@ import org.devcourse.resumeme.controller.ResultNoticeController;
 import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.controller.ReviewController;
 import org.devcourse.resumeme.controller.TrainingController;
+import org.devcourse.resumeme.global.auth.filter.AuthFilterTestController;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.ActivityService;
@@ -41,6 +42,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -62,7 +64,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ActivityController.class,
         ForeignLanguageController.class,
         ResultNoticeController.class,
-        TrainingController.class
+        TrainingController.class,
+        AuthFilterTestController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -113,6 +116,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected TrainingService trainingService;
+
+    @MockBean
+    protected ProviderManager providerManager;
 
     protected MockMvc mvc;
 
