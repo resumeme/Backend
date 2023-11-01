@@ -11,4 +11,6 @@ public @interface WithMockCustomUser {
 
     String id() default "1";
 
+    String role() default "ROLE_MENTEE";
+
 }
