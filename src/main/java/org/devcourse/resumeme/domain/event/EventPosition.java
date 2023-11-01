@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
 
@@ -24,6 +25,7 @@ public class EventPosition {
     @Column(name = "event_position_id")
     private Long id;
 
+    @Getter
     @Enumerated(STRING)
     private Position position;
 

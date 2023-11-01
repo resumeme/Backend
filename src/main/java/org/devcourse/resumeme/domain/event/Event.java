@@ -155,4 +155,14 @@ public class Event extends BaseEntity {
         return eventTimeInfo.getEndDate();
     }
 
+    public List<String> positions() {
+        return this.positions.stream()
+                .map(eventPosition -> eventPosition.getPosition().name())
+                .toList();
+    }
+
+    public String status() {
+        return eventInfo.getStatus().name();
+    }
+
 }
