@@ -38,7 +38,9 @@ class EnumControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("enum-response",
                                 customResponseFields("position", enumConvertFieldDescriptor(response.position())),
-                                customResponseFields("eventStatus", enumConvertFieldDescriptor(response.eventStatus()))
+                                customResponseFields("eventStatus", enumConvertFieldDescriptor(response.eventStatus())),
+                                customResponseFields("progress", enumConvertFieldDescriptor(response.progress())),
+                                customResponseFields("blockType", enumConvertFieldDescriptor(response.blockType()))
                         )
                 );
 

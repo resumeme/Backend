@@ -1,0 +1,18 @@
+= 어드민
+
+=== 모든 멘토 등급 업 신청 조회
+
+*Request*
+include::{snippets}/admin/allApplication/http-request.adoc[]
+
+*Response*
+include::{snippets}/admin/allApplication/http-response.adoc[]
+include::{snippets}/admin/allApplication/response-fields.adoc[]
+
+=== 멘토 승인 여부 결정
+
+*Request*
+include::{snippets}/admin/processApplication/http-request.adoc[]
+
+*Response*
+include::{snippets}/admin/processApplication/http-response.adoc[]

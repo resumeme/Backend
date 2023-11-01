@@ -27,3 +27,23 @@ include::{snippets}/event/requestReview/http-request.adoc[]
 
 *Response*
 include::{snippets}/event/requestReview/http-response.adoc[]
+
+=== 합격이력서 공유 소개글 작성
+
+*Request*
+include::{snippets}/result/create/http-request.adoc[]
+include::{snippets}/result/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/result/create/http-response.adoc[]
+include::{snippets}/result/create/response-fields.adoc[]
+
+=== 이력서 리뷰 조회
+
+*Request*
+include::{snippets}/review/getAll/http-request.adoc[]
+include::{snippets}/review/getAll/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/review/getAll/http-response.adoc[]
+include::{snippets}/review/getAll/response-fields.adoc[]
