@@ -55,7 +55,6 @@ include::{snippets}/foreignLanguage/create/response-fields.adoc[]
 === 업무경험 조회
 *Request*
 include::{snippets}/career/find/http-request.adoc[]
-include::{snippets}/career/find/request-fields.adoc
 
 *Response*
 include::{snippets}/career/find/http-response.adoc[]
