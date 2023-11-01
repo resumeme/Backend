@@ -1,6 +1,9 @@
 package org.devcourse.resumeme.domain.resume;
 
 import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -18,12 +21,22 @@ public class ProjectTest {
 
     private Resume resume;
 
+    private Mentee mentee;
+
     @BeforeEach
     void init() {
-        resume = new Resume("title", Mentee.builder()
-                .interestedPositions(Set.of("BACK"))
-                .interestedFields(Set.of("FINANCE"))
-                .build());
+        mentee = Mentee.builder()
+                .id(1L)
+                .imageUrl("menteeimage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong1@kakao.com")
+                .refreshToken("ddefweferfrte")
+                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
+                .build();
+        resume = new Resume("title", mentee);
     }
 
     @Test

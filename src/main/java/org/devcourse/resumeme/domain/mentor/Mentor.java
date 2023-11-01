@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,7 @@ import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EM
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.ROLE_NOT_ALLOWED;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mentor extends BaseEntity {
 
     static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
@@ -60,6 +61,7 @@ public class Mentor extends BaseEntity {
     @Getter
     private String refreshToken;
 
+    @Getter
     @OneToMany(fetch = LAZY, mappedBy = "mentor", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<MentorPosition> experiencedPositions = new HashSet<>();
 

@@ -4,6 +4,7 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.auth.model.Claims;
 import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
@@ -36,11 +37,15 @@ class MenteeControllerTest extends ControllerUnitTest {
         // given
         RequiredInfoRequest requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
         MenteeRegisterInfoRequest menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
-        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo(null,  "KAKAO", "지롱", "devcoco@naver.com", "image.png");
+        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo(null,  "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
 
         Mentee mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo, "refreshTokenRecentlyIssued");
         Mentee savedMentee = Mentee.builder()
                 .id(1L)
+                .imageUrl(oAuth2TempInfo.getImageUrl())
+                .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
+                .email(oAuth2TempInfo.getEmail())
+                .refreshToken(mentee.getRefreshToken())
                 .requiredInfo(mentee.getRequiredInfo())
                 .interestedPositions(menteeRegisterInfoRequest.interestedPositions())
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())

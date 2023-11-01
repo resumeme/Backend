@@ -1,18 +1,20 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.common.DocumentLinkGenerator;
 import org.devcourse.resumeme.controller.dto.ReviewCreateRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
 import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.review.Review;
 import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.support.WithMockCustomUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -42,19 +44,43 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ReviewControllerTest extends ControllerUnitTest {
 
+    private Mentor mentor;
+
+    private Mentee mentee;
+
+    @BeforeEach
+    void setUp() {
+        mentor =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("progrers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .build();
+
+        mentee = Mentee.builder()
+                .id(1L)
+                .imageUrl("menteeimage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong1@kakao.com")
+                .refreshToken("ddefweferfrte")
+                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
+                .build();
+    }
+
     @Test
     @WithMockCustomUser
     void 리뷰_생성에_성공한다() throws Exception {
         // given
         ReviewCreateRequest request = new ReviewCreateRequest("이력서가 맘에 안들어요", "ACTIVITY");
         Long resumeId = 1L;
-        Mentee mentee = Mentee.builder()
-                .id(1L)
-                .email("email")
-                .provider(Provider.KAKAO)
-                .interestedPositions(Set.of("FRONT", "BACK"))
-                .interestedFields(Set.of("RETAIL"))
-                .build();
         Resume resume = new Resume("titlem", mentee);
 
         Review review = request.toEntity(resume);
@@ -96,17 +122,10 @@ class ReviewControllerTest extends ControllerUnitTest {
         // given
         long eventId = 1L;
         long resumeId = 1L;
-        Mentee mentee = Mentee.builder()
-                .id(1L)
-                .email("email")
-                .provider(Provider.KAKAO)
-                .interestedPositions(Set.of("FRONT", "BACK"))
-                .interestedFields(Set.of("RETAIL"))
-                .build();
 
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
@@ -139,6 +158,5 @@ class ReviewControllerTest extends ControllerUnitTest {
                         )
                 );
     }
-
 
 }

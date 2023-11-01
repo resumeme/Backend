@@ -1,9 +1,11 @@
 package org.devcourse.resumeme.domain.review;
 
 import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -28,10 +30,14 @@ class ReviewTest {
         BlockType type = BlockType.CAREER;
         Mentee mentee = Mentee.builder()
                 .id(1L)
-                .email("email")
-                .provider(Provider.KAKAO)
-                .interestedPositions(Set.of("FRONT", "BACK"))
-                .interestedFields(Set.of("RETAIL"))
+                .imageUrl("menteeimage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong1@kakao.com")
+                .refreshToken("ddefweferfrte")
+                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
                 .build();
         Resume resume = new Resume("title", mentee);
 
@@ -55,11 +61,16 @@ class ReviewTest {
         BlockType type = BlockType.CAREER;
         Mentee mentee = Mentee.builder()
                 .id(1L)
-                .email("email")
-                .provider(Provider.KAKAO)
-                .interestedPositions(Set.of("FRONT", "BACK"))
-                .interestedFields(Set.of("RETAIL"))
+                .imageUrl("menteeimage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong1@kakao.com")
+                .refreshToken("ddefweferfrte")
+                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
                 .build();
+
         Resume resume = new Resume("title", mentee);
 
         return Stream.of(

@@ -24,10 +24,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.LAZY;
+import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.ROLE_NOT_ALLOWED;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mentee extends BaseEntity {
+
+    static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
     @Id
     @Getter
@@ -66,6 +72,7 @@ public class Mentee extends BaseEntity {
 
     @Builder
     public Mentee(Long id,String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
+        validateInputs(email, provider, imageUrl, requiredInfo, refreshToken);
         this.id = id;
         this.email = email;
         this.provider = provider;
@@ -75,6 +82,15 @@ public class Mentee extends BaseEntity {
         this.interestedPositions = interestedPositions.stream().map(position -> new MenteePosition(this, Position.valueOf(position.toUpperCase()))).collect(Collectors.toSet());
         this.interestedFields = interestedFields.stream().map(field -> new MenteeField(this, Field.valueOf(field.toUpperCase()))).collect(Collectors.toSet());
         this.introduce = introduce;
+    }
+
+    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken) {
+        check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
+        check(provider == null, NO_EMPTY_VALUE);
+        check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
+        check(requiredInfo == null, NO_EMPTY_VALUE);
+        check(!ROLE_MENTEE.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
+        check(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
     }
 
     public void updateInfos(MenteeInfoUpdateRequest updateRequest) {
