@@ -5,6 +5,8 @@ import org.devcourse.resumeme.domain.review.Review;
 import org.devcourse.resumeme.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -13,6 +15,10 @@ public class ReviewService {
 
     public Review create(Review review) {
         return reviewRepository.save(review);
+    }
+
+    public List<Review> getAllWithResumeId(Long resumeId) {
+        return reviewRepository.findAllByResumeId(resumeId);
     }
 
 }

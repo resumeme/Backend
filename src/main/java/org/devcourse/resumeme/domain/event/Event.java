@@ -165,4 +165,14 @@ public class Event extends BaseEntity {
         return eventInfo.getStatus().name();
     }
 
+    public void checkAppliedResume(Long resumeId) {
+        for (MenteeToEvent applicant : applicants) {
+            if (applicant.getResumeId().equals(resumeId)) {
+                return;
+            }
+        }
+
+        throw new EventException("RESUME_NOT_FOUND", "참여한 이력서가 없습니다");
+    }
+
 }
