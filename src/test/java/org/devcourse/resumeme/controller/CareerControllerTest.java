@@ -93,29 +93,29 @@ public class CareerControllerTest extends ControllerUnitTest {
 
         given(careerService.getOne(careerId)).willReturn(career);
 
-        ResultActions result = mvc.perform(get("/api/v1/resume/{careerId}", careerId)
-                        .contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mvc.perform(get("/api/v1/resume/{careerId}", careerId));
+
 
         result
                 .andExpect(status().isOk())
-                .andDo(document("career/get",
-                        pathParameters(
-                                parameterWithName("careerId").description("The ID of the career")
-                        ),
-                        responseFields(
-                                fieldWithPath("companyName").type(STRING).description("The name of the company"),
-                                fieldWithPath("position").type(STRING).description("The position in the company"),
-                                fieldWithPath("skills").type(ARRAY).description("List of skills"),
-                                fieldWithPath("duties[].title").type(STRING).description("제목"),
-                                fieldWithPath("duties[].description").type(STRING).description("설명"),
-                                fieldWithPath("duties[].startDate").type(STRING).description("시작일"),
-                                fieldWithPath("duties[].endDate").type(STRING).description("종료일"),
-                                fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("Current employment status"),
-                                fieldWithPath("careerStartDate").type(STRING).description("Start date of the career"),
-                                fieldWithPath("endDate").type(STRING).description("End date of the career"),
-                                fieldWithPath("careerContent").type(STRING).description("Details about the career")
-                        )
-                ));
+                .andDo(
+                        document("career/find",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("companyName").type(STRING).description("회사명"),
+                                        fieldWithPath("position").type(STRING).description("직책"),
+                                        fieldWithPath("skills").type(ARRAY).description("기술 목록"),
+                                        fieldWithPath("duties[].title").type(STRING).description("업무 제목"),
+                                        fieldWithPath("duties[].description").type(STRING).description("업무 설명"),
+                                        fieldWithPath("duties[].startDate").type(STRING).description("업무 시작일"),
+                                        fieldWithPath("duties[].endDate").type(STRING).description("업무 종료일"),
+                                        fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("현재 재직 상태"),
+                                        fieldWithPath("careerStartDate").type(STRING).description("경력 시작일"),
+                                        fieldWithPath("endDate").type(STRING).description("경력 종료일"),
+                                        fieldWithPath("careerContent").type(STRING).description("경력 상세 내용")
+                                )
+                        ));
 
     }
 
