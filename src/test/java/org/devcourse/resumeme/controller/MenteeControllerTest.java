@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.MAP;
+import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.ROLE;
+import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -141,7 +143,7 @@ class MenteeControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("role").type(STRING).description("역할"),
+                                        fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 분야"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")

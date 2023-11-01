@@ -6,6 +6,7 @@ import org.devcourse.resumeme.domain.event.EventStatus;
 import org.devcourse.resumeme.domain.event.Progress;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,8 @@ public class EnumController {
                 to(EventStatus.values()),
                 to(Progress.values()),
                 to(BlockType.values()),
-                to(Provider.values())
+                to(Provider.values()),
+                to(Role.values())
         );
     }
 
@@ -34,7 +36,7 @@ public class EnumController {
 
     public record EnumDocsResponse(Map<String, String> position, Map<String, String> eventStatus,
                                    Map<String, String> progress, Map<String, String> blockType,
-                                   Map<String, String> provider) {
+                                   Map<String, String> provider, Map<String, String> role) {
 
     }
 

@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
 
@@ -28,6 +29,7 @@ public class MentorPosition {
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
 
+    @Getter
     @Enumerated(STRING)
     private Position position;
 
