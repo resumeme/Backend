@@ -11,8 +11,6 @@ import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.validate;
-import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
-import static org.devcourse.resumeme.domain.user.Role.ROLE_PENDING;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,7 +44,7 @@ public class RequiredInfo {
         validateNickname(nickname);
         validateRealName(realName);
         validatePhoneNumber(phoneNumber);
-        validateRole(role);
+        validateUserRole(role);
     }
 
     public void updateNickname(String nickname) {
@@ -60,24 +58,24 @@ public class RequiredInfo {
     }
 
     public void updateRole(Role role) {
-        validateRole(role);
+        validateUserRole(role);
         this.role = role;
     }
 
-    public void validateNickname(String nickname) {
+    private void validateNickname(String nickname) {
         validate(nickname == null || nickname.isBlank(), "INVALID_TEXT", "닉네임이 유효하지 않습니다.");
     }
 
-    public void validateRealName(String realName) {
+    private void validateRealName(String realName) {
         validate(realName == null || realName.isBlank(), "INVALID_TEXT", "이름이 유효하지 않습니다.");
     }
 
-    public void validatePhoneNumber(String phoneNumber) {
+    private void validatePhoneNumber(String phoneNumber) {
         validate(phoneNumber == null || !(phoneNumber.matches(PHONE_REGEX)), "INVALID_TEXT", "전화번호가 유효하지 않습니다.");
     }
 
-    public void validateRole(Role role) {
-        validate(!role.equals(ROLE_MENTEE) && !role.equals(ROLE_PENDING), ExceptionCode.ROLE_NOT_ALLOWED);
+    private void validateUserRole(Role role) {
+        validate(Role.ROLE_ADMIN.equals(role), ExceptionCode.ROLE_NOT_ALLOWED);
     }
 
 }

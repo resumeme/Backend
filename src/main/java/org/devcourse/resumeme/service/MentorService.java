@@ -15,13 +15,17 @@ public class MentorService {
 
     private final MentorRepository mentorRepository;
 
+    private final MentorApplicationEventPublisher mentorApplicationEventPublisher;
+
     @Transactional(readOnly = true)
     public Mentor getOne(Long id) {
         return mentorRepository.findById(id).orElseThrow(() -> new CustomException("MENTOR_NOT_FOUND", "존재하지 않는 회원입니다."));
     }
 
     public Mentor create(Mentor mentor) {
-        return mentorRepository.save(mentor);
+        Mentor savedMentor = mentorRepository.save(mentor);
+        mentorApplicationEventPublisher.publishMentorApplicationEvent(savedMentor);
+        return savedMentor;
     }
 
     public void updateRefreshToken(Long id, String refreshToken) {

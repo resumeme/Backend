@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.common.DocumentLinkGenerator;
 import org.devcourse.resumeme.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.controller.dto.EventCreateRequest.EventInfoRequest;
@@ -38,8 +37,6 @@ import static org.devcourse.resumeme.common.domain.Position.BACK;
 import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTOR;
-import static org.devcourse.resumeme.domain.user.Role.ROLE_PENDING;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -244,7 +241,7 @@ class EventControllerTest extends ControllerUnitTest {
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         RequiredInfoRequest requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_PENDING);
         MentorRegisterInfoRequest mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
-        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo( "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
+        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo(null,"GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         String refreshToken = "refreshTokenRecentlyIssued";
         Mentor mentor = Mentor.builder()
                 .id(1L)
