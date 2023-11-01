@@ -41,7 +41,7 @@ class EnumControllerTest extends ControllerUnitTest {
                                 customResponseFields("eventStatus", enumConvertFieldDescriptor(response.eventStatus())),
                                 customResponseFields("progress", enumConvertFieldDescriptor(response.progress())),
                                 customResponseFields("blockType", enumConvertFieldDescriptor(response.blockType())),
-                                customResponseFields("provider", enumConvertFieldDescriptor(response.blockType()))
+                                customResponseFields("provider", enumConvertFieldDescriptor(response.provider()))
                         )
                 );
 
