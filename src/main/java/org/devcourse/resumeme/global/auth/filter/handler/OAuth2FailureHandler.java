@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.global.auth;
+package org.devcourse.resumeme.global.auth.filter.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
