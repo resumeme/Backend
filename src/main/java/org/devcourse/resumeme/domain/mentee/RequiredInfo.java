@@ -7,10 +7,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -63,19 +64,19 @@ public class RequiredInfo {
     }
 
     private void validateNickname(String nickname) {
-        validate(nickname == null || nickname.isBlank(), "INVALID_TEXT", "닉네임이 유효하지 않습니다.");
+        check(nickname == null || nickname.isBlank(), "INVALID_TEXT", "닉네임이 유효하지 않습니다.");
     }
 
     private void validateRealName(String realName) {
-        validate(realName == null || realName.isBlank(), "INVALID_TEXT", "이름이 유효하지 않습니다.");
+        check(realName == null || realName.isBlank(), "INVALID_TEXT", "이름이 유효하지 않습니다.");
     }
 
     private void validatePhoneNumber(String phoneNumber) {
-        validate(phoneNumber == null || !(phoneNumber.matches(PHONE_REGEX)), "INVALID_TEXT", "전화번호가 유효하지 않습니다.");
+        check(phoneNumber == null || !(phoneNumber.matches(PHONE_REGEX)), "INVALID_TEXT", "전화번호가 유효하지 않습니다.");
     }
 
     private void validateUserRole(Role role) {
-        validate(Role.ROLE_ADMIN.equals(role), ExceptionCode.ROLE_NOT_ALLOWED);
+        Validator.check(Role.ROLE_ADMIN.equals(role), ExceptionCode.ROLE_NOT_ALLOWED);
     }
 
 }

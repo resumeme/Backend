@@ -9,9 +9,10 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,9 +35,9 @@ public class ForeignLanguage {
     private String scoreOrGrade;
 
     public ForeignLanguage(String language, String examName, String scoreOrGrade, Resume resume) {
-        validate(language == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(examName == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(scoreOrGrade == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(language == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(examName == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(scoreOrGrade == null, ExceptionCode.NO_EMPTY_VALUE);
 
         this.resume = resume;
         this.language = language;

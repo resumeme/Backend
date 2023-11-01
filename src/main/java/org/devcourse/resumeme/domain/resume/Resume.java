@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
@@ -23,7 +24,7 @@ import java.util.List;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -80,8 +81,8 @@ public class Resume extends BaseEntity {
     }
 
     private static void validateResume(String title, Mentee mentee) {
-        validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
+        Validator.check(title == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
     }
 
     private Resume(Long id, String title, Mentee mentee, Position position, String introduce, List<Career> career,

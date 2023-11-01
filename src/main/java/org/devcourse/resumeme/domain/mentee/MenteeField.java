@@ -13,7 +13,7 @@ import org.devcourse.resumeme.common.domain.Field;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -32,8 +32,8 @@ public class MenteeField {
     private Field field;
 
     public MenteeField(Mentee mentee, Field field) {
-        validate(field == null, "NO_EMPTY_VALUE", "분야는 필수 값입니다");
-        validate(mentee == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
+        check(field == null, "NO_EMPTY_VALUE", "분야는 필수 값입니다");
+        check(mentee == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
 
         this.mentee = mentee;
         this.field = field;

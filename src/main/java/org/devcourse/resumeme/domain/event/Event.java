@@ -23,7 +23,7 @@ import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -64,10 +64,10 @@ public class Event extends BaseEntity {
     }
 
     private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
-        validate(eventInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
-        validate(eventTimeInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
-        validate(mentor == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
-        validate(positions == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        check(eventInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        check(eventTimeInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        check(mentor == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        check(positions == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
     }
 
     public int acceptMentee(Long menteeId, Long resumeId) {

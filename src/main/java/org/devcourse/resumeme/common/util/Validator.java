@@ -10,13 +10,13 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class Validator {
 
-    public static void validate(boolean predicate, String errorCode, String errorMessage) {
+    public static void check(boolean predicate, String errorCode, String errorMessage) {
         if (predicate) {
             throw new CustomException(errorCode, errorMessage);
         }
     }
 
-    public static void validate(boolean predicate, ExceptionCode exceptionCode) {
+    public static void check(boolean predicate, ExceptionCode exceptionCode) {
         if (predicate) {
             throw new CustomException(exceptionCode);
         }

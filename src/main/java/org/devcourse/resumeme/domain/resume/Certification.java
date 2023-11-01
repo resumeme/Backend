@@ -9,10 +9,11 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,7 +40,7 @@ public class Certification {
     private String description;
 
     public Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
-        validate(isBlank(certificationTitle), ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(isBlank(certificationTitle), ExceptionCode.NO_EMPTY_VALUE);
 
         this.certificationTitle = certificationTitle;
         this.acquisitionDate = acquisitionDate;

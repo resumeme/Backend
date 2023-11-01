@@ -12,7 +12,7 @@ import org.devcourse.resumeme.common.domain.BaseEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.domain.event.Progress.APPLY;
 import static org.devcourse.resumeme.domain.event.Progress.REJECT;
 import static org.devcourse.resumeme.domain.event.Progress.REQUEST;
@@ -43,9 +43,9 @@ public class MenteeToEvent extends BaseEntity {
     private String rejectMessage;
 
     public MenteeToEvent(Event event, Long menteeId, Long resumeId) {
-        validate(event == null, "NOT_EMPTY_VALUE", "이벤트는 빈 값일 수 없습니다");
-        validate(menteeId == null, "NOT_EMPTY_VALUE", "멘티는 빈 값일 수 없습니다");
-        validate(resumeId == null, "NOT_EMPTY_VALUE", "이력서는 빈 값일 수 없습니다");
+        check(event == null, "NOT_EMPTY_VALUE", "이벤트는 빈 값일 수 없습니다");
+        check(menteeId == null, "NOT_EMPTY_VALUE", "멘티는 빈 값일 수 없습니다");
+        check(resumeId == null, "NOT_EMPTY_VALUE", "이력서는 빈 값일 수 없습니다");
 
         this.event = event;
         this.menteeId = menteeId;
@@ -59,7 +59,7 @@ public class MenteeToEvent extends BaseEntity {
     }
 
     public void reject(String rejectMessage) {
-        validate(rejectMessage == null, "NOT_EMPTY_VALUE", "반려 사유를 작성해주세요");
+        check(rejectMessage == null, "NOT_EMPTY_VALUE", "반려 사유를 작성해주세요");
 
         this.rejectMessage = rejectMessage;
         this.progress = REJECT;

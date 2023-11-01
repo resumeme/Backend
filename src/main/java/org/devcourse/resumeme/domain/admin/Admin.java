@@ -5,10 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
 
 @Entity
@@ -25,8 +26,8 @@ public class Admin {
     private String password;
 
     public Admin(String email, String password) {
-        validate(isBlank(email), NO_EMPTY_VALUE);
-        validate(isBlank(password), NO_EMPTY_VALUE);
+        Validator.check(isBlank(email), NO_EMPTY_VALUE);
+        Validator.check(isBlank(password), NO_EMPTY_VALUE);
 
         this.email = email;
         this.password = password;
