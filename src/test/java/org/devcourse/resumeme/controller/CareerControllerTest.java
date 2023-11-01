@@ -3,9 +3,12 @@ package org.devcourse.resumeme.controller;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.CareerCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.resume.Career;
 import org.devcourse.resumeme.domain.resume.Duty;
 import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -37,12 +40,23 @@ public class CareerControllerTest extends ControllerUnitTest {
 
     private Resume resume;
 
+    private Mentee mentee;
+
     @BeforeEach
     void init() {
-        resume = new Resume("title", Mentee.builder()
-                .interestedPositions(Set.of("BACK"))
-                .interestedFields(Set.of("FINANCE"))
-                .build());
+        mentee = Mentee.builder()
+                .id(1L)
+                .imageUrl("image.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("devcourse@naver.com")
+                .refreshToken("fjiejrwoosdfsfsddfss")
+                .requiredInfo(new RequiredInfo("이동호", "동동", "01022283833", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
+                .build();
+
+        resume = new Resume("title", mentee);
     }
 
     @Test

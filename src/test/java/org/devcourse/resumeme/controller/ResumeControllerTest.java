@@ -3,8 +3,10 @@ package org.devcourse.resumeme.controller;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,10 +36,14 @@ public class ResumeControllerTest extends ControllerUnitTest {
     void init() {
         mentee = Mentee.builder()
                 .id(1L)
-                .email("email")
-                .provider(Provider.KAKAO)
-                .interestedPositions(Set.of("FRONT", "BACK"))
-                .interestedFields(Set.of("RETAIL"))
+                .imageUrl("menteeimage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong1@kakao.com")
+                .refreshToken("ddefweferfrte")
+                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
                 .build();
     }
 

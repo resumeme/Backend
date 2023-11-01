@@ -1,7 +1,10 @@
 package org.devcourse.resumeme.domain.event;
 
 import org.devcourse.resumeme.domain.event.exception.EventException;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -9,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.devcourse.resumeme.domain.event.Progress.REQUEST;
@@ -20,11 +23,25 @@ class EventTest {
 
     private Event event;
 
+    private Mentor mentor;
+
     @BeforeEach
     void init() {
+        mentor =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("programmers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .build();
+
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        event = new Event(openEvent, eventTimeInfo, mentor, List.of());
     }
 
     @Test
@@ -104,7 +121,7 @@ class EventTest {
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         LocalDateTime now = LocalDateTime.now();
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(now, LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event bookEvent = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event bookEvent = new Event(openEvent, eventTimeInfo, mentor, List.of());
 
         // when & then
         assertThatThrownBy(() -> bookEvent.openReservationEvent(now))

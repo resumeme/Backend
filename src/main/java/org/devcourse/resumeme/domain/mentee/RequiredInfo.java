@@ -53,6 +53,10 @@ public class RequiredInfo {
         this.nickname = nickname;
     }
 
+    public void updateRealName(String realName) {
+        validateRealName(realName);
+        this.realName = realName;
+    }
     public void updatePhoneNumber(String phoneNumber) {
         validatePhoneNumber(phoneNumber);
         this.phoneNumber = phoneNumber;

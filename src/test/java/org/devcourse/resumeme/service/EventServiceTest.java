@@ -4,7 +4,10 @@ import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
 import org.devcourse.resumeme.domain.event.exception.EventException;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.repository.EventRepository;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,6 +58,8 @@ class EventServiceTest {
 
     int executeCount;
 
+    private Mentor mentor;
+
     @BeforeEach
     void init() {
         executeCount = 10;
@@ -61,6 +67,18 @@ class EventServiceTest {
         countDownLatch = new CountDownLatch(executeCount);
         successCount = new AtomicInteger();
         failCount = new AtomicInteger();
+
+        mentor =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("programmers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("BACK", "FRONT"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .build();
     }
 
     @Test
@@ -68,7 +86,6 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        Mentor mentor = new Mentor();
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
 
         given(eventRepository.findAllByMentor(mentor)).willReturn(List.of());
@@ -86,7 +103,6 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        Mentor mentor = new Mentor();
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
 
         EventInfo openEvent1 = EventInfo.open(3, "제목", "내용");
@@ -106,7 +122,7 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
 
         given(eventRepository.findWithLockById(1L)).willReturn(Optional.of(event));
 
@@ -143,7 +159,7 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
 
         EventReject reject = new EventReject(1L, 1L, "이력서 양이 너무 적습니다");
@@ -161,7 +177,7 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
 
         EventReject reject = new EventReject(1L, 2L, "이력서 양이 너무 적습니다");

@@ -21,6 +21,7 @@ import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
 import org.devcourse.resumeme.support.WithMockCustomUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -57,6 +58,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class EventControllerTest extends ControllerUnitTest {
 
+    private Mentor mentor;
+
+    private Mentee mentee1;
+
+    private Mentee mentee2;
+
+    @BeforeEach
+    void setUp() {
+        mentor =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("progrers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .build();
+
+        mentee1 = Mentee.builder()
+                .id(1L)
+                .imageUrl("menteeimage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong1@kakao.com")
+                .refreshToken("ddefweferfrte")
+                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
+                .build();
+
+        mentee2 = Mentee.builder()
+                .id(2L)
+                .imageUrl("menteeimage2.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("backdong2@kakao.com")
+                .refreshToken("ddefwefer2frte")
+                .requiredInfo(new RequiredInfo("김백둥2", "백둥둥2", "01072223722", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of())
+                .interestedFields(Set.of())
+                .introduce(null)
+                .build();
+    }
+
     @Test
     @WithMockCustomUser
     void 첨삭_이벤트_생성에_성공한다() throws Exception {
@@ -70,7 +116,6 @@ class EventControllerTest extends ControllerUnitTest {
         );
         EventCreateRequest eventCreateRequest = new EventCreateRequest(eventInfoRequest, eventTimeRequest, List.of("FRONT", "BACK"));
         /* 로그인 기능 완료 후 멘토 주입 값 추후 변경 예정 */
-        Mentor mentor = new Mentor();
         Event event = eventCreateRequest.toEntity(mentor);
 
         given(eventService.create(event)).willReturn(1L);
@@ -111,7 +156,7 @@ class EventControllerTest extends ControllerUnitTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
 
         ApplyToEventRequest request = new ApplyToEventRequest(1L);
@@ -198,13 +243,13 @@ class EventControllerTest extends ControllerUnitTest {
         Long eventId = 1L;
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, new Mentor(), List.of());
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
         event.acceptMentee(2L, 4L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Resume resume1 = new Resume("title", Mentee.builder().id(1L).interestedPositions(Set.of()).interestedFields(Set.of()).requiredInfo(new RequiredInfo("mentee1", "mentee1", "01012345678", Role.ROLE_MENTEE)).build());
-        Resume resume2 = new Resume("title", Mentee.builder().id(2L).interestedPositions(Set.of()).interestedFields(Set.of()).requiredInfo(new RequiredInfo("mentee2", "mentee2", "01012345678", Role.ROLE_MENTEE)).build());
+        Resume resume1 = new Resume("title", mentee1);
+        Resume resume2 = new Resume("title", mentee2);
         setId(resume1, 1L);
         setId(resume2, 4L);
         given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));

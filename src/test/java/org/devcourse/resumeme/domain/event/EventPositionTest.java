@@ -1,7 +1,10 @@
 package org.devcourse.resumeme.domain.event;
 
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
+import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -9,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,11 +28,23 @@ class EventPositionTest {
     }
 
     static Stream<Arguments> positionAndEvent() {
+        Mentor mentor =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("programmers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("DEVOPS"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .build();
+
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         return Stream.of(
                 Arguments.of(Position.BACK, null),
-                Arguments.of(null, new Event(openEvent, eventTimeInfo, new Mentor(), List.of())),
+                Arguments.of(null, new Event(openEvent, eventTimeInfo, mentor, List.of())),
                 Arguments.of(null, null)
         );
     }
