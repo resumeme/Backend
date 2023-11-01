@@ -16,6 +16,7 @@ import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 import java.time.LocalDate;
 
 import static org.devcourse.resumeme.common.util.Validator.check;
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Duty {

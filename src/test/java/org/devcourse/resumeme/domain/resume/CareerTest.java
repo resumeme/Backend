@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 public class CareerTest {
 
     private String companyName;
-    private Position position;
+    private String position;
     private Resume resume;
     private List<String> skills;
     private List<Duty> duties;
@@ -29,7 +29,7 @@ public class CareerTest {
     @BeforeEach
     void init() {
         companyName = "Company";
-        position = Position.BACK;
+        position = "BACK";
         skills = new ArrayList<>();
         duties = new ArrayList<>();
         isCurrentlyEmployed = true;

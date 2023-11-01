@@ -24,7 +24,7 @@ public record CareerCreateRequest(
                 .map(DutyRequest::toEntity)
                 .toList();
 
-        return new Career(companyName, Position.valueOf(position), resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent);
+        return new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent);
     }
 
     public record DutyRequest(

@@ -4,10 +4,12 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.CareerCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.resume.Career;
+import org.devcourse.resumeme.domain.resume.Duty;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -18,14 +20,17 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
-import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CareerControllerTest extends ControllerUnitTest {
@@ -78,6 +83,40 @@ public class CareerControllerTest extends ControllerUnitTest {
                                 )
                         )
                 );
+    }
+
+    @Test
+    @WithMockUser
+    void 업무경험_조회에_성공한다() throws Exception {
+        Long careerId = 1L;
+        Career career = new Career("company name", "BACK", resume, List.of("java", "spring"), List.of(new Duty("title", LocalDate.now(), LocalDate.now().plusYears(1L), "description")), false, LocalDate.now(), LocalDate.now().plusYears(1L), "content");
+
+        given(careerService.getOne(careerId)).willReturn(career);
+
+        ResultActions result = mvc.perform(get("/api/v1/resume/{careerId}", careerId)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        result
+                .andExpect(status().isOk())
+                .andDo(document("career/get",
+                        pathParameters(
+                                parameterWithName("careerId").description("The ID of the career")
+                        ),
+                        responseFields(
+                                fieldWithPath("companyName").type(STRING).description("The name of the company"),
+                                fieldWithPath("position").type(STRING).description("The position in the company"),
+                                fieldWithPath("skills").type(ARRAY).description("List of skills"),
+                                fieldWithPath("duties[].title").type(STRING).description("제목"),
+                                fieldWithPath("duties[].description").type(STRING).description("설명"),
+                                fieldWithPath("duties[].startDate").type(STRING).description("시작일"),
+                                fieldWithPath("duties[].endDate").type(STRING).description("종료일"),
+                                fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("Current employment status"),
+                                fieldWithPath("careerStartDate").type(STRING).description("Start date of the career"),
+                                fieldWithPath("endDate").type(STRING).description("End date of the career"),
+                                fieldWithPath("careerContent").type(STRING).description("Details about the career")
+                        )
+                ));
+
     }
 
 }

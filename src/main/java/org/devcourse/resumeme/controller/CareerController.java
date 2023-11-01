@@ -3,10 +3,12 @@ package org.devcourse.resumeme.controller;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.CareerCreateRequest;
+import org.devcourse.resumeme.controller.dto.CareerResponse;
 import org.devcourse.resumeme.domain.resume.Career;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.service.CareerService;
 import org.devcourse.resumeme.service.ResumeService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,13 @@ public class CareerController {
         Career career = request.toEntity(resume);
 
         return new IdResponse(careerService.create(career));
+    }
+
+    @GetMapping("/{careerId}")
+    public CareerResponse getCareer(@PathVariable Long careerId) {
+        Career career = careerService.getOne(careerId);
+
+        return new CareerResponse(career);
     }
 
 }
