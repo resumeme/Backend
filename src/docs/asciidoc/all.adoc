@@ -17,3 +17,112 @@ include::{snippets}/mentee/create/request-fields.adoc[]
 *Response*
 include::{snippets}/mentee/create/http-response.adoc[]
 include::{snippets}/mentee/create/response-fields.adoc[]
+
+=== 업무경험 저장
+*Request*
+include::{snippets}/career/create/http-request.adoc[]
+include::{snippets}/career/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/career/create/http-response.adoc[]
+include::{snippets}/career/create/response-fields.adoc[]
+
+=== 교육 저장
+*Request*
+include::{snippets}/training/create/http-request.adoc[]
+include::{snippets}/training/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/training/create/http-response.adoc[]
+include::{snippets}/training/create/response-fields.adoc[]
+
+=== 프로젝트 저장
+*Request*
+include::{snippets}/project/create/http-request.adoc[]
+include::{snippets}/project/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/project/create/http-response.adoc[]
+include::{snippets}/project/create/response-fields.adoc[]
+
+=== 업무경험 저장
+*Request*
+include::{snippets}/career/create/http-request.adoc[]
+include::{snippets}/career/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/career/create/http-response.adoc[]
+include::{snippets}/career/create/response-fields.adoc[]
+
+=== 교육 저장
+*Request*
+include::{snippets}/training/create/http-request.adoc[]
+include::{snippets}/training/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/training/create/http-response.adoc[]
+include::{snippets}/training/create/response-fields.adoc[]
+
+=== 수상 및 자격증 저장
+*Request*
+include::{snippets}/certification/create/http-request.adoc[]
+include::{snippets}/certification/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/certification/create/http-response.adoc[]
+include::{snippets}/certification/create/response-fields.adoc[]
+
+=== 업무경험 저장
+*Request*
+include::{snippets}/career/create/http-request.adoc[]
+include::{snippets}/career/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/career/create/http-response.adoc[]
+include::{snippets}/career/create/response-fields.adoc[]
+
+=== 교육 저장
+*Request*
+include::{snippets}/training/create/http-request.adoc[]
+include::{snippets}/training/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/training/create/http-response.adoc[]
+include::{snippets}/training/create/response-fields.adoc[]
+
+=== 활동 저장
+*Request*
+include::{snippets}/activity/create/http-request.adoc[]
+include::{snippets}/activity/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/activity/create/http-response.adoc[]
+include::{snippets}/activity/create/response-fields.adoc[]
+
+=== 업무경험 저장
+*Request*
+include::{snippets}/career/create/http-request.adoc[]
+include::{snippets}/career/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/career/create/http-response.adoc[]
+include::{snippets}/career/create/response-fields.adoc[]
+
+=== 교육 저장
+*Request*
+include::{snippets}/training/create/http-request.adoc[]
+include::{snippets}/training/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/training/create/http-response.adoc[]
+include::{snippets}/training/create/response-fields.adoc[]
+
+=== 외국어 저장
+*Request*
+include::{snippets}/foreignLanguage/create/http-request.adoc[]
+include::{snippets}/foreignLanguage/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/foreignLanguage/create/http-response.adoc[]
+include::{snippets}/foreignLanguage/create/response-fields.adoc[]
+
