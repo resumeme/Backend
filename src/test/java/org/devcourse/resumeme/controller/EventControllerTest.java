@@ -32,6 +32,7 @@ import java.util.Set;
 
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.POSITION;
+import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.domain.Position.BACK;
 import static org.devcourse.resumeme.common.domain.Position.FRONT;
@@ -191,6 +192,7 @@ class EventControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    @WithMockCustomUser(role = "ROLE_MENTOR")
     void 첨삭_이벤트에_참여한_이력서를_조회할수있다() throws Exception {
         // given
         Long eventId = 1L;
@@ -221,14 +223,14 @@ class EventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("info").type(OBJECT).description("이벤트 관련 정보"),
-                                        fieldWithPath("info.title").type(STRING).description(""),
-                                        fieldWithPath("info.maximumCount").type(NUMBER).description(""),
-                                        fieldWithPath("info.endDate").type(STRING).description(""),
-                                        fieldWithPath("resumes").type(ARRAY).description(""),
-                                        fieldWithPath("resumes[].resumeId").type(NUMBER).description(""),
-                                        fieldWithPath("resumes[].menteeName").type(STRING).description(""),
-                                        fieldWithPath("resumes[].resumeTitle").type(STRING).description(""),
-                                        fieldWithPath("resumes[].progressStatus").type(STRING).description("")
+                                        fieldWithPath("info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
+                                        fieldWithPath("info.endDate").type(STRING).description("첨삭 종료 일"),
+                                        fieldWithPath("resumes").type(ARRAY).description("이벤트 신청에 사용된 이력서 멘토 로그인 시에만 값 제공"),
+                                        fieldWithPath("resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
+                                        fieldWithPath("resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
+                                        fieldWithPath("resumes[].resumeTitle").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("resumes[].progressStatus").type(STRING).description(generateLinkCode(PROGRESS))
                                 )
                         )
                 );
