@@ -8,8 +8,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
+
+import static org.springframework.http.HttpMethod.POST;
 
 public class OAuthTokenResponseFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -19,6 +22,7 @@ public class OAuthTokenResponseFilter extends AbstractAuthenticationProcessingFi
 
     public OAuthTokenResponseFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper) {
         super(LOGIN_URL, authenticationManager);
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(LOGIN_URL, POST.name()));
         this.objectMapper = objectMapper;
     }
 
