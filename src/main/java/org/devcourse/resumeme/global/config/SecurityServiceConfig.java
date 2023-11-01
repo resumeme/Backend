@@ -6,20 +6,23 @@ import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
+import org.devcourse.resumeme.global.auth.filter.resolver.OAuthTokenProvider;
+import org.devcourse.resumeme.global.auth.filter.resolver.OAuthTokenResolver;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.MentorService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 public class SecurityServiceConfig {
 
     @Bean
-    public OAuthTokenResponseFilter oAuthTokenResponseFilter(OAuth2CustomUserService service, AuthenticationManager authenticationManager, ClientRegistrationRepository clientRegistrationRepository,
-                                                             OAuth2SuccessHandler successHandler, OAuth2FailureHandler failureHandler, ObjectMapper objectMapper) {
-        OAuthTokenResponseFilter oAuthTokenResponseFilter = new OAuthTokenResponseFilter(authenticationManager, service, clientRegistrationRepository, objectMapper);
+    public OAuthTokenResponseFilter oAuthTokenResponseFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper,
+                                                             OAuth2SuccessHandler successHandler, OAuth2FailureHandler failureHandler ) {
+        OAuthTokenResponseFilter oAuthTokenResponseFilter = new OAuthTokenResponseFilter(authenticationManager, objectMapper);
         oAuthTokenResponseFilter.setAuthenticationSuccessHandler(successHandler);
         oAuthTokenResponseFilter.setAuthenticationFailureHandler(failureHandler);
 
@@ -27,8 +30,16 @@ public class SecurityServiceConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration, OAuthTokenProvider oAuthTokenProvider) throws Exception {
+        ProviderManager providerManager = (ProviderManager)configuration.getAuthenticationManager();
+        providerManager.getProviders().add(oAuthTokenProvider);
+
+        return providerManager;
+    }
+
+    @Bean
+    public OAuthTokenProvider oAuthTokenProvider(OAuth2CustomUserService service, ClientRegistrationRepository repository) {
+        return new OAuthTokenProvider(service, repository, new OAuthTokenResolver());
     }
 
     @Bean
