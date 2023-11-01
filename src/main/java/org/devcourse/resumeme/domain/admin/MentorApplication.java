@@ -8,11 +8,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
 
 @Entity
@@ -30,7 +31,7 @@ public class MentorApplication {
     private Mentor mentor;
 
     public MentorApplication(Mentor mentor) {
-        validate(mentor == null, NO_EMPTY_VALUE);
+        Validator.check(mentor == null, NO_EMPTY_VALUE);
 
         this.mentor = mentor;
     }

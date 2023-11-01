@@ -9,7 +9,7 @@ import org.devcourse.resumeme.domain.event.exception.EventException;
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Embeddable
 @NoArgsConstructor(access = PROTECTED)
@@ -37,9 +37,9 @@ public class EventInfo {
     }
 
     private void validateInput(int maximumAttendee, String title, String content) {
-        validate(maximumAttendee < 2 || maximumAttendee > 10, "RANGE_MAXIMUM_ATTENDEE", "참여 인원 수를 2~10명 사이에서 정해주세요");
-        validate(isBlank(title), "NO_EMPTY_STRING", "제목은 필수 값입니다");
-        validate(isBlank(content), "NO_EMPTY_STRING", "내용은 필수 값입니다");
+        check(maximumAttendee < 2 || maximumAttendee > 10, "RANGE_MAXIMUM_ATTENDEE", "참여 인원 수를 2~10명 사이에서 정해주세요");
+        check(isBlank(title), "NO_EMPTY_STRING", "제목은 필수 값입니다");
+        check(isBlank(content), "NO_EMPTY_STRING", "내용은 필수 값입니다");
     }
 
     public static EventInfo open(int maximumAttendee, String title, String content) {

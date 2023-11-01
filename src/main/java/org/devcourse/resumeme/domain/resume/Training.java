@@ -9,10 +9,11 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 import java.time.LocalDate;
 
@@ -63,11 +64,11 @@ public class Training {
 
     private void validateTraining(String schoolOrOrganization, String major, String degree, LocalDate admissionDate,
                                LocalDate graduationDate, double gpa, double maxGpa) {
-        validate(schoolOrOrganization == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(major == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(degree == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(admissionDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(graduationDate == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(schoolOrOrganization == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(major == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(degree == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(admissionDate == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(graduationDate == null, ExceptionCode.NO_EMPTY_VALUE);
 
         if (admissionDate.isAfter(graduationDate)) {
             throw new CustomException("TIME_ERROR", "입학 일시는 졸업 일시보다 먼저여야 합니다.");

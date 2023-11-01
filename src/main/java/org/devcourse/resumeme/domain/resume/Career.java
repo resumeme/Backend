@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
@@ -23,7 +24,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -77,13 +78,13 @@ public class Career {
     }
 
     private void validateCareer(String companyName, Position position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed, LocalDate careerStartDate, LocalDate endDate) {
-        validate(companyName == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(position == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(skills.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
-        validate(duties.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
-        validate(careerStartDate == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(companyName == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(skills.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(duties.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(careerStartDate == null, ExceptionCode.NO_EMPTY_VALUE);
         if (isCurrentlyEmployed) {
-            validate(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
+            Validator.check(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
         }
 
         if (careerStartDate.isAfter(endDate)) {

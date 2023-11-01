@@ -13,7 +13,7 @@ import org.devcourse.resumeme.common.domain.Position;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -32,8 +32,8 @@ public class MentorPosition {
     private Position position;
 
     public MentorPosition(Mentor mentor, Position position) {
-        validate(position == null, "NO_EMPTY_VALUE", "포지션은 필수 값입니다");
-        validate(mentor == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
+        check(position == null, "NO_EMPTY_VALUE", "포지션은 필수 값입니다");
+        check(mentor == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
 
         this.position = position;
         this.mentor = mentor;

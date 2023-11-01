@@ -9,12 +9,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import java.time.LocalDate;
 
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Duty {
@@ -48,9 +49,9 @@ public class Duty {
     }
 
     private void validateDuty(String title, LocalDate startDate, LocalDate endDate) {
-        validate(title == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(startDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(title == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(startDate == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
 
         if (startDate.isAfter(endDate)) {
             throw new CustomException("TIME_ERROR", "시작일은 종료일보다 먼저여야 합니다.");

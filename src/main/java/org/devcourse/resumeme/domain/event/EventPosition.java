@@ -14,7 +14,7 @@ import org.devcourse.resumeme.common.domain.Position;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -34,8 +34,8 @@ public class EventPosition {
     private Event event;
 
     public EventPosition(Position position, Event event) {
-        validate(position == null, "NO_EMPTY_VALUE", "포지션은 필수 값입니다");
-        validate(event == null, "NO_EMPTY_VALUE", "이벤트는 필수 값입니다");
+        check(position == null, "NO_EMPTY_VALUE", "포지션은 필수 값입니다");
+        check(event == null, "NO_EMPTY_VALUE", "이벤트는 필수 값입니다");
 
         this.position = position;
         this.event = event;

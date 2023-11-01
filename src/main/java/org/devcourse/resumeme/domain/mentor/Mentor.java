@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
@@ -23,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_ADMIN;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
 import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTOR;
@@ -87,15 +88,15 @@ public class Mentor extends BaseEntity {
     }
 
     private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
-        validate(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
-        validate(provider == null, NO_EMPTY_VALUE);
-        validate(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
-        validate(requiredInfo == null, NO_EMPTY_VALUE);
-        validate(ROLE_MENTEE.equals(requiredInfo.getRole()) || ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
-        validate(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
-        validate(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
-        validate(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
-        validate(careerYear < 1 || careerYear > 80, "NUMBER_NOT_ALLOWED", "경력 연차가 올바르지 않습니다.");
+        check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
+        Validator.check(provider == null, NO_EMPTY_VALUE);
+        Validator.check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
+        Validator.check(requiredInfo == null, NO_EMPTY_VALUE);
+        Validator.check(ROLE_MENTEE.equals(requiredInfo.getRole()) || ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
+        Validator.check(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
+        Validator.check(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
+        Validator.check(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
+        check(careerYear < 1 || careerYear > 80, "NUMBER_NOT_ALLOWED", "경력 연차가 올바르지 않습니다.");
     }
 
     public void updateRefreshToken(String refreshToken) {

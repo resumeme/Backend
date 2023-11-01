@@ -9,11 +9,12 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import java.time.LocalDate;
 
-import static org.devcourse.resumeme.common.util.Validator.validate;
+import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,9 +43,9 @@ public class Activity {
     private String description;
 
     public Activity(String activityName, LocalDate startDate, LocalDate endDate, boolean inProgress, String link, String description) {
-        validate(activityName == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(startDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        validate(endDate == null && !inProgress, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(activityName == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(startDate == null, ExceptionCode.NO_EMPTY_VALUE);
+        Validator.check(endDate == null && !inProgress, ExceptionCode.NO_EMPTY_VALUE);
 
         this.activityName = activityName;
         this.startDate = startDate;
