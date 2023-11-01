@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.global.config.authorization;
+package org.devcourse.resumeme.global.auth.authorization;
 
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.auth.model.JwtUser;
@@ -7,7 +7,6 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
-import org.springframework.stereotype.Component;
 
 import java.util.function.Supplier;
 

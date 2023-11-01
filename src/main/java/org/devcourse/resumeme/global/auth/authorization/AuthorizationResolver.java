@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.global.config.authorization;
+package org.devcourse.resumeme.global.auth.authorization;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.repository.EventRepository;

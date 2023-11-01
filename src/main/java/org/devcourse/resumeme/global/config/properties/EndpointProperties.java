@@ -1,8 +1,8 @@
-package org.devcourse.resumeme.global.config;
+package org.devcourse.resumeme.global.config.properties;
 
 import jakarta.annotation.PostConstruct;
-import org.devcourse.resumeme.global.config.authorization.AuthorizationResolver;
-import org.devcourse.resumeme.global.config.authorization.OnlyOwn;
+import org.devcourse.resumeme.global.auth.authorization.AuthorizationResolver;
+import org.devcourse.resumeme.global.auth.authorization.OnlyOwn;
 import org.devcourse.resumeme.repository.EventRepository;
 import org.devcourse.resumeme.repository.ResumeRepository;
 import org.springframework.boot.context.properties.ConfigurationProperties;
