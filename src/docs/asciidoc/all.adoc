@@ -1,4 +1,5 @@
-= 모두
+= 공통
+
 === 멘토 가입
 
 *Request*
@@ -17,6 +18,31 @@ include::{snippets}/mentee/create/request-fields.adoc[]
 *Response*
 include::{snippets}/mentee/create/http-response.adoc[]
 include::{snippets}/mentee/create/response-fields.adoc[]
+
+=== 이벤트 전체 조회
+*Request*
+include::{snippets}/event/getAll/http-request.adoc[]
+
+*Response*
+include::{snippets}/event/getAll/http-response.adoc[]
+include::{snippets}/event/getAll/response-fields.adoc[]
+
+=== 멘토 정보 조회
+*Request*
+include::{snippets}/mentor/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/mentor/find/http-response.adoc[]
+include::{snippets}/mentor/find/response-fields.adoc[]
+
+=== 합격이력서 공유 소개글 모두 보기
+*Request*
+include::{snippets}/result/getAll/http-request.adoc[]
+include::{snippets}/result/getAll/query-parameters.adoc[]
+
+*Response*
+include::{snippets}/result/getAll/http-response.adoc[]
+include::{snippets}/result/getAll/response-fields.adoc[]
 
 === 업무경험 저장
 *Request*
@@ -71,4 +97,3 @@ include::{snippets}/foreignLanguage/create/request-fields.adoc[]
 *Response*
 include::{snippets}/foreignLanguage/create/http-response.adoc[]
 include::{snippets}/foreignLanguage/create/response-fields.adoc[]
-

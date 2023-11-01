@@ -1,0 +1,1 @@
+include::../../../../build/generated-snippets/enum-response/enum-response-fields-blockType.adoc[]
