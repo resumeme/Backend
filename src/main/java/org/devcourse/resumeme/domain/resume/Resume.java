@@ -11,6 +11,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
@@ -49,9 +50,11 @@ public class Resume extends BaseEntity {
     @Lob
     private String introduce;
 
+    @Getter
     @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Career> career = new ArrayList<>();
 
+    @Getter
     @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Project> project = new ArrayList<>();
 
@@ -85,6 +88,7 @@ public class Resume extends BaseEntity {
         Validator.check(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
     }
 
+    @Builder
     private Resume(Long id, String title, Mentee mentee, Position position, String introduce, List<Career> career,
                    List<Project> project, List<Certification> certification, List<Activity> activity,
                    List<ForeignLanguage> foreignLanguage, String email, String githubAddress, String blogAddress, String phoneNumber) {

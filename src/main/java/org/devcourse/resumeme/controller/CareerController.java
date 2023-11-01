@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resume")
@@ -32,11 +34,14 @@ public class CareerController {
         return new IdResponse(careerService.create(career));
     }
 
-    @GetMapping("/{careerId}")
-    public CareerResponse getCareer(@PathVariable Long careerId) {
-        Career career = careerService.getOne(careerId);
+    @GetMapping("/{resumeId}/careers")
+    public List<CareerResponse> getCareer(@PathVariable Long resumeId) {
+        Resume resume = resumeService.getOne(resumeId);
+        List<Career> careers = resume.getCareer();
 
-        return new CareerResponse(career);
+        return careers.stream()
+                .map(CareerResponse::new)
+                .toList();
     }
 
 }

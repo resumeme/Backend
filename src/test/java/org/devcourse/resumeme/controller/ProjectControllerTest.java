@@ -4,6 +4,8 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.ProjectCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.domain.resume.Career;
+import org.devcourse.resumeme.domain.resume.Duty;
 import org.devcourse.resumeme.domain.resume.Project;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.user.Provider;
@@ -11,8 +13,12 @@ import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +26,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
@@ -87,6 +94,39 @@ class ProjectControllerTest extends ControllerUnitTest {
                                 )
                         )
                 );
+    }
+
+    @Test
+    @WithMockUser
+    void 업무경험_조회에_성공한다() throws Exception {
+        Long resumeId = 1L;
+        Project project = new Project(resume, "프로젝트", 2023L, true, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
+        Resume savedResume = resume.builder()
+                .project(List.of(project))
+                .build();
+
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+
+        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/projects"));
+
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("project/find",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[]projectName").type(JsonFieldType.STRING).description("프로젝트명"),
+                                        fieldWithPath("[]productionYear").type(JsonFieldType.NUMBER).description("제작 연도"),
+                                        fieldWithPath("[]isTeam").type(JsonFieldType.BOOLEAN).description("팀 프로젝트 여부"),
+                                        fieldWithPath("[]teamMembers").type(JsonFieldType.STRING).optional().description("팀 구성원 (옵션)"),
+                                        fieldWithPath("[]skills").type(JsonFieldType.ARRAY).description("기술 목록"),
+                                        fieldWithPath("[]projectContent").type(JsonFieldType.STRING).description("프로젝트 내용"),
+                                        fieldWithPath("[]projectUrl").type(JsonFieldType.STRING).description("프로젝트 URL")
+                                )
+                        ));
+
     }
 
 }
