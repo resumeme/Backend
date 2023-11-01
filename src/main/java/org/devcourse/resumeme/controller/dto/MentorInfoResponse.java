@@ -2,10 +2,10 @@ package org.devcourse.resumeme.controller.dto;
 
 import org.devcourse.resumeme.domain.mentor.Mentor;
 
-public record MentorInfoResponse(String imageUrl, String nickname, String careerContent, int careerYear, String introduce) {
+public record MentorInfoResponse(String imageUrl, String nickname, String role, String careerContent, int careerYear, String introduce) {
 
-    public static MentorInfoResponse of(Mentor mentor) {
-        return new MentorInfoResponse(mentor.getImageUrl(), mentor.getRequiredInfo().getNickname(), mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
+    public MentorInfoResponse(Mentor mentor) {
+        this(mentor.getImageUrl(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getRole().toString(), mentor.getIntroduce(), mentor.getCareerYear(), mentor.getIntroduce());
     }
 
 }

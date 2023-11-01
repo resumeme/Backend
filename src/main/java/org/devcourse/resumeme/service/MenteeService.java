@@ -8,6 +8,8 @@ import org.devcourse.resumeme.repository.MenteeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,9 +31,16 @@ public class MenteeService {
         findMentee.updateRefreshToken(refreshToken);
     }
 
-    public void update(Long id, MenteeInfoUpdateRequest updateRequest) {
+    public Long update(Long id, MenteeInfoUpdateRequest updateRequest) {
         Mentee findMentee = getOne(id);
         findMentee.updateInfos(updateRequest);
+
+        return findMentee.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Mentee> getAll() {
+        return menteeRepository.findAll();
     }
 
 }

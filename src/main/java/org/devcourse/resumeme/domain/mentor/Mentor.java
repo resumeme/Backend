@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.common.util.Validator;
+import org.devcourse.resumeme.controller.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
@@ -91,13 +91,13 @@ public class Mentor extends BaseEntity {
 
     private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
         check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
-        Validator.check(provider == null, NO_EMPTY_VALUE);
-        Validator.check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
-        Validator.check(requiredInfo == null, NO_EMPTY_VALUE);
-        Validator.check(ROLE_MENTEE.equals(requiredInfo.getRole()) || ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
-        Validator.check(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
-        Validator.check(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
-        Validator.check(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
+        check(provider == null, NO_EMPTY_VALUE);
+        check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
+        check(requiredInfo == null, NO_EMPTY_VALUE);
+        check(ROLE_MENTEE.equals(requiredInfo.getRole()) || ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
+        check(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
+        check(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
+        check(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
         check(careerYear < 1 || careerYear > 80, "NUMBER_NOT_ALLOWED", "경력 연차가 올바르지 않습니다.");
     }
 
@@ -111,6 +111,20 @@ public class Mentor extends BaseEntity {
 
     public boolean isApproved() {
         return ROLE_MENTOR.equals(this.requiredInfo.getRole());
+    }
+
+    public void updateInfos(MentorInfoUpdateRequest updateRequest) {
+        this.clearPositions();
+        this.requiredInfo.updateRealName(updateRequest.realName());
+        this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
+        updateRequest.experiencedPositions().forEach(position -> this.experiencedPositions.add(new MentorPosition(this, Position.valueOf(position.toUpperCase()))));
+        this.careerContent = updateRequest.careerContent();
+        this.careerYear = updateRequest.careerYear();
+        this.introduce = updateRequest.introduce();
+    }
+
+    public void clearPositions() {
+        this.getExperiencedPositions().clear();
     }
 
 }
