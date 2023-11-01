@@ -17,7 +17,10 @@ import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.devcourse.resumeme.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.service.vo.EventReject;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,11 +70,20 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public EventResponse getAllAttendResumes(@PathVariable Long eventId) {
+    public EventResponse getAllAttendResumes(@PathVariable Long eventId, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
         Event event = eventService.getOne(eventId);
-        List<Resume> resumes = getResumes(event);
 
-        return new EventResponse(event, resumes);
+        if (isMentor(auth)) {
+            return new EventResponse(event, getResumes(event));
+        }
+
+        return new EventResponse(event, List.of());
+    }
+
+    private boolean isMentor(Authentication auth) {
+        return auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority -> authority.equals("ROLE_MENTOR"));
     }
 
     private List<Resume> getResumes(Event event) {
