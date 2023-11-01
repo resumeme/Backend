@@ -2,10 +2,17 @@ package org.devcourse.resumeme.controller.dto;
 
 import org.devcourse.resumeme.domain.mentor.Mentor;
 
-public record MentorInfoResponse(String imageUrl, String nickname, String role, String careerContent, int careerYear, String introduce) {
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public record MentorInfoResponse(String imageUrl, String nickname, String role, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
 
     public MentorInfoResponse(Mentor mentor) {
-        this(mentor.getImageUrl(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getRole().toString(), mentor.getIntroduce(), mentor.getCareerYear(), mentor.getIntroduce());
+        this(mentor.getImageUrl(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getRole().name(), getExperiencedPositions(mentor), mentor.getIntroduce(), mentor.getCareerYear(), mentor.getIntroduce());
+    }
+
+    private static Set<String> getExperiencedPositions(Mentor mentor) {
+        return mentor.getExperiencedPositions().stream().map(mentorPosition -> mentorPosition.getPosition().name()).collect(Collectors.toSet());
     }
 
 }
