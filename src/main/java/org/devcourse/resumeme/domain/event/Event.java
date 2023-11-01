@@ -23,7 +23,12 @@ import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.common.util.Validator.notNull;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.APPLICATION_NOT_FOUND;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.MENTEE_NOT_FOUND;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NOT_OPEN_TIME;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -64,10 +69,10 @@ public class Event extends BaseEntity {
     }
 
     private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
-        check(eventInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
-        check(eventTimeInfo == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
-        check(mentor == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
-        check(positions == null, "NO_EMPTY_VALUE", "빈 값일 수 없습니다");
+        notNull(eventInfo);
+        notNull(eventTimeInfo);
+        notNull(mentor);
+        notNull(positions);
     }
 
     public int acceptMentee(Long menteeId, Long resumeId) {
@@ -83,7 +88,7 @@ public class Event extends BaseEntity {
                 .filter(applicant -> applicant.isSameMentee(menteeId))
                 .findFirst()
                 .ifPresent(applicant -> {
-                    throw new EventException("DUPLICATE_APPLICATION_EVENT", "이미 신청한 이력이 있습니다");
+                    throw new EventException(DUPLICATE_APPLICATION_EVENT);
                 });
     }
 
@@ -95,7 +100,7 @@ public class Event extends BaseEntity {
                     applicant.reject(message);
                     applicants.remove(applicant);
                 }, () -> {
-                    throw new EventException("NOT_FOUND_MENTEE", "신청한 멘티가 없습니다");
+                    throw new EventException(MENTEE_NOT_FOUND);
                 });
 
         return eventInfo.remainSeats(applicants.size());
@@ -109,7 +114,7 @@ public class Event extends BaseEntity {
 
     public void openReservationEvent(LocalDateTime nowDateTime) {
         if (!eventTimeInfo.isAfterOpenTime(nowDateTime)) {
-            throw new EventException("NOT_OPEN_TIME", "예약한 오픈 시간이 아닙니다");
+            throw new EventException(NOT_OPEN_TIME);
         }
 
         eventInfo.open();
@@ -122,7 +127,7 @@ public class Event extends BaseEntity {
             }
         }
 
-        throw new EventException("NOT_FOUND", "이력을 찾을 수 없습니다");
+        throw new EventException(APPLICATION_NOT_FOUND);
     }
 
     public Mentor getMentor() {
@@ -139,7 +144,9 @@ public class Event extends BaseEntity {
                 .findFirst()
                 .ifPresentOrElse(
                         MenteeToEvent::requestReview,
-                        () -> {throw new EventException("MENTEE_NOT_FOUND", "참여중인 멘티가 없습니다");}
+                        () -> {
+                            throw new EventException(MENTEE_NOT_FOUND);
+                        }
                 );
     }
 
@@ -172,7 +179,7 @@ public class Event extends BaseEntity {
             }
         }
 
-        throw new EventException("RESUME_NOT_FOUND", "참여한 이력서가 없습니다");
+        throw new EventException(RESUME_NOT_FOUND);
     }
 
 }

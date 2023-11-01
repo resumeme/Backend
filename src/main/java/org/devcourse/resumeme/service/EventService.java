@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.EVENT_NOT_FOUND;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class EventService {
         eventsWithMentor.stream()
                 .filter(Event::isOpen)
                 .forEach(eventWithMentor -> {
-                    throw new EventException("DUPLICATED_EVENT_OPEN", "이미 오픈된 이벤트가 있습니다");
+                    throw new EventException(DUPLICATED_EVENT_OPEN);
                 });
 
         return eventRepository.save(event).getId();
@@ -51,7 +54,7 @@ public class EventService {
     @Transactional(readOnly = true)
     public Event getOne(Long eventId) {
         return eventRepository.findWithApplicantsById(eventId)
-                .orElseThrow(() -> new EventException("NOT_FOUND", "이벤트를 찾을 수 없습니다"));
+                .orElseThrow(() -> new EventException(EVENT_NOT_FOUND));
     }
 
     public void requestReview(Long eventId, Long menteeId) {

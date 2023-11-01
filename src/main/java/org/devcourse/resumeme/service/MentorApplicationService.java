@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.APPLICANT_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class MentorApplicationService {
@@ -24,7 +26,7 @@ public class MentorApplicationService {
 
     public Long delete(Long applicationId) {
         MentorApplication mentorApplication = repository.findById(applicationId)
-                .orElseThrow(() -> new CustomException("NOT_FOUND_APPLICANT", "신청 이력이 없습니다"));
+                .orElseThrow(() -> new CustomException(APPLICANT_NOT_FOUND));
         Long mentorId = mentorApplication.mentorId();
 
         repository.delete(mentorApplication);
