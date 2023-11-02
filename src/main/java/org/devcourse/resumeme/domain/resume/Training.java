@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.domain.resume;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -31,52 +32,53 @@ public class Training {
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
-    private String organization;
-
-    private String major;
-
-    private String degree;
-
-    private LocalDate admissionDate;
-
-    private LocalDate graduationDate;
-
-    private double gpa;
-
-    private double maxGpa;
-
+    @Getter
     private String explanation;
+
+    @Embedded
+    private EducationalDetails educationalDetails;
+
+    @Embedded
+    private DateDetails dateDetails;
+
+    @Embedded
+    private GPADetails gpaDetails;
 
     public Training(String organization, String major, String degree, LocalDate admissionDate,
                     LocalDate graduationDate, double gpa, double maxGpa, String explanation, Resume resume) {
-        validateTraining(organization, major, degree, admissionDate, graduationDate, gpa, maxGpa);
-
-        this.organization = organization;
-        this.major = major;
-        this.degree = degree;
-        this.admissionDate = admissionDate;
-        this.graduationDate = graduationDate;
-        this.gpa = gpa;
-        this.maxGpa = maxGpa;
+        this.educationalDetails = new EducationalDetails(organization, major, degree);
+        this.dateDetails = new DateDetails(admissionDate, graduationDate);
+        this.gpaDetails = new GPADetails(gpa, maxGpa);
         this.explanation = explanation;
         this.resume = resume;
     }
 
-    private void validateTraining(String schoolOrOrganization, String major, String degree, LocalDate admissionDate,
-                               LocalDate graduationDate, double gpa, double maxGpa) {
-        Validator.check(schoolOrOrganization == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(major == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(degree == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(admissionDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(graduationDate == null, ExceptionCode.NO_EMPTY_VALUE);
+    public String getOrganization() {
+        return educationalDetails.getOrganization();
+    }
 
-        if (admissionDate.isAfter(graduationDate)) {
-            throw new CustomException("TIME_ERROR", "입학 일시는 졸업 일시보다 먼저여야 합니다.");
-        }
+    public String getMajor() {
+        return educationalDetails.getMajor();
+    }
 
-        if (maxGpa <= gpa) {
-            throw new CustomException("GPA_ERROR", "최대 학점은 내 학점보다 커야 합니다.");
-        }
+    public String getDegree() {
+        return educationalDetails.getDegree();
+    }
+
+    public LocalDate getAdmissionDate() {
+        return dateDetails.getAdmissionDate();
+    }
+
+    public LocalDate getGraduationDate() {
+        return dateDetails.getGraduationDate();
+    }
+
+    public double getGpa() {
+        return gpaDetails.getGpa();
+    }
+
+    public double getMaxGpa() {
+        return gpaDetails.getMaxGpa();
     }
 
 }

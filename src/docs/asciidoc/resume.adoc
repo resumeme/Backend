@@ -9,6 +9,14 @@ include::{snippets}/training/create/request-fields.adoc[]
 include::{snippets}/training/create/http-response.adoc[]
 include::{snippets}/training/create/response-fields.adoc[]
 
+=== 교육 조회
+*Request*
+include::{snippets}/training/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/training/find/http-response.adoc[]
+include::{snippets}/training/find/response-fields.adoc[]
+
 === 수상 및 자격증 저장
 *Request*
 include::{snippets}/certification/create/http-request.adoc[]

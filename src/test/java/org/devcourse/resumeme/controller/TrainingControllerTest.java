@@ -11,15 +11,18 @@ import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -90,6 +93,40 @@ class TrainingControllerTest extends ControllerUnitTest {
                         )
                 );
     }
+
+    @Test
+    @WithMockUser
+    void 교육사항_조회에_성공한다() throws Exception {
+        Long resumeId = 1L;
+        Training training = new Training("organization", "Computer Science", "Bachelor's", LocalDate.now(), LocalDate.now().plusYears(4), 3.8, 4.0, "Description", resume);
+        Resume savedResume = resume.builder().
+                training(List.of(training))
+                .build();
+
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+
+        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/trainings"));
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("training/find",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].organization").type(STRING).description("기관명"),
+                                        fieldWithPath("[].major").type(STRING).description("전공"),
+                                        fieldWithPath("[].degree").type(STRING).description("학위"),
+                                        fieldWithPath("[].admissionDate").type(STRING).description("입학일"),
+                                        fieldWithPath("[].graduationDate").type(STRING).description("졸업일"),
+                                        fieldWithPath("[].gpa").type(NUMBER).description("평점"),
+                                        fieldWithPath("[].maxGpa").type(NUMBER).description("최고 평점"),
+                                        fieldWithPath("[].explanation").type(STRING).description("설명")
+                                )
+                        )
+                );
+    }
+
 }
 
 
