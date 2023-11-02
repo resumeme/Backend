@@ -142,6 +142,8 @@ class MenteeControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
+                                        fieldWithPath("realName").type(STRING).description("실명"),
+                                        fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
                                         fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
