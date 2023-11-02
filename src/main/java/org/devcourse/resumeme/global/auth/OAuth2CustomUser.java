@@ -15,6 +15,7 @@ public class OAuth2CustomUser implements OAuth2User {
 
     @Getter
     private UserCommonInfo userCommonInfo;
+
     private Map<String, Object> attributes;
 
     public OAuth2CustomUser(UserCommonInfo userCommonInfo, Map<String, Object> attributes) {
