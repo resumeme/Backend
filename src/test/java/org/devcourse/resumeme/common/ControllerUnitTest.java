@@ -17,6 +17,9 @@ import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.controller.ReviewController;
 import org.devcourse.resumeme.controller.TrainingController;
 import org.devcourse.resumeme.global.auth.filter.AuthFilterTestController;
+import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
+import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
+import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.ActivityService;
@@ -47,6 +50,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.lang.reflect.Field;
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 @WebMvcTest({
@@ -64,8 +69,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ActivityController.class,
         ForeignLanguageController.class,
         ResultNoticeController.class,
-        TrainingController.class,
-        AuthFilterTestController.class
+        TrainingController.class
+//        AuthFilterTestController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -127,14 +132,25 @@ public abstract class ControllerUnitTest {
 
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
+        OAuthTokenResponseFilter filter = new OAuthTokenResponseFilter(providerManager, mapper);
+        filter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(), mentorService, menteeService));
+        filter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
+
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
+                .addFilter(filter)
                 .build();
     }
 
     protected String toJson(Object data) throws JsonProcessingException {
         return mapper.writeValueAsString(data);
+    }
+
+    protected void setId(Object target, Long injectId) throws NoSuchFieldException, IllegalAccessException {
+        Field field = target.getClass().getDeclaredField("id");
+        field.setAccessible(true);
+        field.set(target, injectId);
     }
 
 }

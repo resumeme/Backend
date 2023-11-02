@@ -68,9 +68,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
                         .careerYear(mentorRegisterInfoRequest.careerYear())
                         .build()
         );
-        Field field = mentorApplication.getClass().getDeclaredField("id");
-        field.setAccessible(true);
-        field.set(mentorApplication, 1L);
+        setId(mentorApplication, 1L);
 
         given(mentorApplicationService.getAll()).willReturn(List.of(mentorApplication));
 

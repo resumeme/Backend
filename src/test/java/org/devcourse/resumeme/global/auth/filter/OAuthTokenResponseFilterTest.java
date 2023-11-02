@@ -4,20 +4,13 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.domain.user.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.OAuth2CustomUser;
-import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
-import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
-import org.devcourse.resumeme.global.auth.token.JwtService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.Map;
@@ -31,27 +24,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class OAuthTokenResponseFilterTest extends ControllerUnitTest {
-
-    @BeforeEach
-    void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
-        OAuthTokenResponseFilter filter = new OAuthTokenResponseFilter(providerManager, mapper);
-        filter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(), mentorService, menteeService));
-        filter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
-
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .addFilter(filter)
-                .build();
-    }
 
     @Test
     void 사용자는_로그인을_oauth를_통해_할수있다() throws Exception {
