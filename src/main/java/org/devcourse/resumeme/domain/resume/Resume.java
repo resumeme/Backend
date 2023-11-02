@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -11,6 +12,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
@@ -49,19 +51,24 @@ public class Resume extends BaseEntity {
     @Lob
     private String introduce;
 
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @Getter
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Career> career = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @Getter
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Project> project = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @Getter
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Certification> certification = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @Getter
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Activity> activity = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @Getter
+    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ForeignLanguage> foreignLanguage = new ArrayList<>();
 
     private String email;
@@ -85,6 +92,7 @@ public class Resume extends BaseEntity {
         Validator.check(mentee == null, ExceptionCode.MENTEE_NOT_FOUND);
     }
 
+    @Builder
     private Resume(Long id, String title, Mentee mentee, Position position, String introduce, List<Career> career,
                    List<Project> project, List<Certification> certification, List<Activity> activity,
                    List<ForeignLanguage> foreignLanguage, String email, String githubAddress, String blogAddress, String phoneNumber) {

@@ -102,12 +102,15 @@ public class CareerControllerTest extends ControllerUnitTest {
     @Test
     @WithMockUser
     void 업무경험_조회에_성공한다() throws Exception {
-        Long careerId = 1L;
+        Long resumeId = 1L;
         Career career = new Career("company name", "BACK", resume, List.of("java", "spring"), List.of(new Duty("title", LocalDate.now(), LocalDate.now().plusYears(1L), "description")), false, LocalDate.now(), LocalDate.now().plusYears(1L), "content");
+        Resume savedResume = resume.builder()
+                .career(List.of(career))
+                .build();
 
-        given(careerService.getOne(careerId)).willReturn(career);
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
 
-        ResultActions result = mvc.perform(get("/api/v1/resume/{careerId}", careerId));
+        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/careers"));
 
 
         result
@@ -117,17 +120,17 @@ public class CareerControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
-                                        fieldWithPath("companyName").type(STRING).description("회사명"),
-                                        fieldWithPath("position").type(STRING).description("직책"),
-                                        fieldWithPath("skills").type(ARRAY).description("기술 목록"),
-                                        fieldWithPath("duties[].title").type(STRING).description("업무 제목"),
-                                        fieldWithPath("duties[].description").type(STRING).description("업무 설명"),
-                                        fieldWithPath("duties[].startDate").type(STRING).description("업무 시작일"),
-                                        fieldWithPath("duties[].endDate").type(STRING).description("업무 종료일"),
-                                        fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("현재 재직 상태"),
-                                        fieldWithPath("careerStartDate").type(STRING).description("경력 시작일"),
-                                        fieldWithPath("endDate").type(STRING).description("경력 종료일"),
-                                        fieldWithPath("careerContent").type(STRING).description("경력 상세 내용")
+                                        fieldWithPath("[].companyName").type(STRING).description("회사명"),
+                                        fieldWithPath("[].position").type(STRING).description("직책"),
+                                        fieldWithPath("[].skills").type(ARRAY).description("기술 목록"),
+                                        fieldWithPath("[].duties[].title").type(STRING).description("업무 제목"),
+                                        fieldWithPath("[].duties[].startDate").type(STRING).description("업무 시작일"),
+                                        fieldWithPath("[].duties[].endDate").type(STRING).description("업무 종료일"),
+                                        fieldWithPath("[].duties[].description").type(STRING).description("업무 설명"),
+                                        fieldWithPath("[].isCurrentlyEmployed").type(BOOLEAN).description("현재 재직 상태"),
+                                        fieldWithPath("[].careerStartDate").type(STRING).description("경력 시작일"),
+                                        fieldWithPath("[].endDate").type(STRING).description("경력 종료일"),
+                                        fieldWithPath("[].careerContent").type(STRING).description("경력 상세 내용")
                                 )
                         ));
 
