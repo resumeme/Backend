@@ -28,8 +28,8 @@ public class DateDetails {
     }
 
     private static void validateDateDetails(LocalDate admissionDate, LocalDate graduationDate) {
-        notNull(ExceptionCode.NO_EMPTY_VALUE);
-        notNull(ExceptionCode.NO_EMPTY_VALUE);
+        notNull(admissionDate);
+        notNull(graduationDate);
 
         if (admissionDate.isAfter(graduationDate)) {
             throw new CustomException(ExceptionCode.TIME_ERROR);

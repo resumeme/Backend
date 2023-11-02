@@ -29,9 +29,9 @@ public class EducationalDetails {
     }
 
     private static void validateEducationalDetails(String organization, String major, String degree) {
-        notNull(ExceptionCode.NO_EMPTY_VALUE);
-        notNull(ExceptionCode.NO_EMPTY_VALUE);
-        notNull(ExceptionCode.NO_EMPTY_VALUE);
+        notNull(organization);
+        notNull(major);
+        notNull(degree);
     }
 
 }
