@@ -78,7 +78,7 @@ public class Project {
     }
 
     public String getTeamMembers() {
-        return isTeam ? TeamMembers : null;
+        return isTeam ? TeamMembers : "";
     }
 
 }
