@@ -29,19 +29,25 @@ public class Certification {
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
+    @Getter
     private String certificationTitle;
 
+    @Getter
     private String acquisitionDate;
 
+    @Getter
     private String issuingAuthority;
 
+    @Getter
     private String link;
 
+    @Getter
     private String description;
 
-    public Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
+    public Certification(Resume resume, String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
         Validator.check(isBlank(certificationTitle), ExceptionCode.NO_EMPTY_VALUE);
 
+        this.resume = resume;
         this.certificationTitle = certificationTitle;
         this.acquisitionDate = acquisitionDate;
         this.issuingAuthority = issuingAuthority;
