@@ -41,7 +41,7 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
         given(providerManager.authenticate(new OAuthAuthenticationToken(code, loginProvider))).willReturn(token);
 
         // when
-        ResultActions result = mvc.perform(post("/login/oauth2/code")
+        ResultActions result = mvc.perform(post("/api/v1/login/oauth2/code")
                 .content(mapper.writeValueAsBytes(new OAuthTokenResponseFilter.CodeRequest(loginProvider, code)))
                 .contentType(APPLICATION_JSON));
 
@@ -74,7 +74,7 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
                 .willThrow(new OAuth2AuthenticationException(new OAuth2Error("NOT_REGISTERED"), "1234"));
 
         // when
-        ResultActions result = mvc.perform(post("/login/oauth2/code")
+        ResultActions result = mvc.perform(post("/api/v1/login/oauth2/code")
                 .content(mapper.writeValueAsBytes(new OAuthTokenResponseFilter.CodeRequest(loginProvider, code)))
                 .contentType(APPLICATION_JSON));
 

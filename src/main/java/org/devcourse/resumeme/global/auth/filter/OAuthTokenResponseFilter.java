@@ -16,7 +16,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 public class OAuthTokenResponseFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String LOGIN_URL = "/login/oauth2/code";
+    private static final String LOGIN_URL = "/api/v1/login/oauth2/code";
 
     private final ObjectMapper objectMapper;
 

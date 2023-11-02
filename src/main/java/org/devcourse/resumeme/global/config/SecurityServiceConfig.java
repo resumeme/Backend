@@ -2,6 +2,7 @@ package org.devcourse.resumeme.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.global.auth.OAuth2CustomUserService;
+import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
@@ -32,6 +33,11 @@ public class SecurityServiceConfig {
         oAuthTokenResponseFilter.setAuthenticationFailureHandler(failureHandler);
 
         return oAuthTokenResponseFilter;
+    }
+
+    @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilter(ObjectMapper objectMapper) {
+        return new ExceptionHandlerFilter(objectMapper);
     }
 
     @Bean
