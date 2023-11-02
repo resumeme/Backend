@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.SERVER_ERROR;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
@@ -33,7 +34,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     }
 
     private void sendErrorResponse(HttpServletResponse response, int statusCode, ExceptionCode code) throws IOException {
-        response.sendError(statusCode);
+        response.setStatus(statusCode);
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().println(objectMapper.writeValueAsString(new ErrorResponse(code.getMessage(), code.name())));
     }
 
