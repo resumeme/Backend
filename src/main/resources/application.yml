@@ -42,6 +42,10 @@ spring:
     properties:
       hibernate:
         show_sql: true
+  data:
+    redis:
+      host: ENC(oH6k+iVdgjNgDTOt/YH31umXunLfqBFi5AbTQE90GKZfUs/sJAHCWB49DOvQ78YmljX7WCIKmH13bJ6ENO+3+M4k1oB5MrUl)
+      port: 6379
 ---
 spring:
   config:
