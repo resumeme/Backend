@@ -7,6 +7,7 @@ public enum ExceptionCode implements DocsEnumType {
     MENTEE_NOT_FOUND("해당 멘티를 찾을 수 없습니다"),
     RESUME_NOT_FOUND("해당 이력서를 찾을 수 없습니다"),
     EVENT_NOT_FOUND("이벤트를 찾을 수 없습니다"),
+    PROJECT_NOT_FOUND("해당 프로젝트를 찾을 수 없습니다"),
     APPLICANT_NOT_FOUND("신청 이력이 없습니다"),
     NO_EMPTY_VALUE("빈 값일 수 없습니다"),
     MENTEE_ONLY_RESUME("멘티만 이력서를 작성할 수 있습니다"),

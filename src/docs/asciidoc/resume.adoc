@@ -53,6 +53,14 @@ include::{snippets}/project/create/request-fields.adoc[]
 include::{snippets}/project/create/http-response.adoc[]
 include::{snippets}/project/create/response-fields.adoc[]
 
+=== 프로젝트 조회
+*Request*
+include::{snippets}/project/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/project/find/http-response.adoc[]
+include::{snippets}/project/find/response-fields.adoc[]
+
 === 활동 저장
 *Request*
 include::{snippets}/activity/create/http-request.adoc[]
