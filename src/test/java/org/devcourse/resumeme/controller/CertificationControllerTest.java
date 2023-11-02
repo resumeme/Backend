@@ -4,22 +4,30 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.CertificationCreateRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.domain.resume.Career;
 import org.devcourse.resumeme.domain.resume.Certification;
+import org.devcourse.resumeme.domain.resume.Duty;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -82,5 +90,36 @@ class CertificationControllerTest extends ControllerUnitTest {
                                 )
                         )
                 );
+    }
+
+    @Test
+    @WithMockUser
+    void 업무경험_조회에_성공한다() throws Exception {
+        Long resumeId = 1L;
+        Certification certification = new Certification(resume, "인증서", "2023-10-01", "발급기관", "https://example.com", "설명");
+        Resume savedResume = resume.builder()
+                .certification(List.of(certification))
+                .build();
+
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+
+        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/certifications"));
+
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("certification/find",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].certificationTitle").type(STRING).description("자격증 제목"),
+                                        fieldWithPath("[].acquisitionDate").type(STRING).description("취득 일자"),
+                                        fieldWithPath("[].issuingAuthority").type(STRING).description("발급 기관"),
+                                        fieldWithPath("[].link").type(STRING).description("링크"),
+                                        fieldWithPath("[].description").type(STRING).description("설명")
+                                )
+                        ));
+
     }
 }

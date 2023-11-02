@@ -11,6 +11,6 @@ public record CertificationCreateRequest(
         String description
 ) {
     public Certification toEntity(Resume resume) {
-        return new Certification(certificationTitle, acquisitionDate, issuingAuthority, link, description);
+        return new Certification(resume, certificationTitle, acquisitionDate, issuingAuthority, link, description);
     }
 }
