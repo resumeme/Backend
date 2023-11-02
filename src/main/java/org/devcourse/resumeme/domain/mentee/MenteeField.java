@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.Field;
 
@@ -28,6 +29,7 @@ public class MenteeField {
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
 
+    @Getter
     @Enumerated(STRING)
     private Field field;
 

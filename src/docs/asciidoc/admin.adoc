@@ -1,6 +1,6 @@
 = 어드민
 
-=== 모든 멘토 등급 업 신청 조회
+=== 멘토 승인 요청 전체 조회
 
 *Request*
 include::{snippets}/admin/allApplication/http-request.adoc[]

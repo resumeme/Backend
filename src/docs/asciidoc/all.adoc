@@ -37,6 +37,42 @@ include::{snippets}/mentee/create/request-fields.adoc[]
 include::{snippets}/mentee/create/http-response.adoc[]
 include::{snippets}/mentee/create/response-fields.adoc[]
 
+=== 멘토 정보 조회
+*Request*
+include::{snippets}/mentor/find/http-request.adoc[]
+include::{snippets}/mentor/find/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/mentor/find/http-response.adoc[]
+include::{snippets}/mentor/find/response-fields.adoc[]
+
+=== 멘티 정보 조회
+*Request*
+include::{snippets}/mentee/find/http-request.adoc[]
+include::{snippets}/mentee/find/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/mentee/find/http-response.adoc[]
+include::{snippets}/mentee/find/response-fields.adoc[]
+
+=== 멘토 정보 수정
+*Request*
+include::{snippets}/mentor/update/http-request.adoc[]
+include::{snippets}/mentor/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/mentor/update/http-response.adoc[]
+include::{snippets}/mentor/update/response-fields.adoc[]
+
+=== 멘티 정보 수정
+*Request*
+include::{snippets}/mentee/update/http-request.adoc[]
+include::{snippets}/mentee/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/mentee/update/http-response.adoc[]
+include::{snippets}/mentee/update/response-fields.adoc[]
+
 === 이벤트 전체 조회
 *Request*
 include::{snippets}/event/getAll/http-request.adoc[]
@@ -45,15 +81,7 @@ include::{snippets}/event/getAll/http-request.adoc[]
 include::{snippets}/event/getAll/http-response.adoc[]
 include::{snippets}/event/getAll/response-fields.adoc[]
 
-=== 멘토 정보 조회
-*Request*
-include::{snippets}/mentor/find/http-request.adoc[]
-
-*Response*
-include::{snippets}/mentor/find/http-response.adoc[]
-include::{snippets}/mentor/find/response-fields.adoc[]
-
-=== 합격이력서 공유 소개글 모두 보기
+=== 합격이력서 공유 소개글 페이징 조회
 *Request*
 include::{snippets}/result/getAll/http-request.adoc[]
 include::{snippets}/result/getAll/query-parameters.adoc[]

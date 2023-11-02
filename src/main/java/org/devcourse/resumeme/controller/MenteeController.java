@@ -2,17 +2,18 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.common.response.IdResponse;
+import org.devcourse.resumeme.controller.dto.MenteeInfoResponse;
 import org.devcourse.resumeme.controller.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.controller.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.auth.model.Claims;
-import org.devcourse.resumeme.global.auth.model.JwtUser;
 import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.MenteeService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,8 +51,17 @@ public class MenteeController {
     }
 
     @PatchMapping("/{menteeId}")
-    public void update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest, @AuthenticationPrincipal JwtUser user) {
-        menteeService.update(user.id(), updateRequest);
+    public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest) {
+        Long updatedMenteeId = menteeService.update(menteeId, updateRequest);
+
+        return new IdResponse(updatedMenteeId);
+    }
+
+    @GetMapping("/{menteeId}")
+    public MenteeInfoResponse getOne(@PathVariable Long menteeId) {
+        Mentee findMentee = menteeService.getOne(menteeId);
+
+        return new MenteeInfoResponse(findMentee);
     }
 
 }
