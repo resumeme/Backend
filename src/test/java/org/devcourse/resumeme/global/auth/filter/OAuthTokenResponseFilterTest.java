@@ -2,7 +2,7 @@ package org.devcourse.resumeme.global.auth.filter;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.domain.user.Role;
-import org.devcourse.resumeme.domain.user.UserCommonInfo;
+import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
 import org.junit.jupiter.api.Test;

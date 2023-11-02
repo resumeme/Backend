@@ -2,7 +2,7 @@ package org.devcourse.resumeme.global.auth.model;
 
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentor.Mentor;
-import org.devcourse.resumeme.domain.user.UserCommonInfo;
+
 import java.util.Date;
 
 public record Claims(Long id, String role, Date expiration) {

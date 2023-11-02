@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentor.Mentor;
-import org.devcourse.resumeme.domain.user.UserCommonInfo;
-import org.devcourse.resumeme.global.advice.exception.CustomException;
-import org.devcourse.resumeme.global.auth.userInfo.GoogleOAuth2UserInfo;
-import org.devcourse.resumeme.global.auth.userInfo.KakaoOAuth2UserInfo;
+import org.devcourse.resumeme.domain.user.Provider;
+import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.userInfo.OAuth2UserInfo;
 import org.devcourse.resumeme.repository.MenteeRepository;
 import org.devcourse.resumeme.repository.MentorRepository;
@@ -20,9 +18,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-import static org.devcourse.resumeme.domain.user.Provider.GOOGLE;
-import static org.devcourse.resumeme.domain.user.Provider.KAKAO;
 
 @Slf4j
 @Service
@@ -37,38 +32,33 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        String providerName = userRequest.getClientRegistration().getRegistrationId();
+
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
-        String provider = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2UserInfo userInfo = null;
-
-        if (provider.equals(GOOGLE.getDescription())) {
-            userInfo = new GoogleOAuth2UserInfo(oAuth2User.getAttributes());
-        }
-
-        if (provider.equals(KAKAO.getDescription())) {
-            userInfo = new KakaoOAuth2UserInfo(oAuth2User.getAttributes());
-        }
-
-        if (userInfo == null) {
-            throw new CustomException("NOT_SUPPORTED_SOCIAL", "지원하지 않는 소셜로그인 입니다.");
-        }
+        OAuth2UserInfo userInfo = Provider.of(providerName).convert(oAuth2User.getAttributes());
 
         String email = userInfo.getEmail();
 
         Optional<Mentor> findMentor = mentorRepository.findByEmail(email);
         Optional<Mentee> findMentee = menteeRepository.findByEmail(email);
 
-        if (findMentor.isEmpty() && findMentee.isEmpty()) {
+        if (isNewUser(findMentor, findMentee)) {
             String cacheKey = oAuth2TempInfoRepository.save(userInfo.toOAuth2TempInfo()).getId();
             log.info("Redis Temporarily saved key : {}", cacheKey);
 
             throw new OAuth2AuthenticationException(new OAuth2Error("NOT_REGISTERED"), cacheKey);
         }
 
-        UserCommonInfo userCommonInfo = findMentor.map(UserCommonInfo::of).orElseGet(() -> UserCommonInfo.of(findMentee.get()));
+        return new OAuth2CustomUser(getUserCommonInfo(findMentor, findMentee), oAuth2User.getAttributes());
+    }
 
-        return new OAuth2CustomUser(userCommonInfo, oAuth2User.getAttributes());
+    private boolean isNewUser(Optional<Mentor> findMentor, Optional<Mentee> findMentee) {
+        return findMentor.isEmpty() && findMentee.isEmpty();
+    }
+
+    private UserCommonInfo getUserCommonInfo(Optional<Mentor> findMentor, Optional<Mentee> findMentee) {
+        return findMentor.map(UserCommonInfo::of)
+                .orElseGet(() -> UserCommonInfo.of(findMentee.get()));
     }
 
 }
