@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
-import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.resume.Resume;
 
@@ -19,6 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.common.util.Validator.notNull;
 import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
 
 @Entity
@@ -43,9 +43,9 @@ public class Review extends BaseEntity {
     private Resume resume;
 
     public Review(String content, BlockType type, Resume resume) {
-        Validator.check(isBlank(content), NO_EMPTY_VALUE);
-        Validator.check(type == null, NO_EMPTY_VALUE);
-        Validator.check(resume == null, NO_EMPTY_VALUE);
+        check(isBlank(content), NO_EMPTY_VALUE);
+        notNull(type);
+        notNull(resume);
 
         this.content = content;
         this.type = type;

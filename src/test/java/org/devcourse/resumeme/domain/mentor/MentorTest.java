@@ -152,7 +152,7 @@ class MentorTest {
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(mentorRegisterInfoRequest.careerYear())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다.");
+                .hasMessage("허용되지 않은 역할입니다");
 
         assertThatThrownBy(() -> Mentor.builder()
                 .id(1L)
@@ -165,7 +165,7 @@ class MentorTest {
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(mentorRegisterInfoRequest.careerYear())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다.");
+                .hasMessage("허용되지 않은 역할입니다");
     }
 
 }

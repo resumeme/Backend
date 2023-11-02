@@ -10,6 +10,11 @@ import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.CANNOT_OPEN_EVENT;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_AVAILABLE_SEATS;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_REMAIN_SEATS;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.RANGE_MAXIMUM_ATTENDEE;
 
 @Embeddable
 @NoArgsConstructor(access = PROTECTED)
@@ -37,9 +42,9 @@ public class EventInfo {
     }
 
     private void validateInput(int maximumAttendee, String title, String content) {
-        check(maximumAttendee < 2 || maximumAttendee > 10, "RANGE_MAXIMUM_ATTENDEE", "참여 인원 수를 2~10명 사이에서 정해주세요");
-        check(isBlank(title), "NO_EMPTY_STRING", "제목은 필수 값입니다");
-        check(isBlank(content), "NO_EMPTY_STRING", "내용은 필수 값입니다");
+        check(maximumAttendee < 2 || maximumAttendee > 10, RANGE_MAXIMUM_ATTENDEE);
+        check(isBlank(title), NO_EMPTY_VALUE);
+        check(isBlank(content), NO_EMPTY_VALUE);
     }
 
     public static EventInfo open(int maximumAttendee, String title, String content) {
@@ -52,7 +57,7 @@ public class EventInfo {
 
     public void checkAvailableApplication() {
         if (!status.canApply()) {
-            throw new EventException("NO_REMAIN_SEATS", "이미 모든 신청이 마감되었습니다");
+            throw new EventException(NO_REMAIN_SEATS);
         }
     }
 
@@ -66,7 +71,7 @@ public class EventInfo {
 
     public void reOpen(int attendeeCount) {
         if (attendeeCount >= maximumAttendee) {
-            throw new EventException("NO_AVAILABLE_SEATS", "잔여 자리가 없어서 재 오픈이 불가능합니다");
+            throw new EventException(NO_AVAILABLE_SEATS);
         }
 
         status = EventStatus.REOPEN;
@@ -74,7 +79,7 @@ public class EventInfo {
 
     public void open() {
         if (!status.isReady()) {
-            throw new EventException("CANNOT_OPEN", "예약한 이벤트에 한에서만 오픈 신청을 할 수 있습니다");
+            throw new EventException(CANNOT_OPEN_EVENT);
         }
 
         status = EventStatus.OPEN;

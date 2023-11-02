@@ -118,7 +118,7 @@ class MenteeTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .introduce(menteeRegisterInfoRequest.introduce())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다.");
+                .hasMessage("허용되지 않은 역할입니다");
 
         assertThatThrownBy(() -> Mentee.builder()
                 .id(1L)
@@ -131,7 +131,7 @@ class MenteeTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .introduce(menteeRegisterInfoRequest.introduce())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다.");
+                .hasMessage("허용되지 않은 역할입니다");
 
         assertThatThrownBy(() -> Mentee.builder()
                 .id(1L)
@@ -144,8 +144,7 @@ class MenteeTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .introduce(menteeRegisterInfoRequest.introduce())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다.");
+                .hasMessage("허용되지 않은 역할입니다");
     }
 
 }
-
