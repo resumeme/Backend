@@ -1,5 +1,14 @@
 = 멘토
 
+=== 멘토 정보 수정
+*Request*
+include::{snippets}/mentor/update/http-request.adoc[]
+include::{snippets}/mentor/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/mentor/update/http-response.adoc[]
+include::{snippets}/mentor/update/response-fields.adoc[]
+
 === 첨삭 이벤트 생성
 
 *Request*

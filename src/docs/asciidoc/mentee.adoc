@@ -1,5 +1,14 @@
 = 멘티
 
+=== 멘티 정보 수정
+*Request*
+include::{snippets}/mentee/update/http-request.adoc[]
+include::{snippets}/mentee/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/mentee/update/http-response.adoc[]
+include::{snippets}/mentee/update/response-fields.adoc[]
+
 === 이력서 작성
 
 *Request*
