@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.global.auth.filter.resolver;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterN
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.GRANT_TYPE;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REDIRECT_URI;
 
+@Slf4j
 public class OAuthTokenResolver {
 
     private final RestOperations restOperations;
@@ -44,6 +46,7 @@ public class OAuthTokenResolver {
         HttpHeaders headers = getHttpHeaders();
         MultiValueMap<String, String> parameters = getBody(clientRegistration, code);
         URI uri = requestUri(clientRegistration);
+        log.info("request uri : {}", uri);
 
         return getResponse(new RequestEntity<>(parameters, headers, HttpMethod.POST, uri)).getBody();
     }
@@ -77,6 +80,8 @@ public class OAuthTokenResolver {
 
     private ResponseEntity<OAuth2AccessTokenResponse> getResponse(RequestEntity<?> request) {
         try {
+            log.info("request to oauth to get Token");
+
             return restOperations.exchange(request, OAuth2AccessTokenResponse.class);
         } catch (RestClientException ex) {
             throw new IllegalArgumentException();
