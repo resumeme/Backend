@@ -38,7 +38,6 @@ public class JwtService {
                 .withClaim(ID, claims.id())
                 .withClaim(ROLE, claims.role())
                 .sign(Algorithm.HMAC512(SECRET_KEY));
-
     }
 
     public String createRefreshToken() {
@@ -81,7 +80,8 @@ public class JwtService {
     }
 
     public void validate(String token) {
-        JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(token);
+        String tokenRefined = token.replace(BEARER, "");
+        JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(tokenRefined);
     }
 
     public Claims extractClaim(String accessToken) {
