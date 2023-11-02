@@ -84,10 +84,7 @@ class ReviewControllerTest extends ControllerUnitTest {
         Resume resume = new Resume("titlem", mentee);
 
         Review review = request.toEntity(resume);
-
-        Field id = review.getClass().getDeclaredField("id");
-        id.setAccessible(true);
-        id.set(review, 1L);
+        setId(review, 1L);
 
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(reviewService.create(any(Review.class))).willReturn(review);
@@ -130,9 +127,7 @@ class ReviewControllerTest extends ControllerUnitTest {
 
         given(eventService.getOne(eventId)).willReturn(event);
         Review review = new Review("리뷰 내용내용", BlockType.CAREER, new Resume("title", mentee));
-        Field field = review.getClass().getDeclaredField("id");
-        field.setAccessible(true);
-        field.set(review, 1L);
+        setId(review, 1L);
 
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(review));
 

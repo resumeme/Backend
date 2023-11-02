@@ -91,9 +91,7 @@ class ResultNoticeControllerTest extends ControllerUnitTest {
         // given
         PageRequest request = PageRequest.of(1, 10);
         ResultNotice resultNotice = new ResultNotice("content", new Resume("title", mentee));
-        Field field = resultNotice.getClass().getDeclaredField("id");
-        field.setAccessible(true);
-        field.set(resultNotice, 1L);
+        setId(resultNotice, 1L);
 
         given(resultService.getAll(request)).willReturn(new PageImpl<>(
                 List.of(resultNotice),

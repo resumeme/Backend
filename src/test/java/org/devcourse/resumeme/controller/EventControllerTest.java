@@ -328,10 +328,4 @@ class EventControllerTest extends ControllerUnitTest {
                 );
     }
 
-    private void setId(Object target, Long injectId) throws NoSuchFieldException, IllegalAccessException {
-        Field field = target.getClass().getDeclaredField("id");
-        field.setAccessible(true);
-        field.set(target, injectId);
-    }
-
 }
