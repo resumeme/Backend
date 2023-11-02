@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.config.properties.EndpointProperties;
@@ -30,6 +31,8 @@ public class SecurityConfig {
 
     private final OAuthTokenResponseFilter oAuthTokenResponseFilter;
 
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring().requestMatchers(properties.ignores().toArray(new String[]{}));
@@ -43,6 +46,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
 
+        http.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
         http.addFilterAfter(jwtAuthorizationFilter, LogoutFilter.class);
         http.addFilterAfter(oAuthTokenResponseFilter, JwtAuthorizationFilter.class);
 
