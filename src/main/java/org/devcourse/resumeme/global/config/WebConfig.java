@@ -7,14 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ConfigurationPropertiesScan
-public class WebConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addCorsMappings(final CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("https://resumeme.vercel.app/")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
-                .maxAge(3600);
-    }
+public class WebConfig {
 
 }
