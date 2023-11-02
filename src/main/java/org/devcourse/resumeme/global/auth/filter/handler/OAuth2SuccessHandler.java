@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.domain.user.Role;
-import org.devcourse.resumeme.domain.user.UserCommonInfo;
+import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.auth.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.model.Claims;

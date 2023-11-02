@@ -2,7 +2,7 @@ package org.devcourse.resumeme.global.auth;
 
 import lombok.Data;
 import lombok.Getter;
-import org.devcourse.resumeme.domain.user.UserCommonInfo;
+import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
