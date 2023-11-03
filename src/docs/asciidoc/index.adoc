@@ -19,7 +19,6 @@ endif::[]
 // 필드 중 htmlFileName과 동일한 이름을 주면 됩니다
 include::mentor.adoc[]
 include::mentee.adoc[]
-include::resume.adoc[]
 include::all.adoc[]
-include::reference.adoc[]
 include::admin.adoc[]
+include::reference.adoc[]

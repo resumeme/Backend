@@ -55,6 +55,38 @@ include::{snippets}/mentee/find/path-parameters.adoc[]
 include::{snippets}/mentee/find/http-response.adoc[]
 include::{snippets}/mentee/find/response-fields.adoc[]
 
+=== 이력서 교육사항 조회
+*Request*
+include::{snippets}/training/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/training/find/http-response.adoc[]
+include::{snippets}/training/find/response-fields.adoc[]
+
+=== 이력서 수상 및 자격증 조회
+*Request*
+include::{snippets}/certification/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/certification/find/http-response.adoc[]
+include::{snippets}/certification/find/response-fields.adoc[]
+
+=== 이력서 업무경험 조회
+*Request*
+include::{snippets}/career/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/career/find/http-response.adoc[]
+include::{snippets}/career/find/response-fields.adoc[]
+
+=== 이력서 프로젝트 조회
+*Request*
+include::{snippets}/project/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/project/find/http-response.adoc[]
+include::{snippets}/project/find/response-fields.adoc[]
+
 === 이벤트 전체 조회
 *Request*
 include::{snippets}/event/getAll/http-request.adoc[]
