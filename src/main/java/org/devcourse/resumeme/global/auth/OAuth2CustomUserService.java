@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -46,9 +47,8 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
             String cacheKey = oAuth2TempInfoRepository.save(userInfo.toOAuth2TempInfo()).getId();
             log.info("Redis Temporarily saved key : {}", cacheKey);
 
-            throw new OAuth2AuthenticationException(new OAuth2Error("NOT_REGISTERED"), cacheKey);
+            return new OAuth2CustomUser(null, Map.of("key", cacheKey));
         }
-
         return new OAuth2CustomUser(getUserCommonInfo(findMentor, findMentee), oAuth2User.getAttributes());
     }
 

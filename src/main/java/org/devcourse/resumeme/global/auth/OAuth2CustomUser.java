@@ -38,4 +38,11 @@ public class OAuth2CustomUser implements OAuth2User {
         return List.of(() -> String.valueOf(userCommonInfo.role()));
     }
 
+    public boolean isNewUser() {
+        return userCommonInfo == null;
+    }
+
+    public String getAuthenticationKey() {
+        return String.valueOf(attributes.get("key"));
+    }
 }
