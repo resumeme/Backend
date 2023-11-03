@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.INTEGER;
@@ -78,7 +77,7 @@ class MentorControllerTest extends ControllerUnitTest {
                 .careerYear(mentorRegisterInfoRequest.careerYear())
                 .build();
 
-        given(oAuth2InfoRedisRepository.findById(any())).willReturn(Optional.of(oAuth2TempInfo));
+        given(oAuth2InfoRedisService.getOne(any())).willReturn((oAuth2TempInfo));
         given(mentorService.create(any(Mentor.class))).willReturn(savedMentor);
         given(jwtService.createAccessToken(any(Claims.class))).willReturn("accessTokenRecentlyIssued");
         given(jwtService.createRefreshToken()).willReturn("refreshTokenRecentlyIssued");

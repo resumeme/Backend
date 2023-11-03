@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.MAP;
@@ -71,7 +70,7 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .build();
 
-        given(oAuth2InfoRedisRepository.findById(any())).willReturn(Optional.of(oAuth2TempInfo));
+        given(oAuth2InfoRedisService.getOne(any())).willReturn(oAuth2TempInfo);
         given(menteeService.create(any(Mentee.class))).willReturn(savedMentee);
         given(jwtService.createAccessToken(any(Claims.class))).willReturn("accessTokenRecentlyIssued");
         given(jwtService.createRefreshToken()).willReturn("refreshTokenRecentlyIssued");
