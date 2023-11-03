@@ -24,6 +24,12 @@ public class ResumeService {
         return saved.getId();
     }
 
+    public Long update(Resume resume) {
+        Resume saved = resumeRepository.save(resume);
+
+        return saved.getId();
+    }
+
     @Transactional(readOnly = true)
     public Resume getOne(Long id) {
         return resumeRepository.findById(id)

@@ -3,11 +3,14 @@ package org.devcourse.resumeme.controller;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
+import org.devcourse.resumeme.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.global.auth.model.JwtUser;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.ResumeService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +31,16 @@ public class ResumeController {
         Long savedId = resumeService.create(resume);
 
         return new IdResponse(savedId);
+    }
+
+    @PatchMapping("/{resumeId}")
+    public IdResponse updateResume(@PathVariable Long resumeId, @RequestBody ResumeInfoRequest request) {
+        Resume resume = resumeService.getOne(resumeId);
+
+        resume.updateResumeInfo(request.toEntity());
+        Long updated = resumeService.update(resume);
+
+        return new IdResponse(updated);
     }
 
 }

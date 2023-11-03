@@ -2,6 +2,7 @@ package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
+import org.devcourse.resumeme.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.resume.Resume;
@@ -11,14 +12,19 @@ import org.devcourse.resumeme.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.RequestEntity.patch;
+import static org.springframework.http.RequestEntity.put;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -31,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ResumeControllerTest extends ControllerUnitTest {
 
     private Mentee mentee;
+
+    private Resume resume;
 
     @BeforeEach
     void init() {
@@ -45,6 +53,8 @@ public class ResumeControllerTest extends ControllerUnitTest {
                 .interestedFields(Set.of())
                 .introduce(null)
                 .build();
+
+        resume = new Resume("title", mentee);
     }
 
     @Test
@@ -73,6 +83,38 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 이력서 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 이력서_업데이트에_성공한다() throws Exception {
+        ResumeInfoRequest request = new ResumeInfoRequest("BACK", List.of("Java", "Spring"), "안녕하세요 blah blah");
+        Long resumeId = 1L;
+
+        given(resumeService.getOne(resumeId)).willReturn(resume);
+        given(resumeService.update(resume)).willReturn(1L);
+
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("position").description("포지션"),
+                                        fieldWithPath("skills").description("스킬 목록"),
+                                        fieldWithPath("introduce").description("자기 소개")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("업데이트된 이력서 아이디")
                                 )
                         )
                 );
