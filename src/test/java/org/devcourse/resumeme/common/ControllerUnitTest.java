@@ -16,12 +16,10 @@ import org.devcourse.resumeme.controller.ResultNoticeController;
 import org.devcourse.resumeme.controller.ResumeController;
 import org.devcourse.resumeme.controller.ReviewController;
 import org.devcourse.resumeme.controller.TrainingController;
-import org.devcourse.resumeme.global.auth.filter.AuthFilterTestController;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.token.JwtService;
-import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.ActivityService;
 import org.devcourse.resumeme.service.CareerService;
 import org.devcourse.resumeme.service.CertificationService;
@@ -30,6 +28,7 @@ import org.devcourse.resumeme.service.ForeignLanguageService;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.MentorApplicationService;
 import org.devcourse.resumeme.service.MentorService;
+import org.devcourse.resumeme.service.OAuth2InfoRedisService;
 import org.devcourse.resumeme.service.ProjectService;
 import org.devcourse.resumeme.service.ResultService;
 import org.devcourse.resumeme.service.ResumeService;
@@ -93,7 +92,7 @@ public abstract class ControllerUnitTest {
     protected JwtService jwtService;
 
     @MockBean
-    protected OAuth2InfoRedisRepository oAuth2InfoRedisRepository;
+    protected OAuth2InfoRedisService oAuth2InfoRedisService;
 
     @MockBean
     protected ReviewService reviewService;
