@@ -9,6 +9,8 @@ import org.devcourse.resumeme.repository.MentorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.MENTOR_NOT_FOUND;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -19,8 +21,9 @@ public class MentorService {
     private final MentorApplicationEventPublisher mentorApplicationEventPublisher;
 
     @Transactional(readOnly = true)
-    public Mentor getOne(Long id) {
-        return mentorRepository.findById(id).orElseThrow(() -> new CustomException("MENTOR_NOT_FOUND", "존재하지 않는 회원입니다."));
+    public Mentor getOne(Long mentorId) {
+        return mentorRepository.findWithPositions(mentorId)
+                .orElseThrow(() -> new CustomException(MENTOR_NOT_FOUND));
     }
 
     public Mentor create(Mentor mentor) {

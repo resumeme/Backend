@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.MENTEE_NOT_FOUND;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -22,8 +24,9 @@ public class MenteeService {
     }
 
     @Transactional(readOnly = true)
-    public Mentee getOne(Long id) {
-        return menteeRepository.findById(id).orElseThrow(() -> new CustomException("MENTEE_NOT_FOUND", "존재하지 않는 회원입니다."));
+    public Mentee getOne(Long menteeId) {
+        return menteeRepository.findWithPositionsAndFields(menteeId)
+                .orElseThrow(() -> new CustomException(MENTEE_NOT_FOUND));
     }
 
     public void updateRefreshToken(Long id, String refreshToken) {
