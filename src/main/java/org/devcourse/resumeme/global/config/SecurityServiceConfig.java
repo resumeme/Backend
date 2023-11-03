@@ -69,7 +69,7 @@ public class SecurityServiceConfig {
         configuration.setAllowedOrigins(List.of(/*"https://resumeme.vercel.app", "http://localhost:5173"*/"*"));
         configuration.setAllowedMethods(List.of("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
         configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
