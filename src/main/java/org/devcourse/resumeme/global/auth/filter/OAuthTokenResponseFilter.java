@@ -3,10 +3,13 @@ package org.devcourse.resumeme.global.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.devcourse.resumeme.global.auth.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -30,7 +33,17 @@ public class OAuthTokenResponseFilter extends AbstractAuthenticationProcessingFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
         CodeRequest codeRequest = objectMapper.readValue(request.getInputStream(), CodeRequest.class);
 
-        return this.getAuthenticationManager().authenticate(new OAuthAuthenticationToken(codeRequest.code, codeRequest.loginProvider));
+        Authentication authenticate = this.getAuthenticationManager().authenticate(new OAuthAuthenticationToken(codeRequest.code, codeRequest.loginProvider));
+        checkSignedUser(authenticate);
+
+        return authenticate;
+    }
+
+    private void checkSignedUser(Authentication authenticate) {
+        OAuth2CustomUser principal = (OAuth2CustomUser) authenticate.getPrincipal();
+        if (principal.isNewUser()) {
+            throw new OAuth2AuthenticationException(new OAuth2Error("NOT_REGISTERED"), principal.getAuthenticationKey());
+        }
     }
 
     record CodeRequest(String loginProvider, String code) {
