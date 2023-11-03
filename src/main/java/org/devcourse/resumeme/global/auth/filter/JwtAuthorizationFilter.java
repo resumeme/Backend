@@ -78,7 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken createAuthentication(Claims claims) {
-        return new UsernamePasswordAuthenticationToken(new JwtUser(claims.id()), null, List.of(() -> "ROLE_MENTEE"));
+        return new UsernamePasswordAuthenticationToken(new JwtUser(claims.id()), null, List.of(claims::role));
     }
 
 }
