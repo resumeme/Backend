@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.domain.review;
+package org.devcourse.resumeme.domain.comment;
 
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ReviewTest {
+class CommentTest {
 
     @Test
     void 리뷰_작성에_성공한다() {
@@ -42,17 +42,17 @@ class ReviewTest {
         Resume resume = new Resume("title", mentee);
 
         // when
-        Review review = new Review(content, type, resume);
+        Comment comment = new Comment(content, type, resume);
 
         // then
-        assertThat(review).isNotNull();
+        assertThat(comment).isNotNull();
     }
 
     @ParameterizedTest
     @MethodSource("reviewCreate")
     void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(String content, BlockType type, Resume resume) {
         // then
-        assertThatThrownBy(() -> new Review(content, type, resume))
+        assertThatThrownBy(() -> new Comment(content, type, resume))
                 .isInstanceOf(CustomException.class);
     }
 

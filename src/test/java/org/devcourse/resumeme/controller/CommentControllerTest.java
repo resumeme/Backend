@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.controller.dto.ReviewCreateRequest;
+import org.devcourse.resumeme.controller.dto.CommentCreateRequest;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
@@ -10,7 +10,7 @@ import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.resume.Resume;
-import org.devcourse.resumeme.domain.review.Review;
+import org.devcourse.resumeme.domain.comment.Comment;
 import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.support.WithMockCustomUser;
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +41,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class ReviewControllerTest extends ControllerUnitTest {
+class CommentControllerTest extends ControllerUnitTest {
 
     private Mentor mentor;
 
@@ -79,18 +78,18 @@ class ReviewControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 리뷰_생성에_성공한다() throws Exception {
         // given
-        ReviewCreateRequest request = new ReviewCreateRequest("이력서가 맘에 안들어요", "ACTIVITY");
+        CommentCreateRequest request = new CommentCreateRequest("이력서가 맘에 안들어요", "ACTIVITY");
         Long resumeId = 1L;
         Resume resume = new Resume("titlem", mentee);
 
-        Review review = request.toEntity(resume);
-        setId(review, 1L);
+        Comment comment = request.toEntity(resume);
+        setId(comment, 1L);
 
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(reviewService.create(any(Review.class))).willReturn(review);
+        given(reviewService.create(any(Comment.class))).willReturn(comment);
 
         // when
-        ResultActions result = mvc.perform(post("/api/v1/events/{eventId}/resume/{resumeId}/reviews", 1L, resumeId)
+        ResultActions result = mvc.perform(post("/api/v1/events/{eventId}/resume/{resumeId}/comments", 1L, resumeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -98,7 +97,7 @@ class ReviewControllerTest extends ControllerUnitTest {
         result
                 .andExpect(status().isOk())
                 .andDo(
-                        document("review/create",
+                        document("comment/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
@@ -126,18 +125,18 @@ class ReviewControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Review review = new Review("리뷰 내용내용", BlockType.CAREER, new Resume("title", mentee));
-        setId(review, 1L);
+        Comment comment = new Comment("리뷰 내용내용", BlockType.CAREER, new Resume("title", mentee));
+        setId(comment, 1L);
 
-        given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(review));
+        given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/events/{eventId}/resume/{resumeId}/reviews", eventId, resumeId));
+        ResultActions result = mvc.perform(get("/api/v1/events/{eventId}/resume/{resumeId}/comments", eventId, resumeId));
 
         // then
         result.andExpect(status().isOk())
                 .andDo(
-                        document("review/getAll",
+                        document("comment/getAll",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 pathParameters(

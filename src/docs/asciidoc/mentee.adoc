@@ -74,12 +74,12 @@ include::{snippets}/activity/create/response-fields.adoc[]
 
 === 이력서 첨삭 코멘트 조회
 *Request*
-include::{snippets}/review/getAll/http-request.adoc[]
-include::{snippets}/review/getAll/path-parameters.adoc[]
+include::{snippets}/comment/getAll/http-request.adoc[]
+include::{snippets}/comment/getAll/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/review/getAll/http-response.adoc[]
-include::{snippets}/review/getAll/response-fields.adoc[]
+include::{snippets}/comment/getAll/http-response.adoc[]
+include::{snippets}/comment/getAll/response-fields.adoc[]
 
 === 첨삭 이벤트 참여 신청
 *Request*
