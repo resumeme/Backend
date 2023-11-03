@@ -5,6 +5,8 @@ import org.devcourse.resumeme.common.domain.DocsEnumType;
 public enum ExceptionCode implements DocsEnumType {
 
     MENTEE_NOT_FOUND("해당 멘티를 찾을 수 없습니다"),
+    MENTOR_NOT_FOUND("해당 멘토를 찾을 수 없습니다"),
+    INFO_NOT_FOUND("회원 임시 정보를 찾을 수 없습니다"),
     RESUME_NOT_FOUND("해당 이력서를 찾을 수 없습니다"),
     EVENT_NOT_FOUND("이벤트를 찾을 수 없습니다"),
     PROJECT_NOT_FOUND("해당 프로젝트를 찾을 수 없습니다"),

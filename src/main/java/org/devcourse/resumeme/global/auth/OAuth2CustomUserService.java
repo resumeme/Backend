@@ -9,11 +9,10 @@ import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.userInfo.OAuth2UserInfo;
 import org.devcourse.resumeme.repository.MenteeRepository;
 import org.devcourse.resumeme.repository.MentorRepository;
-import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
+import org.devcourse.resumeme.service.OAuth2InfoRedisService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
 
     private final MenteeRepository menteeRepository;
 
-    private final OAuth2InfoRedisRepository oAuth2TempInfoRepository;
+    private final OAuth2InfoRedisService oAuth2InfoRedisService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,7 +43,7 @@ public class OAuth2CustomUserService extends DefaultOAuth2UserService {
         Optional<Mentee> findMentee = menteeRepository.findByEmail(email);
 
         if (isNewUser(findMentor, findMentee)) {
-            String cacheKey = oAuth2TempInfoRepository.save(userInfo.toOAuth2TempInfo()).getId();
+            String cacheKey = oAuth2InfoRedisService.create(userInfo.toOAuth2TempInfo());
             log.info("Redis Temporarily saved key : {}", cacheKey);
 
             return new OAuth2CustomUser(null, Map.of("key", cacheKey));

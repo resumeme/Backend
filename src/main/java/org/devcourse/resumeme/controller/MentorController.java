@@ -7,12 +7,11 @@ import org.devcourse.resumeme.controller.dto.MentorInfoResponse;
 import org.devcourse.resumeme.controller.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.controller.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.domain.mentor.Mentor;
-import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.auth.model.Claims;
 import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.token.JwtService;
-import org.devcourse.resumeme.repository.OAuth2InfoRedisRepository;
 import org.devcourse.resumeme.service.MentorService;
+import org.devcourse.resumeme.service.OAuth2InfoRedisService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,19 +32,18 @@ public class MentorController {
 
     private final MentorService mentorService;
 
-    private final OAuth2InfoRedisRepository oAuth2InfoRedisRepository;
+    private final OAuth2InfoRedisService oAuth2InfoRedisService;
 
     @PostMapping
     public Map<String, String> register(@RequestBody MentorRegisterInfoRequest registerInfoRequest) {
         log.debug("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
-        OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisRepository.findById(registerInfoRequest.cacheKey())
-                .orElseThrow(() -> new CustomException("REGISTER_FAIL", "회원가입에 실패했습니다."));
+        OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisService.getOne(registerInfoRequest.cacheKey());
 
         String refreshToken = jwtService.createRefreshToken();
         Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo, refreshToken);
         Mentor savedMentor = mentorService.create(mentor);
         String accessToken = jwtService.createAccessToken(Claims.of(savedMentor));
-        oAuth2InfoRedisRepository.delete(oAuth2TempInfo);
+        oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return Map.of("access", accessToken, "refresh", refreshToken);
     }
