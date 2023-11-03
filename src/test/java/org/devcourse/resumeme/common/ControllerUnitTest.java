@@ -14,9 +14,8 @@ import org.devcourse.resumeme.controller.MentorController;
 import org.devcourse.resumeme.controller.ProjectController;
 import org.devcourse.resumeme.controller.ResultNoticeController;
 import org.devcourse.resumeme.controller.ResumeController;
-import org.devcourse.resumeme.controller.ReviewController;
+import org.devcourse.resumeme.controller.CommentController;
 import org.devcourse.resumeme.controller.TrainingController;
-import org.devcourse.resumeme.global.auth.filter.AuthFilterTestController;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
@@ -33,7 +32,7 @@ import org.devcourse.resumeme.service.MentorService;
 import org.devcourse.resumeme.service.ProjectService;
 import org.devcourse.resumeme.service.ResultService;
 import org.devcourse.resumeme.service.ResumeService;
-import org.devcourse.resumeme.service.ReviewService;
+import org.devcourse.resumeme.service.CommentService;
 import org.devcourse.resumeme.service.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -60,7 +59,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ResumeController.class,
         MenteeController.class,
         MentorController.class,
-        ReviewController.class,
+        CommentController.class,
         CareerController.class,
         ProjectController.class,
         CertificationController.class,
@@ -96,7 +95,7 @@ public abstract class ControllerUnitTest {
     protected OAuth2InfoRedisRepository oAuth2InfoRedisRepository;
 
     @MockBean
-    protected ReviewService reviewService;
+    protected CommentService reviewService;
 
     @MockBean
     protected CareerService careerService;
