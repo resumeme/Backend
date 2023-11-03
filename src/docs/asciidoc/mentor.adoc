@@ -32,12 +32,12 @@ include::{snippets}/event/getOwn/response-fields.adoc[]
 === 첨삭 코멘트 작성
 
 *Request*
-include::{snippets}/review/create/http-request.adoc[]
-include::{snippets}/review/create/request-fields.adoc[]
+include::{snippets}/comment/create/http-request.adoc[]
+include::{snippets}/comment/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/review/create/http-response.adoc[]
-include::{snippets}/review/create/response-fields.adoc[]
+include::{snippets}/comment/create/http-response.adoc[]
+include::{snippets}/comment/create/response-fields.adoc[]
 
 === 첨삭 이벤트 참여 신청 반려
 
