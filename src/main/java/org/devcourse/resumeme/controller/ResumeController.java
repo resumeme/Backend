@@ -5,6 +5,7 @@ import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
 import org.devcourse.resumeme.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.domain.resume.ResumeInfo;
 import org.devcourse.resumeme.global.auth.model.JwtUser;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.ResumeService;
@@ -36,11 +37,9 @@ public class ResumeController {
     @PatchMapping("/{resumeId}")
     public IdResponse updateResume(@PathVariable Long resumeId, @RequestBody ResumeInfoRequest request) {
         Resume resume = resumeService.getOne(resumeId);
+        ResumeInfo resumeInfo = request.toEntity();
 
-        resume.updateResumeInfo(request.toEntity());
-        Long updated = resumeService.update(resume);
-
-        return new IdResponse(updated);
+        return new IdResponse(resumeService.update(resume, resumeInfo));
     }
 
 }

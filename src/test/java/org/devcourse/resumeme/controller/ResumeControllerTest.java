@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
@@ -95,7 +94,7 @@ public class ResumeControllerTest extends ControllerUnitTest {
         Long resumeId = 1L;
 
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(resumeService.update(resume)).willReturn(1L);
+        given(resumeService.update(resume, request.toEntity())).willReturn(1L);
 
         ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
