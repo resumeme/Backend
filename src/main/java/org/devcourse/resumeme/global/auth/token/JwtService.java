@@ -88,8 +88,7 @@ public class JwtService {
         Map<String, Claim> claims = JWT.decode(accessToken).getClaims();
 
         Long id = claims.get(ID).asLong();
-        String role = claims.get(ROLE).toString();
-        System.out.println("role = " + role);
+        String role = claims.get(ROLE).asString();
         Date expiration = claims.get("exp").asDate();
 
         return new Claims(id, role, expiration);
