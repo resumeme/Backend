@@ -2,6 +2,7 @@ package org.devcourse.resumeme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.domain.resume.Resume;
+import org.devcourse.resumeme.domain.resume.ResumeInfo;
 import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.repository.ResumeRepository;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,13 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
 
     public Long create(Resume resume) {
+        Resume saved = resumeRepository.save(resume);
+
+        return saved.getId();
+    }
+
+    public Long update(Resume resume, ResumeInfo resumeInfo) {
+        resume.updateResumeInfo(resumeInfo);
         Resume saved = resumeRepository.save(resume);
 
         return saved.getId();
