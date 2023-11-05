@@ -2,6 +2,7 @@ package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.controller.dto.CommentCreateRequest;
+import org.devcourse.resumeme.domain.comment.Comment;
 import org.devcourse.resumeme.domain.event.Event;
 import org.devcourse.resumeme.domain.event.EventInfo;
 import org.devcourse.resumeme.domain.event.EventTimeInfo;
@@ -10,7 +11,6 @@ import org.devcourse.resumeme.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.domain.mentor.Mentor;
 import org.devcourse.resumeme.domain.resume.BlockType;
 import org.devcourse.resumeme.domain.resume.Resume;
-import org.devcourse.resumeme.domain.comment.Comment;
 import org.devcourse.resumeme.domain.user.Provider;
 import org.devcourse.resumeme.domain.user.Role;
 import org.devcourse.resumeme.support.WithMockCustomUser;
@@ -37,6 +37,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -144,9 +145,10 @@ class CommentControllerTest extends ControllerUnitTest {
                                         parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디")
                                 ),
                                 responseFields(
-                                        fieldWithPath("[].id").type(NUMBER).description("리뷰 아이디"),
-                                        fieldWithPath("[].content").type(STRING).description("리뷰 내용"),
-                                        fieldWithPath("[].blockType").type(STRING).description(generateLinkCode(BLOCK_TYPE))
+                                        subsectionWithPath("*").description(generateLinkCode(BLOCK_TYPE)),
+                                        fieldWithPath("*.id").type(NUMBER).description("리뷰 아이디"),
+                                        fieldWithPath("*.content").type(STRING).description("리뷰 내용"),
+                                        fieldWithPath("*.blockType").type(STRING).description(generateLinkCode(BLOCK_TYPE))
                                 )
 
                         )
