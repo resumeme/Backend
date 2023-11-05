@@ -6,8 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -16,16 +14,12 @@ import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.common.util.Validator;
-import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -81,8 +75,6 @@ public class Career {
     private void validateCareer(String companyName, String position, List<String> skills, List<Duty> duties, boolean isCurrentlyEmployed, LocalDate careerStartDate, LocalDate endDate) {
         Validator.check(companyName == null, ExceptionCode.NO_EMPTY_VALUE);
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(skills.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(duties.isEmpty(), ExceptionCode.NO_EMPTY_VALUE);
     }
 
     public boolean isCurrentlyEmployed() {

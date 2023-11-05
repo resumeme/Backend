@@ -52,15 +52,6 @@ public class CareerTest {
     }
 
     @Test
-    void 기술_스택_및_업무_내용_없을_시_예외_발생() {
-        LocalDate careerStartDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().plusYears(2);
-
-        assertThatThrownBy(() -> new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
-                .isInstanceOf(CustomException.class);
-    }
-
-    @Test
     void 종료일이_시작일_보다_먼저일_시_예외_발생() {
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().minusYears(1);
