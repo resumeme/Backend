@@ -31,11 +31,6 @@ public class CareerPeriod {
     }
 
     private void validateCareerPeriod(LocalDate careerStartDate, LocalDate endDate, boolean isCurrentlyEmployed) {
-        check(careerStartDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        if (isCurrentlyEmployed) {
-            check(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        }
-
         if (careerStartDate.isAfter(endDate)) {
             throw new CustomException("TIME_ERROR", "시작일은 종료일보다 먼저여야 합니다.");
         }
