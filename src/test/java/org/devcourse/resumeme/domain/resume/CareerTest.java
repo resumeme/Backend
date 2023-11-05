@@ -62,6 +62,7 @@ public class CareerTest {
 
     @Test
     void 재직중일시_종료일_필수_입력() {
+        isCurrentlyEmployed = false;
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = null;
         String careerContent = "상세 업무";

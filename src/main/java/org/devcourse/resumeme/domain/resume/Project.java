@@ -46,7 +46,7 @@ public class Project {
 
     @Getter
     @ElementCollection
-    @CollectionTable(name = "career_skills")
+    @CollectionTable(name = "project_skills")
     @Column(name = "skill")
     private List<String> skills;
 
