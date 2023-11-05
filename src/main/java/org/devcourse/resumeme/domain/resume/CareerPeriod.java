@@ -32,7 +32,7 @@ public class CareerPeriod {
 
     private void validateCareerPeriod(LocalDate careerStartDate, LocalDate endDate, boolean isCurrentlyEmployed) {
         check(careerStartDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        if (isCurrentlyEmployed) {
+        if (!isCurrentlyEmployed) {
             check(endDate == null, ExceptionCode.NO_EMPTY_VALUE);
         }
         if (careerStartDate.isAfter(endDate)) {

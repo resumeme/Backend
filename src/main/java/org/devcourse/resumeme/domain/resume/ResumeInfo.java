@@ -22,7 +22,7 @@ public class ResumeInfo {
 
     @Getter
     @ElementCollection
-    @CollectionTable(name = "career_skills")
+    @CollectionTable(name = "resume_skills")
     @Column(name = "skill")
     private List<String> skills;
 
