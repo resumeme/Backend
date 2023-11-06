@@ -2,90 +2,90 @@
 
 === 이미 가입된 사용자 로그인
 **Request**
-include::{snippets}/login/alreadyUser/http-request.adoc[]
-include::{snippets}/login/alreadyUser/request-fields.adoc[]
+include::{snippets}/user/login/alreadyUser/http-request.adoc[]
+include::{snippets}/user/login/alreadyUser/request-fields.adoc[]
 
 *Response*
-include::{snippets}/login/alreadyUser/http-response.adoc[]
-include::{snippets}/login/alreadyUser/response-headers.adoc[]
+include::{snippets}/user/login/alreadyUser/http-response.adoc[]
+include::{snippets}/user/login/alreadyUser/response-headers.adoc[]
 
 === 새로운 사용자 로그인
 **Request**
-include::{snippets}/login/newUser/http-request.adoc[]
-include::{snippets}/login/newUser/request-fields.adoc[]
+include::{snippets}/user/login/newUser/http-request.adoc[]
+include::{snippets}/user/login/newUser/request-fields.adoc[]
 
 *Response*
-include::{snippets}/login/newUser/http-response.adoc[]
-include::{snippets}/login/newUser/response-headers.adoc[]
+include::{snippets}/user/login/newUser/http-response.adoc[]
+include::{snippets}/user/login/newUser/response-headers.adoc[]
 
 === 멘토 가입
 
 *Request*
-include::{snippets}/mentor/create/http-request.adoc[]
-include::{snippets}/mentor/create/request-fields.adoc[]
+include::{snippets}/user/mentor/create/http-request.adoc[]
+include::{snippets}/user/mentor/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/mentor/create/http-response.adoc[]
-include::{snippets}/mentor/create/response-fields.adoc[]
+include::{snippets}/user/mentor/create/http-response.adoc[]
+include::{snippets}/user/mentor/create/response-headers.adoc[]
 
 === 멘티 가입
 *Request*
-include::{snippets}/mentee/create/http-request.adoc[]
-include::{snippets}/mentee/create/request-fields.adoc[]
+include::{snippets}/user/mentee/create/http-request.adoc[]
+include::{snippets}/user/mentee/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/mentee/create/http-response.adoc[]
-include::{snippets}/mentee/create/response-fields.adoc[]
+include::{snippets}/user/mentee/create/http-response.adoc[]
+include::{snippets}/user/mentee/create/response-headers.adoc[]
 
 === 멘토 정보 조회
 *Request*
-include::{snippets}/mentor/find/http-request.adoc[]
-include::{snippets}/mentor/find/path-parameters.adoc[]
+include::{snippets}/user/mentor/find/http-request.adoc[]
+include::{snippets}/user/mentor/find/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/mentor/find/http-response.adoc[]
-include::{snippets}/mentor/find/response-fields.adoc[]
+include::{snippets}/user/mentor/find/http-response.adoc[]
+include::{snippets}/user/mentor/find/response-fields.adoc[]
 
 === 멘티 정보 조회
 *Request*
-include::{snippets}/mentee/find/http-request.adoc[]
-include::{snippets}/mentee/find/path-parameters.adoc[]
+include::{snippets}/user/mentee/find/http-request.adoc[]
+include::{snippets}/user/mentee/find/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/mentee/find/http-response.adoc[]
-include::{snippets}/mentee/find/response-fields.adoc[]
+include::{snippets}/user/mentee/find/http-response.adoc[]
+include::{snippets}/user/mentee/find/response-fields.adoc[]
 
 === 이력서 교육사항 조회
 *Request*
-include::{snippets}/training/find/http-request.adoc[]
+include::{snippets}/resume/training/find/http-request.adoc[]
 
 *Response*
-include::{snippets}/training/find/http-response.adoc[]
-include::{snippets}/training/find/response-fields.adoc[]
+include::{snippets}/resume/training/find/http-response.adoc[]
+include::{snippets}/resume/training/find/response-fields.adoc[]
 
 === 이력서 수상 및 자격증 조회
 *Request*
-include::{snippets}/certification/find/http-request.adoc[]
+include::{snippets}/resume/certification/find/http-request.adoc[]
 
 *Response*
-include::{snippets}/certification/find/http-response.adoc[]
-include::{snippets}/certification/find/response-fields.adoc[]
+include::{snippets}/resume/certification/find/http-response.adoc[]
+include::{snippets}/resume/certification/find/response-fields.adoc[]
 
 === 이력서 업무경험 조회
 *Request*
-include::{snippets}/career/find/http-request.adoc[]
+include::{snippets}/resume/career/find/http-request.adoc[]
 
 *Response*
-include::{snippets}/career/find/http-response.adoc[]
-include::{snippets}/career/find/response-fields.adoc[]
+include::{snippets}/resume/career/find/http-response.adoc[]
+include::{snippets}/resume/career/find/response-fields.adoc[]
 
 === 이력서 프로젝트 조회
 *Request*
-include::{snippets}/project/find/http-request.adoc[]
+include::{snippets}/resume/project/find/http-request.adoc[]
 
 *Response*
-include::{snippets}/project/find/http-response.adoc[]
-include::{snippets}/project/find/response-fields.adoc[]
+include::{snippets}/resume/project/find/http-response.adoc[]
+include::{snippets}/resume/project/find/response-fields.adoc[]
 
 === 이벤트 전체 조회
 *Request*

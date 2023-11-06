@@ -2,38 +2,38 @@ package org.devcourse.resumeme.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.devcourse.resumeme.business.comment.controller.CommentController;
+import org.devcourse.resumeme.business.comment.service.CommentService;
+import org.devcourse.resumeme.business.event.controller.EventController;
+import org.devcourse.resumeme.business.event.service.EventService;
+import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
+import org.devcourse.resumeme.business.result.service.ResultService;
+import org.devcourse.resumeme.business.resume.controller.ActivityController;
+import org.devcourse.resumeme.business.resume.controller.CareerController;
+import org.devcourse.resumeme.business.resume.controller.CertificationController;
+import org.devcourse.resumeme.business.resume.controller.ForeignLanguageController;
+import org.devcourse.resumeme.business.resume.controller.ProjectController;
+import org.devcourse.resumeme.business.resume.controller.ResumeController;
+import org.devcourse.resumeme.business.resume.controller.TrainingController;
+import org.devcourse.resumeme.business.resume.service.ActivityService;
+import org.devcourse.resumeme.business.resume.service.CareerService;
+import org.devcourse.resumeme.business.resume.service.CertificationService;
+import org.devcourse.resumeme.business.resume.service.ForeignLanguageService;
+import org.devcourse.resumeme.business.resume.service.ProjectService;
+import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.resume.service.TrainingService;
+import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
+import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
+import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
+import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
+import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
+import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.controller.EnumController;
-import org.devcourse.resumeme.controller.ActivityController;
-import org.devcourse.resumeme.controller.CareerController;
-import org.devcourse.resumeme.controller.CertificationController;
-import org.devcourse.resumeme.controller.EventController;
-import org.devcourse.resumeme.controller.ForeignLanguageController;
-import org.devcourse.resumeme.controller.MenteeController;
-import org.devcourse.resumeme.controller.MentorApplicationController;
-import org.devcourse.resumeme.controller.MentorController;
-import org.devcourse.resumeme.controller.ProjectController;
-import org.devcourse.resumeme.controller.ResultNoticeController;
-import org.devcourse.resumeme.controller.ResumeController;
-import org.devcourse.resumeme.controller.CommentController;
-import org.devcourse.resumeme.controller.TrainingController;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
-import org.devcourse.resumeme.global.auth.token.JwtService;
-import org.devcourse.resumeme.service.ActivityService;
-import org.devcourse.resumeme.service.CareerService;
-import org.devcourse.resumeme.service.CertificationService;
-import org.devcourse.resumeme.service.EventService;
-import org.devcourse.resumeme.service.ForeignLanguageService;
-import org.devcourse.resumeme.service.MenteeService;
-import org.devcourse.resumeme.service.MentorApplicationService;
-import org.devcourse.resumeme.service.MentorService;
-import org.devcourse.resumeme.service.OAuth2InfoRedisService;
-import org.devcourse.resumeme.service.ProjectService;
-import org.devcourse.resumeme.service.ResultService;
-import org.devcourse.resumeme.service.ResumeService;
-import org.devcourse.resumeme.service.CommentService;
-import org.devcourse.resumeme.service.TrainingService;
+import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
+import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -69,7 +69,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ForeignLanguageController.class,
         ResultNoticeController.class,
         TrainingController.class
-//        AuthFilterTestController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)

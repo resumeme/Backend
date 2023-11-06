@@ -6,12 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.global.advice.exception.CustomException;
-import org.devcourse.resumeme.global.auth.model.Claims;
-import org.devcourse.resumeme.global.auth.model.JwtUser;
-import org.devcourse.resumeme.global.auth.token.JwtService;
-import org.devcourse.resumeme.service.MenteeService;
-import org.devcourse.resumeme.service.MentorService;
+import org.devcourse.resumeme.global.exception.CustomException;
+import org.devcourse.resumeme.global.auth.model.jwt.Claims;
+import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
+import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
+import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
+import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
-import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
 @Slf4j
 @RequiredArgsConstructor

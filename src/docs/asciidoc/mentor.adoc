@@ -2,12 +2,12 @@
 
 === 멘토 정보 수정
 *Request*
-include::{snippets}/mentor/update/http-request.adoc[]
-include::{snippets}/mentor/update/path-parameters.adoc[]
+include::{snippets}/user/mentor/update/http-request.adoc[]
+include::{snippets}/user/mentor/update/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/mentor/update/http-response.adoc[]
-include::{snippets}/mentor/update/response-fields.adoc[]
+include::{snippets}/user/mentor/update/http-response.adoc[]
+include::{snippets}/user/mentor/update/response-fields.adoc[]
 
 === 첨삭 이벤트 생성
 

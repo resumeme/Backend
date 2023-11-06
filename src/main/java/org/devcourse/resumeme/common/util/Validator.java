@@ -1,12 +1,12 @@
 package org.devcourse.resumeme.common.util;
 
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.global.advice.exception.CustomException;
-import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
+import org.devcourse.resumeme.global.exception.CustomException;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.util.StringUtils;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class Validator {

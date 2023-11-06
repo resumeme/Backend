@@ -2,12 +2,12 @@ package org.devcourse.resumeme.common.controller;
 
 import org.devcourse.resumeme.common.domain.DocsEnumType;
 import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.domain.event.EventStatus;
-import org.devcourse.resumeme.domain.event.Progress;
-import org.devcourse.resumeme.domain.resume.BlockType;
-import org.devcourse.resumeme.domain.user.Provider;
-import org.devcourse.resumeme.global.advice.exception.ExceptionCode;
-import org.devcourse.resumeme.domain.user.Role;
+import org.devcourse.resumeme.business.event.domain.EventStatus;
+import org.devcourse.resumeme.business.event.domain.Progress;
+import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
