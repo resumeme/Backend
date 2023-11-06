@@ -11,15 +11,18 @@ import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -92,5 +95,37 @@ class ActivityControllerTest extends ControllerUnitTest {
                         )
                 );
     }
+
+    @Test
+    @WithMockUser
+    void 활동_조회에_성공한다() throws Exception {
+        Long resumeId = 1L;
+        Activity activity = new Activity("Project A", LocalDate.now().minusMonths(6), LocalDate.now(), true, "https://projectalink.com", "Project A");
+        Resume savedResume = resume.builder()
+                .activity(List.of(activity))
+                .build();
+
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+
+        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/activities"));
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("activity/find",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].activityName").type(STRING).description("활동명"),
+                                        fieldWithPath("[].startDate").type(STRING).description("시작일"),
+                                        fieldWithPath("[].endDate").type(STRING).description("종료일"),
+                                        fieldWithPath("[].inProgress").type(BOOLEAN).description("진행 중 여부"),
+                                        fieldWithPath("[].link").type(STRING).description("링크"),
+                                        fieldWithPath("[].description").type(STRING).description("설명")
+                                )
+                        )
+                );
+    }
+
 }
 

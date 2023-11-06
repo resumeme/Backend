@@ -24,14 +24,18 @@ public class ForeignLanguage {
     @Column(name = "foreign_language_id")
     private Long id;
 
+    @Getter
     @ManyToOne
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
+    @Getter
     private String language;
 
+    @Getter
     private String examName;
 
+    @Getter
     private String scoreOrGrade;
 
     public ForeignLanguage(String language, String examName, String scoreOrGrade, Resume resume) {

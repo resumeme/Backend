@@ -16,12 +16,12 @@ import java.time.LocalDate;
 
 import static org.devcourse.resumeme.common.util.Validator.check;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Activity {
 
     @Id
-    @Getter
     @GeneratedValue
     @Column(name = "activity_id")
     private Long id;
