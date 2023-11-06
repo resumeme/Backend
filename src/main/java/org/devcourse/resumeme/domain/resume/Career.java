@@ -43,7 +43,7 @@ public class Career {
     private Resume resume;
 
     @Getter
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "career_skills")
     @Column(name = "skill")
     private List<String> skills;
