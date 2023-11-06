@@ -2,11 +2,13 @@ package org.devcourse.resumeme.common.util;
 
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
+import org.springframework.restdocs.snippet.Attributes;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.snippet.Attributes.key;
 
 public interface ApiDocumentUtils {
 
@@ -21,6 +23,10 @@ public interface ApiDocumentUtils {
 
     static OperationResponsePreprocessor getDocumentResponse() {
         return preprocessResponse(prettyPrint());
+    }
+
+    static Attributes.Attribute constraints(String constraints) {
+        return key("constraints").value(constraints);
     }
 
 }

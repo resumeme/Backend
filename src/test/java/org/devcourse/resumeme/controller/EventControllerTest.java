@@ -37,6 +37,7 @@ import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.PROGRES
 import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.domain.Position.BACK;
 import static org.devcourse.resumeme.common.domain.Position.FRONT;
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -54,6 +55,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class EventControllerTest extends ControllerUnitTest {
@@ -140,7 +142,7 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("time.now").type(STRING).description("첨삭 이벤트 생성 요청 시간"),
                                         fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간"),
                                         fieldWithPath("time.closeDateTime").type(STRING).description("첨삭 이벤트 신청 마감 시간"),
-                                        fieldWithPath("time.endDate").type(STRING).description("첨삭 종료 시간"),
+                                        fieldWithPath("time.endDate").type(STRING).description("첨삭 종료 시간").optional().attributes(constraints("마감 시간보다 늦어야 함")),
                                         fieldWithPath("positions").type(ARRAY).description(generateLinkCode(POSITION))
                                 ),
                                 responseFields(
