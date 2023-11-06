@@ -36,6 +36,23 @@ include::{snippets}/resume/updateTitle/request-fields.adoc[]
 include::{snippets}/resume/updateTitle/http-response.adoc[]
 include::{snippets}/resume/updateTitle/response-fields.adoc[]
 
+=== 이력서 참고링크 수정
+*Request*
+include::{snippets}/resume/updateLink/http-request.adoc[]
+include::{snippets}/resume/updateLink/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/updateLink/http-response.adoc[]
+include::{snippets}/resume/updateLink/response-fields.adoc[]
+
+=== 이력서 참고링크 조회
+*Request*
+include::{snippets}/resume/findLink/http-request.adoc[]
+
+*Response*
+include::{snippets}/resume/findLink/http-response.adoc[]
+include::{snippets}/resume/findLink/response-fields.adoc[]
+
 === 이력서 교육사항 저장
 *Request*
 include::{snippets}/resume/training/create/http-request.adoc[]

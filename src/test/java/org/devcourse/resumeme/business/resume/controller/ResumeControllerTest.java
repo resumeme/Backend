@@ -1,5 +1,8 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
+import org.devcourse.resumeme.business.resume.domain.LinkType;
+import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
@@ -25,6 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.RequestEntity.patch;
 import static org.springframework.http.RequestEntity.put;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -146,6 +150,66 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("id").description("업데이트된 이력서 아이디")
                                 )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 이력서_참고링크_조회에_성공한다() throws Exception {
+        Long resumeId = 1L;
+        ReferenceLink referenceLink = new ReferenceLink(LinkType.BLOG, "resumeme.tistory.com");
+        Resume savedResume = resume.builder().
+                referenceLink(referenceLink)
+                .build();
+
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+
+        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/link", 1L));
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/findLink",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("linkType").type(STRING).description("링크 유형(깃허브 주소, 블로그 주소, 기타)"),
+                                        fieldWithPath("url").type(STRING).description("링크 URL")
+                                )
+
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 이력서_참고링크_수정에_성공한다() throws Exception {
+        ResumeLinkRequest request = new ResumeLinkRequest("GITHUB", "https://github.com/resumeme");
+        Long resumeId = 1L;
+
+        given(resumeService.getOne(resumeId)).willReturn(resume);
+        given(resumeService.updateReferenceLink(resume, request.toEntity())).willReturn(1L);
+
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}/link", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/updateLink",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("linkType").type(STRING).description("링크 유형(깃허브 주소, 블로그 주소, 기타)"),
+                                        fieldWithPath("url").type(STRING).description("링크 URL")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("업데이트된 이력서 아이디")
+                                )
+
                         )
                 );
     }
