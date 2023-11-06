@@ -3,7 +3,7 @@ package org.devcourse.resumeme.controller.dto;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.resume.Resume;
 
-public record ResumeCreateRequest(
+public record ResumeRequest(
         String title
 ) {
 

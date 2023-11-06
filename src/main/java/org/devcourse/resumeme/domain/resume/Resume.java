@@ -133,4 +133,8 @@ public class Resume extends BaseEntity {
         this.resumeInfo = resumeInfo;
     }
 
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
 }

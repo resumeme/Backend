@@ -2,7 +2,7 @@ package org.devcourse.resumeme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
-import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
+import org.devcourse.resumeme.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.domain.resume.ResumeInfo;
@@ -27,7 +27,7 @@ public class ResumeController {
     private final MenteeService menteeService;
 
     @PostMapping
-    public IdResponse createResume(@AuthenticationPrincipal JwtUser user, @RequestBody ResumeCreateRequest request) {
+    public IdResponse createResume(@AuthenticationPrincipal JwtUser user, @RequestBody ResumeRequest request) {
         Resume resume = request.toEntity(menteeService.getOne(user.id()));
         Long savedId = resumeService.create(resume);
 
@@ -39,7 +39,14 @@ public class ResumeController {
         Resume resume = resumeService.getOne(resumeId);
         ResumeInfo resumeInfo = request.toEntity();
 
-        return new IdResponse(resumeService.update(resume, resumeInfo));
+        return new IdResponse(resumeService.updateResumeInfo(resume, resumeInfo));
+    }
+
+    @PatchMapping("/{resumeId}/title")
+    public IdResponse updateResumeTitle(@PathVariable Long resumeId, @RequestBody ResumeRequest request) {
+        Resume resume = resumeService.getOne(resumeId);
+
+        return new IdResponse(resumeService.updateTitle(resume, request.title()));
     }
 
 }
