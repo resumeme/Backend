@@ -73,7 +73,7 @@ public class Mentor extends BaseEntity {
 
     @Builder
     public Mentor(Long id, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
-        validateInputs(email, provider, imageUrl, requiredInfo, refreshToken, experiencedPositions, careerContent, careerYear, introduce);
+        validateInputs(email, provider, imageUrl, requiredInfo, experiencedPositions, careerContent, careerYear, introduce);
         this.id = id;
         this.email = email;
         this.provider = provider;
@@ -86,13 +86,12 @@ public class Mentor extends BaseEntity {
         this.introduce = introduce;
     }
 
-    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
+    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
         check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
         check(provider == null, NO_EMPTY_VALUE);
         check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
         check(requiredInfo == null, NO_EMPTY_VALUE);
         check(Role.ROLE_MENTEE.equals(requiredInfo.getRole()) || Role.ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
-        check(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
         check(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
         check(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
         check(careerYear < 1 || careerYear > 80, "NUMBER_NOT_ALLOWED", "경력 연차가 올바르지 않습니다.");
