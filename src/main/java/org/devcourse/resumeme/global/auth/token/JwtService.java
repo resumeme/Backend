@@ -6,12 +6,14 @@ import com.auth0.jwt.interfaces.Claim;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.auth.model.Claims;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtService {
 
@@ -48,11 +50,6 @@ public class JwtService {
                 .sign(Algorithm.HMAC512(SECRET_KEY));
     }
 
-    public void sendAccessToken(HttpServletResponse response, String accessToken) {
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setHeader(ACCESS_TOKEN_NAME, accessToken);
-    }
-
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
         setAccessTokenHeader(response, accessToken);
@@ -79,13 +76,20 @@ public class JwtService {
         response.setHeader(REFRESH_TOKEN_NAME, refreshToken);
     }
 
-    public void validate(String token) {
-        String tokenRefined = token.replace(BEARER, "");
-        JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(tokenRefined);
+    public boolean validate(String token) {
+        try {
+            String tokenRefined = token.replace(BEARER, "");
+            JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(tokenRefined);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Claims extractClaim(String accessToken) {
-        Map<String, Claim> claims = JWT.decode(accessToken).getClaims();
+        String refinedToken = accessToken.replace("Bearer ", "");
+        Map<String, Claim> claims = JWT.decode(refinedToken).getClaims();
 
         Long id = claims.get(ID).asLong();
         String role = claims.get(ROLE).asString();
