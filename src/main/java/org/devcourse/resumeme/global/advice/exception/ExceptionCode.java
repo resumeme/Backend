@@ -26,7 +26,8 @@ public enum ExceptionCode implements DocsEnumType {
     TIME_ERROR("시간 순서를 다시 확인해주세요"),
     CAN_NOT_RESERVATION("현재 시간보다 이전 시간으로는 예약할 수 없습니다"),
     DUPLICATED_EVENT_OPEN("이미 오픈된 이벤트가 있습니다"),
-    SERVER_ERROR("서버 에러입니다")
+    SERVER_ERROR("서버 에러입니다"),
+    INVALID_ACCESS_TOKEN("유효하지 않은 액세스 토큰입니다")
     ;
 
     private final String message;

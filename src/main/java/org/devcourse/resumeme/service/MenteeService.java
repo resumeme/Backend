@@ -29,6 +29,12 @@ public class MenteeService {
                 .orElseThrow(() -> new CustomException(MENTEE_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
+    public Mentee getOneSimple(Long menteeId) {
+        return menteeRepository.findById(menteeId)
+                .orElseThrow(() -> new CustomException(MENTEE_NOT_FOUND));
+    }
+
     public void updateRefreshToken(Long id, String refreshToken) {
         Mentee findMentee = getOne(id);
         findMentee.updateRefreshToken(refreshToken);

@@ -27,6 +27,8 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -39,6 +41,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MentorControllerTest extends ControllerUnitTest {
@@ -90,6 +93,8 @@ class MentorControllerTest extends ControllerUnitTest {
         // then
         result
                 .andExpect(status().isOk())
+                .andExpect(header().exists("access"))
+                .andExpect(header().exists("refresh"))
                 .andDo(
                         document("mentor/create",
                                 getDocumentRequest(),
@@ -105,9 +110,9 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
                                 ),
-                                responseFields(
-                                        fieldWithPath("access").type(MAP).description("액세스 토큰"),
-                                        fieldWithPath("refresh").type(MAP).description("리프레시 토큰")
+                                responseHeaders(
+                                        headerWithName("access").description("액세스 토큰"),
+                                        headerWithName("refresh").description("리프레시 토큰")
                                 )
                         )
                 );
