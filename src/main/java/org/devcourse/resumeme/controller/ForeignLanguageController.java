@@ -3,15 +3,19 @@ package org.devcourse.resumeme.controller;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.controller.dto.ForeignLanguageRequestDto;
+import org.devcourse.resumeme.controller.dto.ForeignLanguageResponse;
 import org.devcourse.resumeme.domain.resume.ForeignLanguage;
 import org.devcourse.resumeme.domain.resume.Resume;
 import org.devcourse.resumeme.service.ForeignLanguageService;
 import org.devcourse.resumeme.service.ResumeService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +33,16 @@ public class ForeignLanguageController {
 
         return new IdResponse(foreignLanguageService.create(foreignLanguage));
     }
+
+    @GetMapping("/{resumeId}/foreign-languages")
+    public List<ForeignLanguageResponse> getForeignLanguages(@PathVariable Long resumeId) {
+        Resume resume = resumeService.getOne(resumeId);
+        List<ForeignLanguage> languages = resume.getForeignLanguage();
+
+        return languages.stream()
+                .map(ForeignLanguageResponse::new)
+                .toList();
+    }
+
 }
 

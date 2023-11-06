@@ -11,14 +11,17 @@ import org.devcourse.resumeme.domain.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -81,5 +84,34 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
                         )
                 );
     }
+
+    @Test
+    @WithMockUser
+    void 외국어_조회에_성공한다() throws Exception {
+        Long resumeId = 1L;
+        ForeignLanguage foreignLanguage = new ForeignLanguage("영어", "토익", "990", resume);
+        Resume savedResume = resume.builder()
+                .foreignLanguage(List.of(foreignLanguage))
+                .build();
+
+        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+
+        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/foreign-languages"));
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("foreignLanguage/find",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].language").type(STRING).description("언어"),
+                                        fieldWithPath("[].examName").type(STRING).description("시험명"),
+                                        fieldWithPath("[].scoreOrGrade").type(STRING).description("점수 또는 학점")
+                                )
+                        )
+                );
+    }
+
 }
 

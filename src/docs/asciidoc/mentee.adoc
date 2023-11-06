@@ -63,6 +63,14 @@ include::{snippets}/foreignLanguage/create/request-fields.adoc[]
 include::{snippets}/foreignLanguage/create/http-response.adoc[]
 include::{snippets}/foreignLanguage/create/response-fields.adoc[]
 
+=== 이력서 어학성적 조회
+*Request*
+include::{snippets}/foreignLanguage/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/foreignLanguage/find/http-response.adoc[]
+include::{snippets}/foreignLanguage/find/response-fields.adoc[]
+
 === 이력서 프로젝트 저장
 *Request*
 include::{snippets}/project/create/http-request.adoc[]
@@ -80,6 +88,15 @@ include::{snippets}/activity/create/request-fields.adoc[]
 *Response*
 include::{snippets}/activity/create/http-response.adoc[]
 include::{snippets}/activity/create/response-fields.adoc[]
+
+=== 이력서 활동사항 조회
+*Request*
+include::{snippets}/activity/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/activity/find/http-response.adoc[]
+include::{snippets}/activity/find/response-fields.adoc[]
+
 
 === 이력서 첨삭 코멘트 조회
 *Request*
