@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.controller;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.controller.dto.ResumeCreateRequest;
+import org.devcourse.resumeme.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.domain.mentee.Mentee;
 import org.devcourse.resumeme.domain.mentee.RequiredInfo;
@@ -59,7 +59,7 @@ public class ResumeControllerTest extends ControllerUnitTest {
     @Test
     @WithMockCustomUser
     void 이력서_생성에_성공한다() throws Exception {
-        ResumeCreateRequest request = new ResumeCreateRequest("title");
+        ResumeRequest request = new ResumeRequest("title");
         Resume resume = request.toEntity(mentee);
 
         given(menteeService.getOne(any())).willReturn(mentee);
@@ -94,7 +94,7 @@ public class ResumeControllerTest extends ControllerUnitTest {
         Long resumeId = 1L;
 
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(resumeService.update(resume, request.toEntity())).willReturn(1L);
+        given(resumeService.updateResumeInfo(resume, request.toEntity())).willReturn(1L);
 
         ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -111,6 +111,37 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("position").description("포지션"),
                                         fieldWithPath("skills").description("스킬 목록"),
                                         fieldWithPath("introduce").description("자기 소개")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("업데이트된 이력서 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 이력서_제목_수정에_성공한다() throws Exception {
+        ResumeRequest request = new ResumeRequest("new title");
+        Long resumeId = 1L;
+
+        given(resumeService.getOne(resumeId)).willReturn(resume);
+        given(resumeService.updateTitle(resume, request.title())).willReturn(1L);
+
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}/title", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/updateTitle",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("title").type(STRING).description("이력서 제목")
+
                                 ),
                                 responseFields(
                                         fieldWithPath("id").description("업데이트된 이력서 아이디")

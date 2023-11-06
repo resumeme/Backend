@@ -25,8 +25,15 @@ public class ResumeService {
         return saved.getId();
     }
 
-    public Long update(Resume resume, ResumeInfo resumeInfo) {
+    public Long updateResumeInfo(Resume resume, ResumeInfo resumeInfo) {
         resume.updateResumeInfo(resumeInfo);
+        Resume saved = resumeRepository.save(resume);
+
+        return saved.getId();
+    }
+
+    public Long updateTitle(Resume resume, String title) {
+        resume.updateTitle(title);
         Resume saved = resumeRepository.save(resume);
 
         return saved.getId();
