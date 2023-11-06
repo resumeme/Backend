@@ -53,6 +53,7 @@ public class CareerTest {
 
     @Test
     void 종료일이_시작일_보다_먼저일_시_예외_발생() {
+        isCurrentlyEmployed = false;
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().minusYears(1);
 
