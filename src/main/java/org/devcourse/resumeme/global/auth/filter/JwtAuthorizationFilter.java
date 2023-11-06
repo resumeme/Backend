@@ -1,27 +1,29 @@
 package org.devcourse.resumeme.global.auth.filter;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.global.advice.exception.CustomException;
 import org.devcourse.resumeme.global.auth.model.Claims;
 import org.devcourse.resumeme.global.auth.model.JwtUser;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.MentorService;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.devcourse.resumeme.domain.user.Role.ROLE_MENTEE;
+import static org.devcourse.resumeme.global.advice.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,41 +37,42 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> accessToken = jwtService.extractAccessToken(request);
-        log.info("accessToken from request = {}", accessToken);
-
-        try {
-            accessToken.ifPresent(token -> {
-                jwtService.validate(token);
-                saveAuthentication(token);
-            });
-
-        } catch (TokenExpiredException expiredException) {
-            jwtService.extractRefreshToken(request).ifPresent(refreshToken -> {
-                try {
-                    jwtService.validate(refreshToken);
-                    Claims claims = jwtService.extractClaim(accessToken.get());
-
-                    if (ROLE_MENTEE.toString().equals(claims.role())) {
-                        if (jwtService.compareTokens(menteeService.getOne(claims.id()).getRefreshToken(), refreshToken)) {
-                            Map<String, String> tokens = jwtService.createAndSendNewTokens(claims, response);
-                            menteeService.updateRefreshToken(claims.id(), tokens.get("refresh"));
-                        }
-                    } else {
-                        if (jwtService.compareTokens(mentorService.getOne(claims.id()).getRefreshToken(), refreshToken)) {
-                            Map<String, String> tokens = jwtService.createAndSendNewTokens(claims, response);
-                            mentorService.updateRefreshToken(claims.id(), tokens.get("refresh"));
-                        }
-                    }
-                } catch (Exception e) {
-                    log.debug("invalid access token");
-                }
-            });
-        } catch (Exception e) {
-            log.debug("invalid access token");
-        }
+        jwtService.extractAccessToken(request)
+                .filter(jwtService::validate)
+                .ifPresentOrElse(this::saveAuthentication, () -> checkRefreshToken(request, response));
 
         filterChain.doFilter(request, response);
+    }
+
+    private void checkRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+        Claims claims;
+        Optional<String> accessToken = jwtService.extractAccessToken(request);
+        if (accessToken.isEmpty()) {
+            return;
+        } else {
+            claims = jwtService.extractClaim(accessToken.get());
+        }
+
+        jwtService.extractRefreshToken(request).ifPresentOrElse(token -> {
+                    if (jwtService.validate(token) && jwtService.compareTokens(findSavedTokenWithClaims(claims), token)) {
+                        String issuedAccessToken = jwtService.createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
+                        saveAuthentication(issuedAccessToken);
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        jwtService.setAccessTokenHeader(response, issuedAccessToken);
+                    }
+                }, () -> {
+                    throw new CustomException(INVALID_ACCESS_TOKEN);
+                }
+        );
+    }
+
+    private String findSavedTokenWithClaims(Claims claims) {
+        Long id = claims.id();
+        if (claims.role().equals(ROLE_MENTEE.name())) {
+            return menteeService.getOneSimple(id).getRefreshToken();
+        }
+
+        return mentorService.getOneSimple(id).getRefreshToken();
     }
 
     private void saveAuthentication(String accessToken) {
