@@ -27,6 +27,8 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -107,6 +109,10 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
+                                ),
+                                responseHeaders(
+                                        headerWithName("access").description("액세스 토큰"),
+                                        headerWithName("refresh").description("리프레시 토큰")
                                 )
                         )
                 );

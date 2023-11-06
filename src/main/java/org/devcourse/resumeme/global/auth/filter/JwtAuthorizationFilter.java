@@ -49,9 +49,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         Optional<String> accessToken = jwtService.extractAccessToken(request);
         if (accessToken.isEmpty()) {
             return;
-        } else {
-            claims = jwtService.extractClaim(accessToken.get());
         }
+        claims = jwtService.extractClaim(accessToken.get());
 
         jwtService.extractRefreshToken(request).ifPresentOrElse(token -> {
                     if (jwtService.validate(token) && jwtService.compareTokens(findSavedTokenWithClaims(claims), token)) {

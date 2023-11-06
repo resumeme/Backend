@@ -24,6 +24,8 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -53,7 +55,7 @@ class MenteeControllerTest extends ControllerUnitTest {
     void setUp() {
         requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
-        oAuth2TempInfo = new OAuth2TempInfo(null,  "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
+        oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
         mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo, "refreshTokenRecentlyIssued");
     }
 
@@ -89,7 +91,6 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("mentee/create",
                                 getDocumentRequest(),
-                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
                                         fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)"),
@@ -99,19 +100,18 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
+                                ),
+                                responseHeaders(
+                                        headerWithName("access").description("액세스 토큰"),
+                                        headerWithName("refresh").description("리프레시 토큰")
                                 )
-//                                ,
-//                                responseFields(
-//                                        fieldWithPath("access").type(MAP).description("액세스 토큰"),
-//                                        fieldWithPath("refresh").type(MAP).description("리프레시 토큰")
-//                                )
                         )
                 );
     }
 
     @Test
     @WithMockCustomUser
-    void 멘티_정보_조회에_성공한다 () throws Exception {
+    void 멘티_정보_조회에_성공한다() throws Exception {
         // given
         Long menteeId = 1L;
 
