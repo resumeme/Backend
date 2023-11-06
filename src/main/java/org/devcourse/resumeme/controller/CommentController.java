@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,13 +39,15 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<CommentResponse> getAllOwnReviews(@PathVariable Long eventId, @PathVariable Long resumeId) {
+    public Map<String, CommentResponse> getAllOwnReviews(@PathVariable Long eventId, @PathVariable Long resumeId) {
         Event event = eventService.getOne(eventId);
         event.checkAppliedResume(resumeId);
 
         return commentService.getAllWithResumeId(resumeId).stream()
                 .map(CommentResponse::new)
-                .toList();
+                .toList()
+                .stream()
+                .collect(Collectors.toMap(CommentResponse::blockType, commentResponse -> commentResponse));
     }
 
 }
