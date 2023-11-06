@@ -12,6 +12,7 @@ import org.devcourse.resumeme.global.auth.model.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.token.JwtService;
 import org.devcourse.resumeme.service.MenteeService;
 import org.devcourse.resumeme.service.OAuth2InfoRedisService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -35,7 +34,7 @@ public class MenteeController {
     private final OAuth2InfoRedisService oAuth2InfoRedisService;
 
     @PostMapping
-    public Map<String, String> register(@RequestBody MenteeRegisterInfoRequest registerInfoRequest) {
+    public ResponseEntity<Void> register(@RequestBody MenteeRegisterInfoRequest registerInfoRequest) {
         log.debug("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
         OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisService.getOne(registerInfoRequest.cacheKey());
 
@@ -45,7 +44,10 @@ public class MenteeController {
         String accessToken = jwtService.createAccessToken(Claims.of(savedMentee));
         oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
-        return Map.of("access", accessToken, "refresh", refreshToken);
+        return ResponseEntity.status(200)
+                .header("access", accessToken)
+                .header("refresh", refreshToken)
+                .build();
     }
 
     @PatchMapping("/{menteeId}")
