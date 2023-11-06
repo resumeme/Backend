@@ -35,6 +35,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -83,6 +84,8 @@ class MenteeControllerTest extends ControllerUnitTest {
         // then
         result
                 .andExpect(status().isOk())
+                .andExpect(header().exists("access"))
+                .andExpect(header().exists("refresh"))
                 .andDo(
                         document("mentee/create",
                                 getDocumentRequest(),
@@ -96,11 +99,12 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
-                                ),
-                                responseFields(
-                                        fieldWithPath("access").type(MAP).description("액세스 토큰"),
-                                        fieldWithPath("refresh").type(MAP).description("리프레시 토큰")
                                 )
+//                                ,
+//                                responseFields(
+//                                        fieldWithPath("access").type(MAP).description("액세스 토큰"),
+//                                        fieldWithPath("refresh").type(MAP).description("리프레시 토큰")
+//                                )
                         )
                 );
     }

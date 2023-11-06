@@ -39,6 +39,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MentorControllerTest extends ControllerUnitTest {
@@ -90,6 +91,8 @@ class MentorControllerTest extends ControllerUnitTest {
         // then
         result
                 .andExpect(status().isOk())
+                .andExpect(header().exists("access"))
+                .andExpect(header().exists("refresh"))
                 .andDo(
                         document("mentor/create",
                                 getDocumentRequest(),
@@ -104,10 +107,6 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
-                                ),
-                                responseFields(
-                                        fieldWithPath("access").type(MAP).description("액세스 토큰"),
-                                        fieldWithPath("refresh").type(MAP).description("리프레시 토큰")
                                 )
                         )
                 );
