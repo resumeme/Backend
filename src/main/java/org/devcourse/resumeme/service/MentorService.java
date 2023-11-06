@@ -26,6 +26,12 @@ public class MentorService {
                 .orElseThrow(() -> new CustomException(MENTOR_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
+    public Mentor getOneSimple(Long mentorId) {
+        return mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new CustomException(MENTOR_NOT_FOUND));
+    }
+
     public Mentor create(Mentor mentor) {
         Mentor savedMentor = mentorRepository.save(mentor);
         mentorApplicationEventPublisher.publishMentorApplicationEvent(savedMentor);
