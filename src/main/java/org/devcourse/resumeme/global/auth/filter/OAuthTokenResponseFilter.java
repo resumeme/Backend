@@ -3,7 +3,7 @@ package org.devcourse.resumeme.global.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.devcourse.resumeme.global.auth.OAuth2CustomUser;
+import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;

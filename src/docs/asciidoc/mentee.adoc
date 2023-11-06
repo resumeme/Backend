@@ -2,12 +2,12 @@
 
 === 멘티 정보 수정
 *Request*
-include::{snippets}/mentee/update/http-request.adoc[]
-include::{snippets}/mentee/update/path-parameters.adoc[]
+include::{snippets}/user/mentee/update/http-request.adoc[]
+include::{snippets}/user/mentee/update/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/mentee/update/http-response.adoc[]
-include::{snippets}/mentee/update/response-fields.adoc[]
+include::{snippets}/user/mentee/update/http-response.adoc[]
+include::{snippets}/user/mentee/update/response-fields.adoc[]
 
 === 이력서 작성
 *Request*
@@ -38,73 +38,73 @@ include::{snippets}/resume/updateTitle/response-fields.adoc[]
 
 === 이력서 교육사항 저장
 *Request*
-include::{snippets}/training/create/http-request.adoc[]
-include::{snippets}/training/create/request-fields.adoc[]
+include::{snippets}/resume/training/create/http-request.adoc[]
+include::{snippets}/resume/training/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/training/create/http-response.adoc[]
-include::{snippets}/training/create/response-fields.adoc[]
+include::{snippets}/resume/training/create/http-response.adoc[]
+include::{snippets}/resume/training/create/response-fields.adoc[]
 
 === 이력서 수상 및 자격증 저장
 *Request*
-include::{snippets}/certification/create/http-request.adoc[]
-include::{snippets}/certification/create/request-fields.adoc[]
+include::{snippets}/resume/certification/create/http-request.adoc[]
+include::{snippets}/resume/certification/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/certification/create/http-response.adoc[]
-include::{snippets}/certification/create/response-fields.adoc[]
+include::{snippets}/resume/certification/create/http-response.adoc[]
+include::{snippets}/resume/certification/create/response-fields.adoc[]
 
 === 이력서 업무경험 저장
 *Request*
-include::{snippets}/career/create/http-request.adoc[]
-include::{snippets}/career/create/request-fields.adoc[]
+include::{snippets}/resume/career/create/http-request.adoc[]
+include::{snippets}/resume/career/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/career/create/http-response.adoc[]
-include::{snippets}/career/create/response-fields.adoc[]
+include::{snippets}/resume/career/create/http-response.adoc[]
+include::{snippets}/resume/career/create/response-fields.adoc[]
 
 === 이력서 어학성적 저장
 *Request*
-include::{snippets}/foreignLanguage/create/http-request.adoc[]
-include::{snippets}/foreignLanguage/create/request-fields.adoc[]
+include::{snippets}/resume/foreignLanguage/create/http-request.adoc[]
+include::{snippets}/resume/foreignLanguage/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/foreignLanguage/create/http-response.adoc[]
-include::{snippets}/foreignLanguage/create/response-fields.adoc[]
+include::{snippets}/resume/foreignLanguage/create/http-response.adoc[]
+include::{snippets}/resume/foreignLanguage/create/response-fields.adoc[]
 
 === 이력서 어학성적 조회
 *Request*
-include::{snippets}/foreignLanguage/find/http-request.adoc[]
+include::{snippets}/resume/foreignLanguage/find/http-request.adoc[]
 
 *Response*
-include::{snippets}/foreignLanguage/find/http-response.adoc[]
-include::{snippets}/foreignLanguage/find/response-fields.adoc[]
+include::{snippets}/resume/foreignLanguage/find/http-response.adoc[]
+include::{snippets}/resume/foreignLanguage/find/response-fields.adoc[]
 
 === 이력서 프로젝트 저장
 *Request*
-include::{snippets}/project/create/http-request.adoc[]
-include::{snippets}/project/create/request-fields.adoc[]
+include::{snippets}/resume/project/create/http-request.adoc[]
+include::{snippets}/resume/project/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/project/create/http-response.adoc[]
-include::{snippets}/project/create/response-fields.adoc[]
+include::{snippets}/resume/project/create/http-response.adoc[]
+include::{snippets}/resume/project/create/response-fields.adoc[]
 
 === 이력서 활동사항 저장
 *Request*
-include::{snippets}/activity/create/http-request.adoc[]
-include::{snippets}/activity/create/request-fields.adoc[]
+include::{snippets}/resume/activity/create/http-request.adoc[]
+include::{snippets}/resume/activity/create/request-fields.adoc[]
 
 *Response*
-include::{snippets}/activity/create/http-response.adoc[]
-include::{snippets}/activity/create/response-fields.adoc[]
+include::{snippets}/resume/activity/create/http-response.adoc[]
+include::{snippets}/resume/activity/create/response-fields.adoc[]
 
 === 이력서 활동사항 조회
 *Request*
-include::{snippets}/activity/find/http-request.adoc[]
+include::{snippets}/resume/activity/find/http-request.adoc[]
 
 *Response*
-include::{snippets}/activity/find/http-response.adoc[]
-include::{snippets}/activity/find/response-fields.adoc[]
+include::{snippets}/resume/activity/find/http-response.adoc[]
+include::{snippets}/resume/activity/find/response-fields.adoc[]
 
 
 === 이력서 첨삭 코멘트 조회

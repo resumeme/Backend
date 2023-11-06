@@ -1,9 +1,9 @@
 package org.devcourse.resumeme.global.auth.filter;
 
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.domain.user.Role;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
-import org.devcourse.resumeme.global.auth.OAuth2CustomUser;
+import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Map;
 
-import static org.devcourse.resumeme.common.DocumentLinkGenerator.DocUrl.PROVIDER;
-import static org.devcourse.resumeme.common.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROVIDER;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -49,7 +49,7 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
         result
                 .andExpect(status().isOk())
                 .andDo(
-                        document("login/alreadyUser",
+                        document("user/login/alreadyUser",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
@@ -82,7 +82,7 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
         result
                 .andExpect(status().isOk())
                 .andDo(
-                        document("login/newUser",
+                        document("user/login/newUser",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
