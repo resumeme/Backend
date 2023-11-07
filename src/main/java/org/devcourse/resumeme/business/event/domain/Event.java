@@ -43,6 +43,7 @@ public class Event extends BaseEntity {
     @Embedded
     private EventInfo eventInfo;
 
+    @Getter
     @Embedded
     private EventTimeInfo eventTimeInfo;
 
