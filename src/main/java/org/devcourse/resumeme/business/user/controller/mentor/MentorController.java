@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.*;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/mentors")
@@ -41,13 +43,13 @@ public class MentorController {
 
         Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo);
         Mentor savedMentor = mentorService.create(mentor);
-        Token tokens = jwtService.createTokens(Claims.of(savedMentor));
-        mentorService.updateRefreshToken(savedMentor.getId(), tokens.refreshToken());
+        Token token = jwtService.createTokens(Claims.of(savedMentor));
+        mentorService.updateRefreshToken(savedMentor.getId(), token.refreshToken());
         oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return ResponseEntity.status(200)
-                .header(tokens.getAccessTokenName(),tokens.accessToken())
-                .header(tokens.getRefreshTokenName(),tokens.refreshToken())
+                .header(ACCESS_TOKEN_NAME, token.accessToken())
+                .header(REFRESH_TOKEN_NAME, token.refreshToken())
                 .build();
     }
 

@@ -12,9 +12,9 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
+import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -57,11 +57,7 @@ class MentorControllerTest extends ControllerUnitTest {
 
     private Mentor savedMentor;
 
-    private HttpHeaders headers = new HttpHeaders();
-
-    private final String ACCESS_TOKEN_NAME = "Authorization";
-
-    private final String REFRESH_TOKEN_NAME = "Refresh-Token";
+    private Token token;
 
     @BeforeEach
     void setUp() {
@@ -69,8 +65,7 @@ class MentorControllerTest extends ControllerUnitTest {
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         mentor = mentorRegisterInfoRequest.toEntity(oAuth2TempInfo);
-        headers.set(ACCESS_TOKEN_NAME, "IssuedAccessToken");
-        headers.set(REFRESH_TOKEN_NAME, "IssuedRefreshToken");
+        token = new Token("issuedAccessToken", "issuedRefreshToken");
     }
 
     @Test
@@ -90,7 +85,8 @@ class MentorControllerTest extends ControllerUnitTest {
 
         given(oAuth2InfoRedisService.getOne(any())).willReturn((oAuth2TempInfo));
         given(mentorService.create(any(Mentor.class))).willReturn(savedMentor);
-        given(jwtService.createTokens(any(Claims.class))).willReturn(headers);
+        given(jwtService.createTokens(any(Claims.class))).willReturn(token);
+
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/mentors")
@@ -100,8 +96,8 @@ class MentorControllerTest extends ControllerUnitTest {
         // then
         result
                 .andExpect(status().isOk())
-                .andExpect(header().exists(ACCESS_TOKEN_NAME))
-                .andExpect(header().exists(REFRESH_TOKEN_NAME))
+                .andExpect(header().exists("Authorization"))
+                .andExpect(header().exists("Refresh-Token"))
                 .andDo(
                         document("user/mentor/create",
                                 getDocumentRequest(),
@@ -118,8 +114,8 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
                                 ),
                                 responseHeaders(
-                                        headerWithName(ACCESS_TOKEN_NAME).description("액세스 토큰"),
-                                        headerWithName(REFRESH_TOKEN_NAME).description("리프레시 토큰")
+                                        headerWithName("Authorization").description("액세스 토큰"),
+                                        headerWithName("Refresh-Token").description("리프레시 토큰")
                                 )
                         )
                 );

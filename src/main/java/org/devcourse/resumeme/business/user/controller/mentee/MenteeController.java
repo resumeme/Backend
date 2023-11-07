@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -46,8 +48,8 @@ public class MenteeController {
         oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return ResponseEntity.status(200)
-                .header(token.getAccessTokenName(), token.accessToken())
-                .header(token.getRefreshTokenName(), token.refreshToken())
+                .header(ACCESS_TOKEN_NAME, token.accessToken())
+                .header(REFRESH_TOKEN_NAME, token.refreshToken())
                 .build();
     }
 

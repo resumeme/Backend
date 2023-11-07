@@ -10,9 +10,9 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
+import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -23,6 +23,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -52,11 +53,7 @@ class MenteeControllerTest extends ControllerUnitTest {
 
     private Mentee mentee;
 
-    private HttpHeaders headers = new HttpHeaders();
-
-    private final String ACCESS_TOKEN_NAME = "Authorization";
-
-    private final String REFRESH_TOKEN_NAME = "Refresh-Token";
+    private Token token;
 
     @BeforeEach
     void setUp() {
@@ -64,8 +61,7 @@ class MenteeControllerTest extends ControllerUnitTest {
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
         mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo);
-        headers.set(ACCESS_TOKEN_NAME, "IssuedAccessToken");
-        headers.set(REFRESH_TOKEN_NAME, "IssuedRefreshToken");
+        token = new Token("issuedAccessToken", "issuedRefreshToken");
     }
 
     @Test
@@ -85,7 +81,7 @@ class MenteeControllerTest extends ControllerUnitTest {
 
         given(oAuth2InfoRedisService.getOne(any())).willReturn(oAuth2TempInfo);
         given(menteeService.create(any(Mentee.class))).willReturn(savedMentee);
-        given(jwtService.createTokens(any(Claims.class))).willReturn(headers);
+        given(jwtService.createTokens(any(Claims.class))).willReturn(token);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/mentees")

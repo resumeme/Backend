@@ -94,8 +94,7 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
                                         fieldWithPath("code").type(JsonFieldType.STRING).description("oauth 서버로 부터 받은 인가 코드")
                                 ),
                                 responseHeaders(
-                                        headerWithName("cacheKey").description("oauth 서버로 부터 받은 사용자 정보 임시 저장 키"),
-                                        headerWithName("location").description("필수 정보 받은 후 회원가입 redirect endpoint")
+                                        headerWithName("cacheKey").description("oauth 서버로 부터 받은 사용자 정보 임시 저장 키")
                                 )
                         )
                 );
