@@ -145,6 +145,9 @@ public class ResumeControllerTest extends ControllerUnitTest {
                         document("resume/updateTitle",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("조회 이력서 id")
+                                ),
                                 requestFields(
                                         fieldWithPath("title").type(STRING).description("이력서 제목")
 
