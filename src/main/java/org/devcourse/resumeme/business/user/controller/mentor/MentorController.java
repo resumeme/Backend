@@ -3,15 +3,16 @@ package org.devcourse.resumeme.business.user.controller.mentor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoResponse;
+import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,15 +39,14 @@ public class MentorController {
         log.debug("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
         OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisService.getOne(registerInfoRequest.cacheKey());
 
-        String refreshToken = jwtService.createRefreshToken();
-        Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo, refreshToken);
+        Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo);
         Mentor savedMentor = mentorService.create(mentor);
-        String accessToken = jwtService.createAccessToken(Claims.of(savedMentor));
+        HttpHeaders tokens = jwtService.createTokens(Claims.of(savedMentor));
+        mentorService.updateRefreshToken(savedMentor.getId(), tokens.getFirst("Refresh-Token"));
         oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return ResponseEntity.status(200)
-                .header("access", accessToken)
-                .header("refresh", refreshToken)
+                .headers(tokens)
                 .build();
     }
 

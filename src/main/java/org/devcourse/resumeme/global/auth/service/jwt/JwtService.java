@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Date;
 import java.util.Map;
@@ -17,9 +20,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private static final String ACCESS_TOKEN_NAME = "access";
+    private static final String ACCESS_TOKEN_NAME = "Authorization";
 
-    private static final String REFRESH_TOKEN_NAME = "refresh";
+    private static final String REFRESH_TOKEN_NAME = "Refresh-Token";
 
     private static final int ACCESS_TOKEN_EXP = 3600 * 1000;
 
@@ -102,11 +105,12 @@ public class JwtService {
         return refreshTokenSaved.equals(refreshToken);
     }
 
-    public Map<String, String> createAndSendNewTokens(Claims claims, HttpServletResponse response) {
-        String accessToken = createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
-        String refreshToken = createRefreshToken();
-        sendAccessAndRefreshToken(response, accessToken, refreshToken);
-        return Map.of("access", accessToken, "refresh", refreshToken);
+    public HttpHeaders createTokens(Claims claims) {
+        MultiValueMap<String, String> tokens = new LinkedMultiValueMap<>();
+        tokens.add(ACCESS_TOKEN_NAME, createAccessToken(new Claims(claims.id(), claims.role(), new Date())));
+        tokens.add(REFRESH_TOKEN_NAME, createRefreshToken());
+
+        return new HttpHeaders(tokens);
     }
 
 }
