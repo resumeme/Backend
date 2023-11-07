@@ -1,22 +1,17 @@
 endpoint:
   matchers:
     - matcher:
-        get:
         post: /api/v1/mentees, /api/v1/mentors
       role: all
     - matcher:
         get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/resume/*/**, /api/v1/resumes/*/**
         post: /api/v1/resumes, /api/v1/resume/*/**
-        put:
         patch: /api/v1/events/*/mentee, /api/v1/resumes/*/**
         delete:
       role: mentee
     - matcher:
         get: /api/v1/mentors/*, /api/v1/mentees/*
-        post: /api/v1/events, /api/v1/resume/*/reviews
-        put:
-        patch: /api/v1/events/*
-        delete:
+        post: /api/v1/events, /api/v1/resume/*/reviews, /api/v1/events/*/resume/*/comments
       role: mentor
     - matcher:
         get: /api/v1/admin/applications
@@ -25,6 +20,9 @@ endpoint:
     - matcher:
         get: /api/v1/events/*
         post: /api/v1/events/*/resume/*/reviews
-        patch: /api/v1/events/*/mentee/*
+        patch: /api/v1/events/*/mentee/*, /api/v1/events/*
       role: own_mentor
+    - matcher:
+        get: /api/v1/events/*/resume/*/comments
+      role: own_mentee
   ignores: /docs/**
