@@ -24,10 +24,10 @@ public record EventResponse(EventInfoResponse info, List<ResumeResponse> resumes
                 ).toList();
     }
 
-    public record EventInfoResponse(String title, int maximumCount, int currentApplicantCount, List<String> positions, TimeInfo timeInfo) {
+    public record EventInfoResponse(String title, String content, int maximumCount, int currentApplicantCount, List<String> positions, TimeInfo timeInfo) {
 
         public EventInfoResponse(Event event, List<EventPosition> positions) {
-            this(event.title(), event.maximumCount(), event.getApplicants().size(),
+            this(event.title(), event.content(), event.maximumCount(), event.getApplicants().size(),
                     convertToString(positions), new TimeInfo(event.getEventTimeInfo()));
         }
 

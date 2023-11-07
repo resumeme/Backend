@@ -26,6 +26,7 @@ public class EventInfo {
     @Getter
     private String title;
 
+    @Getter
     private String content;
 
     @Getter

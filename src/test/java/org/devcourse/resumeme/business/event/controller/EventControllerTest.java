@@ -271,6 +271,7 @@ class EventControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("info").type(OBJECT).description("이벤트 관련 정보"),
                                         fieldWithPath("info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("info.content").type(STRING).description("이벤트 상세내용"),
                                         fieldWithPath("info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
                                         fieldWithPath("info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
                                         fieldWithPath("info.positions").type(ARRAY).description(generateLinkCode(POSITION)),

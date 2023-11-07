@@ -155,6 +155,10 @@ public class Event extends BaseEntity {
         return eventInfo.getTitle();
     }
 
+    public String content() {
+        return eventInfo.getContent();
+    }
+
     public int maximumCount() {
         return eventInfo.getMaximumAttendee();
     }
