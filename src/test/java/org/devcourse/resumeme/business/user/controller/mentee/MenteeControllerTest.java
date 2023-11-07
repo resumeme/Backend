@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.MAP;
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
@@ -100,11 +101,11 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
                                         fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)"),
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("requiredInfo.role").type(STRING).description("역할"),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                        fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
+                                        fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_MENTEE")),
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").optional(),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 ),
                                 responseHeaders(
                                         headerWithName(ACCESS_TOKEN_NAME).description("액세스 토큰"),
@@ -154,9 +155,9 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
                                         fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야").optional(),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 )
                         )
                 );
@@ -188,9 +189,9 @@ class MenteeControllerTest extends ControllerUnitTest {
                                 requestFields(
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무"),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("전화번호"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야").optional(),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(MAP).description("멘티 아이디")

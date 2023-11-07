@@ -1,5 +1,6 @@
-= 멘티
+= *멘티's API*
 
+== [회원정보]
 === 멘티 정보 수정
 *Request*
 include::{snippets}/user/mentee/update/http-request.adoc[]
@@ -9,6 +10,7 @@ include::{snippets}/user/mentee/update/path-parameters.adoc[]
 include::{snippets}/user/mentee/update/http-response.adoc[]
 include::{snippets}/user/mentee/update/response-fields.adoc[]
 
+== [이력서]
 === 이력서 작성
 *Request*
 include::{snippets}/resume/create/http-request.adoc[]
@@ -17,43 +19,6 @@ include::{snippets}/resume/create/request-fields.adoc[]
 *Response*
 include::{snippets}/resume/create/http-response.adoc[]
 include::{snippets}/resume/create/response-fields.adoc[]
-
-=== 이력서 기본정보 수정
-*Request*
-include::{snippets}/resume/update/http-request.adoc[]
-include::{snippets}/resume/update/request-fields.adoc[]
-
-*Response*
-include::{snippets}/resume/update/http-response.adoc[]
-include::{snippets}/resume/update/response-fields.adoc[]
-
-=== 이력서 제목 수정
-*Request*
-include::{snippets}/resume/updateTitle/http-request.adoc[]
-include::{snippets}/resume/updateTitle/request-fields.adoc[]
-
-*Response*
-include::{snippets}/resume/updateTitle/http-response.adoc[]
-include::{snippets}/resume/updateTitle/response-fields.adoc[]
-
-=== 이력서 참고링크 수정
-*Request*
-include::{snippets}/resume/updateLink/http-request.adoc[]
-include::{snippets}/resume/findLink/path-parameters.adoc[]
-include::{snippets}/resume/updateLink/request-fields.adoc[]
-
-*Response*
-include::{snippets}/resume/updateLink/http-response.adoc[]
-include::{snippets}/resume/updateLink/response-fields.adoc[]
-
-=== 이력서 참고링크 조회
-*Request*
-include::{snippets}/resume/findLink/http-request.adoc[]
-include::{snippets}/resume/findLink/path-parameters.adoc[]
-
-*Response*
-include::{snippets}/resume/findLink/http-response.adoc[]
-include::{snippets}/resume/findLink/response-fields.adoc[]
 
 === 이력서 교육사항 저장
 *Request*
@@ -91,14 +56,6 @@ include::{snippets}/resume/foreignLanguage/create/request-fields.adoc[]
 include::{snippets}/resume/foreignLanguage/create/http-response.adoc[]
 include::{snippets}/resume/foreignLanguage/create/response-fields.adoc[]
 
-=== 이력서 어학성적 조회
-*Request*
-include::{snippets}/resume/foreignLanguage/find/http-request.adoc[]
-
-*Response*
-include::{snippets}/resume/foreignLanguage/find/http-response.adoc[]
-include::{snippets}/resume/foreignLanguage/find/response-fields.adoc[]
-
 === 이력서 프로젝트 저장
 *Request*
 include::{snippets}/resume/project/create/http-request.adoc[]
@@ -117,24 +74,36 @@ include::{snippets}/resume/activity/create/request-fields.adoc[]
 include::{snippets}/resume/activity/create/http-response.adoc[]
 include::{snippets}/resume/activity/create/response-fields.adoc[]
 
-=== 이력서 활동사항 조회
+
+=== 이력서 제목 수정
 *Request*
-include::{snippets}/resume/activity/find/http-request.adoc[]
+include::{snippets}/resume/updateTitle/http-request.adoc[]
+include::{snippets}/resume/updateTitle/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/activity/find/http-response.adoc[]
-include::{snippets}/resume/activity/find/response-fields.adoc[]
+include::{snippets}/resume/updateTitle/http-response.adoc[]
+include::{snippets}/resume/updateTitle/response-fields.adoc[]
 
-
-=== 이력서 첨삭 코멘트 조회
+=== 이력서 기본정보 수정
 *Request*
-include::{snippets}/comment/getAll/http-request.adoc[]
-include::{snippets}/comment/getAll/path-parameters.adoc[]
+include::{snippets}/resume/update/http-request.adoc[]
+include::{snippets}/resume/update/request-fields.adoc[]
 
 *Response*
-include::{snippets}/comment/getAll/http-response.adoc[]
-include::{snippets}/comment/getAll/response-fields.adoc[]
+include::{snippets}/resume/update/http-response.adoc[]
+include::{snippets}/resume/update/response-fields.adoc[]
 
+=== 이력서 참고링크 수정
+*Request*
+include::{snippets}/resume/updateLink/http-request.adoc[]
+include::{snippets}/resume/findLink/path-parameters.adoc[]
+include::{snippets}/resume/updateLink/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/updateLink/http-response.adoc[]
+include::{snippets}/resume/updateLink/response-fields.adoc[]
+
+== [첨삭]
 === 첨삭 이벤트 참여 신청
 *Request*
 include::{snippets}/event/apply/http-request.adoc[]
@@ -152,6 +121,7 @@ include::{snippets}/event/requestReview/http-request.adoc[]
 *Response*
 include::{snippets}/event/requestReview/http-response.adoc[]
 
+== [합격 이력서]
 === 합격이력서 공유 소개글 작성
 
 *Request*

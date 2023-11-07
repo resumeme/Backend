@@ -22,6 +22,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.INTEGER;
 import static org.assertj.core.api.Assertions.MAP;
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
@@ -106,12 +107,12 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
                                         fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)"),
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("requiredInfo.role").type(STRING).description("역할"),
+                                        fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
+                                        fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_PENDING")),
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
-                                        fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
+                                        fieldWithPath("careerYear").type(INTEGER).description("경력 연차").attributes(constraints("1 이상의 자연수")),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 ),
                                 responseHeaders(
                                         headerWithName("Authorization").description("액세스 토큰"),
@@ -146,11 +147,11 @@ class MentorControllerTest extends ControllerUnitTest {
                                 ),
                                 requestFields(
                                         fieldWithPath("realName").type(STRING).description("실명"),
-                                        fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
+                                        fieldWithPath("phoneNumber").type(STRING).description("전화번호").attributes(constraints(" - 제외 숫자만")),
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
-                                        fieldWithPath("careerYear").type(NUMBER).description("경력 연차"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                        fieldWithPath("careerYear").type(NUMBER).description("경력 연차").attributes(constraints("1 이상의 자연수")),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(MAP).description("멘토 아이디")
@@ -199,7 +200,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개")
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 )
                         )
                 );

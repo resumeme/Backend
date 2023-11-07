@@ -1,14 +1,6 @@
-= 공통
+= *공통's API*
 
-=== 이미 가입된 사용자 로그인
-**Request**
-include::{snippets}/user/login/alreadyUser/http-request.adoc[]
-include::{snippets}/user/login/alreadyUser/request-fields.adoc[]
-
-*Response*
-include::{snippets}/user/login/alreadyUser/http-response.adoc[]
-include::{snippets}/user/login/alreadyUser/response-headers.adoc[]
-
+== [로그인]
 === 새로운 사용자 로그인
 **Request**
 include::{snippets}/user/login/newUser/http-request.adoc[]
@@ -18,6 +10,16 @@ include::{snippets}/user/login/newUser/request-fields.adoc[]
 include::{snippets}/user/login/newUser/http-response.adoc[]
 include::{snippets}/user/login/newUser/response-headers.adoc[]
 
+=== 기존 사용자 로그인
+**Request**
+include::{snippets}/user/login/alreadyUser/http-request.adoc[]
+include::{snippets}/user/login/alreadyUser/request-fields.adoc[]
+
+*Response*
+include::{snippets}/user/login/alreadyUser/http-response.adoc[]
+include::{snippets}/user/login/alreadyUser/response-headers.adoc[]
+
+== [회원가입]
 === 멘토 가입
 
 *Request*
@@ -37,6 +39,7 @@ include::{snippets}/user/mentee/create/request-fields.adoc[]
 include::{snippets}/user/mentee/create/http-response.adoc[]
 include::{snippets}/user/mentee/create/response-headers.adoc[]
 
+== [회원 정보]
 === 멘토 정보 조회
 *Request*
 include::{snippets}/user/mentor/find/http-request.adoc[]
@@ -54,6 +57,16 @@ include::{snippets}/user/mentee/find/path-parameters.adoc[]
 *Response*
 include::{snippets}/user/mentee/find/http-response.adoc[]
 include::{snippets}/user/mentee/find/response-fields.adoc[]
+
+== [이력서]
+=== 이력서 참고링크 조회
+*Request*
+include::{snippets}/resume/findLink/http-request.adoc[]
+include::{snippets}/resume/findLink/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/findLink/http-response.adoc[]
+include::{snippets}/resume/findLink/response-fields.adoc[]
 
 === 이력서 교육사항 조회
 *Request*
@@ -87,6 +100,16 @@ include::{snippets}/resume/project/find/http-request.adoc[]
 include::{snippets}/resume/project/find/http-response.adoc[]
 include::{snippets}/resume/project/find/response-fields.adoc[]
 
+=== 이력서 어학성적 조회
+*Request*
+include::{snippets}/resume/foreignLanguage/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/resume/foreignLanguage/find/http-response.adoc[]
+include::{snippets}/resume/foreignLanguage/find/response-fields.adoc[]
+
+
+== [이벤트]
 === 이벤트 전체 조회
 *Request*
 include::{snippets}/event/getAll/http-request.adoc[]
@@ -95,6 +118,16 @@ include::{snippets}/event/getAll/http-request.adoc[]
 include::{snippets}/event/getAll/http-response.adoc[]
 include::{snippets}/event/getAll/response-fields.adoc[]
 
+=== 이력서 첨삭 코멘트 조회
+*Request*
+include::{snippets}/comment/getAll/http-request.adoc[]
+include::{snippets}/comment/getAll/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/getAll/http-response.adoc[]
+include::{snippets}/comment/getAll/response-fields.adoc[]
+
+== [합격 이력서]
 === 합격이력서 공유 소개글 페이징 조회
 *Request*
 include::{snippets}/result/getAll/http-request.adoc[]
