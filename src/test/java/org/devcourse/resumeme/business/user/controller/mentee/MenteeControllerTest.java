@@ -101,8 +101,8 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
                                         fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)"),
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" - 제외 숫자만")),
-                                        fieldWithPath("requiredInfo.role").type(STRING).description("역할").attributes(constraints("ROLE_MENTEE")),
+                                        fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
+                                        fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_MENTEE")),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").optional(),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
