@@ -24,6 +24,10 @@ class JwtServiceTest {
 
     private String refreshToken;
 
+    private final String ACCESS_TOKEN_NAME = "Authorization";
+
+    private final String REFRESH_TOKEN_NAME = "Refresh-Token";
+
     @BeforeEach
     void setUp() {
         Claims claims = new Claims(1L, ROLE_MENTEE.name(), new Date());
@@ -43,7 +47,7 @@ class JwtServiceTest {
     @Test
     void 액세스_토큰을_추출하는데_성공한다() {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("access", accessToken);
+        request.addHeader(ACCESS_TOKEN_NAME, accessToken);
         String extractedAccessToken = jwtService.extractAccessToken(request).get();
         jwtService.compareTokens(accessToken, extractedAccessToken);
     }
@@ -52,7 +56,7 @@ class JwtServiceTest {
     void 리프레시_토큰을_추출하는데_성공한다() {
         refreshToken = jwtService.createRefreshToken();
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("refresh", refreshToken);
+        request.addHeader(REFRESH_TOKEN_NAME, refreshToken);
         String extractedRefreshToken = jwtService.extractRefreshToken(request).get();
         jwtService.compareTokens(refreshToken, extractedRefreshToken);
     }
