@@ -35,6 +35,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ResumeControllerTest extends ControllerUnitTest {
@@ -173,6 +175,9 @@ public class ResumeControllerTest extends ControllerUnitTest {
                         document("resume/findLink",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("조회 이력서 id")
+                                ),
                                 responseFields(
                                         fieldWithPath("linkType").type(STRING).description("링크 유형(깃허브 주소, 블로그 주소, 기타)"),
                                         fieldWithPath("url").type(STRING).description("링크 URL")
