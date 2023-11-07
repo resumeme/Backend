@@ -8,9 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
-import org.springframework.http.HttpHeaders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.Date;
 import java.util.Map;
@@ -105,12 +102,10 @@ public class JwtService {
         return refreshTokenSaved.equals(refreshToken);
     }
 
-    public HttpHeaders createTokens(Claims claims) {
-        MultiValueMap<String, String> tokens = new LinkedMultiValueMap<>();
-        tokens.add(ACCESS_TOKEN_NAME, createAccessToken(new Claims(claims.id(), claims.role(), new Date())));
-        tokens.add(REFRESH_TOKEN_NAME, createRefreshToken());
+    public Token createTokens(Claims claims) {
+        Claims claimsForIssueToken = new Claims(claims.id(), claims.role(), new Date());
 
-        return new HttpHeaders(tokens);
+        return new Token(createAccessToken(claimsForIssueToken), createRefreshToken());
     }
 
 }

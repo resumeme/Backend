@@ -11,8 +11,8 @@ import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
+import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,12 +41,13 @@ public class MentorController {
 
         Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo);
         Mentor savedMentor = mentorService.create(mentor);
-        HttpHeaders tokens = jwtService.createTokens(Claims.of(savedMentor));
-        mentorService.updateRefreshToken(savedMentor.getId(), tokens.getFirst("Refresh-Token"));
+        Token tokens = jwtService.createTokens(Claims.of(savedMentor));
+        mentorService.updateRefreshToken(savedMentor.getId(), tokens.refreshToken());
         oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return ResponseEntity.status(200)
-                .headers(tokens)
+                .header(tokens.getAccessTokenName(),tokens.accessToken())
+                .header(tokens.getRefreshTokenName(),tokens.refreshToken())
                 .build();
     }
 
