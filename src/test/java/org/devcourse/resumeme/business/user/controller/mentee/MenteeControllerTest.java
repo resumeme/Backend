@@ -1,15 +1,16 @@
 package org.devcourse.resumeme.business.user.controller.mentee;
 
-import org.devcourse.resumeme.common.ControllerUnitTest;
+import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
-import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.common.ControllerUnitTest;
+import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
-import org.devcourse.resumeme.common.support.WithMockCustomUser;
+import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -18,10 +19,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.MAP;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -51,12 +53,15 @@ class MenteeControllerTest extends ControllerUnitTest {
 
     private Mentee mentee;
 
+    private Token token;
+
     @BeforeEach
     void setUp() {
         requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
-        mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo, "refreshTokenRecentlyIssued");
+        mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo);
+        token = new Token("issuedAccessToken", "issuedRefreshToken");
     }
 
     @Test
@@ -73,10 +78,10 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .build();
 
+
         given(oAuth2InfoRedisService.getOne(any())).willReturn(oAuth2TempInfo);
         given(menteeService.create(any(Mentee.class))).willReturn(savedMentee);
-        given(jwtService.createAccessToken(any(Claims.class))).willReturn("accessTokenRecentlyIssued");
-        given(jwtService.createRefreshToken()).willReturn("refreshTokenRecentlyIssued");
+        given(jwtService.createTokens(any(Claims.class))).willReturn(token);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/mentees")
@@ -86,8 +91,8 @@ class MenteeControllerTest extends ControllerUnitTest {
         // then
         result
                 .andExpect(status().isOk())
-                .andExpect(header().exists("access"))
-                .andExpect(header().exists("refresh"))
+                .andExpect(header().exists(ACCESS_TOKEN_NAME))
+                .andExpect(header().exists(REFRESH_TOKEN_NAME))
                 .andDo(
                         document("user/mentee/create",
                                 getDocumentRequest(),
@@ -102,8 +107,8 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("introduce").type(STRING).description("자기소개")
                                 ),
                                 responseHeaders(
-                                        headerWithName("access").description("액세스 토큰"),
-                                        headerWithName("refresh").description("리프레시 토큰")
+                                        headerWithName(ACCESS_TOKEN_NAME).description("액세스 토큰"),
+                                        headerWithName(REFRESH_TOKEN_NAME).description("리프레시 토큰")
                                 )
                         )
                 );

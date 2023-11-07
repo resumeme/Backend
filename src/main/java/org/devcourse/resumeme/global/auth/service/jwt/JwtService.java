@@ -17,9 +17,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private static final String ACCESS_TOKEN_NAME = "access";
+    private static final String ACCESS_TOKEN_NAME = "Authorization";
 
-    private static final String REFRESH_TOKEN_NAME = "refresh";
+    private static final String REFRESH_TOKEN_NAME = "Refresh-Token";
 
     private static final int ACCESS_TOKEN_EXP = 3600 * 1000;
 
@@ -102,11 +102,10 @@ public class JwtService {
         return refreshTokenSaved.equals(refreshToken);
     }
 
-    public Map<String, String> createAndSendNewTokens(Claims claims, HttpServletResponse response) {
-        String accessToken = createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
-        String refreshToken = createRefreshToken();
-        sendAccessAndRefreshToken(response, accessToken, refreshToken);
-        return Map.of("access", accessToken, "refresh", refreshToken);
+    public Token createTokens(Claims claims) {
+        Claims claimsForIssueToken = new Claims(claims.id(), claims.role(), new Date());
+
+        return new Token(createAccessToken(claimsForIssueToken), createRefreshToken());
     }
 
 }

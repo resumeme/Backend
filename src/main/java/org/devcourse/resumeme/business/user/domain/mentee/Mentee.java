@@ -72,7 +72,7 @@ public class Mentee extends BaseEntity {
 
     @Builder
     public Mentee(Long id,String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
-        validateInputs(email, provider, imageUrl, requiredInfo, refreshToken);
+        validateInputs(email, provider, imageUrl, requiredInfo);
         this.id = id;
         this.email = email;
         this.provider = provider;
@@ -84,13 +84,12 @@ public class Mentee extends BaseEntity {
         this.introduce = introduce;
     }
 
-    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken) {
+    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo) {
         check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
         check(provider == null, NO_EMPTY_VALUE);
         check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
         check(requiredInfo == null, NO_EMPTY_VALUE);
         check(!Role.ROLE_MENTEE.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
-        check(refreshToken == null || refreshToken.isBlank(), NO_EMPTY_VALUE);
     }
 
     public void updateInfos(MenteeInfoUpdateRequest updateRequest) {

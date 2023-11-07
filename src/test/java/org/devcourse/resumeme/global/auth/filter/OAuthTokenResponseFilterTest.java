@@ -1,10 +1,10 @@
 package org.devcourse.resumeme.global.auth.filter;
 
-import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.common.ControllerUnitTest;
+import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
 import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;
-import org.devcourse.resumeme.global.auth.filter.resolver.OAuthAuthenticationToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Map;
 
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROVIDER;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROVIDER;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -30,6 +30,10 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class OAuthTokenResponseFilterTest extends ControllerUnitTest {
+
+    private final String ACCESS_TOKEN_NAME = "Authorization";
+
+    private final String REFRESH_TOKEN_NAME = "Refresh-Token";
 
     @Test
     void 사용자는_로그인을_oauth를_통해_할수있다() throws Exception {
@@ -57,8 +61,8 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
                                         fieldWithPath("code").type(JsonFieldType.STRING).description("oauth 서버로 부터 받은 인가 코드")
                                 ),
                                 responseHeaders(
-                                        headerWithName("access").description("액세스 토큰"),
-                                        headerWithName("refresh").description("리프레시 토큰")
+                                        headerWithName(ACCESS_TOKEN_NAME).description("액세스 토큰"),
+                                        headerWithName(REFRESH_TOKEN_NAME).description("리프레시 토큰")
                                 )
                         )
                 );
@@ -90,8 +94,7 @@ class OAuthTokenResponseFilterTest extends ControllerUnitTest {
                                         fieldWithPath("code").type(JsonFieldType.STRING).description("oauth 서버로 부터 받은 인가 코드")
                                 ),
                                 responseHeaders(
-                                        headerWithName("cacheKey").description("oauth 서버로 부터 받은 사용자 정보 임시 저장 키"),
-                                        headerWithName("location").description("필수 정보 받은 후 회원가입 redirect endpoint")
+                                        headerWithName("cacheKey").description("oauth 서버로 부터 받은 사용자 정보 임시 저장 키")
                                 )
                         )
                 );
