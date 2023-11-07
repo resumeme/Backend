@@ -1,5 +1,6 @@
-= 멘토
+= *멘토's API*
 
+== [회원정보]
 === 멘토 정보 수정
 *Request*
 include::{snippets}/user/mentor/update/http-request.adoc[]
@@ -9,6 +10,7 @@ include::{snippets}/user/mentor/update/path-parameters.adoc[]
 include::{snippets}/user/mentor/update/http-response.adoc[]
 include::{snippets}/user/mentor/update/response-fields.adoc[]
 
+== [첨삭 이벤트]
 === 첨삭 이벤트 생성
 
 *Request*
@@ -19,7 +21,7 @@ include::{snippets}/event/create/request-fields.adoc[]
 include::{snippets}/event/create/http-response.adoc[]
 include::{snippets}/event/create/response-fields.adoc[]
 
-=== 특정 첨삭 이벤트 조회
+=== 첨삭 이벤트 단건 조회
 
 *Request*
 include::{snippets}/event/getOwn/http-request.adoc[]
