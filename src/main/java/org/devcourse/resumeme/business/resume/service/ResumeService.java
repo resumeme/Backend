@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -34,6 +35,13 @@ public class ResumeService {
 
     public Long updateTitle(Resume resume, String title) {
         resume.updateTitle(title);
+        Resume saved = resumeRepository.save(resume);
+
+        return saved.getId();
+    }
+
+    public Long updateReferenceLink(Resume resume, ReferenceLink referenceLink) {
+        resume.updateReferenceLink(referenceLink);
         Resume saved = resumeRepository.save(resume);
 
         return saved.getId();

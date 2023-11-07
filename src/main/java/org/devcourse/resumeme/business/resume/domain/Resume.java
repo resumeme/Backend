@@ -68,13 +68,9 @@ public class Resume extends BaseEntity {
     @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ForeignLanguage> foreignLanguage = new ArrayList<>();
 
-    private String email;
-
-    private String githubAddress;
-
-    private String blogAddress;
-
-    private String phoneNumber;
+    @Getter
+    @Embedded
+    private ReferenceLink referenceLink;
 
     private boolean openStatus;
 
@@ -92,7 +88,7 @@ public class Resume extends BaseEntity {
     @Builder
     private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, List<Career> career,
                    List<Project> project, List<Training> training, List<Certification> certification, List<Activity> activity,
-                   List<ForeignLanguage> foreignLanguage, String email, String githubAddress, String blogAddress, String phoneNumber) {
+                   List<ForeignLanguage> foreignLanguage, ReferenceLink referenceLink) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
@@ -103,17 +99,14 @@ public class Resume extends BaseEntity {
         this.certification = certification;
         this.activity = activity;
         this.foreignLanguage = foreignLanguage;
-        this.email = email;
-        this.githubAddress = githubAddress;
-        this.blogAddress = blogAddress;
-        this.phoneNumber = phoneNumber;
+        this.referenceLink = referenceLink;
         this.openStatus = false;
     }
 
     public Resume copy() {
         return new Resume(
                 null, title, mentee, resumeInfo, career, project, training, certification, activity, foreignLanguage,
-                email, githubAddress, blogAddress, phoneNumber
+                 referenceLink
         );
     }
 
@@ -135,6 +128,10 @@ public class Resume extends BaseEntity {
 
     public void updateTitle(String title) {
         this.title = title;
+    }
+
+    public void updateReferenceLink(ReferenceLink referenceLink) {
+        this.referenceLink = referenceLink;
     }
 
 }
