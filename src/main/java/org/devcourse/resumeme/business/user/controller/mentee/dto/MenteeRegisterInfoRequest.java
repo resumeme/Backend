@@ -10,7 +10,7 @@ import java.util.Set;
 
 public record MenteeRegisterInfoRequest(String cacheKey, RequiredInfoRequest requiredInfo, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
 
-    public Mentee toEntity(OAuth2TempInfo oAuth2TempInfo, String refreshToken) {
+    public Mentee toEntity(OAuth2TempInfo oAuth2TempInfo) {
         return Mentee.builder()
                 .email(oAuth2TempInfo.getEmail())
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider().toUpperCase()))
@@ -18,7 +18,6 @@ public record MenteeRegisterInfoRequest(String cacheKey, RequiredInfoRequest req
                 .requiredInfo(
                         new RequiredInfo(requiredInfo.realName(), requiredInfo.nickname(), requiredInfo.phoneNumber(), requiredInfo.role())
                 )
-                .refreshToken(refreshToken)
                 .introduce(introduce)
                 .interestedPositions(interestedPositions)
                 .interestedFields(interestedFields)
