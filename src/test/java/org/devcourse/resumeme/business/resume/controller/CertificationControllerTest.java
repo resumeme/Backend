@@ -92,7 +92,7 @@ class CertificationControllerTest extends ControllerUnitTest {
 
     @Test
     @WithMockUser
-    void 업무경험_조회에_성공한다() throws Exception {
+    void 인증서_조회에_성공한다() throws Exception {
         // given
         Long resumeId = 1L;
         Certification certification = new Certification("인증서", "2023-10-01", "발급기관", "https://example.com", "설명");

@@ -14,7 +14,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Activity implements Converter{
+public class Activity implements Converter {
 
     private String activityName;
 
