@@ -86,7 +86,8 @@ include::{snippets}/resume/updateTitle/response-fields.adoc[]
 
 === 이력서 기본정보 수정
 *Request*
-include::{snippets}/resume/update/http-request.adoc[]
+include::{snippets}/resume/update/http-request.adoc[]보
+include::{snippets}/resume/update/request-fields.adoc[]
 
 *Response*
 include::{snippets}/resume/update/http-response.adoc[]
