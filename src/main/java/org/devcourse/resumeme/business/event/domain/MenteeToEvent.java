@@ -12,10 +12,10 @@ import org.devcourse.resumeme.common.domain.BaseEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.devcourse.resumeme.common.util.Validator.notNull;
 import static org.devcourse.resumeme.business.event.domain.Progress.APPLY;
 import static org.devcourse.resumeme.business.event.domain.Progress.REJECT;
 import static org.devcourse.resumeme.business.event.domain.Progress.REQUEST;
+import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -27,6 +27,7 @@ public class MenteeToEvent extends BaseEntity {
     @Column(name = "mentee_to_event_id")
     private Long id;
 
+    @Getter
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "event_id")
     private Event event;

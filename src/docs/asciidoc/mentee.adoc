@@ -110,6 +110,15 @@ include::{snippets}/resume/getOwn/http-request.adoc[]
 include::{snippets}/resume/getOwn/http-response.adoc[]
 include::{snippets}/resume/getOwn/response-fields.adoc[]
 
+=== 이력서로 참여한 첨삭 이벤트 조회
+*Request*
+include::{snippets}/resume/findEvents/http-request.adoc[]
+include::{snippets}/resume/findEvents/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/findEvents/http-response.adoc[]
+include::{snippets}/resume/findEvents/response-fields.adoc[]
+
 == [첨삭]
 === 첨삭 이벤트 참여 신청
 *Request*
