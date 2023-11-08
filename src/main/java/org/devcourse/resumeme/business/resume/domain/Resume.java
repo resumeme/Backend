@@ -52,14 +52,6 @@ public class Resume extends BaseEntity {
     private List<Training> training = new ArrayList<>();
 
     @Getter
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Activity> activity = new ArrayList<>();
-
-    @Getter
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ForeignLanguage> foreignLanguage = new ArrayList<>();
-
-    @Getter
     @Embedded
     private ReferenceLink referenceLink;
 
@@ -78,24 +70,20 @@ public class Resume extends BaseEntity {
 
     @Builder
     private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo,
-                   List<Project> project, List<Training> training, List<Activity> activity,
-                   List<ForeignLanguage> foreignLanguage, ReferenceLink referenceLink) {
+            List<Project> project, List<Training> training, ReferenceLink referenceLink) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
         this.project = project;
         this.training = training;
-        this.activity = activity;
-        this.foreignLanguage = foreignLanguage;
         this.referenceLink = referenceLink;
         this.openStatus = false;
     }
 
     public Resume copy() {
         return new Resume(
-                null, title, mentee, resumeInfo, project, training, activity, foreignLanguage,
-                 referenceLink
+                null, title, mentee, resumeInfo, project, training, referenceLink
         );
     }
 
