@@ -61,4 +61,8 @@ public class ResumeService {
         return resumeRepository.findAllById(resumeIds);
     }
 
+    public List<Resume> getAllByMenteeId(Long menteeId) {
+        return resumeRepository.findAllByMenteeId(menteeId);
+    }
+
 }

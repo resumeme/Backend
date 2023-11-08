@@ -1,16 +1,16 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.domain.LinkType;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
-import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +23,17 @@ import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.http.RequestEntity.patch;
-import static org.springframework.http.RequestEntity.put;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -218,6 +221,30 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("id").description("업데이트된 이력서 아이디")
                                 )
 
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 참여한_이력서_리스트를_조회한다() throws Exception {
+        Resume resume1 = new Resume("title1", mentee);
+        Resume resume2 = new Resume("title2", mentee);
+
+        given(resumeService.getAllByMenteeId(mentee.getId())).willReturn(List.of(resume1, resume2));
+
+        ResultActions result = mvc.perform(get("/api/v1/resumes"));
+
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("resume/getOwn",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].id").type(NULL).description("이력서 id"),
+                                        fieldWithPath("[].title").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("[].modifiedAt").type(NULL).description("수정 일자")
+                                )
                         )
                 );
     }
