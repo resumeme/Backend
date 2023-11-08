@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
+import org.devcourse.resumeme.global.auth.model.jwt.JwtProperties;
 
 import java.util.Date;
 import java.util.Map;
@@ -17,37 +18,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private static final String ACCESS_TOKEN_NAME = "Authorization";
-
-    private static final String REFRESH_TOKEN_NAME = "Refresh-Token";
-
-    private static final int ACCESS_TOKEN_EXP = 3600 * 1000;
-
-    private static final int REFRESH_TOKEN_EXP = 3600 * 24 * 7 * 1000;
-
     private static final String ID = "id";
 
     private static final String ROLE = "role";
 
     private static final String BEARER = "Bearer ";
 
-    private static final String SECRET_KEY = "resumeJWT";
+    private final JwtProperties jwtProperties;
 
     public String createAccessToken(Claims claims) {
         return BEARER + JWT.create()
-                .withSubject(ACCESS_TOKEN_NAME)
-                .withExpiresAt(new Date(claims.expiration().getTime() + ACCESS_TOKEN_EXP))
+                .withSubject(jwtProperties.access().headerName())
+                .withExpiresAt(new Date(claims.expiration().getTime() + jwtProperties.access().expiration()))
                 .withClaim(ID, claims.id())
                 .withClaim(ROLE, claims.role())
-                .sign(Algorithm.HMAC512(SECRET_KEY));
+                .sign(Algorithm.HMAC512(jwtProperties.secretKey()));
     }
 
     public String createRefreshToken() {
         Date now = new Date();
         return BEARER + JWT.create()
-                .withSubject(REFRESH_TOKEN_NAME)
-                .withExpiresAt(new Date(now.getTime() + REFRESH_TOKEN_EXP))
-                .sign(Algorithm.HMAC512(SECRET_KEY));
+                .withSubject(jwtProperties.refresh().headerName())
+                .withExpiresAt(new Date(now.getTime() + jwtProperties.refresh().expiration()))
+                .sign(Algorithm.HMAC512(jwtProperties.secretKey()));
     }
 
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
@@ -57,29 +50,29 @@ public class JwtService {
     }
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(REFRESH_TOKEN_NAME))
+        return Optional.ofNullable(request.getHeader(jwtProperties.refresh().headerName()))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
     public Optional<String> extractAccessToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(ACCESS_TOKEN_NAME))
+        return Optional.ofNullable(request.getHeader(jwtProperties.access().headerName()))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(ACCESS_TOKEN_NAME, accessToken);
+        response.setHeader(jwtProperties.access().headerName(), accessToken);
     }
 
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(REFRESH_TOKEN_NAME, refreshToken);
+        response.setHeader(jwtProperties.refresh().headerName(), refreshToken);
     }
 
     public boolean validate(String token) {
         try {
             String tokenRefined = token.replace(BEARER, "");
-            JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(tokenRefined);
+            JWT.require(Algorithm.HMAC512(jwtProperties.secretKey())).build().verify(tokenRefined);
 
             return true;
         } catch (Exception e) {
