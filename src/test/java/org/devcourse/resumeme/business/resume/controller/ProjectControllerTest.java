@@ -1,5 +1,7 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.resume.controller.dto.ProjectCreateRequest;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -58,13 +60,16 @@ class ProjectControllerTest extends ControllerUnitTest {
 
     @Test
     void 프로젝트_저장에_성공한다() throws Exception {
+        // then
         ProjectCreateRequest request = new ProjectCreateRequest("프로젝트", 2023L, true, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
         Long resumeId = 1L;
-        Project project = request.toEntity(resume);
+        Project project = request.toEntity();
 
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(projectService.create(project)).willReturn(1L);
+        Component component = project.of(resumeId);
 
+        given(componentService.create(component, BlockType.PROJECT)).willReturn(1L);
+
+        // when
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/projects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
@@ -95,17 +100,18 @@ class ProjectControllerTest extends ControllerUnitTest {
     @Test
     @WithMockUser
     void 업무경험_조회에_성공한다() throws Exception {
+        // given
         Long resumeId = 1L;
-        Project project = new Project(resume, "프로젝트", 2023L, true, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
-        Resume savedResume = resume.builder()
-                .project(List.of(project))
-                .build();
+        Project project = new Project("프로젝트", 2023L, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
+        Component component = project.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+        Component project1 = new Component("PROJECT", null, null, null, resumeId, List.of(component));
+        given(componentService.getAll(resumeId)).willReturn(List.of(project1));
 
+        // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/projects"));
 
-
+        // then
         result
                 .andExpect(status().isOk())
                 .andDo(

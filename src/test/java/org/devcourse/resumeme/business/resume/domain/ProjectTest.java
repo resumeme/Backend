@@ -49,7 +49,7 @@ public class ProjectTest {
         String projectContent = "프로젝트 설명";
         String projectUrl = "https://example.com/project";
 
-        assertThatThrownBy(() -> new Project(resume, projectName, productionYear, isTeam, teamMembers, skills, projectContent, projectUrl))
+        assertThatThrownBy(() -> new Project(projectName, productionYear, teamMembers, skills, projectContent, projectUrl))
                 .isInstanceOf(CustomException.class);
     }
 

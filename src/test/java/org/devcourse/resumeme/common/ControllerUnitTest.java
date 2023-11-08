@@ -18,9 +18,7 @@ import org.devcourse.resumeme.business.resume.controller.TrainingController;
 import org.devcourse.resumeme.business.resume.controller.career.CareerController;
 import org.devcourse.resumeme.business.resume.controller.certification.CertificationController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
-import org.devcourse.resumeme.business.resume.service.ProjectService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
-import org.devcourse.resumeme.business.resume.service.TrainingService;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
 import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
@@ -107,13 +105,7 @@ public abstract class ControllerUnitTest {
     protected MentorApplicationService mentorApplicationService;
 
     @MockBean
-    protected ProjectService projectService;
-
-    @MockBean
     protected ResultService resultService;
-
-    @MockBean
-    protected TrainingService trainingService;
 
     @MockBean
     protected MenteeToEventService menteeToEventService;
