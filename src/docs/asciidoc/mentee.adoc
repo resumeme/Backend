@@ -96,12 +96,19 @@ include::{snippets}/resume/update/response-fields.adoc[]
 === 이력서 참고링크 수정
 *Request*
 include::{snippets}/resume/updateLink/http-request.adoc[]
-include::{snippets}/resume/findLink/path-parameters.adoc[]
 include::{snippets}/resume/updateLink/request-fields.adoc[]
 
 *Response*
 include::{snippets}/resume/updateLink/http-response.adoc[]
 include::{snippets}/resume/updateLink/response-fields.adoc[]
+
+=== 멘티 이력서 리스트 조회
+*Request*
+include::{snippets}/resume/getOwn/http-request.adoc[]
+
+*Response*
+include::{snippets}/resume/getOwn/http-response.adoc[]
+include::{snippets}/resume/getOwn/response-fields.adoc[]
 
 == [첨삭]
 === 첨삭 이벤트 참여 신청
