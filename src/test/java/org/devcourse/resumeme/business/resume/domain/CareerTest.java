@@ -1,5 +1,7 @@
 package org.devcourse.resumeme.business.resume.domain;
 
+import org.devcourse.resumeme.business.resume.domain.career.Career;
+import org.devcourse.resumeme.business.resume.domain.career.Duty;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -57,18 +59,7 @@ public class CareerTest {
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().minusYears(1);
 
-        assertThatThrownBy(() -> new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
-                .isInstanceOf(CustomException.class);
-    }
-
-    @Test
-    void 재직중일시_종료일_필수_입력() {
-        isCurrentlyEmployed = false;
-        LocalDate careerStartDate = LocalDate.now();
-        LocalDate endDate = null;
-        String careerContent = "상세 업무";
-
-        assertThatThrownBy(() -> new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent))
+        assertThatThrownBy(() -> new Career(companyName, position, 1L, skills, duties, careerStartDate, endDate, careerContent))
                 .isInstanceOf(CustomException.class);
     }
 
