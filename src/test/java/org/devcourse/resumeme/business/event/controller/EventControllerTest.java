@@ -139,8 +139,8 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("info.content").type(STRING).description("첨삭 이벤트 내용"),
                                         fieldWithPath("info.maximumAttendee").type(NUMBER).description("최대 첨삭 이벤트 참여 가능 멘티 인원"),
                                         fieldWithPath("time.now").type(STRING).description("첨삭 이벤트 생성 요청 시간"),
-                                        fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간"),
-                                        fieldWithPath("time.closeDateTime").type(STRING).description("첨삭 이벤트 신청 마감 시간"),
+                                        fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간").optional().attributes(constraints("이벤트 오픈 예약 시 필수")),
+                                        fieldWithPath("time.closeDateTime").type(STRING).description("첨삭 이벤트 신청 마감 시간").attributes(constraints("오픈 시간보다 느리게")),
                                         fieldWithPath("time.endDate").type(STRING).description("첨삭 종료 시간").optional().attributes(constraints("마감 시간보다 늦어야 함")),
                                         fieldWithPath("positions").type(ARRAY).description(generateLinkCode(POSITION))
                                 ),
@@ -211,7 +211,7 @@ class EventControllerTest extends ControllerUnitTest {
                                         parameterWithName("menteeId").description("반려시키고 싶은 멘티 아이디")
                                 ),
                                 requestFields(
-                                        fieldWithPath("rejectMessage").type(STRING).description("이벤트 신청 반려 사유")
+                                        fieldWithPath("rejectMessage").type(STRING).description("이벤트 신청 반려 사유").optional()
                                 )
                         )
                 );
