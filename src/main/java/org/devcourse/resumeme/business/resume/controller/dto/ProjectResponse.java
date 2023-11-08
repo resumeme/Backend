@@ -17,7 +17,7 @@ public record ProjectResponse(
         this(
                 project.getProjectName(),
                 project.getProductionYear(),
-                project.isTeam(),
+                project.getTeamMembers().equals("1"),
                 project.getTeamMembers(),
                 project.getSkills(),
                 project.getProjectContent(),

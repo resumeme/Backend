@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import org.devcourse.resumeme.business.resume.domain.Project;
-import org.devcourse.resumeme.business.resume.domain.Resume;
 
 import java.util.List;
 
@@ -15,8 +14,8 @@ public record ProjectCreateRequest(
         String projectUrl
 ) {
 
-    public Project toEntity(Resume resume) {
-        return new Project(resume, projectName, productionYear, isTeam, teamMembers, skills, projectContent, projectUrl);
+    public Project toEntity() {
+        return new Project(projectName, productionYear, teamMembers, skills, projectContent, projectUrl);
     }
 
 }

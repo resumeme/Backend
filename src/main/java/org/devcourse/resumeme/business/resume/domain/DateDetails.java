@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import java.time.LocalDate;
 
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DateDetails {
 

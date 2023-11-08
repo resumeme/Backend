@@ -3,12 +3,10 @@ package org.devcourse.resumeme.business.resume.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,11 +14,6 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.CascadeType.REMOVE;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
@@ -44,14 +37,6 @@ public class Resume extends BaseEntity {
     private ResumeInfo resumeInfo;
 
     @Getter
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Project> project = new ArrayList<>();
-
-    @Getter
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Training> training = new ArrayList<>();
-
-    @Getter
     @Embedded
     private ReferenceLink referenceLink;
 
@@ -69,21 +54,18 @@ public class Resume extends BaseEntity {
     }
 
     @Builder
-    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo,
-            List<Project> project, List<Training> training, ReferenceLink referenceLink) {
+    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, ReferenceLink referenceLink) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
-        this.project = project;
-        this.training = training;
         this.referenceLink = referenceLink;
         this.openStatus = false;
     }
 
     public Resume copy() {
         return new Resume(
-                null, title, mentee, resumeInfo, project, training, referenceLink
+                null, title, mentee, resumeInfo, referenceLink
         );
     }
 

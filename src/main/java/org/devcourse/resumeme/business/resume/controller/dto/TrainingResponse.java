@@ -17,13 +17,13 @@ public record TrainingResponse(
 
     public TrainingResponse(Training training) {
         this(
-                training.getOrganization(),
-                training.getMajor(),
-                training.getDegree(),
-                training.getAdmissionDate(),
-                training.getGraduationDate(),
-                training.getGpa(),
-                training.getMaxGpa(),
+                training.getEducationalDetails().getOrganization(),
+                training.getEducationalDetails().getMajor(),
+                training.getEducationalDetails().getDegree(),
+                training.getDateDetails().getAdmissionDate(),
+                training.getDateDetails().getGraduationDate(),
+                training.getGpaDetails().getGpa(),
+                training.getGpaDetails().getMaxGpa(),
                 training.getExplanation()
         );
     }
