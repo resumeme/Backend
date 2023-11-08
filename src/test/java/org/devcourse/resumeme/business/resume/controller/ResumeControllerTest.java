@@ -230,6 +230,8 @@ public class ResumeControllerTest extends ControllerUnitTest {
     void 참여한_이력서_리스트를_조회한다() throws Exception {
         Resume resume1 = new Resume("title1", mentee);
         Resume resume2 = new Resume("title2", mentee);
+        setId(resume1, 1L);
+        setId(resume2, 2L);
 
         given(resumeService.getAllByMenteeId(mentee.getId())).willReturn(List.of(resume1, resume2));
 
@@ -241,7 +243,7 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
-                                        fieldWithPath("[].id").type(NULL).description("이력서 id"),
+                                        fieldWithPath("[].id").type(NUMBER).description("이력서 id"),
                                         fieldWithPath("[].title").type(STRING).description("이력서 제목"),
                                         fieldWithPath("[].modifiedAt").type(NULL).description("수정 일자")
                                 )
