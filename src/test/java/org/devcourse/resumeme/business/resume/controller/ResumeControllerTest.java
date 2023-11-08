@@ -1,5 +1,9 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.EventInfo;
+import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
@@ -10,6 +14,7 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +23,17 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.common.domain.Position.BACK;
+import static org.devcourse.resumeme.common.domain.Position.DEVOPS;
+import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -33,13 +43,13 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ResumeControllerTest extends ControllerUnitTest {
@@ -246,6 +256,71 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].id").type(NUMBER).description("이력서 id"),
                                         fieldWithPath("[].title").type(STRING).description("이력서 제목"),
                                         fieldWithPath("[].modifiedAt").type(NULL).description("수정 일자")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 이력서와_관련된_이벤트_리스트_조회에_성공한다() throws Exception {
+        // given
+        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+
+        Mentor mentorOne =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("progrers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .build();
+
+        Mentor mentorTwo =  Mentor.builder()
+                .id(2L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("GOOGLE"))
+                .email("mentor222@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김기안", "기안멘토", "01022632375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT"))
+                .careerContent("유통회사 다님")
+                .careerYear(5)
+                .build();
+
+        Event eventOne = new Event(openEvent, eventTimeInfo, mentorOne, List.of(BACK, FRONT));
+        Event eventTwo = new Event(openEvent, eventTimeInfo, mentorTwo, List.of(DEVOPS));
+        setId(eventOne,1L);
+        setId(eventTwo,2L);
+
+        MenteeToEvent menteeToEventOne = new MenteeToEvent(eventOne, 1L, 1L);
+        MenteeToEvent menteeToEventTwo = new MenteeToEvent(eventTwo, 1L, 1L);
+
+        given(menteeToEventService.getEventsRelatedToResume(any(Long.class))).willReturn(List.of(menteeToEventOne, menteeToEventTwo));
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/related-events", 1L));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(
+                        document("resume/findEvents",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("멘티가 작성한 이력서 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("[].endDate").type(STRING).description("이벤트 마감 날짜"),
+                                        fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("[].positions").type(ARRAY).description(generateLinkCode(POSITION))
                                 )
                         )
                 );

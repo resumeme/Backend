@@ -7,6 +7,7 @@ import org.devcourse.resumeme.business.comment.service.CommentService;
 import org.devcourse.resumeme.business.event.controller.EventController;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
+import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
 import org.devcourse.resumeme.business.resume.controller.ActivityController;
@@ -123,6 +124,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected TrainingService trainingService;
+
+    @MockBean
+    protected MenteeToEventService menteeToEventService;
 
     @MockBean
     protected ProviderManager providerManager;
