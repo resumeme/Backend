@@ -11,14 +11,14 @@ import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
 import org.devcourse.resumeme.business.resume.controller.ActivityController;
-import org.devcourse.resumeme.business.resume.controller.CareerController;
+import org.devcourse.resumeme.business.resume.controller.career.CareerController;
 import org.devcourse.resumeme.business.resume.controller.CertificationController;
 import org.devcourse.resumeme.business.resume.controller.ForeignLanguageController;
 import org.devcourse.resumeme.business.resume.controller.ProjectController;
 import org.devcourse.resumeme.business.resume.controller.ResumeController;
 import org.devcourse.resumeme.business.resume.controller.TrainingController;
 import org.devcourse.resumeme.business.resume.service.ActivityService;
-import org.devcourse.resumeme.business.resume.service.CareerService;
+import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.CertificationService;
 import org.devcourse.resumeme.business.resume.service.ForeignLanguageService;
 import org.devcourse.resumeme.business.resume.service.ProjectService;
@@ -79,7 +79,10 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected EventPositionService eventPositionService;
-    
+
+    @MockBean
+    protected ComponentService blockService;
+
     @MockBean
     protected EventService eventService;
 
@@ -100,9 +103,6 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected CommentService reviewService;
-
-    @MockBean
-    protected CareerService careerService;
 
     @MockBean
     protected MentorApplicationService mentorApplicationService;

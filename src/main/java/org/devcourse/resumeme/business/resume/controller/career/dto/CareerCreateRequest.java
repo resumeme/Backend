@@ -1,8 +1,7 @@
-package org.devcourse.resumeme.business.resume.controller.dto;
+package org.devcourse.resumeme.business.resume.controller.career.dto;
 
-import org.devcourse.resumeme.business.resume.domain.Career;
-import org.devcourse.resumeme.business.resume.domain.Duty;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
+import org.devcourse.resumeme.business.resume.domain.career.Duty;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,12 +16,12 @@ public record CareerCreateRequest(
         LocalDate endDate,
         String careerContent
 ) {
-    public Career toEntity(Resume resume) {
+    public Career toEntity(Long resumeId) {
         List<Duty> duties = this.duties.stream()
                 .map(DutyRequest::toEntity)
                 .toList();
 
-        return new Career(companyName, position, resume, skills, duties, isCurrentlyEmployed, careerStartDate, endDate, careerContent);
+        return new Career(companyName, position, resumeId, skills, duties, careerStartDate, endDate, careerContent);
     }
 
     public record DutyRequest(

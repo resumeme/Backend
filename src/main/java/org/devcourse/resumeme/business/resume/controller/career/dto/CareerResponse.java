@@ -1,7 +1,7 @@
-package org.devcourse.resumeme.business.resume.controller.dto;
+package org.devcourse.resumeme.business.resume.controller.career.dto;
 
-import org.devcourse.resumeme.business.resume.domain.Career;
-import org.devcourse.resumeme.business.resume.domain.Duty;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
+import org.devcourse.resumeme.business.resume.domain.career.Duty;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,9 +22,9 @@ public record CareerResponse(
                 career.getPosition(),
                 career.getSkills(),
                 mapDuties(career.getDuties()),
-                career.isCurrentlyEmployed(),
-                career.getCareerStartDate(),
-                career.getEndDate(),
+                career.getCareerPeriod().getEndDate() == null,
+                career.getCareerPeriod().getStartDate(),
+                career.getCareerPeriod().getEndDate(),
                 career.getCareerContent()
         );
     }

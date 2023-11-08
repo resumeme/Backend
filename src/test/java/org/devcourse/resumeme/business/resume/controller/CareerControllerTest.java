@@ -1,14 +1,15 @@
 package org.devcourse.resumeme.business.resume.controller;
 
-import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.business.resume.controller.dto.CareerCreateRequest;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
-import org.devcourse.resumeme.business.resume.domain.Career;
-import org.devcourse.resumeme.business.resume.domain.Duty;
+import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
+import org.devcourse.resumeme.business.resume.domain.career.Duty;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -26,13 +27,13 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CareerControllerTest extends ControllerUnitTest {
@@ -62,10 +63,8 @@ public class CareerControllerTest extends ControllerUnitTest {
     void 업무경험_저장에_성공한다() throws Exception {
         CareerCreateRequest request = new CareerCreateRequest("company name", "BACK", List.of("java", "spring"), List.of(new CareerCreateRequest.DutyRequest("title", "description", LocalDate.now(), LocalDate.now().plusYears(1L))), false, LocalDate.now(), LocalDate.now().plusYears(1L), "content");
         Long resumeId = 1L;
-        Career career = request.toEntity(resume);
 
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(careerService.create(career)).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/careers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -101,19 +100,23 @@ public class CareerControllerTest extends ControllerUnitTest {
     @Test
     @WithMockUser
     void 업무경험_조회에_성공한다() throws Exception {
+        // given
         Long resumeId = 1L;
-        Career career = new Career("company name", "BACK", resume, List.of("java", "spring"), List.of(new Duty("title", LocalDate.now(), LocalDate.now().plusYears(1L), "description")), false, LocalDate.now(), LocalDate.now().plusYears(1L), "content");
-        Resume savedResume = resume.builder()
-                .career(List.of(career))
-                .build();
+        Career career = new Career("그렙", "백엔드", resumeId, List.of("자바", "스프링"),
+                List.of(new Duty("로그인 기능 개발", LocalDate.of(2023, 11,1), LocalDate.of(2023,12,31), "소셜 로그인 개발")),
+                LocalDate.of(2022, 10, 12), LocalDate.of(2023, 11, 1), "그렙 회사 다님");
 
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+        Component component = career.of(resumeId);
+        Component career1 = new Component("CAREER", null, null, null, resumeId, List.of(component));
+        given(blockService.getAll(resumeId)).willReturn(List.of(career1));
 
+        // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/careers"));
 
-
+        // then
         result
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andDo(
                         document("resume/career/find",
                                 getDocumentRequest(),
