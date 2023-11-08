@@ -85,9 +85,9 @@ class ActivityControllerTest extends ControllerUnitTest {
                                         fieldWithPath("activityName").type(STRING).description("활동명"),
                                         fieldWithPath("startDate").type(STRING).description("시작일"),
                                         fieldWithPath("endDate").type(STRING).description("종료일"),
-                                        fieldWithPath("inProgress").type(BOOLEAN).description("진행 중 여부"),
-                                        fieldWithPath("link").type(STRING).description("링크"),
-                                        fieldWithPath("description").type(STRING).description("설명")
+                                        fieldWithPath("inProgress").type(BOOLEAN).description("진행 중 여부").optional(),
+                                        fieldWithPath("link").type(STRING).description("링크").optional(),
+                                        fieldWithPath("description").type(STRING).description("설명").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 활동 ID")

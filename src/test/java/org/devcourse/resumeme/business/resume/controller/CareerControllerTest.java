@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -80,16 +81,16 @@ public class CareerControllerTest extends ControllerUnitTest {
                                 getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("companyName").type(STRING).description("회사명"),
-                                        fieldWithPath("position").type(STRING).description("포지션"),
-                                        fieldWithPath("skills[]").type(ARRAY).description("List of skills"),
+                                        fieldWithPath("position").type(STRING).description("포지션").optional(),
+                                        fieldWithPath("skills[]").type(ARRAY).description("List of skills").optional(),
                                         fieldWithPath("duties[].title").type(STRING).description("제목"),
-                                        fieldWithPath("duties[].description").type(STRING).description("설명"),
+                                        fieldWithPath("duties[].description").type(STRING).description("설명").optional(),
                                         fieldWithPath("duties[].startDate").type(STRING).description("시작일"),
                                         fieldWithPath("duties[].endDate").type(STRING).description("종료일"),
-                                        fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("현재 근무 여부"),
+                                        fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("현재 근무 여부").attributes(constraints("false일 시 endDate 필수")),
                                         fieldWithPath("careerStartDate").type(STRING).description("경력 시작일"),
                                         fieldWithPath("endDate").type(STRING).description("종료일"),
-                                        fieldWithPath("careerContent").type(STRING).description("경력 내용")
+                                        fieldWithPath("careerContent").type(STRING).description("경력 내용").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 경력 ID")

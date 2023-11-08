@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -83,9 +84,9 @@ class TrainingControllerTest extends ControllerUnitTest {
                                         fieldWithPath("degree").type(STRING).description("학위"),
                                         fieldWithPath("admissionDate").type(STRING).description("입학일"),
                                         fieldWithPath("graduationDate").type(STRING).description("졸업일"),
-                                        fieldWithPath("gpa").type(NUMBER).description("학점"),
-                                        fieldWithPath("maxGpa").type(NUMBER).description("최고 학점"),
-                                        fieldWithPath("explanation").type(STRING).description("설명")
+                                        fieldWithPath("gpa").type(NUMBER).description("학점").optional(),
+                                        fieldWithPath("maxGpa").type(NUMBER).description("최고 학점").optional().attributes(constraints("gpa보다 큰 값이어야 함")),
+                                        fieldWithPath("explanation").type(STRING).description("설명").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 트레이닝 ID")
