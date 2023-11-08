@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface MenteeToEventRepository extends JpaRepository<Long, MenteeToEvent> {
+public interface MenteeToEventRepository extends JpaRepository<MenteeToEvent, Long> {
 
     @Query("select me from MenteeToEvent me join fetch me.event where me.resumeId = :resumeId")
     List<MenteeToEvent> findAllByResumeId(@Param(value = "resumeId") Long resumeId);
