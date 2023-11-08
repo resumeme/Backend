@@ -1,5 +1,7 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageRequestDto;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -56,11 +58,12 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
     @Test
     void 외국어_저장에_성공한다() throws Exception {
         ForeignLanguageRequestDto request = new ForeignLanguageRequestDto("English", "TOEIC", "900");
+        ForeignLanguage entity = request.toEntity();
         Long resumeId = 1L;
-        ForeignLanguage foreignLanguage = request.toEntity(resume);
 
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(foreignLanguageService.create(foreignLanguage)).willReturn(1L);
+        Component component = entity.of(resumeId);
+
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/foreign-languages")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,16 +91,18 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
     @Test
     @WithMockUser
     void 외국어_조회에_성공한다() throws Exception {
+        // given
         Long resumeId = 1L;
-        ForeignLanguage foreignLanguage = new ForeignLanguage("영어", "토익", "990", resume);
-        Resume savedResume = resume.builder()
-                .foreignLanguage(List.of(foreignLanguage))
-                .build();
+        ForeignLanguage foreignLanguage = new ForeignLanguage("영어", "토익", "990");
+        Component component = foreignLanguage.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+        Component foreignLanguage1 = new Component("FOREIGN_LANGUAGE", null, null, null, resumeId, List.of(component));
+        given(componentService.getAll(resumeId)).willReturn(List.of(foreignLanguage1));
 
+        // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/foreign-languages"));
 
+        // then
         result
                 .andExpect(status().isOk())
                 .andDo(

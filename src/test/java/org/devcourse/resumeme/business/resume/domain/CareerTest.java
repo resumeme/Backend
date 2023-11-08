@@ -59,7 +59,7 @@ public class CareerTest {
         LocalDate careerStartDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().minusYears(1);
 
-        assertThatThrownBy(() -> new Career(companyName, position, 1L, skills, duties, careerStartDate, endDate, careerContent))
+        assertThatThrownBy(() -> new Career(companyName, position, skills, duties, careerStartDate, endDate, careerContent))
                 .isInstanceOf(CustomException.class);
     }
 

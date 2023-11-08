@@ -34,26 +34,26 @@ public class ActivityTest {
 
     @Test
     void 활동_생성을_성공한다() {
-        Activity activity = new Activity(activityName, startDate, endDate, inProgress, link, description);
+        Activity activity = new Activity(activityName, startDate, endDate, link, description);
 
         assertEquals(activityName, activity.getActivityName());
     }
 
     @Test
     void 활동명_누락_시_예외_발생() {
-        assertThatThrownBy(() -> new Activity(null, startDate, endDate, inProgress, link, description))
+        assertThatThrownBy(() -> new Activity(null, startDate, endDate, link, description))
                 .isInstanceOf(CustomException.class);
     }
 
     @Test
     void 시작일_누락_시_예외_발생() {
-        assertThatThrownBy(() -> new Activity(activityName, null, endDate, inProgress, link, description))
+        assertThatThrownBy(() -> new Activity(activityName, null, endDate, link, description))
                 .isInstanceOf(CustomException.class);
     }
 
     @Test
     void 종료일_누락_및_진행중이_아닌_경우_예외_발생() {
-        assertThatThrownBy(() -> new Activity(activityName, startDate, null, false, link, description))
+        assertThatThrownBy(() -> new Activity(activityName, startDate, null, link, description))
                 .isInstanceOf(CustomException.class);
     }
 }

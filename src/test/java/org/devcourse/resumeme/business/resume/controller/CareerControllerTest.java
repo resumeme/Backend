@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
+import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
@@ -64,8 +65,10 @@ public class CareerControllerTest extends ControllerUnitTest {
     void 업무경험_저장에_성공한다() throws Exception {
         CareerCreateRequest request = new CareerCreateRequest("company name", "BACK", List.of("java", "spring"), List.of(new CareerCreateRequest.DutyRequest("title", "description", LocalDate.now(), LocalDate.now().plusYears(1L))), false, LocalDate.now(), LocalDate.now().plusYears(1L), "content");
         Long resumeId = 1L;
+        Career entity = request.toEntity();
+        Component component = entity.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(resume);
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/careers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,13 +106,13 @@ public class CareerControllerTest extends ControllerUnitTest {
     void 업무경험_조회에_성공한다() throws Exception {
         // given
         Long resumeId = 1L;
-        Career career = new Career("그렙", "백엔드", resumeId, List.of("자바", "스프링"),
+        Career career = new Career("그렙", "백엔드", List.of("자바", "스프링"),
                 List.of(new Duty("로그인 기능 개발", LocalDate.of(2023, 11,1), LocalDate.of(2023,12,31), "소셜 로그인 개발")),
                 LocalDate.of(2022, 10, 12), LocalDate.of(2023, 11, 1), "그렙 회사 다님");
 
         Component component = career.of(resumeId);
         Component career1 = new Component("CAREER", null, null, null, resumeId, List.of(component));
-        given(blockService.getAll(resumeId)).willReturn(List.of(career1));
+        given(componentService.getAll(resumeId)).willReturn(List.of(career1));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/careers"));
