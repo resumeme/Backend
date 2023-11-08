@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -78,11 +79,11 @@ class ProjectControllerTest extends ControllerUnitTest {
                                 requestFields(
                                         fieldWithPath("projectName").type(STRING).description("프로젝트명"),
                                         fieldWithPath("productionYear").type(NUMBER).description("생산 연도"),
-                                        fieldWithPath("isTeam").type(BOOLEAN).description("팀 프로젝트 여부"),
-                                        fieldWithPath("teamMembers").type(STRING).description("팀원 목록"),
-                                        fieldWithPath("skills[]").type(ARRAY).description("기술 목록"),
-                                        fieldWithPath("projectContent").type(STRING).description("프로젝트 내용"),
-                                        fieldWithPath("projectUrl").type(STRING).description("프로젝트 URL")
+                                        fieldWithPath("isTeam").type(BOOLEAN).description("팀 프로젝트 여부").optional().attributes(constraints("true일 시 teamMembers 필수")),
+                                        fieldWithPath("teamMembers").type(STRING).description("팀원 목록").optional(),
+                                        fieldWithPath("skills[]").type(ARRAY).description("기술 목록").optional(),
+                                        fieldWithPath("projectContent").type(STRING).description("프로젝트 내용").optional(),
+                                        fieldWithPath("projectUrl").type(STRING).description("프로젝트 URL").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 프로젝트 ID")

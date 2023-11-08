@@ -75,10 +75,10 @@ class CertificationControllerTest extends ControllerUnitTest {
                                 getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("certificationTitle").type(STRING).description("인증서명"),
-                                        fieldWithPath("acquisitionDate").type(STRING).description("취득일"),
-                                        fieldWithPath("issuingAuthority").type(STRING).description("발급기관"),
-                                        fieldWithPath("link").type(STRING).description("링크"),
-                                        fieldWithPath("description").type(STRING).description("설명")
+                                        fieldWithPath("acquisitionDate").type(STRING).description("취득일").optional(),
+                                        fieldWithPath("issuingAuthority").type(STRING).description("발급기관").optional(),
+                                        fieldWithPath("link").type(STRING).description("링크").optional(),
+                                        fieldWithPath("description").type(STRING).description("설명").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 인증서 ID")

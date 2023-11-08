@@ -127,9 +127,9 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
-                                        fieldWithPath("position").description("포지션"),
-                                        fieldWithPath("skills").description("스킬 목록"),
-                                        fieldWithPath("introduce").description("자기 소개")
+                                        fieldWithPath("position").description("포지션").optional(),
+                                        fieldWithPath("skills").description("스킬 목록").optional(),
+                                        fieldWithPath("introduce").description("자기 소개").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("id").description("업데이트된 이력서 아이디")
