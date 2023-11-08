@@ -2,9 +2,7 @@ package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
-import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.resume.service.ForeignLanguageService;
-import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageRequestDto;
 import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageResponse;
@@ -17,30 +15,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.FOREIGN_LANGUAGE;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resume")
 public class ForeignLanguageController {
 
-    private final ForeignLanguageService foreignLanguageService;
-
-    private final ResumeService resumeService;
+    private final ComponentService componentService;
 
     @PostMapping("/{resumeId}/foreign-languages")
     public IdResponse createForeignLanguage(@PathVariable Long resumeId, @RequestBody ForeignLanguageRequestDto request) {
-        Resume resume = resumeService.getOne(resumeId);
-        ForeignLanguage foreignLanguage = request.toEntity(resume);
+        ForeignLanguage foreignLanguage = request.toEntity();
 
-        return new IdResponse(foreignLanguageService.create(foreignLanguage));
+        return new IdResponse(componentService.create(foreignLanguage.of(resumeId), FOREIGN_LANGUAGE));
     }
 
     @GetMapping("/{resumeId}/foreign-languages")
     public List<ForeignLanguageResponse> getForeignLanguages(@PathVariable Long resumeId) {
-        Resume resume = resumeService.getOne(resumeId);
-        List<ForeignLanguage> languages = resume.getForeignLanguage();
-
-        return languages.stream()
-                .map(ForeignLanguageResponse::new)
+        return componentService.getAll(resumeId).stream()
+                .filter(component -> component.isType("FOREIGN_LANGUAGE"))
+                .flatMap(component -> component.getComponents().stream())
+                .toList().stream()
+                .map(component -> new ForeignLanguageResponse(ForeignLanguage.from(component)))
                 .toList();
     }
 

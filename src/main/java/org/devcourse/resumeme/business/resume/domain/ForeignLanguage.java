@@ -1,52 +1,50 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.util.Validator;
-import org.devcourse.resumeme.global.exception.ExceptionCode;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
-import static org.devcourse.resumeme.common.util.Validator.check;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@Entity
+import static org.devcourse.resumeme.common.util.Validator.notNull;
+
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ForeignLanguage {
+public class ForeignLanguage implements Converter {
 
-    @Id
-    @Getter
-    @GeneratedValue
-    @Column(name = "foreign_language_id")
-    private Long id;
-
-    @Getter
-    @ManyToOne
-    @JoinColumn(name = "resume_id")
-    private Resume resume;
-
-    @Getter
     private String language;
 
-    @Getter
     private String examName;
 
-    @Getter
     private String scoreOrGrade;
 
-    public ForeignLanguage(String language, String examName, String scoreOrGrade, Resume resume) {
-        Validator.check(language == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(examName == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(scoreOrGrade == null, ExceptionCode.NO_EMPTY_VALUE);
+    public ForeignLanguage(String language, String examName, String scoreOrGrade) {
+        notNull(language);
+        notNull(examName);
+        notNull(scoreOrGrade);
 
-        this.resume = resume;
         this.language = language;
         this.examName = examName;
         this.scoreOrGrade = scoreOrGrade;
+    }
+
+
+    @Override
+    public Component of(Long resumeId) {
+        Component examName = new Component("examName", this.examName, null, null, resumeId, null);
+        Component scoreOrGrade = new Component("scoreOrGrade", this.scoreOrGrade, null, null, resumeId, null);
+
+        return new Component("language", this.language, null, null, resumeId, List.of(examName, scoreOrGrade));
+    }
+
+    public static ForeignLanguage from(Component component) {
+        Map<String, String> collect = component.getComponents().stream()
+                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+
+        return new ForeignLanguage(component.getContent(), collect.get("examName"), collect.get("scoreOrGrade"));
     }
 
 }
