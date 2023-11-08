@@ -13,15 +13,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.common.domain.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
-import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
@@ -43,10 +42,6 @@ public class Resume extends BaseEntity {
 
     @Embedded
     private ResumeInfo resumeInfo;
-
-    @Getter
-    @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Career> career = new ArrayList<>();
 
     @Getter
     @OneToMany(mappedBy = "resume", cascade = {PERSIST, REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -86,14 +81,13 @@ public class Resume extends BaseEntity {
     }
 
     @Builder
-    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, List<Career> career,
+    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo,
                    List<Project> project, List<Training> training, List<Certification> certification, List<Activity> activity,
                    List<ForeignLanguage> foreignLanguage, ReferenceLink referenceLink) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
-        this.career = career;
         this.project = project;
         this.training = training;
         this.certification = certification;
@@ -105,7 +99,7 @@ public class Resume extends BaseEntity {
 
     public Resume copy() {
         return new Resume(
-                null, title, mentee, resumeInfo, career, project, training, certification, activity, foreignLanguage,
+                null, title, mentee, resumeInfo, project, training, certification, activity, foreignLanguage,
                  referenceLink
         );
     }
