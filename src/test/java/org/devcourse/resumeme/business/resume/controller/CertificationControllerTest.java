@@ -1,7 +1,9 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.business.resume.controller.dto.CertificationCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.certification.dto.CertificationCreateRequest;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.resume.domain.Certification;
@@ -57,10 +59,11 @@ class CertificationControllerTest extends ControllerUnitTest {
     void 인증서_저장에_성공한다() throws Exception {
         CertificationCreateRequest request = new CertificationCreateRequest("인증서", "2023-10-01", "발급기관", "https://example.com", "설명");
         Long resumeId = 1L;
-        Certification certification = request.toEntity(resume);
+        Certification certification = request.toEntity();
+        Component component = certification.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(certificationService.create(certification)).willReturn(1L);
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+
 
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/certifications")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,18 +92,19 @@ class CertificationControllerTest extends ControllerUnitTest {
 
     @Test
     @WithMockUser
-    void 업무경험_조회에_성공한다() throws Exception {
+    void 인증서_조회에_성공한다() throws Exception {
+        // given
         Long resumeId = 1L;
-        Certification certification = new Certification(resume, "인증서", "2023-10-01", "발급기관", "https://example.com", "설명");
-        Resume savedResume = resume.builder()
-                .certification(List.of(certification))
-                .build();
+        Certification certification = new Certification("인증서", "2023-10-01", "발급기관", "https://example.com", "설명");
+        Component component = certification.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+        Component certification1 = new Component("CERTIFICATION", null, null, null, resumeId, List.of(component));
+        given(componentService.getAll(resumeId)).willReturn(List.of(certification1));
 
+        // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/certifications"));
 
-
+        // then
         result
                 .andExpect(status().isOk())
                 .andDo(

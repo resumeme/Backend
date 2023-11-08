@@ -1,5 +1,8 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.resume.controller.dto.ActivityRequestDto;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -65,10 +68,11 @@ class ActivityControllerTest extends ControllerUnitTest {
         );
 
         Long resumeId = 1L;
-        Activity activity = request.toEntity(resume);
+        Activity activity = request.toEntity();
 
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(activityService.create(activity)).willReturn(1L);
+        Component component = activity.of(resumeId);
+
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/activities")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -99,16 +103,18 @@ class ActivityControllerTest extends ControllerUnitTest {
     @Test
     @WithMockUser
     void 활동_조회에_성공한다() throws Exception {
+        // given
         Long resumeId = 1L;
-        Activity activity = new Activity("Project A", LocalDate.now().minusMonths(6), LocalDate.now(), true, "https://projectalink.com", "Project A");
-        Resume savedResume = resume.builder()
-                .activity(List.of(activity))
-                .build();
+        Activity activity = new Activity("Project A", LocalDate.now().minusMonths(6), LocalDate.now(), "https://projectalink.com", "Project A");
+        Component component = activity.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+        Component activity1 = new Component("ACTIVITY", null, null, null, resumeId, List.of(component));
+        given(componentService.getAll(resumeId)).willReturn(List.of(activity1));
 
+        // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/activities"));
 
+        // then
         result
                 .andExpect(status().isOk())
                 .andDo(

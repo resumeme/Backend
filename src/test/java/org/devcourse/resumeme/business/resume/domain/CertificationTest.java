@@ -40,13 +40,13 @@ class CertificationTest {
 
     @Test
     public void 수상_및_자격증_생성에_성공한다() {
-        Certification certification = new Certification(resume, "제목", "2023-01-01", "수여 기관", "Link", "Description");
+        Certification certification = new Certification("제목", "2023-01-01", "수여 기관", "Link", "Description");
         assertThat(certification).isNotNull();
     }
 
     @Test
     public void 제목이_비어있을_때_예외_발생() {
-        assertThatThrownBy(() -> new Certification(resume, null, "2023-01-01", "수여 기관", "Link", "Description"))
+        assertThatThrownBy(() -> new Certification(null, "2023-01-01", "수여 기관", "Link", "Description"))
                 .isInstanceOf(CustomException.class);
     }
 

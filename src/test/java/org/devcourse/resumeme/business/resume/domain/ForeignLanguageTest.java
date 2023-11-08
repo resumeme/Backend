@@ -49,7 +49,7 @@ class ForeignLanguageTest {
 
     @Test
     void 외국어_생성에_성공한다() {
-        ForeignLanguage foreignLanguage = new ForeignLanguage(language, examName, scoreOrGrade, resume);
+        ForeignLanguage foreignLanguage = new ForeignLanguage(language, examName, scoreOrGrade);
 
         assertThat(foreignLanguage).isNotNull();
     }
@@ -57,19 +57,19 @@ class ForeignLanguageTest {
 
     @Test
     void 언어_누락_시_예외_발생() {
-        assertThatThrownBy(() -> new ForeignLanguage(null, examName, scoreOrGrade, resume))
+        assertThatThrownBy(() -> new ForeignLanguage(null, examName, scoreOrGrade))
                 .isInstanceOf(CustomException.class);
     }
 
     @Test
     void 시험명_누락_시_예외_발생() {
-        assertThatThrownBy(() -> new ForeignLanguage(language, null, scoreOrGrade, resume))
+        assertThatThrownBy(() -> new ForeignLanguage(language, null, scoreOrGrade))
                 .isInstanceOf(CustomException.class);
     }
 
     @Test
     void 점수또는등급_누락_시_예외_발생() {
-        assertThatThrownBy(() -> new ForeignLanguage(language, examName, null, resume))
+        assertThatThrownBy(() -> new ForeignLanguage(language, examName, null))
                 .isInstanceOf(CustomException.class);
     }
 
