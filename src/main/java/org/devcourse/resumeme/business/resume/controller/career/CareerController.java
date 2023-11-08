@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerResponse;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
-import org.devcourse.resumeme.business.resume.service.BlockService;
+import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ import static org.devcourse.resumeme.business.resume.domain.BlockType.CAREER;
 @RequestMapping("/api/v1/resume")
 public class CareerController {
 
-    private final BlockService blockService;
+    private final ComponentService blockService;
 
     @PostMapping("/{resumeId}/careers")
     public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody CareerCreateRequest request) {
