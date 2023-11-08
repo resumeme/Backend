@@ -43,13 +43,13 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ResumeControllerTest extends ControllerUnitTest {
@@ -306,7 +306,6 @@ public class ResumeControllerTest extends ControllerUnitTest {
 
         // then
         result.andExpect(status().isOk())
-                .andDo(print())
                 .andDo(
                         document("resume/findEvents",
                                 getDocumentRequest(),
@@ -315,12 +314,16 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                         parameterWithName("resumeId").description("멘티가 작성한 이력서 아이디")
                                 ),
                                 responseFields(
-                                        fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
-                                        fieldWithPath("[].nickname").type(STRING).description("멘토 닉네임"),
-                                        fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
-                                        fieldWithPath("[].endDate").type(STRING).description("이벤트 마감 날짜"),
-                                        fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
-                                        fieldWithPath("[].positions").type(ARRAY).description(generateLinkCode(POSITION))
+                                        fieldWithPath("[].eventInfo").type(OBJECT).description("이벤트 정보 객체"),
+                                        fieldWithPath("[].eventInfo.eventId").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].eventInfo.title").type(STRING).description("이벤트 아이디"),
+                                        fieldWithPath("[].eventInfo.endDate").type(STRING).description("이벤트 아이디"),
+                                        fieldWithPath("[].eventInfo.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("[].eventInfo.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("[].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("[].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소")
                                 )
                         )
                 );

@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeResponse;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
@@ -23,10 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
-import static org.devcourse.resumeme.business.event.controller.dto.EventResponse.ResumeResponse;
 
 import java.util.List;
 
