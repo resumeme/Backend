@@ -2,7 +2,7 @@ spring:
   jpa:
     open-in-view: false
   config:
-    import: application-endpoint.yml, application-auth.yml
+    import: application-endpoint.yml, application-auth.yml, application-jwt.yml
   data:
     redis:
       host: localhost

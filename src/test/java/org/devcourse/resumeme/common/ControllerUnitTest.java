@@ -34,6 +34,7 @@ import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
+import org.devcourse.resumeme.global.auth.model.jwt.JwtProperties;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Field;
 
+import static org.devcourse.resumeme.global.auth.model.jwt.JwtProperties.TokenInfo;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 @WebMvcTest({
@@ -139,7 +141,7 @@ public abstract class ControllerUnitTest {
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
         OAuthTokenResponseFilter filter = new OAuthTokenResponseFilter(providerManager, mapper);
-        filter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(), mentorService, menteeService));
+        filter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(new JwtProperties("null", new TokenInfo("Authorization", 20), new TokenInfo("Refresh-Token", 30))), mentorService, menteeService));
         filter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
 
         mvc = MockMvcBuilders
