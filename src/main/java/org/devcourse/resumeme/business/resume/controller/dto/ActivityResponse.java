@@ -17,7 +17,7 @@ public record ActivityResponse(
                 activity.getActivityName(),
                 activity.getStartDate(),
                 activity.getEndDate(),
-                activity.isInProgress(),
+                activity.getEndDate() == null,
                 activity.getLink(),
                 activity.getDescription()
         );

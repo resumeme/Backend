@@ -1,34 +1,20 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.util.Validator;
-import org.devcourse.resumeme.global.exception.ExceptionCode;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Activity {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "activity_id")
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "resume_id")
-    private Resume resume;
+public class Activity implements Converter{
 
     private String activityName;
 
@@ -36,27 +22,35 @@ public class Activity {
 
     private LocalDate endDate;
 
-    private boolean inProgress;
-
     private String link;
 
     private String description;
 
-    public Activity(String activityName, LocalDate startDate, LocalDate endDate, boolean inProgress, String link, String description) {
-        Validator.check(activityName == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(startDate == null, ExceptionCode.NO_EMPTY_VALUE);
-        Validator.check(endDate == null && !inProgress, ExceptionCode.NO_EMPTY_VALUE);
+    public Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description) {
+        notNull(activityName);
+        notNull(startDate);
+        notNull(endDate);
 
         this.activityName = activityName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.inProgress = inProgress;
         this.link = link;
         this.description = description;
     }
 
-    public String getActivityName() {
-        return this.activityName;
+    @Override
+    public Component of(Long resumeId) {
+        Component link = new Component("link", this.link, null, null, resumeId, null);
+        Component description = new Component("description", this.description, null, null, resumeId, null);
+
+        return new Component("title", activityName, startDate, endDate, resumeId, List.of(link, description));
+    }
+
+    public static Activity from(Component component) {
+        Map<String, String> collect = component.getComponents().stream()
+                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+
+        return new Activity(component.getContent(), component.getStartDate(), component.getEndDate(), collect.get("link"), collect.get("description"));
     }
 
 }
