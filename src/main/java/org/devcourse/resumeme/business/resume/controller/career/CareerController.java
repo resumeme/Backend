@@ -26,7 +26,7 @@ public class CareerController {
 
     @PostMapping("/{resumeId}/careers")
     public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody CareerCreateRequest request) {
-        Career career = request.toEntity(resumeId);
+        Career career = request.toEntity();
 
         return new IdResponse(blockService.create(career.of(resumeId), CAREER));
     }
@@ -37,7 +37,7 @@ public class CareerController {
                 .filter(component -> component.isType("CAREER"))
                 .flatMap(component -> component.getComponents().stream())
                 .toList().stream()
-                .map(component -> new CareerResponse(Career.from(component, resumeId)))
+                .map(component -> new CareerResponse(Career.from(component)))
                 .toList();
     }
 

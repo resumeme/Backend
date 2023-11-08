@@ -16,12 +16,12 @@ public record CareerCreateRequest(
         LocalDate endDate,
         String careerContent
 ) {
-    public Career toEntity(Long resumeId) {
+    public Career toEntity() {
         List<Duty> duties = this.duties.stream()
                 .map(DutyRequest::toEntity)
                 .toList();
 
-        return new Career(companyName, position, resumeId, skills, duties, careerStartDate, endDate, careerContent);
+        return new Career(companyName, position, skills, duties, careerStartDate, endDate, careerContent);
     }
 
     public record DutyRequest(

@@ -3,6 +3,7 @@ package org.devcourse.resumeme.business.resume.domain.career;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.common.util.Validator;
@@ -20,15 +21,11 @@ import static org.devcourse.resumeme.business.resume.domain.BlockType.CAREER;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Career {
-
-    private Long id;
+public class Career implements Converter {
 
     private String companyName;
 
     private String position;
-
-    private Long resumeId;
 
     private List<String> skills;
 
@@ -40,13 +37,12 @@ public class Career {
 
     private BlockType type = CAREER;
 
-    public Career(String companyName, String position, Long resumeId, List<String> skills, List<Duty> duties,
+    public Career(String companyName, String position, List<String> skills, List<Duty> duties,
                   LocalDate careerStartDate, LocalDate endDate, String careerContent) {
         validateCareer(companyName, position);
 
         this.companyName = companyName;
         this.position = position;
-        this.resumeId = resumeId;
         this.skills = skills;
         this.duties = duties;
         this.careerPeriod = new CareerPeriod(careerStartDate, endDate);
@@ -58,6 +54,7 @@ public class Career {
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
+    @Override
     public Component of(Long resumeId) {
         Component position = new Component("position", this.position, null, null, resumeId, null);
         Component skills = new Component("skill", String.join(",", this.skills), null, null, resumeId, null);
@@ -75,7 +72,7 @@ public class Career {
                 .toList();
     }
 
-    public static Career from(Component careerComponent, Long resumeId) {
+    public static Career from(Component careerComponent) {
         Map<String, String> description = new HashMap<>();
         List<Duty> duties = new ArrayList<>();
 
@@ -90,7 +87,7 @@ public class Career {
             }
         }
 
-        return new Career(careerComponent.getProperty(), description.get("position"), resumeId,
+        return new Career(careerComponent.getProperty(), description.get("position"),
                 Arrays.asList(description.get("skill").split(",")), duties, careerComponent.getStartDate(),
                 careerComponent.getEndDate(), description.get("careerContent"));
     }
