@@ -1,11 +1,5 @@
-package org.devcourse.resumeme.business.resume.domain;
+package org.devcourse.resumeme.business.resume.domain.career;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,24 +9,13 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
 
-import static org.devcourse.resumeme.common.util.Validator.check;
 @Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Duty {
 
-    @Id
-    @Getter
-    @GeneratedValue
-    @Column(name = "duty_id")
     private Long id;
 
-    @Getter
     private String title;
-
-    @ManyToOne
-    @JoinColumn(name = "career_id")
-    private Career career;
 
     private LocalDate startDate;
 
