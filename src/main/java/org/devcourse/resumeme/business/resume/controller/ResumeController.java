@@ -1,11 +1,13 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.event.controller.dto.EventsResponse;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
+import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeResponse;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
@@ -24,6 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.business.event.controller.dto.EventResponse.ResumeResponse;
+
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resumes")
@@ -32,6 +38,8 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     private final MenteeService menteeService;
+
+    private final MenteeToEventService menteeToEventService;
 
     @PostMapping
     public IdResponse createResume(@AuthenticationPrincipal JwtUser user, @RequestBody ResumeRequest request) {
@@ -75,6 +83,15 @@ public class ResumeController {
     public List<ResumeResponse> getAll(@AuthenticationPrincipal JwtUser user) {
         return resumeService.getAllByMenteeId(user.id()).stream()
                 .map(ResumeResponse::new)
+                .toList();
+    }
+
+    @GetMapping("/{resumeId}/related-events")
+    public List<EventsResponse> getEvents(@PathVariable Long resumeId) {
+        List<MenteeToEvent> relatedEvents = menteeToEventService.getEventsRelatedToResume(resumeId);
+
+        return relatedEvents.stream()
+                .map(menteeToEvent -> new EventsResponse(menteeToEvent.getEvent()))
                 .toList();
     }
 
