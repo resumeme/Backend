@@ -18,7 +18,7 @@ public class GPADetails {
     private double maxGpa;
 
     public GPADetails(double gpa, double maxGpa) {
-        if (maxGpa <= gpa) {
+        if (maxGpa < gpa) {
             throw new CustomException(ExceptionCode.GPA_ERROR);
         }
         this.gpa = gpa;
