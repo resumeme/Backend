@@ -7,7 +7,9 @@ import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventsResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
+import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
@@ -42,6 +44,8 @@ public class EventController {
 
     private final MentorService mentorService;
 
+    private final EventPositionService eventPositionService;
+
     @PostMapping
     public IdResponse createEvent(@RequestBody EventCreateRequest request, @AuthenticationPrincipal JwtUser user) {
         /* 인증 유저 아이디를 통한 멘토 찾아오기 */
@@ -72,12 +76,13 @@ public class EventController {
     @GetMapping("/{eventId}")
     public EventResponse getAllAttendResumes(@PathVariable Long eventId, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
         Event event = eventService.getOne(eventId);
+        List<EventPosition> positions = eventPositionService.getAll(eventId);
 
         if (isMentor(auth)) {
-            return new EventResponse(event, getResumes(event));
+            return new EventResponse(event, positions, getResumes(event));
         }
 
-        return new EventResponse(event, List.of());
+        return new EventResponse(event, positions, List.of());
     }
 
     private boolean isMentor(Authentication auth) {

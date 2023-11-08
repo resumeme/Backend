@@ -1,26 +1,27 @@
 package org.devcourse.resumeme.business.event.controller;
 
-import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventTimeRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
-import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
+import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
+import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
-import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
-import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
+import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -30,15 +31,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.domain.Position.BACK;
 import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -253,6 +254,7 @@ class EventControllerTest extends ControllerUnitTest {
         setId(resume1, 1L);
         setId(resume2, 4L);
         given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));
+        given(eventPositionService.getAll(eventId)).willReturn(List.of(new EventPosition(BACK, event)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/events/{eventId}", eventId));
@@ -269,8 +271,14 @@ class EventControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("info").type(OBJECT).description("이벤트 관련 정보"),
                                         fieldWithPath("info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("info.content").type(STRING).description("이벤트 상세내용"),
+                                        fieldWithPath("info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
                                         fieldWithPath("info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
-                                        fieldWithPath("info.endDate").type(STRING).description("첨삭 종료 일"),
+                                        fieldWithPath("info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
+                                        fieldWithPath("info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
+                                        fieldWithPath("info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
+                                        fieldWithPath("info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
                                         fieldWithPath("resumes").type(ARRAY).description("이벤트 신청에 사용된 이력서 멘토 로그인 시에만 값 제공"),
                                         fieldWithPath("resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
@@ -317,12 +325,16 @@ class EventControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
-                                        fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
-                                        fieldWithPath("[].nickname").type(STRING).description("멘토 닉네임"),
-                                        fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
-                                        fieldWithPath("[].endDate").type(STRING).description("이벤트 마감 날짜"),
-                                        fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
-                                        fieldWithPath("[].positions").type(ARRAY).description(generateLinkCode(POSITION))
+                                        fieldWithPath("[].eventInfo").type(OBJECT).description("이벤트 정보 객체"),
+                                        fieldWithPath("[].eventInfo.eventId").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].eventInfo.title").type(STRING).description("이벤트 아이디"),
+                                        fieldWithPath("[].eventInfo.endDate").type(STRING).description("이벤트 아이디"),
+                                        fieldWithPath("[].eventInfo.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("[].eventInfo.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("[].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("[].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소")
                                 )
                         )
                 );

@@ -43,6 +43,7 @@ public class Event extends BaseEntity {
     @Embedded
     private EventInfo eventInfo;
 
+    @Getter
     @Embedded
     private EventTimeInfo eventTimeInfo;
 
@@ -152,6 +153,10 @@ public class Event extends BaseEntity {
 
     public String title() {
         return eventInfo.getTitle();
+    }
+
+    public String content() {
+        return eventInfo.getContent();
     }
 
     public int maximumCount() {

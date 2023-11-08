@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.business.comment.controller.CommentController;
 import org.devcourse.resumeme.business.comment.service.CommentService;
 import org.devcourse.resumeme.business.event.controller.EventController;
+import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
@@ -75,6 +76,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public abstract class ControllerUnitTest {
 
+    @MockBean
+    protected EventPositionService eventPositionService;
+    
     @MockBean
     protected EventService eventService;
 

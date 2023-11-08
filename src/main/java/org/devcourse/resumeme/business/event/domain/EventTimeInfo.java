@@ -17,8 +17,10 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.TIME_ERROR;
 @NoArgsConstructor(access = PROTECTED)
 public class EventTimeInfo {
 
+    @Getter
     private LocalDateTime openDateTime;
 
+    @Getter
     private LocalDateTime closeDateTime;
 
     @Getter
