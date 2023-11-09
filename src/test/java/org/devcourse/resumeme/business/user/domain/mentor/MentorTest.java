@@ -1,12 +1,12 @@
 package org.devcourse.resumeme.business.user.domain.mentor;
 
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.assertj.core.api.Assertions;
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.global.exception.CustomException;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,6 +15,10 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_ADMIN;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_PENDING;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class MentorTest {
@@ -29,9 +33,9 @@ class MentorTest {
 
     @BeforeEach
     void SetUP() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_PENDING);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", ROLE_PENDING);
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
-        oAuth2TempInfo = new OAuth2TempInfo( null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
+        oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         refreshToken = "refreshTokenRecentlyIssued";
     }
 
@@ -77,7 +81,7 @@ class MentorTest {
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
                 .email(oAuth2TempInfo.getEmail())
                 .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(),  requiredInfoRequest.role()))
+                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
                 .experiencedPositions(emptyExperiencedPositions)
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(mentorRegisterInfoRequest.careerYear())
@@ -87,7 +91,7 @@ class MentorTest {
 
     @Test
     void 경력_연차가_1_미만_80_초과일_경우_멘토_생성에_실패한다() {
-        int lessThanOne = -3;
+        int lessThanOne = 0;
         int moreThanEighty = 81;
 
         assertThatThrownBy(() -> Mentor.builder()
@@ -96,7 +100,7 @@ class MentorTest {
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
                 .email(oAuth2TempInfo.getEmail())
                 .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(),  requiredInfoRequest.role()))
+                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
                 .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(lessThanOne)
@@ -137,35 +141,93 @@ class MentorTest {
     }
 
     @Test
-    void 멘티_또는_관리자_역할로는_멘토_생성에_실패한다() {
-        Role mentee = Role.ROLE_MENTEE;
-        Role admin = Role.ROLE_ADMIN;
-
-        assertThatThrownBy(() -> Mentor.builder()
+    void 신규_가입_멘티의_ROLE을_PENDING에서_MENTOR로_수정할_수_있다() {
+        // given
+        Mentor mentor = Mentor.builder()
                 .id(1L)
-                .imageUrl(oAuth2TempInfo.getImageUrl())
-                .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
-                .email(oAuth2TempInfo.getEmail())
-                .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), mentee))
-                .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
-                .careerContent(mentorRegisterInfoRequest.careerContent())
-                .careerYear(mentorRegisterInfoRequest.careerYear())
-                .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다");
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
 
-        assertThatThrownBy(() -> Mentor.builder()
-                .id(1L)
-                .imageUrl(oAuth2TempInfo.getImageUrl())
-                .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
-                .email(oAuth2TempInfo.getEmail())
-                .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), admin))
-                .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
-                .careerContent(mentorRegisterInfoRequest.careerContent())
-                .careerYear(mentorRegisterInfoRequest.careerYear())
-                .build()).isInstanceOf(CustomException.class)
-                .hasMessage("허용되지 않은 역할입니다");
+        // when
+        mentor.updateRole(ROLE_MENTOR);
+
+        // then
+        Assertions.assertThat(mentor.getRequiredInfo().getRole()).isEqualTo(ROLE_MENTOR);
     }
 
+    @Test
+    void 멘토의_ROLE을_MENTEE로_수정하는데_실패한다() {
+        // given
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
+        assertThatThrownBy(() -> mentor.updateRole(ROLE_MENTEE)).isInstanceOf(CustomException.class);
+    }
+
+    @Test
+    void 멘토의_ROLE을_ADMIN으로_수정하는데_실패한다() {
+        // given
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
+        assertThatThrownBy(() -> mentor.updateRole(ROLE_ADMIN)).isInstanceOf(CustomException.class);
+    }
+
+    @Test
+    void 이미_승인된_멘토는_승인여부_확인시_true를_반환한다() {
+        // given
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
+        // when, then
+        Assertions.assertThat(mentor.isApproved()).isTrue();
+    }
+
+    @Test
+    void 미승인_상태의_멘토는_승인여부_확인시_false를_반환한다() {
+        // given
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
+        // when, then
+        Assertions.assertThat(mentor.isApproved()).isFalse();
+    }
 }
