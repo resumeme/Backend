@@ -1,81 +1,53 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static org.devcourse.resumeme.common.util.Validator.check;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Training {
+public class Training implements Converter {
 
-    @Id
-    @Getter
-    @GeneratedValue
-    @Column(name = "training_id")
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "resume_id")
-    private Resume resume;
-
-    @Getter
     private String explanation;
 
-    @Embedded
     private EducationalDetails educationalDetails;
 
-    @Embedded
     private DateDetails dateDetails;
 
-    @Embedded
     private GPADetails gpaDetails;
 
     public Training(String organization, String major, String degree, LocalDate admissionDate,
-                    LocalDate graduationDate, double gpa, double maxGpa, String explanation, Resume resume) {
+            LocalDate graduationDate, double gpa, double maxGpa, String explanation) {
         this.educationalDetails = new EducationalDetails(organization, major, degree);
         this.dateDetails = new DateDetails(admissionDate, graduationDate);
         this.gpaDetails = new GPADetails(gpa, maxGpa);
         this.explanation = explanation;
-        this.resume = resume;
     }
 
-    public String getOrganization() {
-        return educationalDetails.getOrganization();
+    @Override
+    public Component of(Long resumeId) {
+        Component explanation = new Component("explanation", this.explanation, null, null, resumeId, null);
+        Component degree = new Component("degree", educationalDetails.getDegree(), null, null, resumeId, null);
+        Component major = new Component("major", educationalDetails.getMajor(), null, null, resumeId, null);
+        Component gpa = new Component("gpa", String.valueOf(gpaDetails.getGpa()), null, null, resumeId, null);
+        Component maxGpa = new Component("maxGpa", String.valueOf(gpaDetails.getMaxGpa()), null, null, resumeId, null);
+
+        return new Component("training", this.educationalDetails.getOrganization(), this.dateDetails.getAdmissionDate(), this.dateDetails.getGraduationDate(),
+                resumeId, List.of(explanation, degree, major, gpa, maxGpa));
     }
 
-    public String getMajor() {
-        return educationalDetails.getMajor();
-    }
+    public static Training from(Component component) {
+        Map<String, String> collect = component.getComponents().stream()
+                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
 
-    public String getDegree() {
-        return educationalDetails.getDegree();
-    }
-
-    public LocalDate getAdmissionDate() {
-        return dateDetails.getAdmissionDate();
-    }
-
-    public LocalDate getGraduationDate() {
-        return dateDetails.getGraduationDate();
-    }
-
-    public double getGpa() {
-        return gpaDetails.getGpa();
-    }
-
-    public double getMaxGpa() {
-        return gpaDetails.getMaxGpa();
+        return new Training(component.getContent(), collect.get("major"), collect.get("degree"), component.getStartDate(), component.getEndDate(),
+                Double.valueOf(collect.get("gpa")), Double.valueOf(collect.get("maxGpa")), collect.get("explanation"));
     }
 
 }

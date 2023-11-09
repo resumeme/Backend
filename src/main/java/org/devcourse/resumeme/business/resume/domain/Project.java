@@ -1,72 +1,41 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.devcourse.resumeme.common.util.Validator.check;
-
-@Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Project {
+public class Project implements Converter {
 
-    @Id
-    @Getter
-    @GeneratedValue
-    @Column(name = "project_id")
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "resume_id")
-    private Resume resume;
-
-    @Getter
     private String projectName;
 
-    @Getter
     private Long productionYear;
 
-    @Getter
-    private boolean isTeam;
+    private String teamMembers;
 
-    private String TeamMembers;
-
-    @Getter
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "project_skills")
-    @Column(name = "skill")
     private List<String> skills;
 
-    @Getter
     private String projectContent;
 
-    @Getter
     private String projectUrl;
 
-    public Project(Resume resume, String projectName, Long productionYear, boolean isTeam, String teamMembers, List<String> skills,
-                   String projectContent, String projectUrl) {
+    public Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
+            String projectContent, String projectUrl) {
         validateProject(projectName, productionYear);
 
-        this.resume = resume;
         this.projectName = projectName;
         this.productionYear = productionYear;
-        this.isTeam = isTeam;
-        if (isTeam) {
-            this.TeamMembers = teamMembers;
-        }
+        this.teamMembers = teamMembers;
         this.skills = skills;
         this.projectContent = projectContent;
         this.projectUrl = projectUrl;
@@ -77,8 +46,23 @@ public class Project {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    public String getTeamMembers() {
-        return isTeam ? TeamMembers : "";
+    @Override
+    public Component of(Long resumeId) {
+        Component url = new Component("url", projectUrl, null, null, resumeId, null);
+        Component content = new Component("content", projectContent, null, null, resumeId, null);
+        Component memberCount = new Component("member", teamMembers, null, null, resumeId, null);
+        Component skill = new Component("skills", String.join(",", skills), null, null, resumeId, null);
+
+        return new Component("projectName", this.projectName, LocalDate.of(productionYear.intValue(), 1, 31),
+                null, resumeId, List.of(url, content, memberCount, skill));
+    }
+
+    public static Project from(Component component) {
+        Map<String, String> collect = component.getComponents().stream()
+                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+
+        return new Project(component.getContent(), (long) component.getStartDate().getYear(), collect.get("member"), Arrays.asList(collect.get("skills").split(",")),
+                collect.get("content"), collect.get("url"));
     }
 
 }

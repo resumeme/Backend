@@ -41,7 +41,7 @@ public class TrainingTest {
     @Test
     void 입학일자는_졸업일자_보다_먼저여야_한다() {
         assertThatThrownBy(() -> new Training("School", "Major", "Degree",
-                LocalDate.now(), LocalDate.now().minusDays(1), 3.5, 4.0, "Explanation", resume))
+                LocalDate.now(), LocalDate.now().minusDays(1), 3.5, 4.0, "Explanation"))
                 .isInstanceOf(CustomException.class);
     }
 
@@ -51,7 +51,7 @@ public class TrainingTest {
         double maxGpa = 4.0;
 
         assertThatThrownBy(() -> new Training("School", "Major", "Degree",
-                LocalDate.now(), LocalDate.now().plusDays(1), gpa, maxGpa, "Explanation", resume))
+                LocalDate.now(), LocalDate.now().plusDays(1), gpa, maxGpa, "Explanation"))
                 .isInstanceOf(CustomException.class);
     }
 

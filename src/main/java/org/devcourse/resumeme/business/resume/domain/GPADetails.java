@@ -1,13 +1,11 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GPADetails {
 

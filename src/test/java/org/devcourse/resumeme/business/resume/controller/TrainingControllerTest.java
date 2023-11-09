@@ -1,5 +1,8 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.resume.domain.Project;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.resume.controller.dto.TrainingCreateRequest;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.TRAINING;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
@@ -57,21 +61,25 @@ class TrainingControllerTest extends ControllerUnitTest {
 
     @Test
     void 트레이닝_저장에_성공한다() throws Exception {
+        // given
         TrainingCreateRequest request = new TrainingCreateRequest(
                 "데브대", "컴퓨터공학과", "학사 학위", LocalDate.of(2018, 3, 1),
                 LocalDate.of(2022, 2, 28), 4.0, 4.5, "성적 우수"
         );
         Long resumeId = 1L;
-        Training training = request.toEntity(resume);
+        Training training = request.toEntity();
 
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(trainingService.create(training)).willReturn(1L);
+        Component component = training.of(resumeId);
 
+        given(componentService.create(component, TRAINING)).willReturn(1L);
+
+        // when
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/trainings")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
         );
 
+        // then
         result
                 .andExpect(status().isOk())
                 .andDo(
@@ -98,16 +106,18 @@ class TrainingControllerTest extends ControllerUnitTest {
     @Test
     @WithMockUser
     void 교육사항_조회에_성공한다() throws Exception {
+        // given
         Long resumeId = 1L;
-        Training training = new Training("organization", "Computer Science", "Bachelor's", LocalDate.now(), LocalDate.now().plusYears(4), 3.8, 4.0, "Description", resume);
-        Resume savedResume = resume.builder().
-                training(List.of(training))
-                .build();
+        Training training = new Training("organization", "Computer Science", "Bachelor's", LocalDate.now(), LocalDate.now().plusYears(4), 3.8, 4.0, "Description");
+        Component component = training.of(resumeId);
 
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
+        Component training1 = new Component("TRAINING", null, null, null, resumeId, List.of(component));
+        given(componentService.getAll(resumeId)).willReturn(List.of(training1));
 
+        // when
         ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/trainings"));
 
+        // then
         result
                 .andExpect(status().isOk())
                 .andDo(
