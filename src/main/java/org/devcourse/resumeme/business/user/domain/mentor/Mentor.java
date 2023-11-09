@@ -19,12 +19,14 @@ import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpda
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.global.exception.CustomException;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.LAZY;
+import static org.devcourse.resumeme.business.user.domain.Role.*;
 import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
@@ -91,7 +93,7 @@ public class Mentor extends BaseEntity {
         check(provider == null, NO_EMPTY_VALUE);
         check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
         check(requiredInfo == null, NO_EMPTY_VALUE);
-        check(Role.ROLE_MENTEE.equals(requiredInfo.getRole()) || Role.ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
+        check(ROLE_MENTEE.equals(requiredInfo.getRole()) || ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
         check(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
         check(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
         check(careerYear < 1 || careerYear > 80, "NUMBER_NOT_ALLOWED", "경력 연차가 올바르지 않습니다.");
@@ -102,11 +104,14 @@ public class Mentor extends BaseEntity {
     }
 
     public void updateRole(Role role) {
+        if (ROLE_MENTEE.equals(role)) {
+            throw new CustomException(ROLE_NOT_ALLOWED);
+        }
         requiredInfo.updateRole(role);
     }
 
     public boolean isApproved() {
-        return Role.ROLE_MENTOR.equals(this.requiredInfo.getRole());
+        return ROLE_MENTOR.equals(this.requiredInfo.getRole());
     }
 
     public void updateInfos(MentorInfoUpdateRequest updateRequest) {
