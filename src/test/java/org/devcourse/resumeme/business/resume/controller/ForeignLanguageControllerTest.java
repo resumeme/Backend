@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.FOREIGN_LANGUAGE;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -97,7 +98,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
         ForeignLanguage foreignLanguage = new ForeignLanguage("영어", "토익", "990");
         Component component = foreignLanguage.of(resumeId);
 
-        Component foreignLanguage1 = new Component("FOREIGN_LANGUAGE", null, null, null, resumeId, List.of(component));
+        Component foreignLanguage1 = new Component(FOREIGN_LANGUAGE.getUrlParameter(), null, null, null, resumeId, List.of(component));
         given(componentService.getAll(resumeId)).willReturn(List.of(foreignLanguage1));
 
         // when

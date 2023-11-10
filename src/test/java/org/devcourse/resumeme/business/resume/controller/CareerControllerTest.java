@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.CAREER;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
@@ -38,7 +39,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CareerControllerTest extends ControllerUnitTest {
+class CareerControllerTest extends ControllerUnitTest {
 
     private Resume resume;
 
@@ -68,7 +69,7 @@ public class CareerControllerTest extends ControllerUnitTest {
         Career entity = request.toEntity();
         Component component = entity.of(resumeId);
 
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, CAREER)).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/careers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +113,7 @@ public class CareerControllerTest extends ControllerUnitTest {
                 LocalDate.of(2022, 10, 12), LocalDate.of(2023, 11, 1), "그렙 회사 다님");
 
         Component component = career.of(resumeId);
-        Component career1 = new Component("CAREER", null, null, null, resumeId, List.of(component));
+        Component career1 = new Component(CAREER.getUrlParameter(), null, null, null, resumeId, List.of(component));
         given(componentService.getAll(resumeId)).willReturn(List.of(career1));
 
         // when
@@ -134,7 +135,7 @@ public class CareerControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].duties[].startDate").type(STRING).description("업무 시작일"),
                                         fieldWithPath("[].duties[].endDate").type(STRING).description("업무 종료일"),
                                         fieldWithPath("[].duties[].description").type(STRING).description("업무 설명"),
-                                        fieldWithPath("[].isCurrentlyEmployed").type(BOOLEAN).description("현재 재직 상태"),
+                                        fieldWithPath("[].currentlyEmployed").type(BOOLEAN).description("현재 재직 상태"),
                                         fieldWithPath("[].careerStartDate").type(STRING).description("경력 시작일"),
                                         fieldWithPath("[].endDate").type(STRING).description("경력 종료일"),
                                         fieldWithPath("[].careerContent").type(STRING).description("경력 상세 내용")

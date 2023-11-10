@@ -112,7 +112,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         Training training = new Training("organization", "Computer Science", "Bachelor's", LocalDate.now(), LocalDate.now().plusYears(4), 3.8, 4.0, "Description");
         Component component = training.of(resumeId);
 
-        Component training1 = new Component("TRAINING", null, null, null, resumeId, List.of(component));
+        Component training1 = new Component(TRAINING.getUrlParameter(), null, null, null, resumeId, List.of(component));
         given(componentService.getAll(resumeId)).willReturn(List.of(training1));
 
         // when

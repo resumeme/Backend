@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.PROJECT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
@@ -67,7 +68,7 @@ class ProjectControllerTest extends ControllerUnitTest {
 
         Component component = project.of(resumeId);
 
-        given(componentService.create(component, BlockType.PROJECT)).willReturn(1L);
+        given(componentService.create(component, PROJECT)).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/projects")
@@ -106,7 +107,7 @@ class ProjectControllerTest extends ControllerUnitTest {
         Project project = new Project("프로젝트", 2023L, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
         Component component = project.of(resumeId);
 
-        Component project1 = new Component("PROJECT", null, null, null, resumeId, List.of(component));
+        Component project1 = new Component(PROJECT.getUrlParameter(), null, null, null, resumeId, List.of(component));
         given(componentService.getAll(resumeId)).willReturn(List.of(project1));
 
         // when
@@ -122,7 +123,7 @@ class ProjectControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("[]projectName").type(STRING).description("프로젝트명"),
                                         fieldWithPath("[]productionYear").type(NUMBER).description("제작 연도"),
-                                        fieldWithPath("[]isTeam").type(BOOLEAN).description("팀 프로젝트 여부"),
+                                        fieldWithPath("[]team").type(BOOLEAN).description("팀 프로젝트 여부"),
                                         fieldWithPath("[]teamMembers").type(STRING).optional().description("팀 구성원 (옵션)"),
                                         fieldWithPath("[]skills").type(ARRAY).description("기술 목록"),
                                         fieldWithPath("[]projectContent").type(STRING).description("프로젝트 내용"),
