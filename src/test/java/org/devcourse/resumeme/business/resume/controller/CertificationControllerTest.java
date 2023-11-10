@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.CERTIFICATION;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -99,7 +100,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         Certification certification = new Certification("인증서", "2023-10-01", "발급기관", "https://example.com", "설명");
         Component component = certification.of(resumeId);
 
-        Component certification1 = new Component("CERTIFICATION", null, null, null, resumeId, List.of(component));
+        Component certification1 = new Component(CERTIFICATION.getUrlParameter(), null, null, null, resumeId, List.of(component));
         given(componentService.getAll(resumeId)).willReturn(List.of(certification1));
 
         // when

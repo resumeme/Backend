@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.BlockType.ACTIVITY;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -108,7 +109,7 @@ class ActivityControllerTest extends ControllerUnitTest {
         Activity activity = new Activity("Project A", LocalDate.now().minusMonths(6), LocalDate.now(), "https://projectalink.com", "Project A");
         Component component = activity.of(resumeId);
 
-        Component activity1 = new Component("ACTIVITY", null, null, null, resumeId, List.of(component));
+        Component activity1 = new Component(ACTIVITY.getUrlParameter(), null, null, null, resumeId, List.of(component));
         given(componentService.getAll(resumeId)).willReturn(List.of(activity1));
 
         // when

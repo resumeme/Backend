@@ -10,13 +10,8 @@ import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
-import org.devcourse.resumeme.business.resume.controller.ActivityController;
-import org.devcourse.resumeme.business.resume.controller.ForeignLanguageController;
-import org.devcourse.resumeme.business.resume.controller.ProjectController;
 import org.devcourse.resumeme.business.resume.controller.ResumeController;
-import org.devcourse.resumeme.business.resume.controller.TrainingController;
-import org.devcourse.resumeme.business.resume.controller.career.CareerController;
-import org.devcourse.resumeme.business.resume.controller.certification.CertificationController;
+import org.devcourse.resumeme.business.resume.controller.ComponentController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
@@ -59,15 +54,10 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MenteeController.class,
         MentorController.class,
         CommentController.class,
-        CareerController.class,
-        ProjectController.class,
-        CertificationController.class,
+        ComponentController.class,
         MentorApplicationController.class,
         MentorApplicationController.class,
-        ActivityController.class,
-        ForeignLanguageController.class,
         ResultNoticeController.class,
-        TrainingController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
