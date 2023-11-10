@@ -24,7 +24,7 @@ public class StatisticsService {
 
     public Double getFormattedPercentage(long passedResumes, long totalResumes) {
         double percentage = ((double) passedResumes / totalResumes) * 100;
-        return Double.valueOf(String.format("%.2f%%", percentage));
+        return Double.valueOf(String.format("%.2f", percentage));
     }
 
 }
