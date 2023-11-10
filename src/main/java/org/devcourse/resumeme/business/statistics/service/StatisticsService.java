@@ -19,7 +19,12 @@ public class StatisticsService {
             return 0.0;
         }
 
-        return ((double) passedResumes / totalResumes) * 100;
+        return getFormattedPercentage(passedResumes, totalResumes);
+    }
+
+    public Double getFormattedPercentage(long passedResumes, long totalResumes) {
+        double percentage = ((double) passedResumes / totalResumes) * 100;
+        return Double.valueOf(String.format("%.2f%%", percentage));
     }
 
 }
