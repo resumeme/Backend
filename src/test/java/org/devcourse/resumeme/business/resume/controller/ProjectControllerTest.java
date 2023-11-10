@@ -82,9 +82,10 @@ class ProjectControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
                                         fieldWithPath("projectName").type(STRING).description("프로젝트명"),
                                         fieldWithPath("productionYear").type(NUMBER).description("생산 연도"),
-                                        fieldWithPath("isTeam").type(BOOLEAN).description("팀 프로젝트 여부").optional().attributes(constraints("true일 시 teamMembers 필수")),
+                                        fieldWithPath("team").type(BOOLEAN).description("팀 프로젝트 여부").optional().attributes(constraints("true일 시 teamMembers 필수")),
                                         fieldWithPath("teamMembers").type(STRING).description("팀원 목록").optional(),
                                         fieldWithPath("skills[]").type(ARRAY).description("기술 목록").optional(),
                                         fieldWithPath("projectContent").type(STRING).description("프로젝트 내용").optional(),
