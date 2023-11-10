@@ -69,6 +69,7 @@ public class SecurityServiceConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(/*"https://resumeme.vercel.app", "http://localhost:5173"*/"*"));
         configuration.setAllowedMethods(List.of("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
+        configuration.setExposedHeaders(List.of("cacheKey", "Authorization", "Refresh-Token"));
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(false);
 
