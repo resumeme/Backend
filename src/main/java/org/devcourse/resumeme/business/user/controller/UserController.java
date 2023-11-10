@@ -28,7 +28,8 @@ public class UserController {
         if (isMentee(auth)) {
             return new UserInfoResponse(menteeService.getOne(user.id()));
         }
-            return new UserInfoResponse(mentorService.getOne(user.id()));
+
+        return new UserInfoResponse(mentorService.getOne(user.id()));
     }
 
     private boolean isMentee(Authentication auth) {
