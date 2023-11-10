@@ -7,6 +7,7 @@ import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
+import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -15,8 +16,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.INTEGER;
-import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -80,13 +81,13 @@ class UserControllerTest extends ControllerUnitTest {
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("role").type(STRING).description("역할").attributes(constraints("mentor")),
-                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
+                                        fieldWithPath("role").type(STRING).description("역할"),
+                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)),
                                         fieldWithPath("interestedPositions").type(NULL).description("관심 직무"),
                                         fieldWithPath("interestedFields").type(NULL).description("관심 분야"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("introduce").type(STRING).description("자기소개")
                                 )
                         )
                 );
@@ -113,13 +114,13 @@ class UserControllerTest extends ControllerUnitTest {
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("role").type(STRING).description("역할").attributes(constraints("mentee")),
+                                        fieldWithPath("role").type(STRING).description("역할"),
                                         fieldWithPath("experiencedPositions").type(NULL).description("활동 직무"),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야").optional(),
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야").description(generateLinkCode(DocumentLinkGenerator.DocUrl.FIELD)),
                                         fieldWithPath("careerContent").type(NULL).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("introduce").type(STRING).description("자기소개")
                                 )
                         )
                 );
