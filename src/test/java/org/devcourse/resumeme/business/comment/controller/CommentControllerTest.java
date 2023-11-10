@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.comment.controller;
 
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentCreateRequest;
 import org.devcourse.resumeme.business.comment.domain.Comment;
@@ -79,15 +80,18 @@ class CommentControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 리뷰_생성에_성공한다() throws Exception {
         // given
-        CommentCreateRequest request = new CommentCreateRequest("이력서가 맘에 안들어요", "ACTIVITY");
+        CommentCreateRequest request = new CommentCreateRequest(1L, "이력서가 맘에 안들어요", "ACTIVITY");
         Long resumeId = 1L;
+        Component component = new Component("career", "career", null, null, resumeId, List.of());
         Resume resume = new Resume("titlem", mentee);
 
-        Comment comment = request.toEntity(resume);
+        Comment comment = request.toEntity(resume, component);
         setId(comment, 1L);
+        setId(component, 1L);
 
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(reviewService.create(any(Comment.class))).willReturn(comment);
+        given(componentService.getOne(request.componentId())).willReturn(component);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/events/{eventId}/resume/{resumeId}/comments", 1L, resumeId)
@@ -102,10 +106,12 @@ class CommentControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("componentId").type(NUMBER).description("이력서 component 아이디"),
                                         fieldWithPath("content").type(STRING).description("리뷰 내용"),
                                         fieldWithPath("blockType").type(STRING).description("이력서 각 블럭 타입")
                                 ),
                                 responseFields(
+                                        fieldWithPath("componentId").type(NUMBER).description("이력서 component 아이디"),
                                         fieldWithPath("id").type(NUMBER).description("리뷰 아이디"),
                                         fieldWithPath("content").type(STRING).description("리뷰 내용"),
                                         fieldWithPath("blockType").type(STRING).description(generateLinkCode(BLOCK_TYPE))
@@ -120,13 +126,15 @@ class CommentControllerTest extends ControllerUnitTest {
         long eventId = 1L;
         long resumeId = 1L;
 
+        Component component = new Component("career", "career", null, null, resumeId, List.of());
+
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Comment comment = new Comment("리뷰 내용내용", BlockType.CAREER, new Resume("title", mentee));
+        Comment comment = new Comment("리뷰 내용내용", BlockType.CAREER, component, new Resume("title", mentee));
         setId(comment, 1L);
 
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
