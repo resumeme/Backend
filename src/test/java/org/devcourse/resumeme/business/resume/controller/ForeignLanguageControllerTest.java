@@ -1,15 +1,15 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.BlockType;
-import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageRequestDto;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
 import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -57,7 +57,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
 
     @Test
     void 외국어_저장에_성공한다() throws Exception {
-        ForeignLanguageRequestDto request = new ForeignLanguageRequestDto("English", "TOEIC", "900");
+        ForeignLanguageCreateRequest request = new ForeignLanguageCreateRequest("English", "TOEIC", "900");
         ForeignLanguage entity = request.toEntity();
         Long resumeId = 1L;
 
@@ -77,6 +77,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
                                         fieldWithPath("language").type(STRING).description("언어"),
                                         fieldWithPath("examName").type(STRING).description("시험명"),
                                         fieldWithPath("scoreOrGrade").type(STRING).description("점수 또는 학점")

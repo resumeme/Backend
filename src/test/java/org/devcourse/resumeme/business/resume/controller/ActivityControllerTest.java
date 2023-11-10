@@ -1,16 +1,15 @@
 package org.devcourse.resumeme.business.resume.controller;
 
-import org.devcourse.resumeme.business.resume.domain.BlockType;
-import org.devcourse.resumeme.business.resume.domain.career.Career;
-import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.business.resume.controller.dto.ActivityRequestDto;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.resume.controller.dto.ActivityCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -63,7 +62,7 @@ class ActivityControllerTest extends ControllerUnitTest {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(5);
 
-        ActivityRequestDto request = new ActivityRequestDto(
+        ActivityCreateRequest request = new ActivityCreateRequest(
                 "활동1", startDate, endDate, false, "https://example.com", "활동 설명"
         );
 
@@ -86,6 +85,7 @@ class ActivityControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
                                         fieldWithPath("activityName").type(STRING).description("활동명"),
                                         fieldWithPath("startDate").type(STRING).description("시작일"),
                                         fieldWithPath("endDate").type(STRING).description("종료일"),
