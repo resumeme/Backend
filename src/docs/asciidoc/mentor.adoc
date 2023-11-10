@@ -1,6 +1,13 @@
 = *멘토's API*
 
 == [회원정보]
+=== 멘토 정보 조회 (마이페이지)
+include::{snippets}/user/mentor/findMy/http-request.adoc[]
+
+*Response*
+include::{snippets}/user/mentor/findMy/http-response.adoc[]
+include::{snippets}/user/mentor/findMy/response-fields.adoc[]
+
 === 멘토 정보 수정
 *Request*
 include::{snippets}/user/mentor/update/http-request.adoc[]

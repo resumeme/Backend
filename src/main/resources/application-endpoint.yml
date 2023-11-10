@@ -1,6 +1,7 @@
 endpoint:
   matchers:
     - matcher:
+        get: /api/v1/user
         post: /api/v1/mentees, /api/v1/mentors
       role: all
     - matcher:
