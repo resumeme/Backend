@@ -55,7 +55,7 @@ class UserControllerTest extends ControllerUnitTest {
                 .email("happy4567@naver.com")
                 .requiredInfo(new RequiredInfo("김건재", "gunjay", "01058337248", Role.ROLE_MENTEE))
                 .interestedPositions(Set.of("FRONT", "BACK"))
-                .interestedFields(Set.of("RETAIL"))
+                .interestedFields(Set.of("COMMERCE"))
                 .introduce("빨리 취업하고싶어요! 화이팅~!")
                 .build();
     }
