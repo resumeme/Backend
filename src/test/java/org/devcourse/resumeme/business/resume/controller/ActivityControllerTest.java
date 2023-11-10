@@ -85,6 +85,7 @@ class ActivityControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
                                         fieldWithPath("activityName").type(STRING).description("활동명"),
                                         fieldWithPath("startDate").type(STRING).description("시작일"),
                                         fieldWithPath("endDate").type(STRING).description("종료일"),

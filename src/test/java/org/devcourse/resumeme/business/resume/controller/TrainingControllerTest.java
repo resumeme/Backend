@@ -87,6 +87,7 @@ class TrainingControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
                                         fieldWithPath("organization").type(STRING).description("교육 기관"),
                                         fieldWithPath("major").type(STRING).description("전공"),
                                         fieldWithPath("degree").type(STRING).description("학위"),

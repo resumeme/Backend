@@ -82,6 +82,7 @@ public class CareerControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
                                         fieldWithPath("companyName").type(STRING).description("회사명"),
                                         fieldWithPath("position").type(STRING).description("포지션").optional(),
                                         fieldWithPath("skills[]").type(ARRAY).description("List of skills").optional(),
@@ -89,7 +90,7 @@ public class CareerControllerTest extends ControllerUnitTest {
                                         fieldWithPath("duties[].description").type(STRING).description("설명").optional(),
                                         fieldWithPath("duties[].startDate").type(STRING).description("시작일"),
                                         fieldWithPath("duties[].endDate").type(STRING).description("종료일"),
-                                        fieldWithPath("isCurrentlyEmployed").type(BOOLEAN).description("현재 근무 여부").attributes(constraints("false일 시 endDate 필수")),
+                                        fieldWithPath("currentlyEmployed").type(BOOLEAN).description("현재 근무 여부").attributes(constraints("false일 시 endDate 필수")),
                                         fieldWithPath("careerStartDate").type(STRING).description("경력 시작일"),
                                         fieldWithPath("endDate").type(STRING).description("종료일"),
                                         fieldWithPath("careerContent").type(STRING).description("경력 내용").optional()
