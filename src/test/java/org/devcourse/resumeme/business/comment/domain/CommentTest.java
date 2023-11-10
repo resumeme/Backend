@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.comment.domain;
 
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.resume.domain.BlockType;
@@ -14,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -40,9 +42,10 @@ class CommentTest {
                 .introduce(null)
                 .build();
         Resume resume = new Resume("title", mentee);
+        Component component = new Component("career", "career", null, null, 1L, List.of());
 
         // when
-        Comment comment = new Comment(content, type, resume);
+        Comment comment = new Comment(content, type, component, resume);
 
         // then
         assertThat(comment).isNotNull();
@@ -50,9 +53,9 @@ class CommentTest {
 
     @ParameterizedTest
     @MethodSource("reviewCreate")
-    void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(String content, BlockType type, Resume resume) {
+    void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(String content, BlockType type, Component component, Resume resume) {
         // then
-        assertThatThrownBy(() -> new Comment(content, type, resume))
+        assertThatThrownBy(() -> new Comment(content, type, component, resume))
                 .isInstanceOf(CustomException.class);
     }
 
@@ -73,13 +76,15 @@ class CommentTest {
 
         Resume resume = new Resume("title", mentee);
 
+        Component component = new Component("career", "career", null, null, 1L, List.of());
+
         return Stream.of(
-                Arguments.of(null, null, null),
-                Arguments.of(content, null, null),
-                Arguments.of(null, type, null),
-                Arguments.of(null, null, resume),
-                Arguments.of("", type, null),
-                Arguments.of("   ", null, resume)
+                Arguments.of(null, null, component, null),
+                Arguments.of(content, null, component, null),
+                Arguments.of(null, type, component, null),
+                Arguments.of(null, null, component, resume),
+                Arguments.of("", type, component, null),
+                Arguments.of("   ", null, null, resume)
         );
     }
 

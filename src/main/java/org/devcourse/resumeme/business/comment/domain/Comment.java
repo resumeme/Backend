@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -38,18 +39,25 @@ public class Comment extends BaseEntity {
     @Enumerated(STRING)
     private BlockType type;
 
+    @Getter
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "component_id")
+    private Component component;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
-    public Comment(String content, BlockType type, Resume resume) {
+    public Comment(String content, BlockType type, Component component, Resume resume) {
         check(isBlank(content), NO_EMPTY_VALUE);
         notNull(type);
         notNull(resume);
+        notNull(component);
 
         this.content = content;
         this.type = type;
         this.resume = resume;
+        this.component = component;
     }
 
 }
