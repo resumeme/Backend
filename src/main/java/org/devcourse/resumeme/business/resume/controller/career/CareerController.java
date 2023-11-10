@@ -1,8 +1,9 @@
 package org.devcourse.resumeme.business.resume.controller.career;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
+import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.devcourse.resumeme.business.resume.domain.BlockType.CAREER;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resume")
@@ -24,11 +23,9 @@ public class CareerController {
 
     private final ComponentService blockService;
 
-    @PostMapping("/{resumeId}/careers")
-    public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody CareerCreateRequest request) {
-        Career career = request.toEntity();
-
-        return new IdResponse(blockService.create(career.of(resumeId), CAREER));
+    @PostMapping("/{resumeId}/{type}")
+    public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable String type) {
+        return new IdResponse(blockService.create(request.toEntity().of(resumeId), BlockType.of(type)));
     }
 
     @GetMapping("/{resumeId}/careers")
