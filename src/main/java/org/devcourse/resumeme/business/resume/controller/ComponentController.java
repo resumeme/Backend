@@ -1,10 +1,9 @@
-package org.devcourse.resumeme.business.resume.controller.career;
+package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.career.dto.CareerResponse;
+import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.BlockType;
-import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resume")
-public class CareerController {
+public class ComponentController {
 
     private final ComponentService blockService;
 
@@ -28,13 +27,13 @@ public class CareerController {
         return new IdResponse(blockService.create(request.toEntity().of(resumeId), BlockType.of(type)));
     }
 
-    @GetMapping("/{resumeId}/careers")
-    public List<CareerResponse> getCareer(@PathVariable Long resumeId) {
+    @GetMapping("/{resumeId}/{type}")
+    public List<ComponentResponse> getCareer(@PathVariable Long resumeId, @PathVariable String type) {
         return blockService.getAll(resumeId).stream()
-                .filter(component -> component.isType("CAREER"))
+                .filter(component -> component.isType(type))
                 .flatMap(component -> component.getComponents().stream())
                 .toList().stream()
-                .map(component -> new CareerResponse(Career.from(component)))
+                .map(component -> BlockType.from(type, component))
                 .toList();
     }
 

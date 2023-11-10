@@ -28,7 +28,7 @@ public class ComponentService {
             return component.getId();
         }
 
-        return componentRepository.save(new Component(type.name(), null, null, null, resumeId, List.of(block))).getId();
+        return componentRepository.save(new Component(type.getUrlParameter(), null, null, null, resumeId, List.of(block))).getId();
     }
 
     public List<Component> getAll(Long resumeId) {
