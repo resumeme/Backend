@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.dto.ActivityRequestDto;
+import org.devcourse.resumeme.business.resume.controller.dto.ActivityCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ActivityResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
@@ -25,7 +25,7 @@ public class ActivityController {
     private final ComponentService componentService;
 
     @PostMapping("/{resumeId}/activities")
-    public IdResponse createActivity(@PathVariable Long resumeId, @RequestBody ActivityRequestDto request) {
+    public IdResponse createActivity(@PathVariable Long resumeId, @RequestBody ActivityCreateRequest request) {
         Activity activity = request.toEntity();
 
         return new IdResponse(componentService.create(activity.of(resumeId), ACTIVITY));
