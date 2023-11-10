@@ -10,6 +10,7 @@ import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
+import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
@@ -109,7 +110,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
                                         fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_PENDING")),
-                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
+                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차").attributes(constraints("1 이상의 자연수")),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
@@ -148,7 +149,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                 requestFields(
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호").attributes(constraints(" - 제외 숫자만")),
-                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
+                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(NUMBER).description("경력 연차").attributes(constraints("1 이상의 자연수")),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
@@ -197,7 +198,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
-                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무"),
+                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()

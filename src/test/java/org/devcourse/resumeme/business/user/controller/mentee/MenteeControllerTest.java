@@ -22,9 +22,11 @@ import static org.assertj.core.api.Assertions.MAP;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
-import static org.devcourse.resumeme.global.auth.service.jwt.Token.*;
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.ACCESS_TOKEN_NAME;
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN_NAME;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -59,7 +61,7 @@ class MenteeControllerTest extends ControllerUnitTest {
     @BeforeEach
     void setUp() {
         requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
-        menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
+        menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
         mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo);
         token = new Token("issuedAccessToken", "issuedRefreshToken");
@@ -103,8 +105,8 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
                                         fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_MENTEE")),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").optional(),
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 ),
                                 responseHeaders(
@@ -155,8 +157,8 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
                                         fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야").optional(),
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 )
                         )
@@ -189,8 +191,8 @@ class MenteeControllerTest extends ControllerUnitTest {
                                 requestFields(
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").optional(),
-                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 분야").optional(),
+                                        fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
+                                        fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
                                 ),
                                 responseFields(

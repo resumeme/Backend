@@ -1,11 +1,11 @@
 package org.devcourse.resumeme.business.user.domain.mentee;
 
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
+import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -29,7 +29,7 @@ class MenteeTest {
     @BeforeEach
     void SetUP() {
         requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
-        menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("RETAIL", "FINANCE"), "안녕하세요 취업하고싶어요.");
+        menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "FINANCE"), "안녕하세요 취업하고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         refreshToken = "refreshTokenRecentlyIssued";
     }
