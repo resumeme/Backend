@@ -14,6 +14,7 @@ import org.devcourse.resumeme.business.resume.controller.ResumeController;
 import org.devcourse.resumeme.business.resume.controller.ComponentController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
 import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
@@ -58,6 +59,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MentorApplicationController.class,
         MentorApplicationController.class,
         ResultNoticeController.class,
+        UserController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
