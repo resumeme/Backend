@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 
+import java.time.LocalDateTime;
+
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
@@ -42,7 +44,9 @@ public class Resume extends BaseEntity {
 
     private boolean openStatus;
 
-    private boolean passStatus;
+    @Getter
+    @Embedded
+    private PassInfo passInfo;
 
     public Resume(String title, Mentee mentee) {
         validateResume(title, mentee);
@@ -56,18 +60,18 @@ public class Resume extends BaseEntity {
     }
 
     @Builder
-    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, ReferenceLink referenceLink) {
+    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, ReferenceLink referenceLink, PassInfo passInfo) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
         this.referenceLink = referenceLink;
-        this.openStatus = false;
+        this.passInfo = passInfo;
     }
 
     public Resume copy() {
         return new Resume(
-                null, title, mentee, resumeInfo, referenceLink
+                null, title, mentee, resumeInfo, referenceLink, passInfo
         );
     }
 
@@ -84,11 +88,11 @@ public class Resume extends BaseEntity {
     }
 
     public void passResume() {
-        this.passStatus = true;
+        this.passInfo = new PassInfo(true, LocalDateTime.now());
     }
 
     public boolean getPassStatus() {
-        return this.passStatus;
+        return passInfo.isPassStatus();
     }
 
     public void updateResumeInfo(ResumeInfo resumeInfo) {
