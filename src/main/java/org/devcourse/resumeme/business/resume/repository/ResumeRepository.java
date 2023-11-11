@@ -8,4 +8,7 @@ import java.util.List;
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
     List<Resume> findAllByMenteeId(Long menteeId);
+
+    long countByPassStatus(boolean passStatus);
+
 }
