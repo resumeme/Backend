@@ -5,12 +5,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.global.exception.advice.ErrorResponse;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
+import org.devcourse.resumeme.global.exception.TokenException;
+import org.devcourse.resumeme.global.exception.advice.ErrorResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -27,6 +29,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         try {
             filterChain.doFilter(request, response);
+        } catch (TokenException e) {
+            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
+            sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN);
         } catch (Exception e) {
             log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
             sendErrorResponse(response, 500, SERVER_ERROR);

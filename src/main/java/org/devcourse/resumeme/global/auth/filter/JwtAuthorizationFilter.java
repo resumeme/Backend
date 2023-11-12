@@ -6,12 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.global.exception.CustomException;
+import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
+import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.global.exception.TokenException;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,7 +60,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         jwtService.setAccessTokenHeader(response, issuedAccessToken);
                     }
                 }, () -> {
-                    throw new CustomException(INVALID_ACCESS_TOKEN);
+                    throw new TokenException(INVALID_ACCESS_TOKEN);
                 }
         );
     }
