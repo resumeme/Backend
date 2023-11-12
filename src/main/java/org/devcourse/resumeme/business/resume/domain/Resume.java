@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -7,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,8 +46,9 @@ public class Resume extends BaseEntity {
 
     private boolean openStatus;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pass_info_id")
     @Getter
-    @Embedded
     private PassInfo passInfo;
 
     public Resume(String title, Mentee mentee) {
@@ -92,7 +95,7 @@ public class Resume extends BaseEntity {
     }
 
     public boolean getPassStatus() {
-        return passInfo.isPassStatus();
+        return passInfo != null && passInfo.isPassStatus();
     }
 
     public void updateResumeInfo(ResumeInfo resumeInfo) {
