@@ -28,7 +28,7 @@ public class ComponentController {
     }
 
     @GetMapping("/{resumeId}/{type}")
-    public List<ComponentResponse> getCareer(@PathVariable Long resumeId, @PathVariable String type) {
+    public List<ComponentResponse> getCareer(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
         return blockService.getAll(resumeId).stream()
                 .filter(component -> component.isType(type))
                 .flatMap(component -> component.getComponents().stream())
