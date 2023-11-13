@@ -15,7 +15,7 @@ endpoint:
         post: /api/v1/events, /api/v1/resume/*/reviews, /api/v1/events/*/resume/*/comments
       role: mentor
     - matcher:
-        get: /api/v1/admin/applications
+        get: /api/v1/admin/applications, api/v1/admin/statistics/*
         delete: /api/v1/admin/applications/*/*
       role: admin
     - matcher:
