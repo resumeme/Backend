@@ -52,4 +52,8 @@ public class MenteeService {
         return menteeRepository.findAll();
     }
 
+    public void deleteRefreshToken(Long id) {
+        updateRefreshToken(id, null);
+    }
+
 }

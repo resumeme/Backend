@@ -56,4 +56,8 @@ public class MentorService {
         return mentor.getId();
     }
 
+    public void deleteRefreshToken(Long id) {
+        updateRefreshToken(id, null);
+    }
+
 }

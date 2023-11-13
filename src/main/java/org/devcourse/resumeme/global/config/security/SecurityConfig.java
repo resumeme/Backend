@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
+import org.devcourse.resumeme.global.auth.filter.handler.CustomLogoutHandler;
 import org.devcourse.resumeme.global.config.security.properties.EndpointProperties;
 import org.devcourse.resumeme.global.config.security.properties.EndpointProperties.Matcher;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -30,6 +32,10 @@ public class SecurityConfig {
 
     private final ExceptionHandlerFilter exceptionHandlerFilter;
 
+    private final CustomLogoutHandler customLogoutHandler;
+
+    private final HttpStatusReturningLogoutSuccessHandler logoutSuccessHandler;
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring().requestMatchers(properties.ignores().toArray(new String[]{}));
@@ -41,10 +47,15 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable);
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout((logout) -> logout.logoutUrl("/api/v1/logout")
+                        .addLogoutHandler(customLogoutHandler)
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .permitAll()
+                );
 
         http.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
-        http.addFilterAfter(jwtAuthorizationFilter, LogoutFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter, LogoutFilter.class);
         http.addFilterAfter(oAuthTokenResponseFilter, JwtAuthorizationFilter.class);
 
         return http.build();
