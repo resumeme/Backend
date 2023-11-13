@@ -10,10 +10,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
     List<Resume> findAllByMenteeId(Long menteeId);
 
-    long countByPassInfoPassStatus(boolean passStatus);
-
     long countByCreatedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
-
-    long countByPassInfoPassStatusIsTrueAndPassInfoPassDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
 }

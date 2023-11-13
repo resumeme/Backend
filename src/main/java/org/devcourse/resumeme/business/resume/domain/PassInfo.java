@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +29,14 @@ public class PassInfo {
     @Column(name = "pass_date")
     private LocalDateTime passDate;
 
-    public PassInfo(boolean passStatus, LocalDateTime passDate) {
+    @OneToOne
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
+
+    public PassInfo(boolean passStatus, LocalDateTime passDate, Resume resume) {
         this.passStatus = passStatus;
         this.passDate = passDate;
+        this.resume = resume;
     }
 
 }

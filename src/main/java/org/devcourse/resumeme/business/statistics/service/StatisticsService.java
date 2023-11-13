@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.statistics.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.resume.repository.PassInfoRepository;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,12 @@ public class StatisticsService {
 
     private final ResumeRepository resumeRepository;
 
+    private final PassInfoRepository passInfoRepository;
+
     public double calculatePassRate() {
         long totalResumes = resumeRepository.count();
 
-        long passedResumes = resumeRepository.countByPassInfoPassStatus(true);
+        long passedResumes = passInfoRepository.countByPassStatus(true);
 
         if (totalResumes == 0) {
             return 0.0;
@@ -26,7 +29,7 @@ public class StatisticsService {
 
     public double calculatePassRateByPeriod(LocalDateTime startDate, LocalDateTime endDate) {
         long totalResumes = resumeRepository.countByCreatedDateBetween(startDate, endDate);
-        long passedResumes = resumeRepository.countByPassInfoPassStatusIsTrueAndPassInfoPassDateBetween(startDate, endDate);
+        long passedResumes = passInfoRepository.countByPassStatusIsTrueAndPassDateBetween(startDate, endDate);
 
         if (totalResumes == 0) {
             return 0.0;

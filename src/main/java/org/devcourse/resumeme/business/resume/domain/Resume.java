@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -8,15 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
-
-import java.time.LocalDateTime;
 
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
@@ -46,11 +42,6 @@ public class Resume extends BaseEntity {
 
     private boolean openStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pass_info_id")
-    @Getter
-    private PassInfo passInfo;
-
     public Resume(String title, Mentee mentee) {
         validateResume(title, mentee);
         this.title = title;
@@ -63,18 +54,17 @@ public class Resume extends BaseEntity {
     }
 
     @Builder
-    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, ReferenceLink referenceLink, PassInfo passInfo) {
+    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, ReferenceLink referenceLink) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
         this.referenceLink = referenceLink;
-        this.passInfo = passInfo;
     }
 
     public Resume copy() {
         return new Resume(
-                null, title, mentee, resumeInfo, referenceLink, passInfo
+                null, title, mentee, resumeInfo, referenceLink
         );
     }
 
@@ -88,14 +78,6 @@ public class Resume extends BaseEntity {
 
     public void openStatus() {
         this.openStatus = true;
-    }
-
-    public void passResume() {
-        this.passInfo = new PassInfo(true, LocalDateTime.now());
-    }
-
-    public boolean getPassStatus() {
-        return passInfo != null && passInfo.isPassStatus();
     }
 
     public void updateResumeInfo(ResumeInfo resumeInfo) {
