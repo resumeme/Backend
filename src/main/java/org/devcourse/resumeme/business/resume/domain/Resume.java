@@ -42,8 +42,6 @@ public class Resume extends BaseEntity {
 
     private boolean openStatus;
 
-    private boolean passStatus;
-
     public Resume(String title, Mentee mentee) {
         validateResume(title, mentee);
         this.title = title;
@@ -62,7 +60,6 @@ public class Resume extends BaseEntity {
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
         this.referenceLink = referenceLink;
-        this.openStatus = false;
     }
 
     public Resume copy() {
@@ -81,14 +78,6 @@ public class Resume extends BaseEntity {
 
     public void openStatus() {
         this.openStatus = true;
-    }
-
-    public void passResume() {
-        this.passStatus = true;
-    }
-
-    public boolean getPassStatus() {
-        return this.passStatus;
     }
 
     public void updateResumeInfo(ResumeInfo resumeInfo) {
