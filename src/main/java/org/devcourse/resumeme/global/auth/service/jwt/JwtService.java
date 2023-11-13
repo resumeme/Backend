@@ -52,13 +52,13 @@ public class JwtService {
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(jwtProperties.refresh().headerName()))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, ""));
+                .map(JwtService::refineToken);
     }
 
     public Optional<String> extractAccessToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(jwtProperties.access().headerName()))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, ""));
+                .map(JwtService::refineToken);
     }
 
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
@@ -71,7 +71,7 @@ public class JwtService {
 
     public boolean validate(String token) {
         try {
-            String tokenRefined = token.replace(BEARER, "");
+            String tokenRefined = refineToken(token);
             JWT.require(Algorithm.HMAC512(jwtProperties.secretKey())).build().verify(tokenRefined);
 
             return true;
@@ -81,7 +81,7 @@ public class JwtService {
     }
 
     public Claims extractClaim(String accessToken) {
-        String refinedToken = accessToken.replace("Bearer ", "");
+        String refinedToken = refineToken(accessToken);
         Map<String, Claim> claims = JWT.decode(refinedToken).getClaims();
 
         Long id = claims.get(ID).asLong();
@@ -92,13 +92,17 @@ public class JwtService {
     }
 
     public boolean compareTokens(String refreshTokenSaved, String refreshToken) {
-        return refreshTokenSaved.equals(refreshToken);
+        return refineToken(refreshTokenSaved).equals(refreshToken);
     }
 
     public Token createTokens(Claims claims) {
         Claims claimsForIssueToken = new Claims(claims.id(), claims.role(), new Date());
 
         return new Token(createAccessToken(claimsForIssueToken), createRefreshToken());
+    }
+
+    private static String refineToken(String token) {
+        return token.replace(BEARER, "");
     }
 
 }

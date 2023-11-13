@@ -53,7 +53,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         claims = jwtService.extractClaim(accessToken.get());
 
         jwtService.extractRefreshToken(request).ifPresentOrElse(token -> {
-                    if (jwtService.validate(token) && jwtService.compareTokens(findSavedTokenWithClaims(claims).replace("Bearer ",""), token)) {
+                    if (jwtService.validate(token) && jwtService.compareTokens(findSavedTokenWithClaims(claims), token)) {
                         log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
                         String issuedAccessToken = jwtService.createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
                         saveAuthentication(issuedAccessToken);
