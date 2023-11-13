@@ -20,6 +20,7 @@ import java.util.Set;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType.ACCEPT;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -91,12 +92,25 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
     @Test
     void 멘토_승인여부를_결정한다() throws Exception {
         // given
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", Role.ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
         long applicationId = 1L;
         long mentorId = 1L;
         ApplicationProcessType type = ACCEPT;
 
         given(mentorApplicationService.delete(applicationId)).willReturn(mentorId);
         doNothing().when(mentorService).updateRole(mentorId, type);
+        given(mentorService.getOne(any())).willReturn(mentor);
+        doNothing().when(emailService).sendEmail(any());
 
         // when
         ResultActions result = mvc.perform(delete("/api/v1/admin/applications/{applicationId}/{type}", applicationId, type.name()));

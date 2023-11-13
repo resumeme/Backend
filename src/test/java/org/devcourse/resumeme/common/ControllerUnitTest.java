@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.event.controller.EventController;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
+import org.devcourse.resumeme.business.mail.service.EmailService;
 import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
 import org.devcourse.resumeme.business.resume.controller.ResumeController;
@@ -104,6 +105,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected ProviderManager providerManager;
+
+    @MockBean
+    protected EmailService emailService;
 
     protected MockMvc mvc;
 

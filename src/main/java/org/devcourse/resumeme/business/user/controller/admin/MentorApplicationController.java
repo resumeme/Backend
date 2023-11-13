@@ -1,10 +1,11 @@
 package org.devcourse.resumeme.business.user.controller.admin;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.mail.service.EmailService;
 import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
 import org.devcourse.resumeme.business.user.controller.admin.dto.MentorApplicationResponse;
+import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
+import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.business.mail.service.EmailInfoGenerator.createMentorApprovalMail;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/applications")
 public class MentorApplicationController {
 
     private final MentorService mentorService;
+
+    private final EmailService emailService;
 
     private final MentorApplicationService mentorApplicationService;
 
@@ -34,6 +39,7 @@ public class MentorApplicationController {
         Long mentorId = mentorApplicationService.delete(applicationId);
 
         mentorService.updateRole(mentorId, ApplicationProcessType.valueOf(type.toUpperCase()));
+        emailService.sendEmail(createMentorApprovalMail(mentorService.getOne(mentorId)));
     }
 
 }
