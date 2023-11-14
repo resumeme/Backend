@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,6 +26,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 public class SecurityServiceConfig {
+    @Bean
+    public HttpStatusReturningLogoutSuccessHandler logoutSuccessHandler() {
+            return new HttpStatusReturningLogoutSuccessHandler();
+    }
 
     @Bean
     public OAuthTokenResponseFilter oAuthTokenResponseFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper,
