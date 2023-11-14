@@ -197,7 +197,6 @@ class MentorControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
