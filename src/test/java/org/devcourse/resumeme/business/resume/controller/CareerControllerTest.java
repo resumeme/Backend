@@ -149,6 +149,7 @@ class CareerControllerTest extends ControllerUnitTest {
 
         Component component = career.of(resumeId);
         Component career1 = new Component(CAREER.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(career1));
 
         // when
@@ -163,6 +164,7 @@ class CareerControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[].companyName").type(STRING).description("회사명"),
                                         fieldWithPath("[].position").type(STRING).description("직책"),
                                         fieldWithPath("[].skills").type(ARRAY).description("기술 목록"),

@@ -138,6 +138,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         Component component = certification.of(resumeId);
 
         Component certification1 = new Component(CERTIFICATION.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(certification1));
 
         // when
@@ -151,6 +152,7 @@ class CertificationControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[].certificationTitle").type(STRING).description("자격증 제목"),
                                         fieldWithPath("[].acquisitionDate").type(STRING).description("취득 일자"),
                                         fieldWithPath("[].issuingAuthority").type(STRING).description("발급 기관"),

@@ -149,6 +149,7 @@ class ProjectControllerTest extends ControllerUnitTest {
         Component component = project.of(resumeId);
 
         Component project1 = new Component(PROJECT.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(project1));
 
         // when
@@ -162,6 +163,7 @@ class ProjectControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[]projectName").type(STRING).description("프로젝트명"),
                                         fieldWithPath("[]productionYear").type(NUMBER).description("제작 연도"),
                                         fieldWithPath("[]team").type(BOOLEAN).description("팀 프로젝트 여부"),
