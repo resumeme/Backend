@@ -13,10 +13,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
+@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE resume SET deleted = true WHERE resume_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Resume extends BaseEntity {
 
@@ -41,6 +45,8 @@ public class Resume extends BaseEntity {
     private ReferenceLink referenceLink;
 
     private boolean openStatus;
+
+    private boolean deleted = false;
 
     public Resume(String title, Mentee mentee) {
         validateResume(title, mentee);
