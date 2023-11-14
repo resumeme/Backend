@@ -7,7 +7,7 @@ import org.devcourse.resumeme.business.resume.domain.Activity;
 import java.time.LocalDate;
 
 @Data
-public class ActivityResponse implements ComponentResponse {
+public class ActivityResponse extends ComponentResponse {
 
     private String activityName;
 
@@ -22,13 +22,14 @@ public class ActivityResponse implements ComponentResponse {
     private String description;
 
     public ActivityResponse(
-            String activityName,
+            Long id, String activityName,
             LocalDate startDate,
             LocalDate endDate,
             boolean inProgress,
             String link,
             String description
     ) {
+        super(id);
         this.activityName = activityName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -37,8 +38,9 @@ public class ActivityResponse implements ComponentResponse {
         this.description = description;
     }
 
-    public ActivityResponse(Activity activity) {
+    public ActivityResponse(Activity activity, Long id) {
         this(
+                id,
                 activity.getActivityName(),
                 activity.getStartDate(),
                 activity.getEndDate(),

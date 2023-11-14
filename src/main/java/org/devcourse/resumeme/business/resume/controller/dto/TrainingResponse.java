@@ -1,13 +1,15 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Training;
 
 import java.time.LocalDate;
 
 @Data
-public class TrainingResponse implements ComponentResponse {
+@NoArgsConstructor
+public class TrainingResponse extends ComponentResponse {
 
     private String organization;
 
@@ -26,7 +28,7 @@ public class TrainingResponse implements ComponentResponse {
     private String explanation;
 
     public TrainingResponse(
-            String organization,
+            Long id, String organization,
             String major,
             String degree,
             LocalDate admissionDate,
@@ -35,6 +37,7 @@ public class TrainingResponse implements ComponentResponse {
             double maxGpa,
             String explanation
     ) {
+        super(id);
         this.organization = organization;
         this.major = major;
         this.degree = degree;
@@ -45,8 +48,9 @@ public class TrainingResponse implements ComponentResponse {
         this.explanation = explanation;
     }
 
-    public TrainingResponse(Training training) {
+    public TrainingResponse(Training training, Long id) {
         this(
+                id,
                 training.getEducationalDetails().getOrganization(),
                 training.getEducationalDetails().getMajor(),
                 training.getEducationalDetails().getDegree(),
