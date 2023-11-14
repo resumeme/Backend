@@ -2,10 +2,12 @@ package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import java.util.List;
 
 import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Service
 @Transactional
@@ -63,6 +66,18 @@ public class EventService {
 
     public List<Event> getAll() {
         return eventRepository.findAll();
+    }
+
+    public void completeReview(Long eventId, String request, Long resumeId) {
+        Event event = getOne(eventId);
+        List<MenteeToEvent> applicants = event.getApplicants();
+
+        MenteeToEvent menteeToEvent = applicants.stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
+
+        menteeToEvent.completeEvent(request);
     }
 
 }

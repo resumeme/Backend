@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
+import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
@@ -71,6 +72,13 @@ public class EventController {
     @PatchMapping("/{eventId}/resume/{resumeId}/mentee")
     public void requestReview(@PathVariable Long eventId, @AuthenticationPrincipal JwtUser user) {
         eventService.requestReview(eventId, user.id());
+    }
+
+    @PatchMapping("/{eventId}/resume/{resumeId}/complete")
+    public void completeReview(
+            @PathVariable Long eventId, @PathVariable Long resumeId, @RequestBody CompleteEventRequest request, @AuthenticationPrincipal JwtUser user
+    ) {
+        eventService.completeReview(eventId, request.comment(), resumeId);
     }
 
     @GetMapping("/{eventId}")

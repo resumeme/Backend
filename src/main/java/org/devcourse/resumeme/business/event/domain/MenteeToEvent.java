@@ -43,6 +43,9 @@ public class MenteeToEvent extends BaseEntity {
 
     private String rejectMessage;
 
+    @Getter
+    private String overallReview;
+
     public MenteeToEvent(Event event, Long menteeId, Long resumeId) {
         notNull(event);
         notNull(menteeId);
@@ -59,6 +62,10 @@ public class MenteeToEvent extends BaseEntity {
         return this.menteeId.equals(menteeId);
     }
 
+    public boolean isSameResume(Long resumeId) {
+        return this.resumeId.equals(resumeId);
+    }
+
     public void reject(String rejectMessage) {
         notNull(rejectMessage);
 
@@ -73,6 +80,13 @@ public class MenteeToEvent extends BaseEntity {
 
     public void requestReview() {
         this.progress = REQUEST;
+    }
+
+    public void completeEvent(String overallReview) {
+        notNull(overallReview);
+
+        this.overallReview = overallReview;
+        this.progress = Progress.COMPLETE;
     }
 
 }

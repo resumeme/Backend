@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.event.controller;
 
 import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
+import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventTimeRequest;
@@ -233,6 +234,37 @@ class EventControllerTest extends ControllerUnitTest {
                         document("event/requestReview",
                                 getDocumentRequest(),
                                 getDocumentResponse()
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 첨삭_이벤트_리뷰를_완료한다() throws Exception {
+        // given
+        Long eventId = 1L;
+        Long resumeId = 1L;
+        CompleteEventRequest request = new CompleteEventRequest("좋은 이력서에요.");
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resume/{resumeId}/complete", eventId, resumeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/completeReview",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("이벤트 아이디"),
+                                        parameterWithName("resumeId").description("이력서 아이디")
+                                ),
+                                requestFields(
+                                        fieldWithPath("comment").type(STRING).description("이벤트 리뷰 내용")
+                                )
                         )
                 );
     }
