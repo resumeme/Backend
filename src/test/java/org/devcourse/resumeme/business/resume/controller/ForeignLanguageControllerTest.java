@@ -134,6 +134,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
         Component component = foreignLanguage.of(resumeId);
 
         Component foreignLanguage1 = new Component(FOREIGN_LANGUAGE.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(foreignLanguage1));
 
         // when
@@ -147,6 +148,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[].language").type(STRING).description("언어"),
                                         fieldWithPath("[].examName").type(STRING).description("시험명"),
                                         fieldWithPath("[].scoreOrGrade").type(STRING).description("점수 또는 학점")

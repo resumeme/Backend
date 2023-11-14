@@ -156,6 +156,7 @@ class ActivityControllerTest extends ControllerUnitTest {
         Component component = activity.of(resumeId);
 
         Component activity1 = new Component(ACTIVITY.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(activity1));
 
         // when
@@ -169,6 +170,7 @@ class ActivityControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[].activityName").type(STRING).description("활동명"),
                                         fieldWithPath("[].startDate").type(STRING).description("시작일"),
                                         fieldWithPath("[].endDate").type(STRING).description("종료일"),

@@ -159,6 +159,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         Component component = training.of(resumeId);
 
         Component training1 = new Component(TRAINING.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(training1));
 
         // when
@@ -172,6 +173,7 @@ class TrainingControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[].organization").type(STRING).description("기관명"),
                                         fieldWithPath("[].major").type(STRING).description("전공"),
                                         fieldWithPath("[].degree").type(STRING).description("학위"),
