@@ -54,12 +54,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         jwtService.extractRefreshToken(request).ifPresentOrElse(token -> {
                     if (jwtService.validate(token) && jwtService.compareTokens(findSavedTokenWithClaims(claims), token)) {
+                        log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
                         String issuedAccessToken = jwtService.createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
                         saveAuthentication(issuedAccessToken);
                         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         jwtService.setAccessTokenHeader(response, issuedAccessToken);
                     }
+                    log.info("리프레시 토큰이 유효하지 않습니다.");
                 }, () -> {
+                    log.info("액세스 토큰이 유효하지 않고, 헤더에 리프레시 토큰이 없습니다.");
                     throw new TokenException(INVALID_ACCESS_TOKEN);
                 }
         );
@@ -77,6 +80,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private void saveAuthentication(String accessToken) {
         Claims claims = jwtService.extractClaim(accessToken);
         SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
+        log.info("Authentication 을 만들기 위한 Claims = {}", claims);
+        log.info("context에 Authentication를 저장했습니다.");
     }
 
     private UsernamePasswordAuthenticationToken createAuthentication(Claims claims) {
