@@ -27,9 +27,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.common.domain.Position.BACK;
-import static org.devcourse.resumeme.common.domain.Position.DEVOPS;
-import static org.devcourse.resumeme.common.domain.Position.FRONT;
+import static org.devcourse.resumeme.common.domain.Position.*;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
@@ -37,17 +35,11 @@ import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PO
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
-import static org.springframework.restdocs.payload.JsonFieldType.NULL;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -326,6 +318,29 @@ public class ResumeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소")
                                 )
                         )
+                );
+    }
+
+    @Test
+    void 이력서_삭제에_성공한다() throws Exception {
+        // given
+        Long resumeId = 1L;
+
+        willDoNothing().given(resumeService).delete(resumeId);
+
+        // when
+        ResultActions result = mvc.perform(delete("/api/v1/resumes/{resumeId}", resumeId));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                       document("resume/delete",
+                               getDocumentRequest(),
+                               getDocumentResponse(),
+                               pathParameters(
+                                       parameterWithName("resumeId").description("이력서 아이디")
+                               )
+                       )
                 );
     }
 
