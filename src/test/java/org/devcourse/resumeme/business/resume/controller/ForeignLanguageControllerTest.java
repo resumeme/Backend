@@ -24,8 +24,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -85,6 +84,42 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 외국어 정보 ID")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 외국어_수정에_성공한다() throws Exception {
+        ForeignLanguageCreateRequest request = new ForeignLanguageCreateRequest("English", "TOEIC", "900");
+        ForeignLanguage entity = request.toEntity();
+        Long resumeId = 1L;
+        Long componentId = 1L;
+
+        Component component = entity.of(resumeId);
+
+        given(componentService.delete(componentId)).willReturn("foreign-languages");
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+
+        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/foreign-languages/components/{componentId}", componentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+        );
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/foreignLanguage/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
+                                        fieldWithPath("language").type(STRING).description("언어"),
+                                        fieldWithPath("examName").type(STRING).description("시험명"),
+                                        fieldWithPath("scoreOrGrade").type(STRING).description("점수 또는 학점")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("수정된 외국어 정보 ID")
                                 )
                         )
                 );

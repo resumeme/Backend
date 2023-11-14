@@ -60,7 +60,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MentorApplicationController.class,
         MentorApplicationController.class,
         ResultNoticeController.class,
-        UserController.class
+        UserController.class,
+        ComponentController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)

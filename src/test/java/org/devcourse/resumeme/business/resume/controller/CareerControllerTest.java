@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
@@ -22,20 +21,12 @@ import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.business.resume.domain.BlockType.CAREER;
-import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
-import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
-import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
-import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,6 +89,50 @@ class CareerControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 경력 ID")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 업무경험_수정에_성공한다() throws Exception {
+        CareerCreateRequest request = new CareerCreateRequest("company name", "BACK", List.of("java", "spring"), List.of(new CareerCreateRequest.DutyRequest("title", "description", LocalDate.now(), LocalDate.now().plusYears(1L))), false, LocalDate.now(), LocalDate.now().plusYears(1L), "content");
+        Long resumeId = 1L;
+        Long componentId = 1L;
+
+        Career entity = request.toEntity();
+        Component component = entity.of(resumeId);
+
+        given(componentService.delete(componentId)).willReturn("careers");
+        given(componentService.create(component, CAREER)).willReturn(1L);
+
+        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/careers/components/{componentId}", componentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/career/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
+                                        fieldWithPath("companyName").type(STRING).description("회사명"),
+                                        fieldWithPath("position").type(STRING).description("포지션").optional(),
+                                        fieldWithPath("skills[]").type(ARRAY).description("List of skills").optional(),
+                                        fieldWithPath("duties[].title").type(STRING).description("제목"),
+                                        fieldWithPath("duties[].description").type(STRING).description("설명").optional(),
+                                        fieldWithPath("duties[].startDate").type(STRING).description("시작일"),
+                                        fieldWithPath("duties[].endDate").type(STRING).description("종료일"),
+                                        fieldWithPath("currentlyEmployed").type(BOOLEAN).description("현재 근무 여부").attributes(constraints("false일 시 endDate 필수")),
+                                        fieldWithPath("careerStartDate").type(STRING).description("경력 시작일"),
+                                        fieldWithPath("endDate").type(STRING).description("종료일"),
+                                        fieldWithPath("careerContent").type(STRING).description("경력 내용").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("수정된 경력 ID")
                                 )
                         )
                 );

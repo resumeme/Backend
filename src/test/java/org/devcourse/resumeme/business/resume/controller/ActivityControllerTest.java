@@ -25,8 +25,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -96,6 +95,53 @@ class ActivityControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 활동 ID")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 활동_수정에_성공한다() throws Exception {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(5);
+
+        ActivityCreateRequest request = new ActivityCreateRequest(
+                "활동1", startDate, endDate, false, "https://example.com", "활동 설명"
+        );
+
+        Long resumeId = 1L;
+        Long componentId = 1L;
+        Activity activity = request.toEntity();
+
+        Component component = activity.of(resumeId);
+
+        given(componentService.delete(componentId)).willReturn("activities");
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/activities/components/{componentId}", componentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+        );
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/activity/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
+                                        fieldWithPath("activityName").type(STRING).description("활동명"),
+                                        fieldWithPath("startDate").type(STRING).description("시작일"),
+                                        fieldWithPath("endDate").type(STRING).description("종료일"),
+                                        fieldWithPath("inProgress").type(BOOLEAN).description("진행 중 여부").optional(),
+                                        fieldWithPath("link").type(STRING).description("링크").optional(),
+                                        fieldWithPath("description").type(STRING).description("설명").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("수정 된 활동 ID")
                                 )
                         )
                 );
