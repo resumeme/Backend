@@ -5,7 +5,7 @@ import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentRes
 import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
 
 @Data
-public class ForeignLanguageResponse implements ComponentResponse {
+public class ForeignLanguageResponse extends ComponentResponse {
 
     private String language;
 
@@ -14,17 +14,19 @@ public class ForeignLanguageResponse implements ComponentResponse {
     private String scoreOrGrade;
 
     public ForeignLanguageResponse(
-            String language,
+            Long id, String language,
             String examName,
             String scoreOrGrade
     ) {
+        super(id);
         this.language = language;
         this.examName = examName;
         this.scoreOrGrade = scoreOrGrade;
     }
 
-    public ForeignLanguageResponse(ForeignLanguage foreignLanguage) {
+    public ForeignLanguageResponse(ForeignLanguage foreignLanguage, Long id) {
         this(
+                id,
                 foreignLanguage.getLanguage(),
                 foreignLanguage.getExamName(),
                 foreignLanguage.getScoreOrGrade()

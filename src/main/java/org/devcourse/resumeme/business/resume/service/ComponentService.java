@@ -45,4 +45,11 @@ public class ComponentService {
                 .orElseThrow(() -> new CustomException(COMPONENT_NOT_FOUND));
     }
 
+    public String delete(Long componentId) {
+        Component component = getOne(componentId);
+        componentRepository.delete(component);
+
+        return component.getProperty();
+    }
+
 }

@@ -24,12 +24,12 @@ import java.util.function.Function;
 
 public enum BlockType implements DocsEnumType {
 
-    ACTIVITY("활동", "activities", ActivityCreateRequest.class, component -> new ActivityResponse(Activity.from(component))),
-    CAREER("업무경험", "careers", CareerCreateRequest.class, component -> new CareerResponse(Career.from(component))),
-    CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, component -> new CertificationResponse(Certification.from(component))),
-    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, component -> new ForeignLanguageResponse(ForeignLanguage.from(component))),
-    PROJECT("프로젝트", "projects", ProjectCreateRequest.class, component -> new ProjectResponse(Project.from(component))),
-    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(Training.from(component)));
+    ACTIVITY("활동", "activities", ActivityCreateRequest.class, component -> new ActivityResponse(Activity.from(component), component.getId())),
+    CAREER("업무경험", "careers", CareerCreateRequest.class, component -> new CareerResponse(Career.from(component), component.getId())),
+    CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, component -> new CertificationResponse(Certification.from(component), component.getId())),
+    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, component -> new ForeignLanguageResponse(ForeignLanguage.from(component), component.getId())),
+    PROJECT("프로젝트", "projects", ProjectCreateRequest.class, component -> new ProjectResponse(Project.from(component), component.getId())),
+    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(Training.from(component), component.getId()));
 
     private final String description;
 

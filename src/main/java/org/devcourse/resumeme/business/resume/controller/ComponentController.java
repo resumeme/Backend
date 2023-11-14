@@ -6,12 +6,7 @@ import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequ
 import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.common.response.IdResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +30,18 @@ public class ComponentController {
                 .toList().stream()
                 .map(component -> BlockType.from(type, component))
                 .toList();
+    }
+
+    @PatchMapping("/{resumeId}/{type}/components/{componentId}")
+    public IdResponse updateComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
+        String originType = blockService.delete(componentId);
+
+        return createCareer(resumeId, request, originType);
+    }
+
+    @DeleteMapping("/{resumeId}/components/{componentId}")
+    public void deleteComponent(@PathVariable Long componentId) {
+        blockService.delete(componentId);
     }
 
 }

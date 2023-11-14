@@ -24,8 +24,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -93,6 +92,44 @@ class CertificationControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    void 인증서_수정에_성공한다() throws Exception {
+        CertificationCreateRequest request = new CertificationCreateRequest("인증서", "2023-10-01", "발급기관", "https://example.com", "설명");
+        Long resumeId = 1L;
+        Long componentId = 1L;
+
+        Certification certification = request.toEntity();
+        Component component = certification.of(resumeId);
+
+        given(componentService.delete(componentId)).willReturn("certifications");
+        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+
+        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/certifications/components/{componentId}", componentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/certification/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
+                                        fieldWithPath("certificationTitle").type(STRING).description("인증서명"),
+                                        fieldWithPath("acquisitionDate").type(STRING).description("취득일").optional(),
+                                        fieldWithPath("issuingAuthority").type(STRING).description("발급기관").optional(),
+                                        fieldWithPath("link").type(STRING).description("링크").optional(),
+                                        fieldWithPath("description").type(STRING).description("설명").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("수정된 인증서 ID")
+                                )
+                        )
+                );
+    }
+
+    @Test
     @WithMockUser
     void 인증서_조회에_성공한다() throws Exception {
         // given
@@ -101,6 +138,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         Component component = certification.of(resumeId);
 
         Component certification1 = new Component(CERTIFICATION.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(certification1));
 
         // when
@@ -114,6 +152,7 @@ class CertificationControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[].certificationTitle").type(STRING).description("자격증 제목"),
                                         fieldWithPath("[].acquisitionDate").type(STRING).description("취득 일자"),
                                         fieldWithPath("[].issuingAuthority").type(STRING).description("발급 기관"),

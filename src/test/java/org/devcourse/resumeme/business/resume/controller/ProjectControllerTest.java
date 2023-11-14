@@ -25,8 +25,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -100,6 +99,48 @@ class ProjectControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    void 프로젝트_수정에_성공한다() throws Exception {
+        // then
+        ProjectCreateRequest request = new ProjectCreateRequest("프로젝트", 2023L, true, "member1, member2, member3", List.of("java", "Spring"), "content", "https://example.com");
+        Long resumeId = 1L;
+        Long componentId = 1L;
+        Project project = request.toEntity();
+
+        Component component = project.of(resumeId);
+
+        given(componentService.delete(componentId)).willReturn("projects");
+        given(componentService.create(component, PROJECT)).willReturn(1L);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/projects/components/{componentId}", componentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/project/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("type").type(STRING).description("서버쪽에서 동적으로 처리합니다 보내지 마세요").optional(),
+                                        fieldWithPath("projectName").type(STRING).description("프로젝트명"),
+                                        fieldWithPath("productionYear").type(NUMBER).description("생산 연도"),
+                                        fieldWithPath("team").type(BOOLEAN).description("팀 프로젝트 여부").optional().attributes(constraints("true일 시 teamMembers 필수")),
+                                        fieldWithPath("teamMembers").type(STRING).description("팀원 목록").optional(),
+                                        fieldWithPath("skills[]").type(ARRAY).description("기술 목록").optional(),
+                                        fieldWithPath("projectContent").type(STRING).description("프로젝트 내용").optional(),
+                                        fieldWithPath("projectUrl").type(STRING).description("프로젝트 URL").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("수정된 프로젝트 ID")
+                                )
+                        )
+                );
+    }
+
+    @Test
     @WithMockUser
     void 업무경험_조회에_성공한다() throws Exception {
         // given
@@ -108,6 +149,7 @@ class ProjectControllerTest extends ControllerUnitTest {
         Component component = project.of(resumeId);
 
         Component project1 = new Component(PROJECT.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(project1));
 
         // when
@@ -121,6 +163,7 @@ class ProjectControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
+                                        fieldWithPath("[].id").type(NUMBER).description("블럭 아이디"),
                                         fieldWithPath("[]projectName").type(STRING).description("프로젝트명"),
                                         fieldWithPath("[]productionYear").type(NUMBER).description("제작 연도"),
                                         fieldWithPath("[]team").type(BOOLEAN).description("팀 프로젝트 여부"),
