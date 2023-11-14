@@ -1,13 +1,15 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Project;
 
 import java.util.List;
 
 @Data
-public class ProjectResponse implements ComponentResponse {
+@NoArgsConstructor
+public class ProjectResponse extends ComponentResponse {
 
     private String projectName;
 
@@ -24,7 +26,7 @@ public class ProjectResponse implements ComponentResponse {
     private String projectUrl;
 
     public ProjectResponse(
-            String projectName,
+            Long id, String projectName,
             Long productionYear,
             boolean isTeam,
             String teamMembers,
@@ -32,6 +34,7 @@ public class ProjectResponse implements ComponentResponse {
             String projectContent,
             String projectUrl
     ) {
+        super(id);
         this.projectName = projectName;
         this.productionYear = productionYear;
         this.isTeam = isTeam;
@@ -41,8 +44,9 @@ public class ProjectResponse implements ComponentResponse {
         this.projectUrl = projectUrl;
     }
 
-    public ProjectResponse(Project project) {
+    public ProjectResponse(Project project, Long id) {
         this(
+                id,
                 project.getProjectName(),
                 project.getProductionYear(),
                 project.getTeamMembers().equals("1"),

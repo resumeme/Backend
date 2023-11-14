@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class CareerResponse implements ComponentResponse {
+public class CareerResponse extends ComponentResponse {
 
     private String companyName;
 
@@ -27,7 +27,7 @@ public class CareerResponse implements ComponentResponse {
     private String careerContent;
 
     public CareerResponse(
-            String companyName,
+            Long id, String companyName,
             String position,
             List<String> skills,
             List<DutyResponse> duties,
@@ -36,6 +36,7 @@ public class CareerResponse implements ComponentResponse {
             LocalDate endDate,
             String careerContent
     ) {
+        super(id);
         this.companyName = companyName;
         this.position = position;
         this.skills = skills;
@@ -46,8 +47,9 @@ public class CareerResponse implements ComponentResponse {
         this.careerContent = careerContent;
     }
 
-    public CareerResponse(Career career) {
+    public CareerResponse(Career career, Long id) {
         this(
+                id,
                 career.getCompanyName(),
                 career.getPosition(),
                 career.getSkills(),
