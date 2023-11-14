@@ -12,10 +12,11 @@ import java.util.Optional;
 public interface ComponentRepository extends JpaRepository<Component, Long> {
 
     @EntityGraph(attributePaths = "components")
-    @Query("select c from Component c")
     List<Component> findAllByResumeId(Long resumeId);
 
     @Query("select c from Component c where c.resumeId = :resumeId and c.property = :type")
     Optional<Component> findExistBlock(@Param("resumeId") Long resumeId, @Param("type") String type);
 
+    @EntityGraph(attributePaths = "components")
+    Optional<Component> findById(Long componentId);
 }
