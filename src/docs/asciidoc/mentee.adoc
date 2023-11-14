@@ -81,6 +81,67 @@ include::{snippets}/resume/activity/create/request-fields.adoc[]
 include::{snippets}/resume/activity/create/http-response.adoc[]
 include::{snippets}/resume/activity/create/response-fields.adoc[]
 
+=== 이력서 교육사항 수정
+*Request*
+include::{snippets}/resume/training/update/http-request.adoc[]
+include::{snippets}/resume/training/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/training/update/http-response.adoc[]
+include::{snippets}/resume/training/update/response-fields.adoc[]
+
+=== 이력서 수상 및 자격증 수정
+*Request*
+include::{snippets}/resume/certification/update/http-request.adoc[]
+include::{snippets}/resume/certification/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/certification/update/http-response.adoc[]
+include::{snippets}/resume/certification/update/response-fields.adoc[]
+
+=== 이력서 업무경험 수정
+*Request*
+include::{snippets}/resume/career/update/http-request.adoc[]
+include::{snippets}/resume/career/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/career/update/http-response.adoc[]
+include::{snippets}/resume/career/update/response-fields.adoc[]
+
+=== 이력서 어학성적 수정
+*Request*
+include::{snippets}/resume/foreignLanguage/update/http-request.adoc[]
+include::{snippets}/resume/foreignLanguage/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/foreignLanguage/update/http-response.adoc[]
+include::{snippets}/resume/foreignLanguage/update/response-fields.adoc[]
+
+=== 이력서 프로젝트 수정
+*Request*
+include::{snippets}/resume/project/update/http-request.adoc[]
+include::{snippets}/resume/project/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/project/update/http-response.adoc[]
+include::{snippets}/resume/project/update/response-fields.adoc[]
+
+=== 이력서 활동사항 수정
+*Request*
+include::{snippets}/resume/activity/update/http-request.adoc[]
+include::{snippets}/resume/activity/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/activity/update/http-response.adoc[]
+include::{snippets}/resume/activity/update/response-fields.adoc[]
+
+=== 이력서 블럭 삭제
+*Request*
+include::{snippets}/resume/component/delete/http-request.adoc[]
+include::{snippets}/resume/component/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/delete/http-response.adoc[]
 
 === 이력서 제목 수정
 *Request*
