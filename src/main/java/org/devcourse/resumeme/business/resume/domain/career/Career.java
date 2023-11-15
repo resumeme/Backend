@@ -82,7 +82,7 @@ public class Career implements Converter {
             }
         }
 
-        return new Career(careerComponent.getProperty(), description.get("position"),
+        return new Career(careerComponent.getContent(), description.get("position"),
                 Arrays.asList(description.get("skill").split(",")), duties, careerComponent.getStartDate(),
                 careerComponent.getEndDate(), description.get("careerContent"));
     }
