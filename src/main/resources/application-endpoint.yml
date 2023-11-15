@@ -13,6 +13,7 @@ endpoint:
     - matcher:
         get: /api/v1/mentors/*, /api/v1/mentees/*
         post: /api/v1/events, /api/v1/resumes/*/reviews, /api/v1/events/*/resumes/*/comments
+        patch: /api/v1/mentors/*
       role: mentor
     - matcher:
         get: /api/v1/admin/applications, api/v1/admin/statistics/*

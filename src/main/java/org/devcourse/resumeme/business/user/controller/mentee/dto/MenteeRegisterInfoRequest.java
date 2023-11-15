@@ -18,10 +18,18 @@ public record MenteeRegisterInfoRequest(String cacheKey, RequiredInfoRequest req
                 .requiredInfo(
                         new RequiredInfo(requiredInfo.realName(), requiredInfo.nickname(), requiredInfo.phoneNumber(), requiredInfo.role())
                 )
+                .interestedPositions(replaceNullWithEmptySet(interestedPositions))
+                .interestedFields(replaceNullWithEmptySet(interestedFields))
                 .introduce(introduce)
-                .interestedPositions(interestedPositions)
-                .interestedFields(interestedFields)
                 .build();
+    }
+
+    private Set<String> replaceNullWithEmptySet(Set<String> attributes) {
+        if (attributes == null) {
+            return Set.of();
+        }
+
+        return attributes;
     }
 
 }

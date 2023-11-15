@@ -11,7 +11,7 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
 
     Optional<Mentee> findByEmail(String email);
 
-    @Query("select m from Mentee m join fetch m.interestedPositions join fetch m.interestedFields where m.id = :menteeId")
+    @Query("select m from Mentee m left join fetch m.interestedPositions left join fetch m.interestedFields where m.id = :menteeId")
     Optional<Mentee> findWithPositionsAndFields(@Param("menteeId") Long menteeId);
 
 }

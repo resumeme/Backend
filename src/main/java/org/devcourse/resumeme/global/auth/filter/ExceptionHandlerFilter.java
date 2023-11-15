@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.devcourse.resumeme.global.exception.TokenException;
 import org.devcourse.resumeme.global.exception.advice.ErrorResponse;
@@ -32,6 +33,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         } catch (TokenException e) {
             log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
             sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN);
+        } catch (CustomException e) {
+            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
+            sendErrorResponse(response, 400, ExceptionCode.valueOf(e.getCode()));
         } catch (Exception e) {
             log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
             sendErrorResponse(response, 500, SERVER_ERROR);
