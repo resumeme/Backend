@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -121,4 +122,17 @@ public class EventController {
                 .toList();
 
     }
+
+    @GetMapping("/own")
+    public List<EventResponse> getMyEvents(@AuthenticationPrincipal JwtUser user) {
+        List<EventResponse> myEvents = new ArrayList<>();
+        List<Event> events = eventService.getAll()
+                .stream()
+                .filter(event -> event.getMentor().getId().longValue() == user.id())
+                .toList();
+        events.forEach(event -> myEvents.add(new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event))));
+
+        return myEvents;
+    }
+
 }
