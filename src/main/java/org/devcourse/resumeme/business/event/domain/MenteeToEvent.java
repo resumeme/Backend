@@ -8,7 +8,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -84,6 +86,10 @@ public class MenteeToEvent extends BaseEntity {
 
     public void completeEvent(String overallReview) {
         notNull(overallReview);
+
+        if (isRejected()) {
+            throw new EventException(ExceptionCode.EVENT_REJECTED);
+        }
 
         this.overallReview = overallReview;
         this.progress = Progress.COMPLETE;

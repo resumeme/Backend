@@ -70,9 +70,7 @@ public class EventService {
 
     public void completeReview(Long eventId, String request, Long resumeId) {
         Event event = getOne(eventId);
-        List<MenteeToEvent> applicants = event.getApplicants();
-
-        MenteeToEvent menteeToEvent = applicants.stream()
+        MenteeToEvent menteeToEvent = event.getApplicants().stream()
                 .filter(m -> m.isSameResume(resumeId))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
