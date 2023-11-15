@@ -38,10 +38,10 @@ public class ComponentController {
     }
 
     @PatchMapping("/{resumeId}/{type}/components/{componentId}")
-    public IdResponse updateComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
-        String originType = blockService.delete(componentId);
+    public IdResponse updateComponent(@PathVariable Long resumeId, @PathVariable String type, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
+        blockService.delete(componentId);
 
-        return createCareer(resumeId, request, originType);
+        return createCareer(resumeId, request, type);
     }
 
     @DeleteMapping("/{resumeId}/components/{componentId}")
