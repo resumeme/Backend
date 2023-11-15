@@ -16,9 +16,7 @@ import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,9 +61,8 @@ public class MenteeController {
     }
 
     @PatchMapping("/{menteeId}")
-    public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
-        JwtUser user = (JwtUser) auth.getPrincipal();
-        if (!(isMentee(auth) && Objects.equals(menteeId, user.id()))) {
+    public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest, @AuthenticationPrincipal JwtUser user) {
+        if (!Objects.equals(menteeId, user.id())) {
             throw new CustomException(BAD_REQUEST);
         }
         Long updatedMenteeId = menteeService.update(menteeId, updateRequest);
@@ -78,12 +75,6 @@ public class MenteeController {
         Mentee findMentee = menteeService.getOne(menteeId);
 
         return new MenteeInfoResponse(findMentee);
-    }
-
-    private boolean isMentee(Authentication auth) {
-        return auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(authority -> authority.equals("ROLE_MENTEE"));
     }
 
 }

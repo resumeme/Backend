@@ -16,9 +16,7 @@ import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,20 +68,13 @@ public class MentorController {
     }
 
     @PatchMapping("/{mentorId}")
-    public IdResponse update(@PathVariable Long mentorId, @RequestBody MentorInfoUpdateRequest mentorInfoUpdateRequest, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
-        JwtUser user = (JwtUser) auth.getPrincipal();
-        if (isMentee(auth) && !Objects.equals(mentorId, user.id())) {
+    public IdResponse update(@PathVariable Long mentorId, @RequestBody MentorInfoUpdateRequest mentorInfoUpdateRequest, @AuthenticationPrincipal JwtUser user) {
+        if (!Objects.equals(mentorId, user.id())) {
             throw new CustomException(BAD_REQUEST);
         }
         Long updatedMentorId = mentorService.update(mentorId, mentorInfoUpdateRequest);
 
         return new IdResponse(updatedMentorId);
-    }
-
-    private boolean isMentee(Authentication auth) {
-        return auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(authority -> authority.equals("ROLE_MENTEE"));
     }
 
 }
