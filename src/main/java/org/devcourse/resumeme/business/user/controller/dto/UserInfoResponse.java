@@ -6,16 +6,16 @@ import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record UserInfoResponse(String imageUrl, String realName, String nickname, String phoneNumber, String role,
+public record UserInfoResponse(Long id, String imageUrl, String realName, String nickname, String phoneNumber, String role,
                                Set<String> experiencedPositions, Set<String> interestedPositions,
                                Set<String> interestedFields, String careerContent, int careerYear, String introduce) {
 
     public UserInfoResponse(Mentor mentor) {
-        this(mentor.getImageUrl(), mentor.getRequiredInfo().getRealName(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRoleName(), getExperiencedPositions(mentor), null, null, mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
+        this(mentor.getId(), mentor.getImageUrl(), mentor.getRequiredInfo().getRealName(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRoleName(), getExperiencedPositions(mentor), null, null, mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
     }
 
     public UserInfoResponse(Mentee mentee) {
-        this(mentee.getImageUrl(), mentee.getRequiredInfo().getRealName(), mentee.getRequiredInfo().getNickname(), mentee.getRequiredInfo().getPhoneNumber(), mentee.getRoleName(), null, getInterestedPositions(mentee), getInterestedFields(mentee), null, 0, mentee.getIntroduce());
+        this(mentee.getId(), mentee.getImageUrl(), mentee.getRequiredInfo().getRealName(), mentee.getRequiredInfo().getNickname(), mentee.getRequiredInfo().getPhoneNumber(), mentee.getRoleName(), null, getInterestedPositions(mentee), getInterestedFields(mentee), null, 0, mentee.getIntroduce());
     }
 
     private static Set<String> getExperiencedPositions(Mentor mentor) {

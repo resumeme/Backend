@@ -129,7 +129,7 @@ public class Mentor extends BaseEntity {
     }
 
     public String getRoleName() {
-        return requiredInfo.getRealName();
+        return requiredInfo.getRole().getRoleName();
     }
 
 }

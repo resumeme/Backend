@@ -23,6 +23,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -76,6 +77,7 @@ class UserControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("user/mentor/findMy",
                                 responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("멘토 id"),
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
@@ -109,6 +111,7 @@ class UserControllerTest extends ControllerUnitTest {
                         document("user/mentee/findMy",
                                 getDocumentRequest(),
                                 responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("멘티 id"),
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
