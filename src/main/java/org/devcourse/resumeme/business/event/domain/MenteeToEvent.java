@@ -15,6 +15,7 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.Progress.APPLY;
+import static org.devcourse.resumeme.business.event.domain.Progress.COMPLETE;
 import static org.devcourse.resumeme.business.event.domain.Progress.REJECT;
 import static org.devcourse.resumeme.business.event.domain.Progress.REQUEST;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
@@ -91,8 +92,10 @@ public class MenteeToEvent extends BaseEntity {
             throw new EventException(ExceptionCode.EVENT_REJECTED);
         }
 
-        this.overallReview = overallReview;
-        this.progress = Progress.COMPLETE;
+        if (progress != COMPLETE) {
+            this.overallReview = overallReview;
+            this.progress = COMPLETE;
+        }
     }
 
 }
