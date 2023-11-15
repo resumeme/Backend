@@ -225,7 +225,7 @@ class EventControllerTest extends ControllerUnitTest {
         Long eventId = 1L;
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resume/{resumeId}/mentee", eventId, 1L));
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resumes/{resumeId}/mentee", eventId, 1L));
 
         // then
         result
@@ -247,7 +247,7 @@ class EventControllerTest extends ControllerUnitTest {
         CompleteEventRequest request = new CompleteEventRequest("좋은 이력서에요.");
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resume/{resumeId}/complete", eventId, resumeId)
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resumes/{resumeId}/complete", eventId, resumeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
