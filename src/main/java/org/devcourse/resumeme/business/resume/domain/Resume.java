@@ -33,10 +33,12 @@ public class Resume extends BaseEntity {
     @Getter
     private String title;
 
+    @Getter
     @ManyToOne
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
 
+    @Getter
     @Embedded
     private ResumeInfo resumeInfo;
 

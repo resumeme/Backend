@@ -66,6 +66,15 @@ include::{snippets}/user/mentee/find/http-response.adoc[]
 include::{snippets}/user/mentee/find/response-fields.adoc[]
 
 == [이력서]
+=== 이력서 기본 정보 조회
+*Request*
+include::{snippets}/resume/basicInfo/http-request.adoc[]
+include::{snippets}/resume/basicInfo/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/basicInfo/http-response.adoc[]
+include::{snippets}/resume/basicInfo/response-fields.adoc[]
+
 === 이력서 참고링크 조회
 *Request*
 include::{snippets}/resume/findLink/http-request.adoc[]

@@ -10,6 +10,7 @@ import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.domain.LinkType;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -44,7 +45,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ResumeControllerTest extends ControllerUnitTest {
+class ResumeControllerTest extends ControllerUnitTest {
 
     private Mentee mentee;
 
@@ -97,6 +98,45 @@ public class ResumeControllerTest extends ControllerUnitTest {
                         )
                 );
     }
+
+    @Test
+    void 이력서_기본정보_조회에_성공한다() throws Exception {
+        // given
+        Long resumeId = 1L;
+
+        Resume resume = Resume.builder()
+                .title("title")
+                .resumeInfo(new ResumeInfo("백엔드", List.of("자바", "스프링"), "안녕하세요"))
+                .mentee(mentee)
+                .build();
+        given(resumeService.getOne(resumeId)).willReturn(resume);
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}", resumeId));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("resume/basicInfo",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("이력서 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("title").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("position").type(STRING).description("지원 분야"),
+                                        fieldWithPath("skills").type(ARRAY).description("사용 기술"),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개글"),
+                                        fieldWithPath("ownerInfo").type(OBJECT).description("작성자 정보"),
+                                        fieldWithPath("ownerInfo.id").type(NUMBER).description("작성자 아이디"),
+                                        fieldWithPath("ownerInfo.name").type(STRING).description("작성자 이름"),
+                                        fieldWithPath("ownerInfo.phoneNumber").type(STRING).description("작성자 핸드폰 번호")
+                                )
+                        )
+                );
+    }
+
 
     @Test
     @WithMockCustomUser

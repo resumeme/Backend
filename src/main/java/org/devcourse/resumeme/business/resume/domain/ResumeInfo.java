@@ -4,14 +4,11 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.Position;
 
 import java.util.List;
 
@@ -19,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResumeInfo {
 
+    @Getter
     private String position;
 
     @Getter
@@ -28,6 +26,7 @@ public class ResumeInfo {
     private List<String> skills;
 
     @Lob
+    @Getter
     private String introduce;
 
     public ResumeInfo(String position, List<String> skills, String introduce) {

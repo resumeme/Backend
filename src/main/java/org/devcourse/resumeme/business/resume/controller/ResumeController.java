@@ -9,6 +9,7 @@ import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeResponse;
+import org.devcourse.resumeme.business.resume.controllerl.dto.BasicResumeInfo;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
@@ -40,6 +41,13 @@ public class ResumeController {
         return new IdResponse(savedId);
     }
 
+    @GetMapping("/{resumeId}")
+    public BasicResumeInfo getBasicInformation(@PathVariable Long resumeId) {
+        Resume resume = resumeService.getOne(resumeId);
+
+        return new BasicResumeInfo(resume);
+    }
+    
     @PatchMapping("/{resumeId}")
     public IdResponse updateResume(@PathVariable Long resumeId, @RequestBody ResumeInfoRequest request) {
         Resume resume = resumeService.getOne(resumeId);
