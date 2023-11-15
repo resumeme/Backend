@@ -23,6 +23,7 @@ public enum ExceptionCode implements DocsEnumType {
     RANGE_MAXIMUM_ATTENDEE("참여 인원 수를 2~10명 사이에서 정해주세요"),
     NO_REMAIN_SEATS("이미 모든 신청이 마감되었습니다"),
     NO_AVAILABLE_SEATS("잔여 자리가 없어서 재 오픈이 불가능합니다"),
+    EVENT_REJECTED("거절된 이벤트입니다"),
     CANNOT_OPEN_EVENT("예약한 이벤트에 한에서만 오픈 신청을 할 수 있습니다"),
     TIME_ERROR("시간 순서를 다시 확인해주세요"),
     CAN_NOT_RESERVATION("현재 시간보다 이전 시간으로는 예약할 수 없습니다"),

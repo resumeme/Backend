@@ -8,11 +8,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.Progress.APPLY;
+import static org.devcourse.resumeme.business.event.domain.Progress.COMPLETE;
 import static org.devcourse.resumeme.business.event.domain.Progress.REJECT;
 import static org.devcourse.resumeme.business.event.domain.Progress.REQUEST;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
@@ -43,6 +46,9 @@ public class MenteeToEvent extends BaseEntity {
 
     private String rejectMessage;
 
+    @Getter
+    private String overallReview;
+
     public MenteeToEvent(Event event, Long menteeId, Long resumeId) {
         notNull(event);
         notNull(menteeId);
@@ -59,6 +65,10 @@ public class MenteeToEvent extends BaseEntity {
         return this.menteeId.equals(menteeId);
     }
 
+    public boolean isSameResume(Long resumeId) {
+        return this.resumeId.equals(resumeId);
+    }
+
     public void reject(String rejectMessage) {
         notNull(rejectMessage);
 
@@ -73,6 +83,19 @@ public class MenteeToEvent extends BaseEntity {
 
     public void requestReview() {
         this.progress = REQUEST;
+    }
+
+    public void completeEvent(String overallReview) {
+        notNull(overallReview);
+
+        if (isRejected()) {
+            throw new EventException(ExceptionCode.EVENT_REJECTED);
+        }
+
+        if (progress != COMPLETE) {
+            this.overallReview = overallReview;
+            this.progress = COMPLETE;
+        }
     }
 
 }
