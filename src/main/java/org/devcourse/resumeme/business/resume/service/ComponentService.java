@@ -26,6 +26,7 @@ public class ComponentService {
         if (existBlock1.isPresent()) {
             Component component = existBlock1.get();
             component.addSubComponent(block);
+            componentRepository.save(component);
 
             return block.getId();
         }
