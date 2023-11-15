@@ -63,7 +63,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
 
         Component component = entity.of(resumeId);
 
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, "foreign-languages")).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/foreign-languages")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
         Component component = entity.of(resumeId);
 
         given(componentService.delete(componentId)).willReturn("foreign-languages");
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, "foreign-languages")).willReturn(1L);
 
         ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/foreign-languages/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)

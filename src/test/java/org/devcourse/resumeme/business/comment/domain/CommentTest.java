@@ -45,7 +45,7 @@ class CommentTest {
         Component component = new Component("career", "career", null, null, 1L, List.of());
 
         // when
-        Comment comment = new Comment(content, type, component, resume);
+        Comment comment = new Comment(content, component, resume);
 
         // then
         assertThat(comment).isNotNull();
@@ -55,7 +55,7 @@ class CommentTest {
     @MethodSource("reviewCreate")
     void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(String content, BlockType type, Component component, Resume resume) {
         // then
-        assertThatThrownBy(() -> new Comment(content, type, component, resume))
+        assertThatThrownBy(() -> new Comment(content, component, resume))
                 .isInstanceOf(CustomException.class);
     }
 

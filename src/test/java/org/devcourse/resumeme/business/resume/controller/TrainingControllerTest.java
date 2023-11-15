@@ -70,7 +70,7 @@ class TrainingControllerTest extends ControllerUnitTest {
 
         Component component = training.of(resumeId);
 
-        given(componentService.create(component, TRAINING)).willReturn(1L);
+        given(componentService.create(component, "trainings")).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/trainings")
@@ -117,7 +117,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         Component component = training.of(resumeId);
 
         given(componentService.delete(componentId)).willReturn("trainings");
-        given(componentService.create(component, TRAINING)).willReturn(1L);
+        given(componentService.create(component, "trainings")).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/trainings/components/{componentId}", componentId)
@@ -158,7 +158,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         Training training = new Training("organization", "Computer Science", "Bachelor's", LocalDate.now(), LocalDate.now().plusYears(4), 3.8, 4.0, "Description");
         Component component = training.of(resumeId);
 
-        Component training1 = new Component(TRAINING.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        Component training1 = new Component("trainings", null, null, null, resumeId, List.of(component));
         setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(training1));
 

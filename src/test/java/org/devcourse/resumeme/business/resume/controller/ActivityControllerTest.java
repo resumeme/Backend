@@ -71,7 +71,7 @@ class ActivityControllerTest extends ControllerUnitTest {
 
         Component component = activity.of(resumeId);
 
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, "activities")).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/activities")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,7 +117,7 @@ class ActivityControllerTest extends ControllerUnitTest {
         Component component = activity.of(resumeId);
 
         given(componentService.delete(componentId)).willReturn("activities");
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, BlockType.CAREER.getUrlParameter())).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/activities/components/{componentId}", componentId)
@@ -155,7 +155,7 @@ class ActivityControllerTest extends ControllerUnitTest {
         Activity activity = new Activity("Project A", LocalDate.now().minusMonths(6), LocalDate.now(), "https://projectalink.com", "Project A");
         Component component = activity.of(resumeId);
 
-        Component activity1 = new Component(ACTIVITY.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        Component activity1 = new Component("activities", null, null, null, resumeId, List.of(component));
         setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(activity1));
 

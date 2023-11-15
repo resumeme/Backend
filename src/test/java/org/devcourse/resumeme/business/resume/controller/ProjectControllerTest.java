@@ -67,7 +67,7 @@ class ProjectControllerTest extends ControllerUnitTest {
 
         Component component = project.of(resumeId);
 
-        given(componentService.create(component, PROJECT)).willReturn(1L);
+        given(componentService.create(component, "projects")).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/projects")
@@ -109,7 +109,7 @@ class ProjectControllerTest extends ControllerUnitTest {
         Component component = project.of(resumeId);
 
         given(componentService.delete(componentId)).willReturn("projects");
-        given(componentService.create(component, PROJECT)).willReturn(1L);
+        given(componentService.create(component, "projects")).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/projects/components/{componentId}", componentId)
