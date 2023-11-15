@@ -73,7 +73,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         given(componentService.create(component, TRAINING)).willReturn(1L);
 
         // when
-        ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/trainings")
+        ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/trainings")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
         );
@@ -120,7 +120,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         given(componentService.create(component, TRAINING)).willReturn(1L);
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/trainings/components/{componentId}", componentId)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/trainings/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
         );
@@ -163,7 +163,7 @@ class TrainingControllerTest extends ControllerUnitTest {
         given(componentService.getAll(resumeId)).willReturn(List.of(training1));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/trainings"));
+        ResultActions result = mvc.perform(get("/api/v1/resumes/" + resumeId + "/trainings"));
 
         // then
         result

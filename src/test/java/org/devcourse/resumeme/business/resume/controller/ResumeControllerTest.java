@@ -112,7 +112,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         given(resumeService.getOne(resumeId)).willReturn(resume);
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}", resumeId));
+        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/basic", resumeId));
 
         // then
         result.andExpect(status().isOk())

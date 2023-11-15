@@ -84,6 +84,18 @@ include::{snippets}/resume/findLink/path-parameters.adoc[]
 include::{snippets}/resume/findLink/http-response.adoc[]
 include::{snippets}/resume/findLink/response-fields.adoc[]
 
+=== 이력서 블럭 전체 조회
+
+include::{snippets}/resume/component/findAll/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/component/findAll/http-request.adoc[]
+include::{snippets}/resume/component/findAll/path-parameters.adoc[]
+
+*Response*
+
+반환 값은 아래 개별 조회를 하나의 ARRAY로 제공되기 때문에 따로 추가는 하지 않겠습니다
+
 === 이력서 교육사항 조회
 *Request*
 include::{snippets}/resume/training/find/http-request.adoc[]

@@ -65,7 +65,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
 
         given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
-        ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/foreign-languages")
+        ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/foreign-languages")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
         );
@@ -101,7 +101,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
         given(componentService.delete(componentId)).willReturn("foreign-languages");
         given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
-        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/foreign-languages/components/{componentId}", componentId)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/foreign-languages/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
         );
@@ -138,7 +138,7 @@ class ForeignLanguageControllerTest extends ControllerUnitTest {
         given(componentService.getAll(resumeId)).willReturn(List.of(foreignLanguage1));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/foreign-languages"));
+        ResultActions result = mvc.perform(get("/api/v1/resumes/" + resumeId + "/foreign-languages"));
 
         // then
         result

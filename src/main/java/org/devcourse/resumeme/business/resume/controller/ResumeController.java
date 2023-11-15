@@ -41,7 +41,7 @@ public class ResumeController {
         return new IdResponse(savedId);
     }
 
-    @GetMapping("/{resumeId}")
+    @GetMapping("/{resumeId}/basic")
     public BasicResumeInfo getBasicInformation(@PathVariable Long resumeId) {
         Resume resume = resumeService.getOne(resumeId);
 
