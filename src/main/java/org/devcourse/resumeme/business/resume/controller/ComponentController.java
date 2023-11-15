@@ -22,7 +22,7 @@ public class ComponentController {
 
     @PostMapping("/{resumeId}/{type}")
     public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable String type) {
-        return new IdResponse(blockService.create(request.toEntity().of(resumeId), BlockType.of(type)));
+        return new IdResponse(blockService.create(request.toEntity().of(resumeId), type));
     }
 
     @GetMapping({"/{resumeId}","/{resumeId}/{type}"})
