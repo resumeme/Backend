@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.user.controller.dto;
 
-import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 
@@ -12,7 +11,7 @@ public record UserInfoResponse(String imageUrl, String realName, String nickname
                                Set<String> interestedFields, String careerContent, int careerYear, String introduce) {
 
     public UserInfoResponse(Mentor mentor) {
-        this(mentor.getImageUrl(), mentor.getRequiredInfo().getRealName(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRequiredInfo().getRole().equals(Role.ROLE_MENTOR) ? "mentor" : "pending", getExperiencedPositions(mentor), null, null, mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
+        this(mentor.getImageUrl(), mentor.getRequiredInfo().getRealName(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRequiredInfo().getRole().getDescription(), getExperiencedPositions(mentor), null, null, mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
     }
 
     public UserInfoResponse(Mentee mentee) {
