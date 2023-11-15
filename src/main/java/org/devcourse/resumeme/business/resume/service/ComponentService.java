@@ -27,10 +27,12 @@ public class ComponentService {
             Component component = existBlock1.get();
             component.addSubComponent(block);
 
-            return component.getId();
+            return block.getId();
         }
 
-        return componentRepository.save(new Component(type, null, null, null, resumeId, List.of(block))).getId();
+        componentRepository.save(new Component(type, null, null, null, resumeId, List.of(block))).getId();
+
+        return block.getId();
     }
 
     public List<Component> getAll(Long resumeId) {
