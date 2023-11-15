@@ -24,8 +24,12 @@ public record MenteeRegisterInfoRequest(String cacheKey, RequiredInfoRequest req
                 .build();
     }
 
-    private Set<String> replaceNullWithEmptySet(Set<String> setAttributes) {
-        return setAttributes == null ? Set.of() : setAttributes;
+    private Set<String> replaceNullWithEmptySet(Set<String> attributes) {
+        if (attributes == null) {
+            return Set.of();
+        }
+
+        return attributes;
     }
 
 }

@@ -12,8 +12,12 @@ public record MenteeInfoUpdateRequest(String nickname, String phoneNumber, Set<S
         this.introduce = introduce;
     }
 
-    private Set<String> replaceNullWithEmptySet(Set<String> setAttributes) {
-        return setAttributes == null ? Set.of() : setAttributes;
+    private Set<String> replaceNullWithEmptySet(Set<String> attributes) {
+        if (attributes == null) {
+            return Set.of();
+        }
+
+        return attributes;
     }
 
 }

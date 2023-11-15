@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.ACCESS_TOKEN_NAME;
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN_NAME;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
@@ -69,7 +67,7 @@ public class MentorController {
 
     @PatchMapping("/{mentorId}")
     public IdResponse update(@PathVariable Long mentorId, @RequestBody MentorInfoUpdateRequest mentorInfoUpdateRequest, @AuthenticationPrincipal JwtUser user) {
-        if (!Objects.equals(mentorId, user.id())) {
+        if (!mentorId.equals(user.id())) {
             throw new CustomException(BAD_REQUEST);
         }
         Long updatedMentorId = mentorService.update(mentorId, mentorInfoUpdateRequest);
