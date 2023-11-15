@@ -121,4 +121,14 @@ public class EventController {
                 .toList();
 
     }
+
+    @GetMapping("/own")
+    public List<EventResponse> getMyEvents(@AuthenticationPrincipal JwtUser user) {
+        return eventService.getAll()
+                .stream()
+                .filter(event -> event.getMentor().getId().longValue() == user.id())
+                .map(event -> new EventResponse(event,eventPositionService.getAll(event.getId()), getResumes(event)))
+                .toList();
+    }
+
 }
