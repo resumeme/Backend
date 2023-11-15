@@ -115,7 +115,7 @@ public class Mentee extends BaseEntity {
     }
 
     public String getRoleName() {
-        return requiredInfo.getRealName();
+        return requiredInfo.getRole().getRoleName();
     }
 
 }
