@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
@@ -16,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.devcourse.resumeme.business.resume.domain.BlockType.CAREER;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,8 +31,6 @@ public class Career implements Converter {
     private List<Duty> duties;
 
     private CareerPeriod careerPeriod;
-
-    private BlockType type = CAREER;
 
     public Career(String companyName, String position, List<String> skills, List<Duty> duties,
                   LocalDate careerStartDate, LocalDate endDate, String careerContent) {

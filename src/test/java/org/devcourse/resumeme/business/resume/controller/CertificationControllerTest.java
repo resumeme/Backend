@@ -62,7 +62,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         Certification certification = request.toEntity();
         Component component = certification.of(resumeId);
 
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, "certifications")).willReturn(1L);
 
 
         ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/certifications")
@@ -101,7 +101,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         Component component = certification.of(resumeId);
 
         given(componentService.delete(componentId)).willReturn("certifications");
-        given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
+        given(componentService.create(component, "certifications")).willReturn(1L);
 
         ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/certifications/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)

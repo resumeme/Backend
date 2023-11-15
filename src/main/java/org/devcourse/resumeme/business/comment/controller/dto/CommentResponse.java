@@ -2,10 +2,12 @@ package org.devcourse.resumeme.business.comment.controller.dto;
 
 import org.devcourse.resumeme.business.comment.domain.Comment;
 
-public record CommentResponse(Long id, String content, String blockType, Long componentId) {
+import java.time.LocalDateTime;
+
+public record CommentResponse(Long commentId, String content, Long componentId, LocalDateTime lastModifiedAt) {
 
     public CommentResponse(Comment comment) {
-        this(comment.getId(), comment.getContent(), comment.getType().name(), comment.getComponent().getId());
+        this(comment.getId(), comment.getContent(), comment.getComponent().getId(), comment.getLastModifiedDate());
     }
 
 }

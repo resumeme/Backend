@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -20,9 +19,9 @@ public class ComponentService {
 
     private final ComponentRepository componentRepository;
 
-    public Long create(Component block, BlockType type) {
+    public Long create(Component block, String type) {
         Long resumeId = block.getResumeId();
-        Optional<Component> existBlock1 = componentRepository.findExistBlock(resumeId, type.name());
+        Optional<Component> existBlock1 = componentRepository.findExistBlock(resumeId, type);
 
         if (existBlock1.isPresent()) {
             Component component = existBlock1.get();
@@ -31,7 +30,7 @@ public class ComponentService {
             return component.getId();
         }
 
-        return componentRepository.save(new Component(type.getUrlParameter(), null, null, null, resumeId, List.of(block))).getId();
+        return componentRepository.save(new Component(type, null, null, null, resumeId, List.of(block))).getId();
     }
 
     public List<Component> getAll(Long resumeId) {

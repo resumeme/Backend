@@ -1,33 +1,33 @@
 package org.devcourse.resumeme.business.comment.controller;
 
-import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentCreateRequest;
 import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Component;
+import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
-import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.BLOCK_TYPE;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.BLOCK_TYPE;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -80,7 +80,7 @@ class CommentControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 리뷰_생성에_성공한다() throws Exception {
         // given
-        CommentCreateRequest request = new CommentCreateRequest(1L, "이력서가 맘에 안들어요", "ACTIVITY");
+        CommentCreateRequest request = new CommentCreateRequest(1L, "이력서가 맘에 안들어요");
         Long resumeId = 1L;
         Component component = new Component("career", "career", null, null, resumeId, List.of());
         Resume resume = new Resume("titlem", mentee);
@@ -88,7 +88,9 @@ class CommentControllerTest extends ControllerUnitTest {
         Comment comment = request.toEntity(resume, component);
         setId(comment, 1L);
         setId(component, 1L);
-
+        Field lastModifiedAt = comment.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
+        lastModifiedAt.setAccessible(true);
+        lastModifiedAt.set(comment, LocalDateTime.of(2023, 11, 15, 18, 0));
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(reviewService.create(any(Comment.class))).willReturn(comment);
         given(componentService.getOne(request.componentId())).willReturn(component);
@@ -107,14 +109,13 @@ class CommentControllerTest extends ControllerUnitTest {
                                 getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("componentId").type(NUMBER).description("이력서 component 아이디"),
-                                        fieldWithPath("content").type(STRING).description("리뷰 내용"),
-                                        fieldWithPath("blockType").type(STRING).description("이력서 각 블럭 타입")
+                                        fieldWithPath("content").type(STRING).description("리뷰 내용")
                                 ),
                                 responseFields(
+                                        fieldWithPath("commentId").type(NUMBER).description("첨삭 아이디"),
                                         fieldWithPath("componentId").type(NUMBER).description("이력서 component 아이디"),
-                                        fieldWithPath("id").type(NUMBER).description("리뷰 아이디"),
                                         fieldWithPath("content").type(STRING).description("리뷰 내용"),
-                                        fieldWithPath("blockType").type(STRING).description(generateLinkCode(BLOCK_TYPE))
+                                        fieldWithPath("lastModifiedAt").type(STRING).description("리뷰 내용")
                                 )
                         )
                 );
@@ -134,8 +135,12 @@ class CommentControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Comment comment = new Comment("리뷰 내용내용", BlockType.CAREER, component, new Resume("title", mentee));
+        Comment comment = new Comment("리뷰 내용내용", component, new Resume("title", mentee));
         setId(comment, 1L);
+        setId(component, 1L);
+        Field lastModifiedAt = comment.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
+        lastModifiedAt.setAccessible(true);
+        lastModifiedAt.set(comment, LocalDateTime.of(2023, 11, 15, 18, 0));
 
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
 
@@ -153,10 +158,10 @@ class CommentControllerTest extends ControllerUnitTest {
                                         parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디")
                                 ),
                                 responseFields(
-                                        subsectionWithPath("*").description(generateLinkCode(BLOCK_TYPE)),
-                                        fieldWithPath("*.id").type(NUMBER).description("리뷰 아이디"),
-                                        fieldWithPath("*.content").type(STRING).description("리뷰 내용"),
-                                        fieldWithPath("*.blockType").type(STRING).description(generateLinkCode(BLOCK_TYPE))
+                                        fieldWithPath("[].commentId").type(NUMBER).description("리뷰 아이디"),
+                                        fieldWithPath("[].content").type(STRING).description("리뷰 내용"),
+                                        fieldWithPath("[].componentId").type(NUMBER).description("속해있는 블럭 아이디"),
+                                        fieldWithPath("[].lastModifiedAt").type(STRING).description("마지막 수정 시간")
                                 )
 
                         )

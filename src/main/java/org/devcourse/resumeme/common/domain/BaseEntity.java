@@ -2,7 +2,6 @@ package org.devcourse.resumeme.common.domain;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,7 +15,6 @@ public abstract class BaseEntity {
     @CreatedDate
     protected LocalDateTime createdDate;
 
-    @Getter
     @LastModifiedDate
     protected LocalDateTime lastModifiedDate;
 
@@ -26,6 +24,14 @@ public abstract class BaseEntity {
     protected BaseEntity(LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        if (lastModifiedDate == null) {
+            return createdDate;
+        }
+
+        return lastModifiedDate;
     }
 
 }

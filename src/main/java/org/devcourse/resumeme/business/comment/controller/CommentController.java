@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,19 +39,17 @@ public class CommentController {
         Component component = componentService.getOne(request.componentId());
         Comment review = commentService.create(request.toEntity(resume, component));
 
-        return new CommentResponse(review.getId(), review.getContent(), review.getType().name(), component.getId());
+        return new CommentResponse(review.getId(), review.getContent(), component.getId(), review.getLastModifiedDate());
     }
 
     @GetMapping
-    public Map<String, CommentResponse> getAllOwnReviews(@PathVariable Long eventId, @PathVariable Long resumeId) {
+    public List<CommentResponse> getAllOwnReviews(@PathVariable Long eventId, @PathVariable Long resumeId) {
         Event event = eventService.getOne(eventId);
         event.checkAppliedResume(resumeId);
 
         return commentService.getAllWithResumeId(resumeId).stream()
                 .map(CommentResponse::new)
-                .toList()
-                .stream()
-                .collect(Collectors.toMap(CommentResponse::blockType, commentResponse -> commentResponse));
+                .toList();
     }
 
 }

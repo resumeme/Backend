@@ -60,7 +60,7 @@ class CareerControllerTest extends ControllerUnitTest {
         Career entity = request.toEntity();
         Component component = entity.of(resumeId);
 
-        given(componentService.create(component, CAREER)).willReturn(1L);
+        given(componentService.create(component, "career")).willReturn(1L);
 
         ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/careers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ class CareerControllerTest extends ControllerUnitTest {
         Component component = entity.of(resumeId);
 
         given(componentService.delete(componentId)).willReturn("careers");
-        given(componentService.create(component, CAREER)).willReturn(1L);
+        given(componentService.create(component, "careers")).willReturn(1L);
 
         ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/careers/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ class CareerControllerTest extends ControllerUnitTest {
                 LocalDate.of(2022, 10, 12), LocalDate.of(2023, 11, 1), "그렙 회사 다님");
 
         Component component = career.of(resumeId);
-        Component career1 = new Component(CAREER.getUrlParameter(), null, null, null, resumeId, List.of(component));
+        Component career1 = new Component("careers", null, null, null, resumeId, List.of(component));
         setId(component, 1L);
         given(componentService.getAll(resumeId)).willReturn(List.of(career1));
 
