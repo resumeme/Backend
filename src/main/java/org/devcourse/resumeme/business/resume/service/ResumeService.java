@@ -65,4 +65,9 @@ public class ResumeService {
         return resumeRepository.findAllByMenteeId(menteeId);
     }
 
+    public void delete(Long resumeId) {
+        Resume resume = getOne(resumeId);
+
+        resumeRepository.delete(resume);
+    }
 }
