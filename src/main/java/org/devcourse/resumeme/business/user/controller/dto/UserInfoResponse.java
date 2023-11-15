@@ -11,11 +11,11 @@ public record UserInfoResponse(String imageUrl, String realName, String nickname
                                Set<String> interestedFields, String careerContent, int careerYear, String introduce) {
 
     public UserInfoResponse(Mentor mentor) {
-        this(mentor.getImageUrl(), mentor.getRequiredInfo().getRealName(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRequiredInfo().getRole().getDescription(), getExperiencedPositions(mentor), null, null, mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
+        this(mentor.getImageUrl(), mentor.getRequiredInfo().getRealName(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getPhoneNumber(), mentor.getRoleName(), getExperiencedPositions(mentor), null, null, mentor.getCareerContent(), mentor.getCareerYear(), mentor.getIntroduce());
     }
 
     public UserInfoResponse(Mentee mentee) {
-        this(mentee.getImageUrl(), mentee.getRequiredInfo().getRealName(), mentee.getRequiredInfo().getNickname(), mentee.getRequiredInfo().getPhoneNumber(), "mentee", null, getInterestedPositions(mentee), getInterestedFields(mentee), null, 0, mentee.getIntroduce());
+        this(mentee.getImageUrl(), mentee.getRequiredInfo().getRealName(), mentee.getRequiredInfo().getNickname(), mentee.getRequiredInfo().getPhoneNumber(), mentee.getRoleName(), null, getInterestedPositions(mentee), getInterestedFields(mentee), null, 0, mentee.getIntroduce());
     }
 
     private static Set<String> getExperiencedPositions(Mentor mentor) {

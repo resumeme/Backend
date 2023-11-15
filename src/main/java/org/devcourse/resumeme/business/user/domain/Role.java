@@ -11,11 +11,12 @@ public enum Role implements DocsEnumType {
     ROLE_MENTOR("mentor"), // 멘토 승인 완료
     ROLE_ADMIN("admin");
 
-    private final String role;
+    private final String roleName;
 
-    Role(String role) {
-        this.role = role;
+    Role(String roleName) {
+        this.roleName = roleName;
     }
+
 
     public static Role of(String roleName) {
         return Arrays.stream(values())
@@ -31,8 +32,9 @@ public enum Role implements DocsEnumType {
 
     @Override
     public String getDescription() {
-        return role;
+        return roleName;
     }
 
+    public String getRoleName() {return roleName;}
 
 }
