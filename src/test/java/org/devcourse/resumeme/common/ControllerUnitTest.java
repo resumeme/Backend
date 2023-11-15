@@ -11,8 +11,8 @@ import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.mail.service.EmailService;
 import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
-import org.devcourse.resumeme.business.resume.controller.ResumeController;
 import org.devcourse.resumeme.business.resume.controller.ComponentController;
+import org.devcourse.resumeme.business.resume.controller.ResumeController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.user.controller.UserController;
@@ -39,12 +39,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.operation.Operation;
+import org.springframework.restdocs.snippet.TemplatedSnippet;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
 
 import static org.devcourse.resumeme.global.auth.model.jwt.JwtProperties.TokenInfo;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -56,7 +60,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MenteeController.class,
         MentorController.class,
         CommentController.class,
-        ComponentController.class,
         MentorApplicationController.class,
         MentorApplicationController.class,
         ResultNoticeController.class,
@@ -136,6 +139,23 @@ public abstract class ControllerUnitTest {
         Field field = target.getClass().getDeclaredField("id");
         field.setAccessible(true);
         field.set(target, injectId);
+    }
+
+    protected static ExceptionResponseFieldsSnippet exceptionResponse(List<String> exceptions) {
+        return new ExceptionResponseFieldsSnippet("exception-response", Map.of("exceptions", String.join(",", exceptions)));
+    }
+
+    protected static class ExceptionResponseFieldsSnippet extends TemplatedSnippet {
+
+        protected ExceptionResponseFieldsSnippet(String snippetName, Map<String, Object> attributes) {
+            super(snippetName, attributes);
+        }
+
+        @Override
+        protected Map<String, Object> createModel(Operation operation) {
+            return getAttributes();
+        }
+
     }
 
 }

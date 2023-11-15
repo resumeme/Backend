@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/resume")
+@RequestMapping("/api/v1/resumes")
 public class ComponentController {
 
     private final ComponentService blockService;
@@ -25,7 +25,7 @@ public class ComponentController {
         return new IdResponse(blockService.create(request.toEntity().of(resumeId), BlockType.of(type)));
     }
 
-    @GetMapping("/{resumeId}/{type}")
+    @GetMapping({"/{resumeId}","/{resumeId}/{type}"})
     public List<ComponentResponse> getCareer(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
         resumeService.getOne(resumeId);
 
