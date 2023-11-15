@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.comment.controller;
 
 import org.devcourse.resumeme.business.comment.controller.dto.CommentCreateRequest;
+import org.devcourse.resumeme.business.comment.controller.dto.CommentUpdateRequest;
 import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
@@ -26,19 +27,18 @@ import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.BLOCK_TYPE;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -164,6 +164,64 @@ class CommentControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].lastModifiedAt").type(STRING).description("마지막 수정 시간")
                                 )
 
+                        )
+                );
+    }
+
+    @Test
+    void 리뷰를_수정한다() throws Exception {
+        // given
+        long eventId = 1L;
+        long resumeId = 1L;
+        long commentId = 1L;
+
+        CommentUpdateRequest request = new CommentUpdateRequest("새로운 첨삭 내용");
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resumes/{resumeId}/comments/{commentId}", eventId, resumeId, commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("comment/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("참여한 이벤트 아이디"),
+                                        parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디"),
+                                        parameterWithName("commentId").description("작성된 첨삭 아이디")
+                                ),
+                                requestFields(
+                                        fieldWithPath("content").type(STRING).description("새로운 첨삭 내용")
+                                )
+
+                        )
+                );
+    }
+
+    @Test
+    void 리뷰를_삭제한다() throws Exception {
+        // given
+        long eventId = 1L;
+        long resumeId = 1L;
+        long commentId = 1L;
+
+        // when
+        ResultActions result = mvc.perform(delete("/api/v1/events/{eventId}/resumes/{resumeId}/comments/{commentId}", eventId, resumeId, commentId));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("comment/delete",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("참여한 이벤트 아이디"),
+                                        parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디"),
+                                        parameterWithName("commentId").description("작성된 첨삭 아이디")
+                                )
                         )
                 );
     }
