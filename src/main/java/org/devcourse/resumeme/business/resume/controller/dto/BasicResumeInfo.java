@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.resume.controllerl.dto;
+package org.devcourse.resumeme.business.resume.controller.dto;
 
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;

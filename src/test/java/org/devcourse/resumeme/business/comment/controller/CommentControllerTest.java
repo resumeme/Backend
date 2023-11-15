@@ -94,7 +94,7 @@ class CommentControllerTest extends ControllerUnitTest {
         given(componentService.getOne(request.componentId())).willReturn(component);
 
         // when
-        ResultActions result = mvc.perform(post("/api/v1/events/{eventId}/resume/{resumeId}/comments", 1L, resumeId)
+        ResultActions result = mvc.perform(post("/api/v1/events/{eventId}/resumes/{resumeId}/comments", 1L, resumeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -140,7 +140,7 @@ class CommentControllerTest extends ControllerUnitTest {
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/events/{eventId}/resume/{resumeId}/comments", eventId, resumeId));
+        ResultActions result = mvc.perform(get("/api/v1/events/{eventId}/resumes/{resumeId}/comments", eventId, resumeId));
 
         // then
         result.andExpect(status().isOk())

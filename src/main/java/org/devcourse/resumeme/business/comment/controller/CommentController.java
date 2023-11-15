@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/events/{eventId}/resume/{resumeId}/comments")
+@RequestMapping("/api/v1/events/{eventId}/resumes/{resumeId}/comments")
 public class CommentController {
 
     private final ResumeService resumeService;
