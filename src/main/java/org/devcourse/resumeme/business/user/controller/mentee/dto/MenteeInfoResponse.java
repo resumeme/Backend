@@ -5,11 +5,11 @@ import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record MenteeInfoResponse(String imageUrl, String realName, String nickname, String phoneNumber, String role, Set<String> interestedPositions,
+public record MenteeInfoResponse(String imageUrl, String realName, String nickname, String phoneNumber, Set<String> interestedPositions,
                              Set<String> interestedFields, String introduce) {
 
     public MenteeInfoResponse(Mentee mentee) {
-        this(mentee.getImageUrl(), mentee.getRequiredInfo().getRealName(), mentee.getRequiredInfo().getNickname(), mentee.getRequiredInfo().getPhoneNumber(), mentee.getRequiredInfo().getRole().name(),
+        this(mentee.getImageUrl(), mentee.getRequiredInfo().getRealName(), mentee.getRequiredInfo().getNickname(), mentee.getRequiredInfo().getPhoneNumber(),
                 getInterestedPositions(mentee),
                 getInterestedFields(mentee),
                 mentee.getIntroduce());

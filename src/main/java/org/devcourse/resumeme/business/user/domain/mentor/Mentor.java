@@ -128,4 +128,8 @@ public class Mentor extends BaseEntity {
         this.getExperiencedPositions().clear();
     }
 
+    public String getRoleName() {
+        return requiredInfo.getRealName();
+    }
+
 }

@@ -156,7 +156,6 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
-                                        fieldWithPath("role").type(STRING).description(generateLinkCode(ROLE)),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()
@@ -170,7 +169,7 @@ class MenteeControllerTest extends ControllerUnitTest {
     void 멘티_정보_수정에_성공한다() throws Exception {
         // given
         Long menteeId = 1L;
-        MenteeInfoUpdateRequest request = new MenteeInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), Set.of("RETAIL"), "안녕하세요!");
+        MenteeInfoUpdateRequest request = new MenteeInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), Set.of("SNS"), "안녕하세요!");
         given(menteeService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
 
         // when

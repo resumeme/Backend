@@ -5,10 +5,10 @@ import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record MentorInfoResponse(String imageUrl, String nickname, String role, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
+public record MentorInfoResponse(String imageUrl, String nickname, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
 
     public MentorInfoResponse(Mentor mentor) {
-        this(mentor.getImageUrl(), mentor.getRequiredInfo().getNickname(), mentor.getRequiredInfo().getRole().name(), getExperiencedPositions(mentor), mentor.getIntroduce(), mentor.getCareerYear(), mentor.getIntroduce());
+        this(mentor.getImageUrl(), mentor.getRequiredInfo().getNickname(), getExperiencedPositions(mentor), mentor.getIntroduce(), mentor.getCareerYear(), mentor.getIntroduce());
     }
 
     private static Set<String> getExperiencedPositions(Mentor mentor) {
