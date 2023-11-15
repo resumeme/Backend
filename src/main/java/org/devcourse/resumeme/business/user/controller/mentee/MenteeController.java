@@ -9,11 +9,16 @@ import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
+import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +27,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.devcourse.resumeme.global.auth.service.jwt.Token.*;
+import java.util.Objects;
+
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.ACCESS_TOKEN_NAME;
+import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN_NAME;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 
 @Slf4j
 @RestController
@@ -38,7 +47,7 @@ public class MenteeController {
 
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody MenteeRegisterInfoRequest registerInfoRequest) {
-        log.debug("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
+        log.info("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
         OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisService.getOne(registerInfoRequest.cacheKey());
 
         Mentee mentee = registerInfoRequest.toEntity(oAuth2TempInfo);
@@ -54,7 +63,11 @@ public class MenteeController {
     }
 
     @PatchMapping("/{menteeId}")
-    public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest) {
+    public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
+        JwtUser user = (JwtUser) auth.getPrincipal();
+        if (!(isMentee(auth) && Objects.equals(menteeId, user.id()))) {
+            throw new CustomException(BAD_REQUEST);
+        }
         Long updatedMenteeId = menteeService.update(menteeId, updateRequest);
 
         return new IdResponse(updatedMenteeId);
@@ -65,6 +78,12 @@ public class MenteeController {
         Mentee findMentee = menteeService.getOne(menteeId);
 
         return new MenteeInfoResponse(findMentee);
+    }
+
+    private boolean isMentee(Authentication auth) {
+        return auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority -> authority.equals("ROLE_MENTEE"));
     }
 
 }
