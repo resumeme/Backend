@@ -9,7 +9,7 @@ import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeResponse;
-import org.devcourse.resumeme.business.resume.controller.dto.dto.BasicResumeInfo;
+import org.devcourse.resumeme.business.resume.controller.dto.BasicResumeInfo;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
