@@ -62,7 +62,7 @@ class CareerControllerTest extends ControllerUnitTest {
 
         given(componentService.create(component, CAREER)).willReturn(1L);
 
-        ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/careers")
+        ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/careers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -106,7 +106,7 @@ class CareerControllerTest extends ControllerUnitTest {
         given(componentService.delete(componentId)).willReturn("careers");
         given(componentService.create(component, CAREER)).willReturn(1L);
 
-        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/careers/components/{componentId}", componentId)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/careers/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -153,7 +153,7 @@ class CareerControllerTest extends ControllerUnitTest {
         given(componentService.getAll(resumeId)).willReturn(List.of(career1));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/careers"));
+        ResultActions result = mvc.perform(get("/api/v1/resumes/" + resumeId + "/careers"));
 
         // then
         result

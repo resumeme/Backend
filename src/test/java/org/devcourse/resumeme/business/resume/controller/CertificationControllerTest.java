@@ -65,7 +65,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
 
-        ResultActions result = mvc.perform(post("/api/v1/resume/" + resumeId + "/certifications")
+        ResultActions result = mvc.perform(post("/api/v1/resumes/" + resumeId + "/certifications")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -103,7 +103,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         given(componentService.delete(componentId)).willReturn("certifications");
         given(componentService.create(component, BlockType.CAREER)).willReturn(1L);
 
-        ResultActions result = mvc.perform(patch("/api/v1/resume/" + resumeId + "/certifications/components/{componentId}", componentId)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/" + resumeId + "/certifications/components/{componentId}", componentId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -142,7 +142,7 @@ class CertificationControllerTest extends ControllerUnitTest {
         given(componentService.getAll(resumeId)).willReturn(List.of(certification1));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/resume/" + resumeId + "/certifications"));
+        ResultActions result = mvc.perform(get("/api/v1/resumes/" + resumeId + "/certifications"));
 
         // then
         result
