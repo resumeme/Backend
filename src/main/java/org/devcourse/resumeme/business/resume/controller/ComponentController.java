@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.BlockType;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,14 +37,23 @@ public class ComponentController {
     }
 
     @GetMapping({"/{resumeId}", "/{resumeId}/{type}"})
-    public List<ComponentResponse> getCareer(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
+    public Map<String, List<ComponentResponse>> getCareer(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
         resumeService.getOne(resumeId);
 
-        return blockService.getAll(resumeId).stream()
-                .filter(component -> component.isType(type))
-                .flatMap(component -> component.getComponents().stream()
-                        .map(subComponent -> BlockType.from(component.getProperty(), subComponent)))
-                .toList();
+        Map<String, List<ComponentResponse>> result = new HashMap<>();
+
+        List<Component> components = blockService.getAll(resumeId);
+        for (Component component : components) {
+            if (component.isType(type)) {
+                for (Component subComponent : component.getComponents()) {
+                    List<ComponentResponse> response = result.getOrDefault(component.getProperty(), new ArrayList<>());
+                    response.add(BlockType.from(component.getProperty(), subComponent));
+                    result.put(component.getProperty(), response);
+                }
+            }
+        }
+
+        return result;
     }
 
     @PatchMapping("/{resumeId}/{type}/components/{componentId}")
