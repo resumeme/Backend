@@ -25,6 +25,7 @@ public class CustomLogoutHandler implements LogoutHandler {
             JwtUser user = (JwtUser) authentication.getPrincipal();
             if (isMentee(authentication)) {
                 menteeService.deleteRefreshToken(user.id());
+                return;
             }
             mentorService.deleteRefreshToken(user.id());
         }
