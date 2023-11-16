@@ -70,12 +70,12 @@ include::{snippets}/resume/basicInfo/response-fields.adoc[]
 
 === 이력서 참고링크 조회
 *Request*
-include::{snippets}/resume/findLink/http-request.adoc[]
-include::{snippets}/resume/findLink/path-parameters.adoc[]
+include::{snippets}/resume/component/find/links/http-request.adoc[]
+include::{snippets}/resume/component/find/links/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/findLink/http-response.adoc[]
-include::{snippets}/resume/findLink/response-fields.adoc[]
+include::{snippets}/resume/component/find/links/http-response.adoc[]
+include::{snippets}/resume/component/find/links/response-fields.adoc[]
 
 === 이력서 블럭 전체 조회
 
@@ -95,51 +95,49 @@ include::{snippets}/resume/component/delete/path-parameters.adoc[]
 
 === 이력서 교육사항 조회
 *Request*
-include::{snippets}/resume/training/find/http-request.adoc[]
+include::{snippets}/resume/component/find/trainings/http-request.adoc[]
+include::{snippets}/resume/component/find/trainings/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/training/find/http-response.adoc[]
-include::{snippets}/resume/training/find/response-fields.adoc[]
+include::{snippets}/resume/component/find/trainings/http-response.adoc[]
+include::{snippets}/resume/component/find/trainings/response-fields.adoc[]
 
 === 이력서 수상 및 자격증 조회
 *Request*
-include::{snippets}/resume/certification/find/http-request.adoc[]
+include::{snippets}/resume/component/find/certifications/http-request.adoc[]
+include::{snippets}/resume/component/find/certifications/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/certification/find/http-response.adoc[]
-include::{snippets}/resume/certification/find/response-fields.adoc[]
+include::{snippets}/resume/component/find/certifications/http-response.adoc[]
+include::{snippets}/resume/component/find/certifications/response-fields.adoc[]
 
 === 이력서 업무경험 조회
 *Request*
-include::{snippets}/resume/career/find/http-request.adoc[]
+include::{snippets}/resume/component/find/careers/http-request.adoc[]
+include::{snippets}/resume/component/find/careers/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/career/find/http-response.adoc[]
-include::{snippets}/resume/career/find/response-fields.adoc[]
+include::{snippets}/resume/component/find/careers/http-response.adoc[]
+include::{snippets}/resume/component/find/careers/response-fields.adoc[]
 
 === 이력서 프로젝트 조회
 *Request*
-include::{snippets}/resume/project/find/http-request.adoc[]
+include::{snippets}/resume/component/find/projects/http-request.adoc[]
+include::{snippets}/resume/component/find/projects/path-parameters.adoc[]
+
 
 *Response*
-include::{snippets}/resume/project/find/http-response.adoc[]
-include::{snippets}/resume/project/find/response-fields.adoc[]
+include::{snippets}/resume/component/find/projects/http-response.adoc[]
+include::{snippets}/resume/component/find/projects/response-fields.adoc[]
 
 === 이력서 어학성적 조회
 *Request*
-include::{snippets}/resume/foreignLanguage/find/http-request.adoc[]
+include::{snippets}/resume/component/find/foreign-languages/http-request.adoc[]
+include::{snippets}/resume/component/find/foreign-languages/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/foreignLanguage/find/http-response.adoc[]
-include::{snippets}/resume/foreignLanguage/find/response-fields.adoc[]
-
-=== 이력서 참고링크 수정
-*Request*
-include::{snippets}/resume/link/find/http-request.adoc[]
-
-*Response*
-include::{snippets}/resume/link/find/http-response.adoc[]
-include::{snippets}/resume/link/find/response-fields.adoc[]
+include::{snippets}/resume/component/find/foreign-languages/http-response.adoc[]
+include::{snippets}/resume/component/find/foreign-languages/response-fields.adoc[]
 
 == [이벤트]
 === 이벤트 전체 조회
