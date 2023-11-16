@@ -20,10 +20,7 @@ public class ResumeInfo {
     private String position;
 
     @Getter
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "resume_skills")
-    @Column(name = "skill")
-    private List<String> skills;
+    private String skills;
 
     @Lob
     @Getter
@@ -31,7 +28,7 @@ public class ResumeInfo {
 
     public ResumeInfo(String position, List<String> skills, String introduce) {
         this.position = position;
-        this.skills = skills;
+        this.skills = String.join(",", skills);
         this.introduce = introduce;
     }
 
