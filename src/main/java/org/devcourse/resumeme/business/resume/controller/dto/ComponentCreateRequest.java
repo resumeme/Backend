@@ -17,7 +17,8 @@ import org.devcourse.resumeme.business.resume.domain.Converter;
         @JsonSubTypes.Type(value = CertificationCreateRequest.class, name = "certifications"),
         @JsonSubTypes.Type(value = ForeignLanguageCreateRequest.class, name = "foreign-languages"),
         @JsonSubTypes.Type(value = ProjectCreateRequest.class, name = "projects"),
-        @JsonSubTypes.Type(value = TrainingCreateRequest.class, name = "trainings")
+        @JsonSubTypes.Type(value = TrainingCreateRequest.class, name = "trainings"),
+        @JsonSubTypes.Type(value = ResumeLinkRequest.class, name = "links")
 })
 public abstract class ComponentCreateRequest {
 
