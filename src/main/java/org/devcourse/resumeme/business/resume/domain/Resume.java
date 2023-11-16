@@ -38,9 +38,8 @@ public class Resume extends BaseEntity {
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
 
-    @Getter
     @Embedded
-    private ResumeInfo resumeInfo;
+    private ResumeInfo resumeInfo = new ResumeInfo();
 
     private boolean openStatus;
 
@@ -50,6 +49,7 @@ public class Resume extends BaseEntity {
         validateResume(title, mentee);
         this.title = title;
         this.mentee = mentee;
+        this.resumeInfo = new ResumeInfo();
     }
 
     private static void validateResume(String title, Mentee mentee) {
@@ -87,6 +87,13 @@ public class Resume extends BaseEntity {
 
     public void updateTitle(String title) {
         this.title = title;
+    }
+
+    public ResumeInfo getResumeInfo() {
+        if (resumeInfo == null) {
+            resumeInfo = new ResumeInfo();
+        }
+        return resumeInfo;
     }
 
 }

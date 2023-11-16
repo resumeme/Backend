@@ -9,7 +9,7 @@ public record BasicResumeInfo(String title, String position, List<String> skills
                               OwnerInfo ownerInfo) {
 
     public BasicResumeInfo(Resume resume) {
-        this(resume.getTitle(), resume.getResumeInfo().getPosition(), resume.getResumeInfo().getSkills(), resume.getResumeInfo().getIntroduce(),
+        this(resume.getTitle(), resume.getResumeInfo().getPosition(), List.of(resume.getResumeInfo().getSkills().split(",")), resume.getResumeInfo().getIntroduce(),
                 new OwnerInfo(resume.getMentee()));
     }
 

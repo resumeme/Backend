@@ -1,10 +1,6 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,11 +15,7 @@ public class ResumeInfo {
     @Getter
     private String position;
 
-    @Getter
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "resume_skills")
-    @Column(name = "skill")
-    private List<String> skills;
+    private String skills;
 
     @Lob
     @Getter
@@ -31,8 +23,16 @@ public class ResumeInfo {
 
     public ResumeInfo(String position, List<String> skills, String introduce) {
         this.position = position;
-        this.skills = skills;
+        this.skills = String.join(",", skills);
         this.introduce = introduce;
+    }
+
+    public String getSkills() {
+        if (this.skills == null) {
+            return "";
+        }
+
+        return skills;
     }
 
 }
