@@ -28,5 +28,6 @@ endpoint:
     - matcher:
         get: /api/v1/events/*/resumes/*/comments
         patch: /api/v1/resumes/*/*/components/*
+        delete: /api/v1/resumes/*
       role: own_mentee
   ignores: /docs/**
