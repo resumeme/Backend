@@ -42,10 +42,6 @@ public class Resume extends BaseEntity {
     @Embedded
     private ResumeInfo resumeInfo;
 
-    @Getter
-    @Embedded
-    private ReferenceLink referenceLink;
-
     private boolean openStatus;
 
     private boolean deleted = false;
@@ -62,18 +58,15 @@ public class Resume extends BaseEntity {
     }
 
     @Builder
-    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, ReferenceLink referenceLink) {
+    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo) {
         this.id = id;
         this.title = title;
         this.mentee = mentee;
         this.resumeInfo = resumeInfo;
-        this.referenceLink = referenceLink;
     }
 
     public Resume copy() {
-        return new Resume(
-                null, title, mentee, resumeInfo, referenceLink
-        );
+        return new Resume(null, title, mentee, resumeInfo);
     }
 
     public Long menteeId() {
@@ -94,10 +87,6 @@ public class Resume extends BaseEntity {
 
     public void updateTitle(String title) {
         this.title = title;
-    }
-
-    public void updateReferenceLink(ReferenceLink referenceLink) {
-        this.referenceLink = referenceLink;
     }
 
 }
