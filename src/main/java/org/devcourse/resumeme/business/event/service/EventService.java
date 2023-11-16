@@ -64,7 +64,12 @@ public class EventService {
         getOne(eventId).requestReview(menteeId);
     }
 
-    public List<Event> getAll() {
+    @Transactional(readOnly = true)
+    public List<Event> getAll(Long mentorId) {
+        if (mentorId != null) {
+            return eventRepository.findAllByMentorId(mentorId);
+        }
+
         return eventRepository.findAll();
     }
 
