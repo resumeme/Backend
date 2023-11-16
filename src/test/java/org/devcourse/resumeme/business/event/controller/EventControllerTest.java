@@ -42,6 +42,9 @@ import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EV
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -182,6 +185,9 @@ class EventControllerTest extends ControllerUnitTest {
                                 pathParameters(
                                         parameterWithName("eventId").description("참여하고 싶은 이벤트 아이디")
                                 ),
+                                exceptionResponse(
+                                        List.of(EVENT_NOT_FOUND.name())
+                                ),
                                 requestFields(
                                         fieldWithPath("resumeId").type(NUMBER).description("이벤트 참여시 사용할 이력서 아이디")
                                 ),
@@ -212,6 +218,9 @@ class EventControllerTest extends ControllerUnitTest {
                                 pathParameters(
                                         parameterWithName("eventId").description("이벤트 아이디"),
                                         parameterWithName("menteeId").description("반려시키고 싶은 멘티 아이디")
+                                ),
+                                exceptionResponse(
+                                        List.of(EVENT_REJECTED.name())
                                 ),
                                 requestFields(
                                         fieldWithPath("rejectMessage").type(STRING).description("이벤트 신청 반려 사유").optional()
@@ -264,6 +273,9 @@ class EventControllerTest extends ControllerUnitTest {
                                         parameterWithName("eventId").description("이벤트 아이디"),
                                         parameterWithName("resumeId").description("이력서 아이디")
                                 ),
+                                exceptionResponse(
+                                        List.of(EVENT_NOT_FOUND.name(), RESUME_NOT_FOUND.name())
+                                ),
                                 requestFields(
                                         fieldWithPath("comment").type(STRING).description("이벤트 리뷰 내용")
                                 )
@@ -302,6 +314,9 @@ class EventControllerTest extends ControllerUnitTest {
                                 getDocumentResponse(),
                                 pathParameters(
                                         parameterWithName("eventId").description("멘토가 생성한 이벤트 아이디")
+                                ),
+                                exceptionResponse(
+                                        List.of(EVENT_NOT_FOUND.name())
                                 ),
                                 responseFields(
                                         fieldWithPath("info").type(OBJECT).description("이벤트 관련 정보"),

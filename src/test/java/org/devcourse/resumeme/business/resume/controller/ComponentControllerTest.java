@@ -8,6 +8,7 @@ import java.util.List;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -38,6 +39,9 @@ class ComponentControllerTest extends ControllerUnitTest {
                                 pathParameters(
                                         parameterWithName("resumeId").description("해당 이력서 아이디"),
                                         parameterWithName("componentId").description("삭제하고자 하는 블럭 아이디")
+                                ),
+                                exceptionResponse(
+                                        List.of(RESUME_NOT_FOUND.name(), COMPONENT_NOT_FOUND.name())
                                 )
                         )
                 );
