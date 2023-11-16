@@ -139,6 +139,16 @@ include::{snippets}/resume/component/find/foreign-languages/path-parameters.adoc
 include::{snippets}/resume/component/find/foreign-languages/http-response.adoc[]
 include::{snippets}/resume/component/find/foreign-languages/response-fields.adoc[]
 
+=== 이력서 활동사항 조회
+*Request*
+include::{snippets}/resume/component/find/activities/http-request.adoc[]
+include::{snippets}/resume/component/find/activities/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/activities/http-response.adoc[]
+include::{snippets}/resume/component/find/activities/response-fields.adoc[]
+
+
 == [이벤트]
 === 이벤트 전체 조회
 *Request*
