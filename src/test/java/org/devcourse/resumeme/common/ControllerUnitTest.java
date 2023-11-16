@@ -23,6 +23,8 @@ import org.devcourse.resumeme.business.user.service.admin.MentorApplicationServi
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.controller.EnumController;
+import org.devcourse.resumeme.global.auth.filter.FilterTestController;
+import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
@@ -64,7 +66,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MentorApplicationController.class,
         ResultNoticeController.class,
         UserController.class,
-        ComponentController.class
+        ComponentController.class,
+        FilterTestController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -120,14 +123,17 @@ public abstract class ControllerUnitTest {
 
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
-        OAuthTokenResponseFilter filter = new OAuthTokenResponseFilter(providerManager, mapper);
-        filter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(new JwtProperties("null", new TokenInfo("Authorization", 20), new TokenInfo("Refresh-Token", 30))), mentorService, menteeService));
-        filter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
+        OAuthTokenResponseFilter oauthTokenResponseFilter = new OAuthTokenResponseFilter(providerManager, mapper);
+        oauthTokenResponseFilter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(new JwtProperties("null", new TokenInfo("Authorization", 20), new TokenInfo("Refresh-Token", 30))), mentorService, menteeService));
+        oauthTokenResponseFilter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
+
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtService, mentorService, menteeService);
 
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
-                .addFilter(filter)
+                .addFilter(oauthTokenResponseFilter)
+                .addFilter(jwtAuthorizationFilter)
                 .build();
     }
 
