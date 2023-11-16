@@ -50,6 +50,7 @@ public class Resume extends BaseEntity {
         validateResume(title, mentee);
         this.title = title;
         this.mentee = mentee;
+        this.resumeInfo = new ResumeInfo();
     }
 
     private static void validateResume(String title, Mentee mentee) {
