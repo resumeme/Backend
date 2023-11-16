@@ -5,10 +5,7 @@ import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
-import org.devcourse.resumeme.business.resume.domain.LinkType;
-import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -21,14 +18,15 @@ import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.common.domain.Position.*;
+import static org.devcourse.resumeme.common.domain.Position.BACK;
+import static org.devcourse.resumeme.common.domain.Position.DEVOPS;
+import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
@@ -38,9 +36,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.NULL;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -147,7 +154,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(resumeService.updateResumeInfo(resume, request.toEntity())).willReturn(1L);
 
-        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}", 1L)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/{resumeId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -179,7 +186,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(resumeService.updateTitle(resume, request.title())).willReturn(1L);
 
-        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}/title", 1L)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/{resumeId}/title", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -200,69 +207,6 @@ class ResumeControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("id").description("업데이트된 이력서 아이디")
                                 )
-                        )
-                );
-    }
-
-    @Test
-    @WithMockCustomUser
-    void 이력서_참고링크_조회에_성공한다() throws Exception {
-        Long resumeId = 1L;
-        ReferenceLink referenceLink = new ReferenceLink(LinkType.BLOG, "resumeme.tistory.com");
-        Resume savedResume = resume.builder().
-                referenceLink(referenceLink)
-                .build();
-
-        given(resumeService.getOne(resumeId)).willReturn(savedResume);
-
-        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/link", 1L));
-
-        result
-                .andExpect(status().isOk())
-                .andDo(
-                        document("resume/findLink",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                pathParameters(
-                                        parameterWithName("resumeId").description("조회 이력서 id")
-                                ),
-                                responseFields(
-                                        fieldWithPath("linkType").type(STRING).description("링크 유형(깃허브 주소, 블로그 주소, 기타)"),
-                                        fieldWithPath("url").type(STRING).description("링크 URL")
-                                )
-
-                        )
-                );
-    }
-
-    @Test
-    @WithMockCustomUser
-    void 이력서_참고링크_수정에_성공한다() throws Exception {
-        ResumeLinkRequest request = new ResumeLinkRequest("GITHUB", "https://github.com/resumeme");
-        Long resumeId = 1L;
-
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(resumeService.updateReferenceLink(resume, request.toEntity())).willReturn(1L);
-
-        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/resumes/{resumeId}/link", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
-
-
-        result
-                .andExpect(status().isOk())
-                .andDo(
-                        document("resume/updateLink",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                requestFields(
-                                        fieldWithPath("linkType").type(STRING).description("링크 유형(깃허브 주소, 블로그 주소, 기타)"),
-                                        fieldWithPath("url").type(STRING).description("링크 URL")
-                                ),
-                                responseFields(
-                                        fieldWithPath("id").description("업데이트된 이력서 아이디")
-                                )
-
                         )
                 );
     }

@@ -136,6 +136,13 @@ include::{snippets}/resume/foreignLanguage/find/http-request.adoc[]
 include::{snippets}/resume/foreignLanguage/find/http-response.adoc[]
 include::{snippets}/resume/foreignLanguage/find/response-fields.adoc[]
 
+=== 이력서 참고링크 수정
+*Request*
+include::{snippets}/resume/link/find/http-request.adoc[]
+
+*Response*
+include::{snippets}/resume/link/find/http-response.adoc[]
+include::{snippets}/resume/link/find/response-fields.adoc[]
 
 == [이벤트]
 === 이벤트 전체 조회
