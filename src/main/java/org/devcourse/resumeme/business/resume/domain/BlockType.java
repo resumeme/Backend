@@ -12,6 +12,8 @@ import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageCrea
 import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ProjectCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ProjectResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.TrainingCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.TrainingResponse;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
@@ -29,7 +31,8 @@ public enum BlockType implements DocsEnumType {
     CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, component -> new CertificationResponse(Certification.from(component), component.getId())),
     FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, component -> new ForeignLanguageResponse(ForeignLanguage.from(component), component.getId())),
     PROJECT("프로젝트", "projects", ProjectCreateRequest.class, component -> new ProjectResponse(Project.from(component), component.getId())),
-    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(Training.from(component), component.getId()));
+    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(Training.from(component), component.getId())),
+    LINK("외부 링크", "links", ResumeLinkRequest.class, component -> new ResumeLinkResponse(ReferenceLink.from(component), component.getId()));
 
     private final String description;
 
