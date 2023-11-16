@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.global.exception.CustomException;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -18,6 +19,7 @@ import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -49,6 +51,16 @@ public class Comment extends BaseEntity {
         this.content = content;
         this.resume = resume;
         this.component = component;
+    }
+
+    public void checkSameResume(Long resumeId) {
+        if (!resumeId.equals(resume.getId())) {
+            throw new CustomException(RESUME_NOT_FOUND);
+        }
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
     }
 
 }

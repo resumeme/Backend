@@ -22,7 +22,8 @@ endpoint:
     - matcher:
         get: /api/v1/events/*
         post: /api/v1/events/*/resumes/*/reviews
-        patch: /api/v1/events/*/mentee/*, /api/v1/events/*
+        patch: /api/v1/events/*/mentee/*, /api/v1/events/*, /api/v1/events/*/resumes/*/comments/*
+        delete: /api/v1/events/*/resumes/*/comments/*
       role: own_mentor
     - matcher:
         get: /api/v1/events/*/resumes/*/comments

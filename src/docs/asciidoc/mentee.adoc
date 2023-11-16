@@ -222,6 +222,16 @@ include::{snippets}/event/completeReview/path-parameters.adoc[]
 *Response*
 include::{snippets}/event/completeReview/http-response.adoc[]
 
+=== 첨삭 내용 전체 조회
+*Request*
+include::{snippets}/comment/getAll/http-request.adoc[]
+include::{snippets}/comment/getAll/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/getAll/http-response.adoc[]
+include::{snippets}/comment/getAll/response-fields.adoc[]
+
+
 == [합격 이력서]
 === 합격이력서 공유 소개글 작성
 

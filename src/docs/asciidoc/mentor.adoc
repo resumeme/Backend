@@ -57,6 +57,25 @@ include::{snippets}/comment/create/request-fields.adoc[]
 include::{snippets}/comment/create/http-response.adoc[]
 include::{snippets}/comment/create/response-fields.adoc[]
 
+=== 첨삭 코멘트 수정
+
+*Request*
+include::{snippets}/comment/update/http-request.adoc[]
+include::{snippets}/comment/update/path-parameters.adoc[]
+include::{snippets}/comment/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/comment/update/http-response.adoc[]
+
+=== 첨삭 코멘트 삭제
+
+*Request*
+include::{snippets}/comment/delete/http-request.adoc[]
+include::{snippets}/comment/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/delete/http-response.adoc[]
+
 === 첨삭 이벤트 참여 신청 반려
 
 *Request*
