@@ -30,6 +30,8 @@ include::{snippets}/event/create/response-fields.adoc[]
 
 === 첨삭 이벤트 단건 조회
 
+include::{snippets}/event/getOwn/exception-response.adoc[]
+
 *Request*
 include::{snippets}/event/getOwn/http-request.adoc[]
 include::{snippets}/event/getOwn/path-parameters.adoc[]
@@ -46,6 +48,17 @@ include::{snippets}/event/getMyEvents/http-request.adoc[]
 *Response*
 include::{snippets}/event/getMyEvents/http-response.adoc[]
 include::{snippets}/event/getMyEvents/response-fields.adoc[]
+
+=== 첨삭 완료
+
+include::{snippets}/event/completeReview/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/completeReview/http-request.adoc[]
+include::{snippets}/event/completeReview/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/completeReview/http-response.adoc[]
 
 === 첨삭 코멘트 작성
 
@@ -77,6 +90,8 @@ include::{snippets}/comment/delete/path-parameters.adoc[]
 include::{snippets}/comment/delete/http-response.adoc[]
 
 === 첨삭 이벤트 참여 신청 반려
+
+include::{snippets}/event/reject/exception-response.adoc
 
 *Request*
 include::{snippets}/event/reject/http-request.adoc[]

@@ -211,16 +211,7 @@ include::{snippets}/event/apply/response-fields.adoc[]
 include::{snippets}/event/requestReview/http-request.adoc[]
 
 *Response*
-include::{snippets}/event/requestReview/http-response.adoc[]
-
-=== 첨삭 완료
-
-*Request*
-include::{snippets}/event/completeReview/http-request.adoc[]
-include::{snippets}/event/completeReview/path-parameters.adoc[]
-
-*Response*
-include::{snippets}/event/completeReview/http-response.adoc[]
+= include::{snippets}/event/requestReview/http-response.adoc[]
 
 === 첨삭 내용 전체 조회
 *Request*
