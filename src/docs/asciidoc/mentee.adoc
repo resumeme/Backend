@@ -29,120 +29,130 @@ include::{snippets}/resume/create/response-fields.adoc[]
 
 === 이력서 교육사항 저장
 *Request*
-include::{snippets}/resume/training/create/http-request.adoc[]
-include::{snippets}/resume/training/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/trainings/http-request.adoc[]
+include::{snippets}/resume/component/create/trainings/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/training/create/http-response.adoc[]
-include::{snippets}/resume/training/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/trainings/http-response.adoc[]
+include::{snippets}/resume/component/create/trainings/response-fields.adoc[]
 
 === 이력서 수상 및 자격증 저장
 *Request*
-include::{snippets}/resume/certification/create/http-request.adoc[]
-include::{snippets}/resume/certification/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/certifications/http-request.adoc[]
+include::{snippets}/resume/component/create/certifications/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/certification/create/http-response.adoc[]
-include::{snippets}/resume/certification/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/certifications/http-response.adoc[]
+include::{snippets}/resume/component/create/certifications/response-fields.adoc[]
 
 === 이력서 업무경험 저장
 *Request*
-include::{snippets}/resume/career/create/http-request.adoc[]
-include::{snippets}/resume/career/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/careers/http-request.adoc[]
+include::{snippets}/resume/component/create/careers/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/career/create/http-response.adoc[]
-include::{snippets}/resume/career/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/careers/http-response.adoc[]
+include::{snippets}/resume/component/create/careers/response-fields.adoc[]
 
 === 이력서 어학성적 저장
 *Request*
-include::{snippets}/resume/foreignLanguage/create/http-request.adoc[]
-include::{snippets}/resume/foreignLanguage/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/foreign-languages/http-request.adoc[]
+include::{snippets}/resume/component/create/foreign-languages/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/foreignLanguage/create/http-response.adoc[]
-include::{snippets}/resume/foreignLanguage/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/foreign-languages/http-response.adoc[]
+include::{snippets}/resume/component/create/foreign-languages/response-fields.adoc[]
 
 === 이력서 프로젝트 저장
 *Request*
-include::{snippets}/resume/project/create/http-request.adoc[]
-include::{snippets}/resume/project/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/projects/http-request.adoc[]
+include::{snippets}/resume/component/create/projects/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/project/create/http-response.adoc[]
-include::{snippets}/resume/project/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/projects/http-response.adoc[]
+include::{snippets}/resume/component/create/projects/response-fields.adoc[]
 
 === 이력서 활동사항 저장
 *Request*
-include::{snippets}/resume/activity/create/http-request.adoc[]
-include::{snippets}/resume/activity/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/activities/http-request.adoc[]
+include::{snippets}/resume/component/create/activities/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/activity/create/http-response.adoc[]
-include::{snippets}/resume/activity/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/activities/http-response.adoc[]
+include::{snippets}/resume/component/create/activities/response-fields.adoc[]
 
 === 이력서 참고링크 저장
 *Request*
-include::{snippets}/resume/link/create/http-request.adoc[]
-include::{snippets}/resume/link/create/request-fields.adoc[]
+include::{snippets}/resume/component/create/links/http-request.adoc[]
+include::{snippets}/resume/component/create/links/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/link/create/http-response.adoc[]
-include::{snippets}/resume/link/create/response-fields.adoc[]
+include::{snippets}/resume/component/create/links/http-response.adoc[]
+include::{snippets}/resume/component/create/links/response-fields.adoc[]
 
 === 이력서 교육사항 수정
 *Request*
-include::{snippets}/resume/training/update/http-request.adoc[]
-include::{snippets}/resume/training/update/request-fields.adoc[]
+include::{snippets}/resume/component/update/trainings/http-request.adoc[]
+include::{snippets}/resume/component/update/trainings/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/training/update/http-response.adoc[]
-include::{snippets}/resume/training/update/response-fields.adoc[]
+include::{snippets}/resume/component/update/trainings/http-response.adoc[]
+include::{snippets}/resume/component/update/trainings/response-fields.adoc[]
 
 === 이력서 수상 및 자격증 수정
 *Request*
-include::{snippets}/resume/certification/update/http-request.adoc[]
-include::{snippets}/resume/certification/update/request-fields.adoc[]
+include::{snippets}/resume/component/update/certifications/http-request.adoc[]
+include::{snippets}/resume/component/update/certifications/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/certification/update/http-response.adoc[]
-include::{snippets}/resume/certification/update/response-fields.adoc[]
+include::{snippets}/resume/component/update/certifications/http-response.adoc[]
+include::{snippets}/resume/component/update/certifications/response-fields.adoc[]
 
 === 이력서 업무경험 수정
 *Request*
-include::{snippets}/resume/career/update/http-request.adoc[]
-include::{snippets}/resume/career/update/request-fields.adoc[]
+include::{snippets}/resume/component/update/careers/http-request.adoc[]
+include::{snippets}/resume/component/update/careers/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/career/update/http-response.adoc[]
-include::{snippets}/resume/career/update/response-fields.adoc[]
+include::{snippets}/resume/component/update/careers/http-response.adoc[]
+include::{snippets}/resume/component/update/careers/response-fields.adoc[]
 
 === 이력서 어학성적 수정
 *Request*
-include::{snippets}/resume/foreignLanguage/update/http-request.adoc[]
-include::{snippets}/resume/foreignLanguage/update/request-fields.adoc[]
+include::{snippets}/resume/component/update/foreign-languages/http-request.adoc[]
+include::{snippets}/resume/component/update/foreign-languages/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/foreignLanguage/update/http-response.adoc[]
-include::{snippets}/resume/foreignLanguage/update/response-fields.adoc[]
+include::{snippets}/resume/component/update/foreign-languages/http-response.adoc[]
+include::{snippets}/resume/component/update/foreign-languages/response-fields.adoc[]
 
 === 이력서 프로젝트 수정
 *Request*
-include::{snippets}/resume/project/update/http-request.adoc[]
-include::{snippets}/resume/project/update/request-fields.adoc[]
+include::{snippets}/resume/component/update/projects/http-request.adoc[]
+include::{snippets}/resume/component/update/projects/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/project/update/http-response.adoc[]
-include::{snippets}/resume/project/update/response-fields.adoc[]
+include::{snippets}/resume/component/update/projects/http-response.adoc[]
+include::{snippets}/resume/component/update/projects/response-fields.adoc[]
 
 === 이력서 활동사항 수정
 *Request*
-include::{snippets}/resume/activity/update/http-request.adoc[]
-include::{snippets}/resume/activity/update/request-fields.adoc[]
+include::{snippets}/resume/component/update/activities/http-request.adoc[]
+include::{snippets}/resume/component/update/activities/request-fields.adoc[]
 
 *Response*
-include::{snippets}/resume/activity/update/http-response.adoc[]
-include::{snippets}/resume/activity/update/response-fields.adoc[]
+include::{snippets}/resume/component/update/activities/http-response.adoc[]
+include::{snippets}/resume/component/update/activities/response-fields.adoc[]
+
+=== 이력서 참고 링크 수정
+*Request*
+include::{snippets}/resume/component/update/links/http-request.adoc[]
+include::{snippets}/resume/component/update/links/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/links/http-response.adoc[]
+include::{snippets}/resume/component/update/links/response-fields.adoc[]
+
 
 === 이력서 블럭 삭제
 *Request*
