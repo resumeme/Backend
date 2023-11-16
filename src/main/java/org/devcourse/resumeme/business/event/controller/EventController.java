@@ -119,10 +119,14 @@ public class EventController {
         JwtUser user = (JwtUser) auth.getPrincipal();
         List<Event> eventList = eventService.getAll(mentorId);
         if (isMentor(auth) && mentorId.equals(user.id())) {
-            return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event))).toList();
+            return eventList.stream()
+                    .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event)))
+                    .toList();
         }
 
-        return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null)).toList();
+        return eventList.stream()
+                .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null))
+                .toList();
     }
 
 }
