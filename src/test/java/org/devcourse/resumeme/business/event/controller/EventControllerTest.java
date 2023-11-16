@@ -13,8 +13,6 @@ import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -22,7 +20,6 @@ import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
-import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -38,13 +35,13 @@ import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -60,6 +57,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -329,6 +327,10 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
                                         fieldWithPath("info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
                                         fieldWithPath("info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
+                                        fieldWithPath("mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소"),
                                         fieldWithPath("resumes").type(ARRAY).description("이벤트 신청에 사용된 이력서 멘토 로그인 시에만 값 제공"),
                                         fieldWithPath("resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
@@ -340,59 +342,8 @@ class EventControllerTest extends ControllerUnitTest {
     }
 
     @Test
-    void 첨삭_이벤트를_전체_조회한다() throws Exception {
-        // given
-        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        RequiredInfoRequest requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_PENDING);
-        MentorRegisterInfoRequest mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
-        OAuth2TempInfo oAuth2TempInfo = new OAuth2TempInfo(null,"GOOGLE", "지롱", "devcoco@naver.com", "image.png");
-        String refreshToken = "refreshTokenRecentlyIssued";
-        Mentor mentor = Mentor.builder()
-                .id(1L)
-                .imageUrl(oAuth2TempInfo.getImageUrl())
-                .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
-                .email(oAuth2TempInfo.getEmail())
-                .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
-                .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
-                .careerContent(mentorRegisterInfoRequest.careerContent())
-                .careerYear(mentorRegisterInfoRequest.careerYear())
-                .build();
-
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of(BACK, FRONT));
-        setId(event, 1L);
-
-        given(eventService.getAll()).willReturn(List.of(event));
-
-        // when
-        ResultActions result = mvc.perform(get("/api/v1/events"));
-
-        // then
-        result.andExpect(status().isOk())
-                .andDo(
-                        document("event/getAll",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                responseFields(
-                                        fieldWithPath("[].eventInfo").type(OBJECT).description("이벤트 정보 객체"),
-                                        fieldWithPath("[].eventInfo.eventId").type(NUMBER).description("이벤트 아이디"),
-                                        fieldWithPath("[].eventInfo.title").type(STRING).description("이벤트 아이디"),
-                                        fieldWithPath("[].eventInfo.endDate").type(STRING).description("이벤트 아이디"),
-                                        fieldWithPath("[].eventInfo.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
-                                        fieldWithPath("[].eventInfo.positions").type(ARRAY).description(generateLinkCode(POSITION)),
-                                        fieldWithPath("[].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
-                                        fieldWithPath("[].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
-                                        fieldWithPath("[].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
-                                        fieldWithPath("[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소")
-                                )
-                        )
-                );
-    }
-
-    @Test
     @WithMockCustomUser(role = "ROLE_MENTOR")
-    void 멘토는_자신의_첨삭_이벤트와_그_이벤트에_참여신청한_이력서를_조회할수있다() throws Exception {
+    void 첨삭_이벤트를_전체_조회한다() throws Exception {
         // given
         Mentor otherMentor = Mentor.builder()
                 .id(2L)
@@ -405,26 +356,26 @@ class EventControllerTest extends ControllerUnitTest {
                 .careerYear(5)
                 .build();
 
-        Long eventOneId = 1L;
-        EventInfo openEventOne = EventInfo.open(3, "제목", "내용");
+        EventInfo openEventOne = EventInfo.open(3, "수증 멘토의 첫번째 첨삭이벤트", "내용");
         EventTimeInfo eventOneTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         Event eventOne = new Event(openEventOne, eventOneTimeInfo, mentor, List.of(FRONT));
+        setId(eventOne, 1L);
         eventOne.acceptMentee(1L, 1L);
         eventOne.acceptMentee(2L, 4L);
 
-        Long eventTwoId = 2L;
         EventInfo openEventTwo = EventInfo.open(5, "첨삭 매운맛으로 해드림", "요렇게 저렇게 첨삭해드릴게요");
         EventTimeInfo eventTwoTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         Event eventTwo = new Event(openEventTwo, eventTwoTimeInfo, mentor, List.of(DEVOPS));
+        setId(eventTwo, 2L);
         eventTwo.acceptMentee(3L, 10L);
         eventTwo.acceptMentee(4L, 9L);
 
-        Long eventThreeId = 3L;
         EventInfo openEventThree = EventInfo.open(5, "첨삭 순한맛으로 해드림", "요렇게 저렇게 첨삭해드릴게요");
         EventTimeInfo eventThreeTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         Event eventThree = new Event(openEventThree, eventThreeTimeInfo, otherMentor, List.of(DEVOPS));
-        eventTwo.acceptMentee(5L, 11L);
-        eventTwo.acceptMentee(6L, 43L);
+        setId(eventThree, 3L);
+        eventThree.acceptMentee(5L, 11L);
+        eventThree.acceptMentee(6L, 43L);
 
         given(eventService.getAll()).willReturn(List.of(eventOne, eventTwo, eventThree));
         Resume resume1 = new Resume("title", mentee1);
@@ -435,19 +386,22 @@ class EventControllerTest extends ControllerUnitTest {
         given(eventPositionService.getAll(1L)).willReturn(List.of(new EventPosition(BACK, eventOne)));
         given(eventPositionService.getAll(2L)).willReturn(List.of(new EventPosition(DEVOPS, eventTwo)));
 
+        given(eventService.getAll()).willReturn(List.of(eventOne, eventTwo, eventThree));
+
         // when
-        ResultActions result = mvc.perform(get("/api/v1/events/own"));
+        ResultActions result = mvc.perform(get("/api/v1/events?mentorId=1"));
 
         // then
         result.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(
-                        document("event/getMyEvents",
-
+                        document("event/getAll",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                queryParameters(
+                                    parameterWithName("mentorId").description("멘토 아이디").optional()),
                                 responseFields(
-                                        fieldWithPath("[]").type(ARRAY).description("이벤트와 연관 이력서 리스트"),
+                                        fieldWithPath("[]").type(ARRAY).description("이벤트 리스트"),
                                         fieldWithPath("[0].info").type(OBJECT).description("이벤트 관련 정보"),
                                         fieldWithPath("[0].info.title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("[0].info.content").type(STRING).description("이벤트 상세내용"),
@@ -458,7 +412,13 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[0].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
                                         fieldWithPath("[0].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
                                         fieldWithPath("[0].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
-                                        fieldWithPath("[0].resumes").type(ARRAY).description("이벤트 신청에 사용된 이력서 멘토 로그인 시에만 값 제공"),
+
+                                        fieldWithPath("[0].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("[0].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[0].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[0].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소"),
+
+                                        fieldWithPath("[0].resumes").type(ARRAY).description("이벤트에 신청한 이력서 목록").attributes(constraints("queryParam의 mentorId와 현재 로그인한 멘토의 id가 일치할 경우에만 제공. 그 외에는 null")),
                                         fieldWithPath("[0].resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("[0].resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
                                         fieldWithPath("[0].resumes[].resumeTitle").type(STRING).description("이력서 제목"),
@@ -474,12 +434,17 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[1].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
                                         fieldWithPath("[1].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
                                         fieldWithPath("[1].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
-                                        fieldWithPath("[1].resumes").type(ARRAY).description("이벤트 신청에 사용된 이력서 멘토 로그인 시에만 값 제공"),
+
+                                        fieldWithPath("[1].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("[1].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[1].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[1].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소"),
+
+                                        fieldWithPath("[1].resumes").type(ARRAY).description("이벤트에 신청한 이력서 목록"),
                                         fieldWithPath("[1].resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("[1].resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
                                         fieldWithPath("[1].resumes[].resumeTitle").type(STRING).description("이력서 제목"),
                                         fieldWithPath("[1].resumes[].progressStatus").type(STRING).description(generateLinkCode(PROGRESS))
-
                                 )
                         )
                 );

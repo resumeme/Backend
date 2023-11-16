@@ -6,7 +6,6 @@ import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
-import org.devcourse.resumeme.business.event.controller.dto.EventsResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -115,20 +115,18 @@ public class EventController {
     }
 
     @GetMapping
-    public List<EventsResponse> getAll() {
-        return eventService.getAll().stream()
-                .map(EventsResponse::new)
-                .toList();
+    public List<EventResponse> getAll(@CurrentSecurityContext(expression = "authentication") Authentication auth, @RequestParam(required = false) Long mentorId) {
+        JwtUser user = (JwtUser) auth.getPrincipal();
 
-    }
+        if (mentorId != null) {
+            List<Event> eventList = eventService.getAll().stream().filter(event -> event.getMentor().getId().equals(mentorId)).toList();
+            if (isMentor(auth) && mentorId.equals(user.id())) {
+                return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event))).toList();
+            }
+            return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null)).toList();
+        }
 
-    @GetMapping("/own")
-    public List<EventResponse> getMyEvents(@AuthenticationPrincipal JwtUser user) {
-        return eventService.getAll()
-                .stream()
-                .filter(event -> event.getMentor().getId().longValue() == user.id())
-                .map(event -> new EventResponse(event,eventPositionService.getAll(event.getId()), getResumes(event)))
-                .toList();
+        return eventService.getAll().stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null)).toList();
     }
 
 }
