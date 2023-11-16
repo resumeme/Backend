@@ -1,21 +1,20 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
-import static jakarta.persistence.EnumType.STRING;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@Embeddable
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReferenceLink {
+public class ReferenceLink implements Converter {
 
-    @Enumerated(STRING)
     private LinkType linkType;
 
-    @Getter
     private String address;
 
     public ReferenceLink(LinkType linkType, String address) {
@@ -23,8 +22,18 @@ public class ReferenceLink {
         this.address = address;
     }
 
-    public String getLinkType() {
-        return linkType.toString();
+    @Override
+    public Component of(Long resumeId) {
+        Component address = new Component("address", this.address, null, null, resumeId, null);
+
+        return new Component("type", linkType.name(), null, null, resumeId, List.of(address));
+    }
+
+    public static ReferenceLink from(Component component) {
+        Map<String, String> collect = component.getComponents().stream()
+                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+
+        return new ReferenceLink(LinkType.valueOf(component.getContent()), collect.get("address"));
     }
 
 }
