@@ -117,16 +117,12 @@ public class EventController {
     @GetMapping
     public List<EventResponse> getAll(@CurrentSecurityContext(expression = "authentication") Authentication auth, @RequestParam(required = false) Long mentorId) {
         JwtUser user = (JwtUser) auth.getPrincipal();
-
-        if (mentorId != null) {
-            List<Event> eventList = eventService.getAll().stream().filter(event -> event.getMentor().getId().equals(mentorId)).toList();
-            if (isMentor(auth) && mentorId.equals(user.id())) {
-                return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event))).toList();
-            }
-            return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null)).toList();
+        List<Event> eventList = eventService.getAll(mentorId);
+        if (isMentor(auth) && mentorId.equals(user.id())) {
+            return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event))).toList();
         }
 
-        return eventService.getAll().stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null)).toList();
+        return eventList.stream().map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null)).toList();
     }
 
 }
