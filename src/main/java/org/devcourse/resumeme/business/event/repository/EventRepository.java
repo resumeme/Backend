@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @EntityGraph(attributePaths = {"applicants"})
     Optional<Event> findWithLockById(Long id);
 
     List<Event> findAllByMentor(Mentor mentor);
