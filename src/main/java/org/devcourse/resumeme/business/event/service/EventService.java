@@ -66,7 +66,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<Event> getAll(Long mentorId) {
-        if (mentorId != null) {
+        if (mentorId.equals(0L)) {
             return eventRepository.findAllByMentorId(mentorId);
         }
 
