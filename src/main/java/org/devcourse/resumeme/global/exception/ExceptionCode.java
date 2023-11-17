@@ -30,7 +30,8 @@ public enum ExceptionCode implements DocsEnumType {
     DUPLICATED_EVENT_OPEN("이미 오픈된 이벤트가 있습니다"),
     SERVER_ERROR("서버 에러입니다"),
     INVALID_ACCESS_TOKEN("유효하지 않은 액세스 토큰입니다"),
-    BAD_REQUEST("잘못된 요청입니다")
+    BAD_REQUEST("잘못된 요청입니다"),
+    LOGIN_REQUIRED("로그인이 필요합니다")
     ;
 
     private final String message;

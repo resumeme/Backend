@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.devcourse.resumeme.global.exception.TokenException;
+import org.devcourse.resumeme.global.exception.UnAuthenticatedException;
 import org.devcourse.resumeme.global.exception.advice.ErrorResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,6 +34,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         } catch (TokenException e) {
             log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
             sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN);
+        } catch (UnAuthenticatedException e) {
+            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
+            sendErrorResponse(response, 401, ExceptionCode.LOGIN_REQUIRED);
         } catch (CustomException e) {
             log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
             sendErrorResponse(response, 400, ExceptionCode.valueOf(e.getCode()));
