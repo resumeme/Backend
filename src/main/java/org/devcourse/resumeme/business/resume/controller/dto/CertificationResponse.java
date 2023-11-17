@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Certification;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class CertificationResponse extends ComponentResponse {
@@ -20,13 +22,13 @@ public class CertificationResponse extends ComponentResponse {
     private String description;
 
     public CertificationResponse(
-            Long id, String certificationTitle,
+            Long id, LocalDateTime createdDate, String certificationTitle,
             String acquisitionDate,
             String issuingAuthority,
             String link,
             String description
     ) {
-        super(id);
+        super(id, createdDate);
         this.certificationTitle = certificationTitle;
         this.acquisitionDate = acquisitionDate;
         this.issuingAuthority = issuingAuthority;
@@ -34,9 +36,9 @@ public class CertificationResponse extends ComponentResponse {
         this.description = description;
     }
 
-    public CertificationResponse(Certification certification, Long id) {
+    public CertificationResponse(Certification certification, Long id, LocalDateTime createdDate) {
         this(
-                id,
+                id, createdDate,
                 certification.getCertificationTitle(),
                 certification.getAcquisitionDate(),
                 certification.getIssuingAuthority(),

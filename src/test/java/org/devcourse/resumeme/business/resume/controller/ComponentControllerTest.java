@@ -45,9 +45,9 @@ import static org.devcourse.resumeme.business.resume.domain.BlockType.PROJECT;
 import static org.devcourse.resumeme.business.resume.domain.BlockType.TRAINING;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.BLOCK_TYPE;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -60,7 +60,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ComponentControllerTest extends ControllerUnitTest {
@@ -186,7 +185,6 @@ class ComponentControllerTest extends ControllerUnitTest {
         // then
         result
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andDo(
                         document("resume/component/find/%s".formatted(type),
                                 getDocumentRequest(),

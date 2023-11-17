@@ -21,7 +21,8 @@ public class ComponentResponse {
                 fieldWithPath("activities.[].endDate").type(STRING).description("종료일"),
                 fieldWithPath("activities.[].inProgress").type(BOOLEAN).description("진행 중 여부"),
                 fieldWithPath("activities.[].link").type(STRING).description("링크"),
-                fieldWithPath("activities.[].description").type(STRING).description("설명")
+                fieldWithPath("activities.[].description").type(STRING).description("설명"),
+                fieldWithPath("activities.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 
@@ -38,7 +39,8 @@ public class ComponentResponse {
                 fieldWithPath("careers.[].currentlyEmployed").type(BOOLEAN).description("현재 재직 상태"),
                 fieldWithPath("careers.[].careerStartDate").type(STRING).description("경력 시작일"),
                 fieldWithPath("careers.[].endDate").type(STRING).description("경력 종료일"),
-                fieldWithPath("careers.[].careerContent").type(STRING).description("경력 상세 내용")
+                fieldWithPath("careers.[].careerContent").type(STRING).description("경력 상세 내용"),
+                fieldWithPath("careers.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 
@@ -49,7 +51,8 @@ public class ComponentResponse {
                 fieldWithPath("certifications.[].acquisitionDate").type(STRING).description("취득 일자"),
                 fieldWithPath("certifications.[].issuingAuthority").type(STRING).description("발급 기관"),
                 fieldWithPath("certifications.[].link").type(STRING).description("링크"),
-                fieldWithPath("certifications.[].description").type(STRING).description("설명")
+                fieldWithPath("certifications.[].description").type(STRING).description("설명"),
+                fieldWithPath("certifications.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 
@@ -58,7 +61,8 @@ public class ComponentResponse {
                 fieldWithPath("foreign-languages.[].id").type(NUMBER).description("블럭 아이디"),
                 fieldWithPath("foreign-languages.[].language").type(STRING).description("언어"),
                 fieldWithPath("foreign-languages.[].examName").type(STRING).description("시험명"),
-                fieldWithPath("foreign-languages.[].scoreOrGrade").type(STRING).description("점수 또는 학점")
+                fieldWithPath("foreign-languages.[].scoreOrGrade").type(STRING).description("점수 또는 학점"),
+                fieldWithPath("foreign-languages.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 
@@ -66,7 +70,8 @@ public class ComponentResponse {
         return responseFields(
                 fieldWithPath("links.[].id").type(NUMBER).description("블럭 아이디"),
                 fieldWithPath("links.[].linkType").type(STRING).description(generateLinkCode(BLOCK_TYPE)),
-                fieldWithPath("links.[].url").type(STRING).description("링크 URL")
+                fieldWithPath("links.[].url").type(STRING).description("링크 URL"),
+                fieldWithPath("links.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 
@@ -79,7 +84,8 @@ public class ComponentResponse {
                 fieldWithPath("projects.[]teamMembers").type(STRING).optional().description("팀 구성원 (옵션)"),
                 fieldWithPath("projects.[]skills").type(ARRAY).description("기술 목록"),
                 fieldWithPath("projects.[]projectContent").type(STRING).description("프로젝트 내용"),
-                fieldWithPath("projects.[]projectUrl").type(STRING).description("프로젝트 URL")
+                fieldWithPath("projects.[]projectUrl").type(STRING).description("프로젝트 URL"),
+                fieldWithPath("projects.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 
@@ -93,7 +99,8 @@ public class ComponentResponse {
                 fieldWithPath("trainings.[].graduationDate").type(STRING).description("졸업일"),
                 fieldWithPath("trainings.[].gpa").type(NUMBER).description("평점"),
                 fieldWithPath("trainings.[].maxGpa").type(NUMBER).description("최고 평점"),
-                fieldWithPath("trainings.[].explanation").type(STRING).description("설명")
+                fieldWithPath("trainings.[].explanation").type(STRING).description("설명"),
+                fieldWithPath("trainings.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 

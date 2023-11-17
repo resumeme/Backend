@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Project;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,7 +27,7 @@ public class ProjectResponse extends ComponentResponse {
     private String projectUrl;
 
     public ProjectResponse(
-            Long id, String projectName,
+            Long id, LocalDateTime createdDate, String projectName,
             Long productionYear,
             boolean isTeam,
             String teamMembers,
@@ -34,7 +35,7 @@ public class ProjectResponse extends ComponentResponse {
             String projectContent,
             String projectUrl
     ) {
-        super(id);
+        super(id, createdDate);
         this.projectName = projectName;
         this.productionYear = productionYear;
         this.isTeam = isTeam;
@@ -44,9 +45,9 @@ public class ProjectResponse extends ComponentResponse {
         this.projectUrl = projectUrl;
     }
 
-    public ProjectResponse(Project project, Long id) {
+    public ProjectResponse(Project project, Long id, LocalDateTime createdDate) {
         this(
-                id,
+                id, createdDate,
                 project.getProjectName(),
                 project.getProductionYear(),
                 !project.getTeamMembers().equals(""),

@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Comparator.comparing;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/resumes")
@@ -53,14 +55,16 @@ public class ComponentController {
             }
         }
 
+        for (List<ComponentResponse> responses : result.values()) {
+            responses.sort(comparing(ComponentResponse::getCreatedDate));
+        }
+
         return result;
     }
 
     @PatchMapping("/{resumeId}/{type}/components/{componentId}")
     public IdResponse updateComponent(@PathVariable Long resumeId, @PathVariable String type, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
-        blockService.delete(componentId);
-
-        return createCareer(resumeId, request, type);
+        return new IdResponse(blockService.update(componentId, request.toEntity().of(resumeId), type));
     }
 
     @DeleteMapping("/{resumeId}/components/{componentId}")
