@@ -29,7 +29,7 @@ public class UserEventController {
 
     @GetMapping("/mentors/{mentorId}/events")
     public List<MentorEventResponse> all(@PathVariable Long mentorId) {
-        return eventService.getAll(mentorId).stream()
+        return eventService.getAll(new AllEventFilter(mentorId, null)).stream()
                 .map(event -> new MentorEventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event)))
                 .toList();
     }

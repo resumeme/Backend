@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
@@ -65,9 +66,9 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public List<Event> getAll(Long mentorId) {
-        if (mentorId != null) {
-            return eventRepository.findAllByMentorId(mentorId);
+    public List<Event> getAll(AllEventFilter filter) {
+        if (filter.mentorId() != null) {
+            return eventRepository.findAllByMentorId(filter.mentorId());
         }
 
         return eventRepository.findAll();
