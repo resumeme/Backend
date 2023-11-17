@@ -54,4 +54,13 @@ public class ComponentService {
         return component.getProperty();
     }
 
+    public Long update(Long componentId, Component newComponent, String type) {
+        Component component = getOne(componentId);
+        componentRepository.delete(component);
+
+        newComponent.updateOriginDate(component.getCreatedDate());
+
+        return create(newComponent, type);
+    }
+
 }

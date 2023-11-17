@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,12 @@ public class Component {
     @OneToMany(mappedBy = "component", cascade = ALL, orphanRemoval = true)
     private List<Component> components = new ArrayList<>();
 
+    @Getter
+    private LocalDateTime createdDate;
+
+    private LocalDateTime lastModifiedDate;
+
+
     public Component(String property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
         this.property = property;
         this.content = content;
@@ -60,6 +67,8 @@ public class Component {
                 component.component = this;
             }
         }
+        this.createdDate = LocalDateTime.now();
+        this.lastModifiedDate = LocalDateTime.now();
     }
 
     public void addSubComponent(Component component) {
@@ -71,5 +80,13 @@ public class Component {
         return type == null || property.equals(type);
     }
 
+    public void updateOriginDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+        this.lastModifiedDate = LocalDateTime.now();
+
+        if (components != null) {
+            components.forEach(subComponent -> subComponent.updateOriginDate(createdDate));
+        }
+    }
 
 }
