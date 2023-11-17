@@ -30,7 +30,7 @@ public class ResumeInfo {
 
     public Set<String> getSkillSet() {
         if (this.skills == null) {
-            Set.of();
+            return Set.of();
         }
 
         return Set.of(skills.split(","));
