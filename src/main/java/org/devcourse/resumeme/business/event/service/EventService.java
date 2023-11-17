@@ -73,6 +73,11 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public List<Event> getAll(List<Long> resumeIds) {
+        return eventRepository.findAllByApplicantsResumeIds(resumeIds);
+    }
+
     public void completeReview(Long eventId, String request, Long resumeId) {
         Event event = getOne(eventId);
         MenteeToEvent menteeToEvent = event.getApplicants().stream()

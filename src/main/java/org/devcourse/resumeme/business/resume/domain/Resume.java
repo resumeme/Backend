@@ -45,6 +45,9 @@ public class Resume extends BaseEntity {
 
     private boolean deleted = false;
 
+    @Getter
+    private Long originResumeId;
+
     public Resume(String title, Mentee mentee) {
         validateResume(title, mentee);
         this.title = title;
@@ -65,8 +68,13 @@ public class Resume extends BaseEntity {
         this.resumeInfo = resumeInfo;
     }
 
+    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, Long originResumeId) {
+        this(id, title, mentee, resumeInfo);
+        this.originResumeId = originResumeId;
+    }
+
     public Resume copy() {
-        return new Resume(null, title, mentee, resumeInfo);
+        return new Resume(null, title, mentee, resumeInfo, id);
     }
 
     public Long menteeId() {
@@ -94,6 +102,14 @@ public class Resume extends BaseEntity {
             resumeInfo = new ResumeInfo();
         }
         return resumeInfo;
+    }
+
+    public boolean isCopied() {
+        return originResumeId != null;
+    }
+
+    public boolean isOrigin() {
+        return originResumeId == null;
     }
 
 }
