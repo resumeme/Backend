@@ -61,7 +61,7 @@ public class EventController {
     @PatchMapping("/{eventId}")
     public IdResponse applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request, @AuthenticationPrincipal JwtUser user) {
         Long copyResumeId = resumeService.copyResume(request.resumeId());
-        Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, copyResumeId, user.id()));
+        Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, user.id(), copyResumeId));
 
         return new IdResponse(eventService.getApplicantId(eventId, user.id()));
     }
