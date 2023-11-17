@@ -29,28 +29,6 @@ public record EventResponse(EventInfoResponse info, MentorInfo mentorInfo, List<
                 ).toList();
     }
 
-    public record EventInfoResponse(String title, String content, int maximumCount, int currentApplicantCount, List<String> positions, TimeInfo timeInfo) {
-
-        public EventInfoResponse(Event event, List<EventPosition> positions) {
-            this(event.title(), event.content(), event.maximumCount(), event.getApplicants().size(),
-                    convertToString(positions), new TimeInfo(event.getEventTimeInfo()));
-        }
-
-        private static List<String> convertToString(List<EventPosition> positions) {
-            return positions.stream()
-                    .map(eventPosition -> eventPosition.getPosition().name())
-                    .toList();
-        }
-
-        record TimeInfo(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {
-
-            public TimeInfo(EventTimeInfo info) {
-                this(info.getOpenDateTime(), info.getCloseDateTime(), info.getEndDate());
-            }
-        }
-
-    }
-
     public record ResumeResponse(Long resumeId, String menteeName, String resumeTitle, String progressStatus) {
 
         public ResumeResponse(MenteeToEvent applicant, Resume resume) {
