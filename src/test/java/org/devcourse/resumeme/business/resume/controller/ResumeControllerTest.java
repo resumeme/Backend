@@ -154,7 +154,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         given(resumeService.getOne(resumeId)).willReturn(resume);
         given(resumeService.updateResumeInfo(resume, request.toEntity())).willReturn(1L);
 
-        ResultActions result = mvc.perform(patch("/api/v1/resumes/{resumeId}", 1L)
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/{resumeId}/basic", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 

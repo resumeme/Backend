@@ -52,7 +52,7 @@ public class ResumeController {
         return new BasicResumeInfo(resume);
     }
     
-    @PatchMapping("/{resumeId}")
+    @PatchMapping("/{resumeId}/basic")
     public IdResponse updateResume(@PathVariable Long resumeId, @RequestBody ResumeInfoRequest request) {
         Resume resume = resumeService.getOne(resumeId);
         ResumeInfo resumeInfo = request.toEntity();
