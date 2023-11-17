@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ComponentRepository extends JpaRepository<Component, Long> {
+public interface ComponentRepository extends JpaRepository<Component, Long>, ComponentCustomRepository {
 
     @EntityGraph(attributePaths = "components")
     List<Component> findAllByResumeId(Long resumeId);
