@@ -26,7 +26,7 @@ endpoint:
         delete: /api/v1/events/*/resumes/*/comments/*
       role: own_mentor
     - matcher:
-        get: /api/v1/events/*/resumes/*/comments
+        get: /api/v1/events/*/resumes/*/comments, /api/v1/resumes
         patch: /api/v1/resumes/*/*/components/*
         delete: /api/v1/resumes/*, /api/v1/resumes/*/components/*
       role: own_mentee
