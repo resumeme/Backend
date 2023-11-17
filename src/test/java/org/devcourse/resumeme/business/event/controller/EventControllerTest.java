@@ -167,7 +167,7 @@ class EventControllerTest extends ControllerUnitTest {
 
         ApplyToEventRequest request = new ApplyToEventRequest(1L);
         given(eventService.acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L))).willReturn(event);
-        given(eventService.getApplicantId(event, 1L)).willReturn(1L);
+        given(eventService.getApplicantId(1L, 1L)).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", 1L)

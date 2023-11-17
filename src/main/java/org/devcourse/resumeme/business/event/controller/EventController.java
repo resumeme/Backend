@@ -63,7 +63,7 @@ public class EventController {
         Long copyResumeId = resumeService.copyResume(request.resumeId());
         Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, copyResumeId, user.id()));
 
-        return new IdResponse(eventService.getApplicantId(event, user.id()));
+        return new IdResponse(eventService.getApplicantId(eventId, user.id()));
     }
 
     @PatchMapping("/{eventId}/mentee/{menteeId}")
