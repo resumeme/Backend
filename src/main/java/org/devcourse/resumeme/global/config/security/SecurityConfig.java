@@ -54,8 +54,8 @@ public class SecurityConfig {
                         .permitAll()
                 );
 
-        http.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
         http.addFilterBefore(jwtAuthorizationFilter, LogoutFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, JwtAuthorizationFilter.class);
         http.addFilterAfter(oAuthTokenResponseFilter, JwtAuthorizationFilter.class);
 
         return http.build();
