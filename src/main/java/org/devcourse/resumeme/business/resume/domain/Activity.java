@@ -29,7 +29,6 @@ public class Activity implements Converter {
     public Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description) {
         notNull(activityName);
         notNull(startDate);
-        notNull(endDate);
 
         this.activityName = activityName;
         this.startDate = startDate;

@@ -43,16 +43,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        setEndpoints(http);
-        http
-                .cors(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .logout((logout) -> logout.logoutUrl("/api/v1/logout")
-                        .addLogoutHandler(customLogoutHandler)
-                        .logoutSuccessHandler(logoutSuccessHandler)
-                        .permitAll()
-                );
+        http.authorizeHttpRequests(registry -> registry.anyRequest().permitAll());
+//        setEndpoints(http);
+//        http
+//                .cors(withDefaults())
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .formLogin(AbstractHttpConfigurer::disable)
+//                .logout((logout) -> logout.logoutUrl("/api/v1/logout")
+//                        .addLogoutHandler(customLogoutHandler)
+//                        .logoutSuccessHandler(logoutSuccessHandler)
+//                        .permitAll()
+//                );
 
         http.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
         http.addFilterBefore(jwtAuthorizationFilter, LogoutFilter.class);

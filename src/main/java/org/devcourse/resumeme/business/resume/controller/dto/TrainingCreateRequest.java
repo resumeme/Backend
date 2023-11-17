@@ -23,9 +23,9 @@ public class TrainingCreateRequest extends ComponentCreateRequest {
 
     private LocalDate graduationDate;
 
-    private double gpa;
+    private Double gpa;
 
-    private double maxGpa;
+    private Double maxGpa;
 
     private String explanation;
 
@@ -35,8 +35,8 @@ public class TrainingCreateRequest extends ComponentCreateRequest {
             String degree,
             LocalDate admissionDate,
             LocalDate graduationDate,
-            double gpa,
-            double maxGpa,
+            Double gpa,
+            Double maxGpa,
             String explanation
     ) {
         this.organization = organization;

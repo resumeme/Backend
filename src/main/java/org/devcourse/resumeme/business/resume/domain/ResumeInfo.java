@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,12 +28,12 @@ public class ResumeInfo {
         this.introduce = introduce;
     }
 
-    public String getSkills() {
+    public Set<String> getSkillSet() {
         if (this.skills == null) {
-            return "";
+            Set.of();
         }
 
-        return skills;
+        return Set.of(skills.split(","));
     }
 
 }
