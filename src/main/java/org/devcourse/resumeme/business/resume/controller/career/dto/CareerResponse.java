@@ -5,6 +5,7 @@ import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -27,7 +28,7 @@ public class CareerResponse extends ComponentResponse {
     private String careerContent;
 
     public CareerResponse(
-            Long id, String companyName,
+            Long id, LocalDateTime createdDate, String companyName,
             String position,
             List<String> skills,
             List<DutyResponse> duties,
@@ -36,7 +37,7 @@ public class CareerResponse extends ComponentResponse {
             LocalDate endDate,
             String careerContent
     ) {
-        super(id);
+        super(id, createdDate);
         this.companyName = companyName;
         this.position = position;
         this.skills = skills;
@@ -47,9 +48,9 @@ public class CareerResponse extends ComponentResponse {
         this.careerContent = careerContent;
     }
 
-    public CareerResponse(Career career, Long id) {
+    public CareerResponse(Career career, Long id, LocalDateTime createdDate) {
         this(
-                id,
+                id, createdDate,
                 career.getCompanyName(),
                 career.getPosition(),
                 career.getSkills(),

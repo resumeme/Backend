@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentRes
 import org.devcourse.resumeme.business.resume.domain.Training;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +29,7 @@ public class TrainingResponse extends ComponentResponse {
     private String explanation;
 
     public TrainingResponse(
-            Long id, String organization,
+            Long id, LocalDateTime createdDate, String organization,
             String major,
             String degree,
             LocalDate admissionDate,
@@ -37,7 +38,7 @@ public class TrainingResponse extends ComponentResponse {
             Double maxGpa,
             String explanation
     ) {
-        super(id);
+        super(id, createdDate);
         this.organization = organization;
         this.major = major;
         this.degree = degree;
@@ -48,9 +49,9 @@ public class TrainingResponse extends ComponentResponse {
         this.explanation = explanation;
     }
 
-    public TrainingResponse(Training training, Long id) {
+    public TrainingResponse(Training training, Long id, LocalDateTime createdDate) {
         this(
-                id,
+                id, createdDate,
                 training.getEducationalDetails().getOrganization(),
                 training.getEducationalDetails().getMajor(),
                 training.getEducationalDetails().getDegree(),

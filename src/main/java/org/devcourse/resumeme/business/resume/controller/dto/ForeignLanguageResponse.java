@@ -4,6 +4,8 @@ import lombok.Data;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ForeignLanguageResponse extends ComponentResponse {
 
@@ -14,19 +16,19 @@ public class ForeignLanguageResponse extends ComponentResponse {
     private String scoreOrGrade;
 
     public ForeignLanguageResponse(
-            Long id, String language,
+            Long id, LocalDateTime createdDate, String language,
             String examName,
             String scoreOrGrade
     ) {
-        super(id);
+        super(id, createdDate);
         this.language = language;
         this.examName = examName;
         this.scoreOrGrade = scoreOrGrade;
     }
 
-    public ForeignLanguageResponse(ForeignLanguage foreignLanguage, Long id) {
+    public ForeignLanguageResponse(ForeignLanguage foreignLanguage, Long id, LocalDateTime createdDate) {
         this(
-                id,
+                id, createdDate,
                 foreignLanguage.getLanguage(),
                 foreignLanguage.getExamName(),
                 foreignLanguage.getScoreOrGrade()
