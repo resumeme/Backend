@@ -21,9 +21,9 @@ public class TrainingResponse extends ComponentResponse {
 
     private LocalDate graduationDate;
 
-    private double gpa;
+    private Double gpa;
 
-    private double maxGpa;
+    private Double maxGpa;
 
     private String explanation;
 
@@ -33,8 +33,8 @@ public class TrainingResponse extends ComponentResponse {
             String degree,
             LocalDate admissionDate,
             LocalDate graduationDate,
-            double gpa,
-            double maxGpa,
+            Double gpa,
+            Double maxGpa,
             String explanation
     ) {
         super(id);

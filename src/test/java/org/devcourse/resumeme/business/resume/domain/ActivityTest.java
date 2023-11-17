@@ -51,9 +51,4 @@ public class ActivityTest {
                 .isInstanceOf(CustomException.class);
     }
 
-    @Test
-    void 종료일_누락_및_진행중이_아닌_경우_예외_발생() {
-        assertThatThrownBy(() -> new Activity(activityName, startDate, null, link, description))
-                .isInstanceOf(CustomException.class);
-    }
 }

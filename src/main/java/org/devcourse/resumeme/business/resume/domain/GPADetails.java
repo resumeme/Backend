@@ -10,12 +10,12 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 public class GPADetails {
 
     @Getter
-    private double gpa;
+    private Double gpa;
 
     @Getter
-    private double maxGpa;
+    private Double maxGpa;
 
-    public GPADetails(double gpa, double maxGpa) {
+    public GPADetails(Double gpa, Double maxGpa) {
         if (maxGpa < gpa) {
             throw new CustomException(ExceptionCode.GPA_ERROR);
         }
