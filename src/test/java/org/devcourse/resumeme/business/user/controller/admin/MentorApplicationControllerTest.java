@@ -1,38 +1,31 @@
 package org.devcourse.resumeme.business.user.controller.admin;
 
-import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
+import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
-import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType.ACCEPT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 class MentorApplicationControllerTest extends ControllerUnitTest {
 
@@ -77,17 +70,8 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
 
         // then
         result.andExpect(status().isOk())
-                .andDo(
-                        document("user/admin/allApplication",
-                                getDocumentResponse(),
-                                responseFields(
-                                        fieldWithPath("[].applicationId").type(NUMBER).description("멘토 승인 신청 아이디"),
-                                        fieldWithPath("[].mentorName").type(STRING).description("멘토 이름")
-                                )
-                        )
-                );
+                .andExpect(view().name("mentorApprovalPage"));
     }
-
 
     @Test
     void 멘토_승인여부를_결정한다() throws Exception {
@@ -113,22 +97,11 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
         doNothing().when(emailService).sendEmail(any());
 
         // when
-        ResultActions result = mvc.perform(delete("/api/v1/admin/applications/{applicationId}/{type}", applicationId, type.name()));
+        ResultActions result = mvc.perform(MockMvcRequestBuilders.post("/api/v1/admin/applications/{applicationId}/approve", applicationId));
 
         // then
-        result.andExpect(status().isOk())
-                .andDo(
-                        document("user/admin/processApplication",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                pathParameters(
-                                        parameterWithName("applicationId").description("멘토 가입 후 신청시 발급 된 아이디"),
-                                        parameterWithName("type").description("멘토가 생성한 이벤트 아이디")
-
-                                )
-                        )
-                );
+        result.andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/applications"));
     }
-
 
 }
