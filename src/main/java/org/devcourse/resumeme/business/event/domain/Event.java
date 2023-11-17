@@ -40,6 +40,7 @@ public class Event extends BaseEntity {
     @Column(name = "event_id")
     private Long id;
 
+    @Getter
     @Embedded
     private EventInfo eventInfo;
 

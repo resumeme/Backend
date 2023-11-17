@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
+import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
@@ -82,49 +84,16 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public EventResponse getAllAttendResumes(@PathVariable Long eventId, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
+    public EventInfoResponse getAllAttendResumes(@PathVariable Long eventId) {
         Event event = eventService.getOne(eventId);
         List<EventPosition> positions = eventPositionService.getAll(eventId);
 
-        if (isMentor(auth)) {
-            return new EventResponse(event, positions, getResumes(event));
-        }
-
-        return new EventResponse(event, positions, List.of());
-    }
-
-    private boolean isMentor(Authentication auth) {
-        return auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(authority -> authority.equals("ROLE_MENTOR"));
-    }
-
-    private List<Resume> getResumes(Event event) {
-        List<MenteeToEvent> applicants = event.getApplicants();
-        List<Long> menteeIds = applicants.stream()
-                .map(MenteeToEvent::getMenteeId)
-                .toList();
-        List<Long> resumeIds = applicants.stream()
-                .map(MenteeToEvent::getResumeId)
-                .toList();
-
-        return resumeService.getAll(resumeIds)
-                .stream()
-                .filter(resume -> menteeIds.contains(resume.menteeId()))
-                .toList();
+        return new EventInfoResponse(event, positions);
     }
 
     @GetMapping
-    public List<EventResponse> getAll(@CurrentSecurityContext(expression = "authentication") Authentication auth, @RequestParam(required = false) Long mentorId) {
-        JwtUser user = (JwtUser) auth.getPrincipal();
-        List<Event> eventList = eventService.getAll(mentorId);
-        if (isMentor(auth) && mentorId.equals(user.id())) {
-            return eventList.stream()
-                    .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event)))
-                    .toList();
-        }
-
-        return eventList.stream()
+    public List<EventResponse> getAll() {
+        return eventService.getAll(null).stream()
                 .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null))
                 .toList();
     }
