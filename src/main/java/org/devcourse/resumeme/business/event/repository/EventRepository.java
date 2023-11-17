@@ -27,4 +27,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @EntityGraph(attributePaths = {"positions", "mentor"})
     List<Event> findAll();
 
+    @EntityGraph(attributePaths = {"applicants", "mentor"})
+    List<Event> findAllByApplicantsMenteeId(Long menteeId);
+
 }

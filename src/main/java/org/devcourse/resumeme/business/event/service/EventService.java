@@ -71,6 +71,10 @@ public class EventService {
             return eventRepository.findAllByMentorId(filter.mentorId());
         }
 
+        if (filter.menteeId() != null) {
+            return eventRepository.findAllByApplicantsMenteeId(filter.menteeId());
+        }
+
         return eventRepository.findAll();
     }
 
