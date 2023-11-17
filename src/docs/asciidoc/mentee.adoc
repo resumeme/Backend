@@ -215,6 +215,15 @@ include::{snippets}/event/apply/request-fields.adoc[]
 include::{snippets}/event/apply/http-response.adoc[]
 include::{snippets}/event/apply/response-fields.adoc[]
 
+=== 첨삭 이벤트 참여 리스트 조회
+*Request*
+include::{snippets}/user/mentee/events/http-request.adoc[]
+include::{snippets}/user/mentee/events/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentee/events/http-response.adoc[]
+include::{snippets}/user/mentee/events/response-fields.adoc[]
+
 === 첨삭 재요청
 
 *Request*
