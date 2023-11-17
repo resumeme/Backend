@@ -22,6 +22,7 @@ import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.userevent.controller.UserEventController;
 import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.global.auth.filter.FilterTestController;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
@@ -67,7 +68,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ResultNoticeController.class,
         UserController.class,
         ComponentController.class,
-        FilterTestController.class
+        FilterTestController.class,
+        UserEventController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)

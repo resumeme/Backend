@@ -377,7 +377,7 @@ class EventControllerTest extends ControllerUnitTest {
         eventThree.acceptMentee(5L, 11L);
         eventThree.acceptMentee(6L, 43L);
 
-        given(eventService.getAll(any())).willReturn(List.of(eventOne, eventTwo, eventThree));
+        given(eventService.getAll(any(Long.class))).willReturn(List.of(eventOne, eventTwo, eventThree));
         Resume resume1 = new Resume("title", mentee1);
         Resume resume2 = new Resume("title", mentee2);
         setId(resume1, 1L);
@@ -386,7 +386,7 @@ class EventControllerTest extends ControllerUnitTest {
         given(eventPositionService.getAll(1L)).willReturn(List.of(new EventPosition(BACK, eventOne)));
         given(eventPositionService.getAll(2L)).willReturn(List.of(new EventPosition(DEVOPS, eventTwo)));
 
-        given(eventService.getAll(any())).willReturn(List.of(eventOne, eventTwo, eventThree));
+        given(eventService.getAll(any(Long.class))).willReturn(List.of(eventOne, eventTwo, eventThree));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/events?mentorId=1"));
