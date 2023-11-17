@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
-import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -218,6 +218,10 @@ class ResumeControllerTest extends ControllerUnitTest {
         Resume resume2 = new Resume("title2", mentee);
         setId(resume1, 1L);
         setId(resume2, 2L);
+        setModifiedAt(resume1, LocalDateTime.now());
+        setModifiedAt(resume2, LocalDateTime.now());
+        setPosition(resume1, "FRONT");
+        setPosition(resume2, "BACK");
 
         given(resumeService.getAllByMenteeId(mentee.getId())).willReturn(List.of(resume1, resume2));
 
@@ -231,7 +235,8 @@ class ResumeControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("[].id").type(NUMBER).description("이력서 id"),
                                         fieldWithPath("[].title").type(STRING).description("이력서 제목"),
-                                        fieldWithPath("[].modifiedAt").type(NULL).description("수정 일자")
+                                        fieldWithPath("[].modifiedAt").type(STRING).description("수정 일자"),
+                                        fieldWithPath("[].position").type(STRING).description("직무")
                                 )
                         )
                 );
@@ -326,6 +331,18 @@ class ResumeControllerTest extends ControllerUnitTest {
                                )
                        )
                 );
+    }
+
+    private void setModifiedAt(Object target, LocalDateTime localDateTime) throws NoSuchFieldException, IllegalAccessException {
+        Field field = target.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
+        field.setAccessible(true);
+        field.set(target, localDateTime);
+    }
+
+    private void setPosition(Resume resume, String position) throws NoSuchFieldException, IllegalAccessException {
+        Field field = resume.getResumeInfo().getClass().getDeclaredField("position");
+        field.setAccessible(true);
+        field.set(resume.getResumeInfo(), position);
     }
 
 }

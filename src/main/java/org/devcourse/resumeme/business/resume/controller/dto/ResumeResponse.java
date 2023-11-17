@@ -7,14 +7,16 @@ import java.time.LocalDateTime;
 public record ResumeResponse(
         Long id,
         String title,
-        LocalDateTime modifiedAt
+        LocalDateTime modifiedAt,
+        String position
 ) {
 
     public ResumeResponse(Resume resume) {
         this(
                 resume.getId(),
                 resume.getTitle(),
-                resume.getLastModifiedDate()
+                resume.getLastModifiedDate(),
+                resume.getResumeInfo().getPosition()
         );
     }
 }
