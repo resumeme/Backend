@@ -47,6 +47,10 @@ public class ProjectCreateRequest extends ComponentCreateRequest {
 
     @Override
     public Project toEntity() {
+        if (teamMembers == null) {
+            teamMembers = "";
+        }
+
         return new Project(projectName, productionYear, teamMembers, skills, projectContent, projectUrl);
     }
 

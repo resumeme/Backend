@@ -49,7 +49,7 @@ public class ProjectResponse extends ComponentResponse {
                 id,
                 project.getProjectName(),
                 project.getProductionYear(),
-                project.getTeamMembers().equals("1"),
+                !project.getTeamMembers().equals(""),
                 project.getTeamMembers(),
                 project.getSkills(),
                 project.getProjectContent(),
