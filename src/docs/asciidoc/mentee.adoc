@@ -2,11 +2,21 @@
 
 == [회원정보]
 === 멘티 정보 조회 (마이페이지)
+**Request**
 include::{snippets}/user/mentee/findMy/http-request.adoc[]
 
 *Response*
 include::{snippets}/user/mentee/findMy/http-response.adoc[]
 include::{snippets}/user/mentee/findMy/response-fields.adoc[]
+
+=== 멘티 이력서 조회
+**Request**
+include::{snippets}/user/mentee/mypage/resume/http-request.adoc[]
+include::{snippets}/user/mentee/mypage/resume/path-parameters.adoc[]
+
+**Response**
+include::{snippets}/user/mentee/mypage/resume/http-response.adoc[]
+include::{snippets}/user/mentee/mypage/resume/response-fields.adoc[]
 
 === 멘티 정보 수정
 *Request*

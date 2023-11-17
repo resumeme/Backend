@@ -35,7 +35,6 @@ import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
@@ -318,16 +317,134 @@ class EventControllerTest extends ControllerUnitTest {
                                         List.of(EVENT_NOT_FOUND.name())
                                 ),
                                 responseFields(
-                                        fieldWithPath("title").type(STRING).description("이벤트 제목"),
-                                        fieldWithPath("status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
-                                        fieldWithPath("content").type(STRING).description("이벤트 상세내용"),
-                                        fieldWithPath("currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
-                                        fieldWithPath("maximumCount").type(NUMBER).description("참여 최대 인원 수"),
-                                        fieldWithPath("positions").type(ARRAY).description(generateLinkCode(POSITION)),
-                                        fieldWithPath("timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
-                                        fieldWithPath("timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
-                                        fieldWithPath("timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
-                                        fieldWithPath("timeInfo.endDate").type(STRING).description("첨삭 종료 일")
+                                        fieldWithPath("info").type(OBJECT).description("이벤트 관련 정보"),
+                                        fieldWithPath("info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("info.content").type(STRING).description("이벤트 상세내용"),
+                                        fieldWithPath("info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
+                                        fieldWithPath("info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
+                                        fieldWithPath("info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
+                                        fieldWithPath("info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
+                                        fieldWithPath("info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
+                                        fieldWithPath("info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
+                                        fieldWithPath("mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소"),
+                                        fieldWithPath("resumes").type(ARRAY).description("이벤트 신청에 사용된 이력서 멘토 로그인 시에만 값 제공"),
+                                        fieldWithPath("resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
+                                        fieldWithPath("resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
+                                        fieldWithPath("resumes[].resumeTitle").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("resumes[].progressStatus").type(STRING).description(generateLinkCode(PROGRESS))
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser(role = "ROLE_MENTOR")
+    void 첨삭_이벤트를_전체_조회한다() throws Exception {
+        // given
+        Mentor otherMentor = Mentor.builder()
+                .id(2L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", Role.ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
+        EventInfo openEventOne = EventInfo.open(3, "수증 멘토의 첫번째 첨삭이벤트", "내용");
+        EventTimeInfo eventOneTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        Event eventOne = new Event(openEventOne, eventOneTimeInfo, mentor, List.of(FRONT));
+        setId(eventOne, 1L);
+        eventOne.acceptMentee(1L, 1L);
+        eventOne.acceptMentee(2L, 4L);
+
+        EventInfo openEventTwo = EventInfo.open(5, "첨삭 매운맛으로 해드림", "요렇게 저렇게 첨삭해드릴게요");
+        EventTimeInfo eventTwoTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        Event eventTwo = new Event(openEventTwo, eventTwoTimeInfo, mentor, List.of(DEVOPS));
+        setId(eventTwo, 2L);
+        eventTwo.acceptMentee(3L, 10L);
+        eventTwo.acceptMentee(4L, 9L);
+
+        EventInfo openEventThree = EventInfo.open(5, "첨삭 순한맛으로 해드림", "요렇게 저렇게 첨삭해드릴게요");
+        EventTimeInfo eventThreeTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        Event eventThree = new Event(openEventThree, eventThreeTimeInfo, otherMentor, List.of(DEVOPS));
+        setId(eventThree, 3L);
+        eventThree.acceptMentee(5L, 11L);
+        eventThree.acceptMentee(6L, 43L);
+
+        given(eventService.getAll(any(Long.class))).willReturn(List.of(eventOne, eventTwo, eventThree));
+        Resume resume1 = new Resume("title", mentee1);
+        Resume resume2 = new Resume("title", mentee2);
+        setId(resume1, 1L);
+        setId(resume2, 4L);
+        given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));
+        given(eventPositionService.getAll(1L)).willReturn(List.of(new EventPosition(BACK, eventOne)));
+        given(eventPositionService.getAll(2L)).willReturn(List.of(new EventPosition(DEVOPS, eventTwo)));
+
+        given(eventService.getAll(any(Long.class))).willReturn(List.of(eventOne, eventTwo, eventThree));
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/events?mentorId=1"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(
+                        document("event/getAll",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                queryParameters(
+                                    parameterWithName("mentorId").description("멘토 아이디").optional()),
+                                responseFields(
+                                        fieldWithPath("[]").type(ARRAY).description("이벤트 리스트"),
+                                        fieldWithPath("[0].info").type(OBJECT).description("이벤트 관련 정보"),
+                                        fieldWithPath("[0].info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("[0].info.content").type(STRING).description("이벤트 상세내용"),
+                                        fieldWithPath("[0].info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
+                                        fieldWithPath("[0].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
+                                        fieldWithPath("[0].info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("[0].info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
+                                        fieldWithPath("[0].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
+                                        fieldWithPath("[0].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
+                                        fieldWithPath("[0].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
+
+                                        fieldWithPath("[0].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("[0].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[0].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[0].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소"),
+
+                                        fieldWithPath("[0].resumes").type(ARRAY).description("이벤트에 신청한 이력서 목록").attributes(constraints("queryParam의 mentorId와 현재 로그인한 멘토의 id가 일치할 경우에만 제공. 그 외에는 null")),
+                                        fieldWithPath("[0].resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
+                                        fieldWithPath("[0].resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
+                                        fieldWithPath("[0].resumes[].resumeTitle").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("[0].resumes[].progressStatus").type(STRING).description(generateLinkCode(PROGRESS)),
+
+                                        fieldWithPath("[1].info").type(OBJECT).description("이벤트 관련 정보"),
+                                        fieldWithPath("[1].info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("[1].info.content").type(STRING).description("이벤트 상세내용"),
+                                        fieldWithPath("[1].info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
+                                        fieldWithPath("[1].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
+                                        fieldWithPath("[1].info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("[1].info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
+                                        fieldWithPath("[1].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
+                                        fieldWithPath("[1].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
+                                        fieldWithPath("[1].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
+
+                                        fieldWithPath("[1].mentorInfo").type(OBJECT).description("이벤트 생성 멘토 아이디"),
+                                        fieldWithPath("[1].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[1].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[1].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 사진 주소"),
+
+                                        fieldWithPath("[1].resumes").type(ARRAY).description("이벤트에 신청한 이력서 목록"),
+                                        fieldWithPath("[1].resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
+                                        fieldWithPath("[1].resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
+                                        fieldWithPath("[1].resumes[].resumeTitle").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("[1].resumes[].progressStatus").type(STRING).description(generateLinkCode(PROGRESS))
                                 )
                         )
                 );
