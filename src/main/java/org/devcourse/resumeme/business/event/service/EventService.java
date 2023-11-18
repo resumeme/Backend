@@ -1,7 +1,9 @@
 package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
@@ -9,15 +11,18 @@ import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.global.exception.CustomException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -86,6 +91,14 @@ public class EventService {
                 .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
 
         menteeToEvent.completeEvent(request);
+    }
+
+    @Scheduled(cron = "0 0 0/1 * * *")
+    public void openBookedEvents() {
+        log.info("scheduler 실행 됨");
+        eventRepository.openBookedEvent(EventStatus.OPEN, LocalDateTime.now());
+        eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
+        eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
     }
 
 }
