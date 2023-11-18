@@ -9,6 +9,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.AUTHORITY;
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.LINK;
+import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
@@ -36,16 +40,17 @@ public class Certification implements Converter {
     }
 
     public Certification(Map<String, String> component) {
-        this(component.get("title"), component.get("titleStartDate"), component.get("authority"), component.get("link"), component.get("description"));
+        this(component.get(TITLE.name()), component.get(TITLE.startDate()), component.get(AUTHORITY.name()),
+                component.get(LINK.name()), component.get(DESCRIPTION.name()));
     }
 
     @Override
     public Component of(Long resumeId) {
-        Component authority = new Component("authority", issuingAuthority, null, null, resumeId, null);
-        Component link = new Component("link", this.link, null, null, resumeId, null);
-        Component description = new Component("description", this.description, null, null, resumeId, null);
+        Component authority = new Component(AUTHORITY, issuingAuthority, resumeId);
+        Component link = new Component(LINK, this.link, resumeId);
+        Component description = new Component(DESCRIPTION, this.description, resumeId);
 
-        return new Component("title", certificationTitle, LocalDate.parse(acquisitionDate), null, resumeId, List.of(authority, link, description));
+        return new Component(TITLE, certificationTitle, LocalDate.parse(acquisitionDate), null, resumeId, List.of(authority, link, description));
     }
 
 }

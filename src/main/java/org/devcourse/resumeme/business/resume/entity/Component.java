@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.Property;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,6 +61,17 @@ public class Component {
 
     private LocalDateTime lastModifiedDate;
 
+    public Component(String property, String content, Long resumeId) {
+        this(property, content, null, null, resumeId, null);
+    }
+
+    public Component(Property property, String content, Long resumeId) {
+        this(property, content, null, null, resumeId, null);
+    }
+
+    public Component(Property property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
+        this(property.name(), content, startDate, endDate, resumeId, components);
+    }
 
     public Component(String property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
         this.property = property;

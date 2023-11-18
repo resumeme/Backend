@@ -8,6 +8,9 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 import java.util.List;
 import java.util.Map;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.EXAM_NAME;
+import static org.devcourse.resumeme.business.resume.domain.Property.LANGUAGE;
+import static org.devcourse.resumeme.business.resume.domain.Property.SCORE;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
@@ -31,15 +34,15 @@ public class ForeignLanguage implements Converter {
     }
 
     public ForeignLanguage(Map<String, String> component) {
-        this(component.get("language"), component.get("examName"), component.get("scoreOrGrade"));
+        this(component.get(LANGUAGE.name()), component.get(EXAM_NAME.name()), component.get(SCORE.name()));
     }
 
     @Override
     public Component of(Long resumeId) {
-        Component examName = new Component("examName", this.examName, null, null, resumeId, null);
-        Component scoreOrGrade = new Component("scoreOrGrade", this.scoreOrGrade, null, null, resumeId, null);
+        Component examName = new Component(EXAM_NAME, this.examName, resumeId);
+        Component scoreOrGrade = new Component(SCORE, this.scoreOrGrade, resumeId);
 
-        return new Component("language", this.language, null, null, resumeId, List.of(examName, scoreOrGrade));
+        return new Component(LANGUAGE, this.language, null, null, resumeId, List.of(examName, scoreOrGrade));
     }
 
 }

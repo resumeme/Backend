@@ -15,6 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.COMPANY;
+import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.DUTY;
+import static org.devcourse.resumeme.business.resume.domain.Property.POSITION;
+import static org.devcourse.resumeme.business.resume.domain.Property.SKILL;
+import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Career implements Converter {
@@ -49,27 +57,27 @@ public class Career implements Converter {
     }
 
     public Career(Map<String, String> component) {
-        this(component.get("company"), component.get("position"), Arrays.asList(component.get("skill").split(",")),
-                getDuties(component), LocalDate.parse(component.get("companyStartDate")), LocalDate.parse(component.get("companyEndDate")), component.get("careerContent"));
+        this(component.get(COMPANY.name()), component.get(POSITION.name()), Arrays.asList(component.get(SKILL.name()).split(",")), getDuties(component),
+                LocalDate.parse(component.get(COMPANY.startDate())), LocalDate.parse(component.get(COMPANY.endDate())), component.get(CONTENT.name()));
     }
 
     private static List<Duty> getDuties(Map<String, String> component) {
-        return IntStream.range(0, Integer.parseInt(component.get("duty")))
-                .mapToObj(i -> new Duty(component, "dutyTitle" + i))
+        return IntStream.range(0, Integer.parseInt(component.get(DUTY.name())))
+                .mapToObj(i -> new Duty(component, i))
                 .toList();
     }
 
     @Override
     public Component of(Long resumeId) {
-        Component position = new Component("position", this.position, null, null, resumeId, null);
-        Component skills = new Component("skill", String.join(",", this.skills), null, null, resumeId, null);
-        Component careerContent = new Component("careerContent", this.careerContent, null, null, resumeId, null);
+        Component position = new Component(POSITION, this.position, resumeId);
+        Component skills = new Component(SKILL, String.join(",", this.skills), resumeId);
+        Component careerContent = new Component(CONTENT, this.careerContent, resumeId);
 
-        Component descriptions = new Component("description", "description", null, null, resumeId, List.of(position, skills, careerContent));
+        Component descriptions = new Component(DESCRIPTION, null, null, null, resumeId, List.of(position, skills, careerContent));
         List<Component> duties = getDuties(resumeId);
-        Component duty = new Component("duty", String.valueOf(duties.size()), null, null, resumeId, duties);
+        Component duty = new Component(DUTY, String.valueOf(duties.size()), null, null, resumeId, duties);
 
-        return new Component("company", this.companyName, this.careerPeriod.getStartDate(), this.careerPeriod.getEndDate(), resumeId, List.of(descriptions, duty));
+        return new Component(COMPANY, this.companyName, this.careerPeriod.getStartDate(), this.careerPeriod.getEndDate(), resumeId, List.of(descriptions, duty));
     }
 
     private List<Component> getDuties(Long resumeId) {
@@ -77,8 +85,8 @@ public class Career implements Converter {
         for (int i = 0; i < duties.size(); i++) {
             Duty duty = duties.get(i);
 
-            Component description = new Component("dutyDescription" + i, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, null);
-            result.add(new Component("dutyTitle" + i, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, List.of(description)));
+            Component description = new Component(DUTY.name() + DESCRIPTION.name() + i, duty.getDescription(), resumeId);
+            result.add(new Component(DUTY.name() + TITLE.name() + i, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, List.of(description)));
         }
 
         return result;

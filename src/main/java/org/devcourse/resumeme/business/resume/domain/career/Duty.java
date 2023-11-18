@@ -10,6 +10,12 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import java.time.LocalDate;
 import java.util.Map;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.DUTY;
+import static org.devcourse.resumeme.business.resume.domain.Property.END_DATE;
+import static org.devcourse.resumeme.business.resume.domain.Property.START_DATE;
+import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Duty {
@@ -33,9 +39,9 @@ public class Duty {
         this.description = description;
     }
 
-    public Duty(Map<String, String> component, String key) {
-        this(component.get(key), LocalDate.parse(component.get(key + "StartDate")),
-                LocalDate.parse(component.get(key + "EndDate")), component.get("description"));
+    public Duty(Map<String, String> component, int id) {
+        this(component.get(DUTY.name() + DESCRIPTION.name() + id), LocalDate.parse(component.get(DUTY.name() + TITLE + id + START_DATE)),
+                LocalDate.parse(component.get(DUTY.name() + TITLE + id + END_DATE )), component.get(DUTY.name() + DESCRIPTION.name() + id));
     }
 
     private void validateDuty(String title, LocalDate startDate, LocalDate endDate) {

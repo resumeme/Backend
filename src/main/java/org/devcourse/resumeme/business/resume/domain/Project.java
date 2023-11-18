@@ -12,6 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
+import static org.devcourse.resumeme.business.resume.domain.Property.MEMBER;
+import static org.devcourse.resumeme.business.resume.domain.Property.PROJECT;
+import static org.devcourse.resumeme.business.resume.domain.Property.SKILL;
+import static org.devcourse.resumeme.business.resume.domain.Property.URL;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Project implements Converter {
@@ -46,19 +52,19 @@ public class Project implements Converter {
     }
 
     public Project(Map<String, String> component) {
-        this(component.get("projectName"), (long) LocalDate.parse(component.get("projectNameStartDate")).getYear(),
-                component.get("member"), Arrays.asList(component.get("skills").split(",")),
-                component.get("content"), component.get("url"));
+        this(component.get(PROJECT.name()), (long) LocalDate.parse(component.get(PROJECT.startDate())).getYear(),
+                component.get(MEMBER.name()), Arrays.asList(component.get(SKILL.name()).split(",")),
+                component.get(CONTENT.name()), component.get(URL.name()));
     }
 
     @Override
     public Component of(Long resumeId) {
-        Component url = new Component("url", projectUrl, null, null, resumeId, null);
-        Component content = new Component("content", projectContent, null, null, resumeId, null);
-        Component memberCount = new Component("member", teamMembers, null, null, resumeId, null);
-        Component skill = new Component("skills", String.join(",", skills), null, null, resumeId, null);
+        Component url = new Component(URL, projectUrl, resumeId);
+        Component content = new Component(CONTENT, projectContent, resumeId);
+        Component memberCount = new Component(MEMBER, teamMembers, resumeId);
+        Component skill = new Component(SKILL, String.join(",", skills), resumeId);
 
-        return new Component("projectName", this.projectName, LocalDate.of(productionYear.intValue(), 1, 31),
+        return new Component(PROJECT, this.projectName, LocalDate.of(productionYear.intValue(), 1, 31),
                 null, resumeId, List.of(url, content, memberCount, skill));
     }
 

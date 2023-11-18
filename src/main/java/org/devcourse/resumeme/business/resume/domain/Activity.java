@@ -9,6 +9,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.END_DATE;
+import static org.devcourse.resumeme.business.resume.domain.Property.LINK;
+import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
@@ -37,16 +41,16 @@ public class Activity implements Converter {
     }
 
     public Activity(Map<String, String> component) {
-        this(component.get("title"), LocalDate.parse(component.get("titleStartDate")),
-                LocalDate.parse(component.get("titleEndDate")), component.get("link"), component.get("description"));
+        this(component.get(TITLE.name()), LocalDate.parse(component.get(TITLE.startDate())),
+                LocalDate.parse(component.get(TITLE.name() + END_DATE.name())), component.get(LINK.name()), component.get(DESCRIPTION.name()));
     }
 
     @Override
     public Component of(Long resumeId) {
-        Component link = new Component("link", this.link, null, null, resumeId, null);
-        Component description = new Component("description", this.description, null, null, resumeId, null);
+        Component link = new Component(LINK, this.link, resumeId);
+        Component description = new Component(DESCRIPTION, this.description, resumeId);
 
-        return new Component("title", activityName, startDate, endDate, resumeId, List.of(link, description));
+        return new Component(TITLE, activityName, startDate, endDate, resumeId, List.of(link, description));
     }
 
 }
