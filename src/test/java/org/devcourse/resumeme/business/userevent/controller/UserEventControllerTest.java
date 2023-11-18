@@ -11,7 +11,7 @@ import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
-import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
+import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
@@ -35,7 +35,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserEventControllerTest extends ControllerUnitTest {
@@ -84,6 +83,7 @@ class UserEventControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    @WithMockCustomUser(role = "ROLE_MENTOR")
     void 멘토_첨삭_이벤트_조회_성공한다() throws Exception {
         // given
         Long mentorId = 1L;
@@ -127,6 +127,7 @@ class UserEventControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    @WithMockCustomUser
     void 멘티_첨삭_신청_내역_조회에_성공한다() throws Exception {
         // given
         Long menteeId = 1L;
