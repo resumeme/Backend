@@ -63,4 +63,8 @@ public class ComponentService {
         return create(newComponent, type);
     }
 
+    public void copy(Long originResumeId, Long newResumeId) {
+        componentRepository.copy(originResumeId, newResumeId);
+    }
+
 }
