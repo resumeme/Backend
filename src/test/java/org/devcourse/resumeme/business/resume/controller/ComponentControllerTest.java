@@ -12,6 +12,7 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -177,6 +178,9 @@ class ComponentControllerTest extends ControllerUnitTest {
         Component component = getComponent(request);
         Component superComponent = new Component(type, null, null, null, 1L, List.of(component));
         setId(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
         given(componentService.getAll(1L)).willReturn(List.of(superComponent));
 
         // when

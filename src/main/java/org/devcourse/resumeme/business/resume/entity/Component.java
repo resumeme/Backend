@@ -41,6 +41,12 @@ public class Component {
     @Getter
     private Long resumeId;
 
+    @Getter
+    private Long originComponentId;
+
+    @Getter
+    private boolean isReflectFeedBack;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private Component component;
@@ -83,6 +89,10 @@ public class Component {
     public void updateOriginDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
         this.lastModifiedDate = LocalDateTime.now();
+
+        if (originComponentId != null) {
+            isReflectFeedBack = true;
+        }
 
         if (components != null) {
             components.forEach(subComponent -> subComponent.updateOriginDate(createdDate));

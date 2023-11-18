@@ -4,9 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -28,39 +28,16 @@ public class TrainingResponse extends ComponentResponse {
 
     private String explanation;
 
-    public TrainingResponse(
-            Long id, LocalDateTime createdDate, String organization,
-            String major,
-            String degree,
-            LocalDate admissionDate,
-            LocalDate graduationDate,
-            Double gpa,
-            Double maxGpa,
-            String explanation
-    ) {
-        super(id, createdDate);
-        this.organization = organization;
-        this.major = major;
-        this.degree = degree;
-        this.admissionDate = admissionDate;
-        this.graduationDate = graduationDate;
-        this.gpa = gpa;
-        this.maxGpa = maxGpa;
-        this.explanation = explanation;
-    }
-
-    public TrainingResponse(Training training, Long id, LocalDateTime createdDate) {
-        this(
-                id, createdDate,
-                training.getEducationalDetails().getOrganization(),
-                training.getEducationalDetails().getMajor(),
-                training.getEducationalDetails().getDegree(),
-                training.getDateDetails().getAdmissionDate(),
-                training.getDateDetails().getGraduationDate(),
-                training.getGpaDetails().getGpa(),
-                training.getGpaDetails().getMaxGpa(),
-                training.getExplanation()
-        );
+    public TrainingResponse(Training training, Component component) {
+        super(component);
+        this.organization = training.getEducationalDetails().getOrganization();
+        this.major = training.getEducationalDetails().getMajor();
+        this.degree = training.getEducationalDetails().getDegree();
+        this.admissionDate = training.getDateDetails().getAdmissionDate();
+        this.graduationDate = training.getDateDetails().getGraduationDate();
+        this.gpa = training.getGpaDetails().getGpa();
+        this.maxGpa = training.getGpaDetails().getMaxGpa();
+        this.explanation = training.getExplanation();
     }
 
 }

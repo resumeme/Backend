@@ -15,7 +15,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet activityResponseSnippet() {
         return responseFields(
-                fieldWithPath("activities.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("activities.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("activities.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("activities.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("activities.[].activityName").type(STRING).description("활동명"),
                 fieldWithPath("activities.[].startDate").type(STRING).description("시작일"),
                 fieldWithPath("activities.[].endDate").type(STRING).description("종료일"),
@@ -28,7 +30,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet careerResponseSnippet() {
         return responseFields(
-                fieldWithPath("careers.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("careers.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("careers.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("careers.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("careers.[].companyName").type(STRING).description("회사명"),
                 fieldWithPath("careers.[].position").type(STRING).description("직책"),
                 fieldWithPath("careers.[].skills").type(ARRAY).description("기술 목록"),
@@ -46,7 +50,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet certificationResponseSnippet() {
         return responseFields(
-                fieldWithPath("certifications.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("certifications.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("certifications.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("certifications.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("certifications.[].certificationTitle").type(STRING).description("자격증 제목"),
                 fieldWithPath("certifications.[].acquisitionDate").type(STRING).description("취득 일자"),
                 fieldWithPath("certifications.[].issuingAuthority").type(STRING).description("발급 기관"),
@@ -58,7 +64,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet foreignLanguageResponseSnippet() {
         return responseFields(
-                fieldWithPath("foreign-languages.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("foreign-languages.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("foreign-languages.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("foreign-languages.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("foreign-languages.[].language").type(STRING).description("언어"),
                 fieldWithPath("foreign-languages.[].examName").type(STRING).description("시험명"),
                 fieldWithPath("foreign-languages.[].scoreOrGrade").type(STRING).description("점수 또는 학점"),
@@ -68,7 +76,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet linkResponseSnippet() {
         return responseFields(
-                fieldWithPath("links.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("links.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("links.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("links.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("links.[].linkType").type(STRING).description(generateLinkCode(BLOCK_TYPE)),
                 fieldWithPath("links.[].url").type(STRING).description("링크 URL"),
                 fieldWithPath("links.[].createdDate").type(STRING).description("생성 시간")
@@ -77,7 +87,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet projectResponseSnippet() {
         return responseFields(
-                fieldWithPath("projects.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("projects.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("projects.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("projects.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("projects.[]projectName").type(STRING).description("프로젝트명"),
                 fieldWithPath("projects.[]productionYear").type(NUMBER).description("제작 연도"),
                 fieldWithPath("projects.[]team").type(BOOLEAN).description("팀 프로젝트 여부"),
@@ -91,7 +103,9 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet trainingResponseSnippet() {
         return responseFields(
-                fieldWithPath("trainings.[].id").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("trainings.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("trainings.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("trainings.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("trainings.[].organization").type(STRING).description("기관명"),
                 fieldWithPath("trainings.[].major").type(STRING).description("전공"),
                 fieldWithPath("trainings.[].degree").type(STRING).description("학위"),
