@@ -7,7 +7,6 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,18 +21,15 @@ public class ReferenceLink implements Converter {
         this.address = address;
     }
 
+    public ReferenceLink(Map<String, String> component) {
+        this(LinkType.valueOf(component.get("type")), component.get("address"));
+    }
+
     @Override
     public Component of(Long resumeId) {
         Component address = new Component("address", this.address, null, null, resumeId, null);
 
         return new Component("type", linkType.name(), null, null, resumeId, List.of(address));
-    }
-
-    public static ReferenceLink from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
-
-        return new ReferenceLink(LinkType.valueOf(component.getContent()), collect.get("address"));
     }
 
 }

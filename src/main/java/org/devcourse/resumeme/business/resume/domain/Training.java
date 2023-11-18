@@ -8,7 +8,6 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +29,12 @@ public class Training implements Converter {
         this.explanation = explanation;
     }
 
+    public Training(Map<String, String> component) {
+        this(component.get("training"), component.get("major"), component.get("degree"), LocalDate.parse(component.get("trainingStartDate")),
+                LocalDate.parse(component.get("trainingEndDate")), Double.parseDouble(component.get("gpa")),
+                Double.parseDouble(component.get("maxGpa")), component.get("explanation"));
+    }
+
     @Override
     public Component of(Long resumeId) {
         Component explanation = new Component("explanation", this.explanation, null, null, resumeId, null);
@@ -40,14 +45,6 @@ public class Training implements Converter {
 
         return new Component("training", this.educationalDetails.getOrganization(), this.dateDetails.getAdmissionDate(), this.dateDetails.getGraduationDate(),
                 resumeId, List.of(explanation, degree, major, gpa, maxGpa));
-    }
-
-    public static Training from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
-
-        return new Training(component.getContent(), collect.get("major"), collect.get("degree"), component.getStartDate(), component.getEndDate(),
-                Double.valueOf(collect.get("gpa")), Double.valueOf(collect.get("maxGpa")), collect.get("explanation"));
     }
 
 }

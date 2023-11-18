@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,6 +45,12 @@ public class Project implements Converter {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
+    public Project(Map<String, String> component) {
+        this(component.get("projectName"), (long) LocalDate.parse(component.get("projectNameStartDate")).getYear(),
+                component.get("member"), Arrays.asList(component.get("skills").split(",")),
+                component.get("content"), component.get("url"));
+    }
+
     @Override
     public Component of(Long resumeId) {
         Component url = new Component("url", projectUrl, null, null, resumeId, null);
@@ -55,14 +60,6 @@ public class Project implements Converter {
 
         return new Component("projectName", this.projectName, LocalDate.of(productionYear.intValue(), 1, 31),
                 null, resumeId, List.of(url, content, memberCount, skill));
-    }
-
-    public static Project from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
-
-        return new Project(component.getContent(), (long) component.getStartDate().getYear(), collect.get("member"), Arrays.asList(collect.get("skills").split(",")),
-                collect.get("content"), collect.get("url"));
     }
 
 }

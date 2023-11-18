@@ -11,10 +11,9 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,7 +32,7 @@ public class Career implements Converter {
     private CareerPeriod careerPeriod;
 
     public Career(String companyName, String position, List<String> skills, List<Duty> duties,
-                  LocalDate careerStartDate, LocalDate endDate, String careerContent) {
+            LocalDate careerStartDate, LocalDate endDate, String careerContent) {
         validateCareer(companyName, position);
 
         this.companyName = companyName;
@@ -49,6 +48,17 @@ public class Career implements Converter {
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
+    public Career(Map<String, String> component) {
+        this(component.get("company"), component.get("position"), Arrays.asList(component.get("skill").split(",")),
+                getDuties(component), LocalDate.parse(component.get("companyStartDate")), LocalDate.parse(component.get("companyEndDate")), component.get("careerContent"));
+    }
+
+    private static List<Duty> getDuties(Map<String, String> component) {
+        return IntStream.range(0, Integer.parseInt(component.get("duty")))
+                .mapToObj(i -> new Duty(component, "dutyTitle" + i))
+                .toList();
+    }
+
     @Override
     public Component of(Long resumeId) {
         Component position = new Component("position", this.position, null, null, resumeId, null);
@@ -56,35 +66,22 @@ public class Career implements Converter {
         Component careerContent = new Component("careerContent", this.careerContent, null, null, resumeId, null);
 
         Component descriptions = new Component("description", "description", null, null, resumeId, List.of(position, skills, careerContent));
-        Component duty = new Component("duty", "duty", null, null, resumeId, getDuties(resumeId));
+        List<Component> duties = getDuties(resumeId);
+        Component duty = new Component("duty", String.valueOf(duties.size()), null, null, resumeId, duties);
 
         return new Component("company", this.companyName, this.careerPeriod.getStartDate(), this.careerPeriod.getEndDate(), resumeId, List.of(descriptions, duty));
     }
 
     private List<Component> getDuties(Long resumeId) {
-        return duties.stream()
-                .map(duty -> new Component(duty.getTitle(), duty.getDescription(), duty.getStartDate(), duty.getEndDate(), resumeId, null))
-                .toList();
-    }
+        List<Component> result = new ArrayList<>();
+        for (int i = 0; i < duties.size(); i++) {
+            Duty duty = duties.get(i);
 
-    public static Career from(Component careerComponent) {
-        Map<String, String> description = new HashMap<>();
-        List<Duty> duties = new ArrayList<>();
-
-        for (Component component : careerComponent.getComponents()) {
-            if (component.getProperty().equals("description")) {
-                description = component.getComponents().stream()
-                        .collect(Collectors.toMap(Component::getProperty, Component::getContent));
-            } else if (component.getProperty().equals("duty")) {
-                duties = component.getComponents().stream()
-                        .map(component1 -> new Duty(component1.getProperty(), component1.getStartDate(), component1.getEndDate(), component1.getContent()))
-                        .toList();
-            }
+            Component description = new Component("dutyDescription" + i, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, null);
+            result.add(new Component("dutyTitle" + i, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, List.of(description)));
         }
 
-        return new Career(careerComponent.getContent(), description.get("position"),
-                Arrays.asList(description.get("skill").split(",")), duties, careerComponent.getStartDate(),
-                careerComponent.getEndDate(), description.get("careerContent"));
+        return result;
     }
 
 }

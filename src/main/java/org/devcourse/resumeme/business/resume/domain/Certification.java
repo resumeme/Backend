@@ -8,7 +8,6 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
@@ -36,6 +35,10 @@ public class Certification implements Converter {
         this.description = description;
     }
 
+    public Certification(Map<String, String> component) {
+        this(component.get("title"), component.get("titleStartDate"), component.get("authority"), component.get("link"), component.get("description"));
+    }
+
     @Override
     public Component of(Long resumeId) {
         Component authority = new Component("authority", issuingAuthority, null, null, resumeId, null);
@@ -43,14 +46,6 @@ public class Certification implements Converter {
         Component description = new Component("description", this.description, null, null, resumeId, null);
 
         return new Component("title", certificationTitle, LocalDate.parse(acquisitionDate), null, resumeId, List.of(authority, link, description));
-    }
-
-    public static Certification from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
-
-        return new Certification(component.getContent(), component.getStartDate().toString(),
-                collect.get("authority"), collect.get("link"), collect.get("description"));
     }
 
 }

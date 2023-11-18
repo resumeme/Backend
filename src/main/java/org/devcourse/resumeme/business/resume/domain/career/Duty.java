@@ -8,6 +8,7 @@ import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +31,11 @@ public class Duty {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
+    }
+
+    public Duty(Map<String, String> component, String key) {
+        this(component.get(key), LocalDate.parse(component.get(key + "StartDate")),
+                LocalDate.parse(component.get(key + "EndDate")), component.get("description"));
     }
 
     private void validateDuty(String title, LocalDate startDate, LocalDate endDate) {
