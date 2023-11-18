@@ -90,6 +90,10 @@ public class Component {
         this.createdDate = createdDate;
         this.lastModifiedDate = LocalDateTime.now();
 
+        if (originComponentId != null) {
+            isReflectFeedBack = true;
+        }
+
         if (components != null) {
             components.forEach(subComponent -> subComponent.updateOriginDate(createdDate));
         }
