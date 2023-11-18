@@ -8,8 +8,11 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.END_DATE;
+import static org.devcourse.resumeme.business.resume.domain.Property.LINK;
+import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
@@ -37,19 +40,17 @@ public class Activity implements Converter {
         this.description = description;
     }
 
-    @Override
-    public Component of(Long resumeId) {
-        Component link = new Component("link", this.link, null, null, resumeId, null);
-        Component description = new Component("description", this.description, null, null, resumeId, null);
-
-        return new Component("title", activityName, startDate, endDate, resumeId, List.of(link, description));
+    public Activity(Map<String, String> component) {
+        this(component.get(TITLE.name()), LocalDate.parse(component.get(TITLE.startDate())),
+                LocalDate.parse(component.get(TITLE.name() + END_DATE.name())), component.get(LINK.name()), component.get(DESCRIPTION.name()));
     }
 
-    public static Activity from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+    @Override
+    public Component of(Long resumeId) {
+        Component link = new Component(LINK, this.link, resumeId);
+        Component description = new Component(DESCRIPTION, this.description, resumeId);
 
-        return new Activity(component.getContent(), component.getStartDate(), component.getEndDate(), collect.get("link"), collect.get("description"));
+        return new Component(TITLE, activityName, startDate, endDate, resumeId, List.of(link, description));
     }
 
 }

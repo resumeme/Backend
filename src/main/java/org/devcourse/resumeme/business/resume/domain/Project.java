@@ -11,7 +11,12 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
+import static org.devcourse.resumeme.business.resume.domain.Property.MEMBER;
+import static org.devcourse.resumeme.business.resume.domain.Property.PROJECT;
+import static org.devcourse.resumeme.business.resume.domain.Property.SKILL;
+import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,23 +51,21 @@ public class Project implements Converter {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    @Override
-    public Component of(Long resumeId) {
-        Component url = new Component("url", projectUrl, null, null, resumeId, null);
-        Component content = new Component("content", projectContent, null, null, resumeId, null);
-        Component memberCount = new Component("member", teamMembers, null, null, resumeId, null);
-        Component skill = new Component("skills", String.join(",", skills), null, null, resumeId, null);
-
-        return new Component("projectName", this.projectName, LocalDate.of(productionYear.intValue(), 1, 31),
-                null, resumeId, List.of(url, content, memberCount, skill));
+    public Project(Map<String, String> component) {
+        this(component.get(PROJECT.name()), (long) LocalDate.parse(component.get(PROJECT.startDate())).getYear(),
+                component.get(MEMBER.name()), Arrays.asList(component.get(SKILL.name()).split(",")),
+                component.get(CONTENT.name()), component.get(URL.name()));
     }
 
-    public static Project from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+    @Override
+    public Component of(Long resumeId) {
+        Component url = new Component(URL, projectUrl, resumeId);
+        Component content = new Component(CONTENT, projectContent, resumeId);
+        Component memberCount = new Component(MEMBER, teamMembers, resumeId);
+        Component skill = new Component(SKILL, String.join(",", skills), resumeId);
 
-        return new Project(component.getContent(), (long) component.getStartDate().getYear(), collect.get("member"), Arrays.asList(collect.get("skills").split(",")),
-                collect.get("content"), collect.get("url"));
+        return new Component(PROJECT, this.projectName, LocalDate.of(productionYear.intValue(), 1, 31),
+                null, resumeId, List.of(url, content, memberCount, skill));
     }
 
 }

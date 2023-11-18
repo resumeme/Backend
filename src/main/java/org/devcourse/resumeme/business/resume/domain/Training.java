@@ -8,7 +8,13 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static org.devcourse.resumeme.business.resume.domain.Property.DEGREE;
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.MAJOR;
+import static org.devcourse.resumeme.business.resume.domain.Property.MAX_SCORE;
+import static org.devcourse.resumeme.business.resume.domain.Property.SCORE;
+import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,24 +36,22 @@ public class Training implements Converter {
         this.explanation = explanation;
     }
 
-    @Override
-    public Component of(Long resumeId) {
-        Component explanation = new Component("explanation", this.explanation, null, null, resumeId, null);
-        Component degree = new Component("degree", educationalDetails.getDegree(), null, null, resumeId, null);
-        Component major = new Component("major", educationalDetails.getMajor(), null, null, resumeId, null);
-        Component gpa = new Component("gpa", String.valueOf(gpaDetails.getGpa()), null, null, resumeId, null);
-        Component maxGpa = new Component("maxGpa", String.valueOf(gpaDetails.getMaxGpa()), null, null, resumeId, null);
-
-        return new Component("training", this.educationalDetails.getOrganization(), this.dateDetails.getAdmissionDate(), this.dateDetails.getGraduationDate(),
-                resumeId, List.of(explanation, degree, major, gpa, maxGpa));
+    public Training(Map<String, String> component) {
+        this(component.get(TRAINING.name()), component.get(MAJOR.name()), component.get(DEGREE.name()),
+                LocalDate.parse(component.get(TRAINING.startDate())), LocalDate.parse(component.get(TRAINING.endDate())),
+                Double.parseDouble(component.get(SCORE.name())), Double.parseDouble(component.get(MAX_SCORE.name())), component.get(DESCRIPTION.name()));
     }
 
-    public static Training from(Component component) {
-        Map<String, String> collect = component.getComponents().stream()
-                .collect(Collectors.toMap(Component::getProperty, Component::getContent));
+    @Override
+    public Component of(Long resumeId) {
+        Component explanation = new Component(DESCRIPTION, this.explanation, resumeId);
+        Component degree = new Component(DEGREE, educationalDetails.getDegree(), resumeId);
+        Component major = new Component(MAJOR, educationalDetails.getMajor(), resumeId);
+        Component gpa = new Component(SCORE, String.valueOf(gpaDetails.getGpa()), resumeId);
+        Component maxGpa = new Component(MAX_SCORE, String.valueOf(gpaDetails.getMaxGpa()), resumeId);
 
-        return new Training(component.getContent(), collect.get("major"), collect.get("degree"), component.getStartDate(), component.getEndDate(),
-                Double.valueOf(collect.get("gpa")), Double.valueOf(collect.get("maxGpa")), collect.get("explanation"));
+        return new Component(TRAINING, this.educationalDetails.getOrganization(), this.dateDetails.getAdmissionDate(), this.dateDetails.getGraduationDate(),
+                resumeId, List.of(explanation, degree, major, gpa, maxGpa));
     }
 
 }
