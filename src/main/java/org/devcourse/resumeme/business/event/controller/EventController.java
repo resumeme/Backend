@@ -12,6 +12,7 @@ import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
@@ -90,7 +91,7 @@ public class EventController {
 
     @GetMapping
     public List<EventResponse> getAll() {
-        return eventService.getAll(null).stream()
+        return eventService.getAll(new AllEventFilter(null, null)).stream()
                 .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null))
                 .toList();
     }

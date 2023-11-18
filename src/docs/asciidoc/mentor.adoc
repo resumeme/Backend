@@ -28,17 +28,15 @@ include::{snippets}/event/create/request-fields.adoc[]
 include::{snippets}/event/create/http-response.adoc[]
 include::{snippets}/event/create/response-fields.adoc[]
 
-=== 첨삭 이벤트 단건 조회
-
-include::{snippets}/event/getOwn/exception-response.adoc[]
+=== 첨삭 이벤트 조회
 
 *Request*
-include::{snippets}/event/getOwn/http-request.adoc[]
-include::{snippets}/event/getOwn/path-parameters.adoc[]
+include::{snippets}/user/mentor/events/http-request.adoc[]
+include::{snippets}/user/mentor/events/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/event/getOwn/http-response.adoc[]
-include::{snippets}/event/getOwn/response-fields.adoc[]
+include::{snippets}/user/mentor/events/http-response.adoc[]
+include::{snippets}/user/mentor/events/response-fields.adoc[]
 
 === 첨삭 코멘트 작성
 
