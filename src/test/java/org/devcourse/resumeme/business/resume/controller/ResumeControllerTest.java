@@ -116,6 +116,9 @@ class ResumeControllerTest extends ControllerUnitTest {
                 .resumeInfo(new ResumeInfo("백엔드", List.of("자바", "스프링"), "안녕하세요"))
                 .mentee(mentee)
                 .build();
+        Field field = resume.getClass().getDeclaredField("originResumeId");
+        field.setAccessible(true);
+        field.set(resume, 2L);
         given(resumeService.getOne(resumeId)).willReturn(resume);
 
         // when
@@ -135,6 +138,7 @@ class ResumeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("position").type(STRING).description("지원 분야"),
                                         fieldWithPath("skills").type(ARRAY).description("사용 기술"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개글"),
+                                        fieldWithPath("originResumeId").type(NUMBER).description("원본 복사 전 이력서 아이디 (NULL 가능)"),
                                         fieldWithPath("ownerInfo").type(OBJECT).description("작성자 정보"),
                                         fieldWithPath("ownerInfo.id").type(NUMBER).description("작성자 아이디"),
                                         fieldWithPath("ownerInfo.name").type(STRING).description("작성자 이름"),
@@ -143,7 +147,6 @@ class ResumeControllerTest extends ControllerUnitTest {
                         )
                 );
     }
-
 
     @Test
     @WithMockCustomUser
