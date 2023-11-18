@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Project;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,36 +26,15 @@ public class ProjectResponse extends ComponentResponse {
 
     private String projectUrl;
 
-    public ProjectResponse(
-            Long id, LocalDateTime createdDate, String projectName,
-            Long productionYear,
-            boolean isTeam,
-            String teamMembers,
-            List<String> skills,
-            String projectContent,
-            String projectUrl
-    ) {
-        super(id, createdDate);
-        this.projectName = projectName;
-        this.productionYear = productionYear;
-        this.isTeam = isTeam;
-        this.teamMembers = teamMembers;
-        this.skills = skills;
-        this.projectContent = projectContent;
-        this.projectUrl = projectUrl;
-    }
-
-    public ProjectResponse(Project project, Long id, LocalDateTime createdDate) {
-        this(
-                id, createdDate,
-                project.getProjectName(),
-                project.getProductionYear(),
-                !project.getTeamMembers().equals(""),
-                project.getTeamMembers(),
-                project.getSkills(),
-                project.getProjectContent(),
-                project.getProjectUrl()
-        );
+    public ProjectResponse(Project project, Component component) {
+        super(component);
+        this.projectName = project.getProjectName();
+        this.productionYear = project.getProductionYear();
+        this.isTeam = !project.getTeamMembers().equals("");
+        this.teamMembers = project.getTeamMembers();
+        this.skills = project.getSkills();
+        this.projectContent = project.getProjectContent();
+        this.projectUrl = project.getProjectUrl();
     }
 
 }

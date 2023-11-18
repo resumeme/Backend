@@ -3,9 +3,9 @@ package org.devcourse.resumeme.business.resume.controller.dto;
 import lombok.Data;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class ActivityResponse extends ComponentResponse {
@@ -22,33 +22,14 @@ public class ActivityResponse extends ComponentResponse {
 
     private String description;
 
-    public ActivityResponse(
-            Long id, LocalDateTime createdDate, String activityName,
-            LocalDate startDate,
-            LocalDate endDate,
-            boolean inProgress,
-            String link,
-            String description
-    ) {
-        super(id, createdDate);
-        this.activityName = activityName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.inProgress = inProgress;
-        this.link = link;
-        this.description = description;
-    }
-
-    public ActivityResponse(Activity activity, Long id, LocalDateTime createdDate) {
-        this(
-                id, createdDate,
-                activity.getActivityName(),
-                activity.getStartDate(),
-                activity.getEndDate(),
-                activity.getEndDate() == null,
-                activity.getLink(),
-                activity.getDescription()
-        );
+    public ActivityResponse(Activity activity, Component component) {
+        super(component);
+        this.activityName = activity.getActivityName();
+        this.startDate = activity.getStartDate();
+        this.endDate = activity.getEndDate();
+        this.inProgress = activity.getEndDate() == null;
+        this.link = activity.getLink();
+        this.description = activity.getDescription();
     }
 
 }

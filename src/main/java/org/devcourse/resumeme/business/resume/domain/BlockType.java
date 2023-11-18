@@ -26,13 +26,13 @@ import java.util.function.Function;
 
 public enum BlockType implements DocsEnumType {
 
-    ACTIVITY("활동", "activities", ActivityCreateRequest.class, component -> new ActivityResponse(Activity.from(component), component.getId(), component.getCreatedDate())),
-    CAREER("업무경험", "careers", CareerCreateRequest.class, component -> new CareerResponse(Career.from(component), component.getId(), component.getCreatedDate())),
-    CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, component -> new CertificationResponse(Certification.from(component), component.getId(), component.getCreatedDate())),
-    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, component -> new ForeignLanguageResponse(ForeignLanguage.from(component), component.getId(), component.getCreatedDate())),
-    PROJECT("프로젝트", "projects", ProjectCreateRequest.class, component -> new ProjectResponse(Project.from(component), component.getId(), component.getCreatedDate())),
-    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(Training.from(component), component.getId(), component.getCreatedDate())),
-    LINK("외부 링크", "links", ResumeLinkRequest.class, component -> new ResumeLinkResponse(ReferenceLink.from(component), component.getId(), component.getCreatedDate()));
+    ACTIVITY("활동", "activities", ActivityCreateRequest.class, component -> new ActivityResponse(Activity.from(component), component)),
+    CAREER("업무경험", "careers", CareerCreateRequest.class, component -> new CareerResponse(Career.from(component), component)),
+    CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, component -> new CertificationResponse(Certification.from(component), component)),
+    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, component -> new ForeignLanguageResponse(ForeignLanguage.from(component), component)),
+    PROJECT("프로젝트", "projects", ProjectCreateRequest.class, component -> new ProjectResponse(Project.from(component), component)),
+    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(Training.from(component), component)),
+    LINK("외부 링크", "links", ResumeLinkRequest.class, component -> new ResumeLinkResponse(ReferenceLink.from(component), component));
 
     private final String description;
 

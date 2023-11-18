@@ -3,9 +3,9 @@ package org.devcourse.resumeme.business.resume.controller.career.dto;
 import lombok.Data;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -27,39 +27,16 @@ public class CareerResponse extends ComponentResponse {
 
     private String careerContent;
 
-    public CareerResponse(
-            Long id, LocalDateTime createdDate, String companyName,
-            String position,
-            List<String> skills,
-            List<DutyResponse> duties,
-            boolean isCurrentlyEmployed,
-            LocalDate careerStartDate,
-            LocalDate endDate,
-            String careerContent
-    ) {
-        super(id, createdDate);
-        this.companyName = companyName;
-        this.position = position;
-        this.skills = skills;
-        this.duties = duties;
-        this.isCurrentlyEmployed = isCurrentlyEmployed;
-        this.careerStartDate = careerStartDate;
-        this.endDate = endDate;
-        this.careerContent = careerContent;
-    }
-
-    public CareerResponse(Career career, Long id, LocalDateTime createdDate) {
-        this(
-                id, createdDate,
-                career.getCompanyName(),
-                career.getPosition(),
-                career.getSkills(),
-                mapDuties(career.getDuties()),
-                career.getCareerPeriod().getEndDate() == null,
-                career.getCareerPeriod().getStartDate(),
-                career.getCareerPeriod().getEndDate(),
-                career.getCareerContent()
-        );
+    public CareerResponse(Career career, Component component) {
+        super(component);
+        this.companyName = career.getCompanyName();
+        this.position = career.getPosition();
+        this.skills = career.getSkills();
+        this.duties = mapDuties(career.getDuties());
+        this.isCurrentlyEmployed = career.getCareerPeriod().getEndDate() == null;
+        this.careerStartDate = career.getCareerPeriod().getStartDate();
+        this.endDate = career.getCareerPeriod().getEndDate();
+        this.careerContent = career.getCareerContent();
     }
 
     private static List<DutyResponse> mapDuties(List<Duty> duties) {

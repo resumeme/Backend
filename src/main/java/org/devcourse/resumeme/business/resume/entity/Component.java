@@ -41,6 +41,12 @@ public class Component {
     @Getter
     private Long resumeId;
 
+    @Getter
+    private Long originComponentId;
+
+    @Getter
+    private boolean isReflectFeedBack;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private Component component;

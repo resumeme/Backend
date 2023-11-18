@@ -4,8 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Certification;
-
-import java.time.LocalDateTime;
+import org.devcourse.resumeme.business.resume.entity.Component;
 
 @Data
 @NoArgsConstructor
@@ -21,30 +20,13 @@ public class CertificationResponse extends ComponentResponse {
 
     private String description;
 
-    public CertificationResponse(
-            Long id, LocalDateTime createdDate, String certificationTitle,
-            String acquisitionDate,
-            String issuingAuthority,
-            String link,
-            String description
-    ) {
-        super(id, createdDate);
-        this.certificationTitle = certificationTitle;
-        this.acquisitionDate = acquisitionDate;
-        this.issuingAuthority = issuingAuthority;
-        this.link = link;
-        this.description = description;
-    }
-
-    public CertificationResponse(Certification certification, Long id, LocalDateTime createdDate) {
-        this(
-                id, createdDate,
-                certification.getCertificationTitle(),
-                certification.getAcquisitionDate(),
-                certification.getIssuingAuthority(),
-                certification.getLink(),
-                certification.getDescription()
-        );
+    public CertificationResponse(Certification certification, Component component) {
+        super(component);
+        this.certificationTitle = certification.getCertificationTitle();
+        this.acquisitionDate = certification.getAcquisitionDate();
+        this.issuingAuthority = certification.getIssuingAuthority();
+        this.link = certification.getLink();
+        this.description = certification.getDescription();
     }
 
 }
