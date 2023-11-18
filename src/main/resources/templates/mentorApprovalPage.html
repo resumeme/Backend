@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    멘토 승인 페이지
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>승인/거부</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="mentorApplication : ${mentorApplications}">
+        <td th:text="${mentorApplication.applicationId}"></td>
+        <td th:text="${mentorApplication.mentorName}"></td>
+        <td>
+            <form th:action="@{'/admin/applications/' + ${mentorApplication.applicationId} + '/approve'}" method="post">
+                <button type="submit">승인</button>
+            </form>
+            <form th:action="@{'/admin/applications/' + ${mentorApplication.applicationId} + '/reject'}" method="post">
+                <button type="submit">거부</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

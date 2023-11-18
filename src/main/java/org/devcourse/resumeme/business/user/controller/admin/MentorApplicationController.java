@@ -6,17 +6,18 @@ import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProc
 import org.devcourse.resumeme.business.user.controller.admin.dto.MentorApplicationResponse;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 import static org.devcourse.resumeme.business.mail.service.EmailInfoGenerator.createMentorApprovalMail;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/applications")
 public class MentorApplicationController {
@@ -28,16 +29,28 @@ public class MentorApplicationController {
     private final MentorApplicationService mentorApplicationService;
 
     @GetMapping
-    public List<MentorApplicationResponse> getAll() {
-        return mentorApplicationService.getAll().stream()
+    public String getAll(Model model) {
+        List<MentorApplicationResponse> mentorApplications = mentorApplicationService.getAll().stream()
                 .map(mentorApplication -> new MentorApplicationResponse(mentorApplication.getId(), mentorApplication.mentorName()))
                 .toList();
+        model.addAttribute("mentorApplications", mentorApplications);
+        return "mentorApprovalPage";
     }
 
-    @DeleteMapping("/{applicationId}/{type}")
-    public void processApplication(@PathVariable Long applicationId, @PathVariable String type) {
-        Long mentorId = mentorApplicationService.delete(applicationId);
+    @PostMapping("/{applicationId}/approve")
+    public String approveApplication(@PathVariable Long applicationId) {
+        processApplication(applicationId, ApplicationProcessType.ACCEPT.toString());
+        return "redirect:/admin/applications";
+    }
 
+    @PostMapping("/{applicationId}/reject")
+    public String rejectApplication(@PathVariable Long applicationId) {
+        processApplication(applicationId, ApplicationProcessType.REJECT.toString());
+        return "redirect:/admin/applications";
+    }
+
+    private void processApplication(Long applicationId, String type) {
+        Long mentorId = mentorApplicationService.delete(applicationId);
         mentorService.updateRole(mentorId, ApplicationProcessType.valueOf(type.toUpperCase()));
         emailService.sendEmail(createMentorApprovalMail(mentorService.getOne(mentorId)));
     }
