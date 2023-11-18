@@ -13,12 +13,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.BaseEntity;
-import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.global.exception.CustomException;
 
 import java.util.HashSet;
@@ -26,7 +26,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static org.devcourse.resumeme.business.user.domain.Role.*;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_ADMIN;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
 import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
@@ -116,7 +118,7 @@ public class Mentor extends BaseEntity {
 
     public void updateInfos(MentorInfoUpdateRequest updateRequest) {
         this.clearPositions();
-        this.requiredInfo.updateRealName(updateRequest.realName());
+        this.requiredInfo.updateNickname(updateRequest.nickname());
         this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
         updateRequest.experiencedPositions().forEach(position -> this.experiencedPositions.add(new MentorPosition(this, Position.valueOf(position.toUpperCase()))));
         this.careerContent = updateRequest.careerContent();
