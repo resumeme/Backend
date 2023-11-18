@@ -16,6 +16,10 @@ endpoint:
         patch: /api/v1/mentors/*
       role: mentor
     - matcher:
+        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events
+        patch: /api/v1/mentors/*
+      role: pending
+    - matcher:
         get: /api/v1/admin/applications, api/v1/admin/statistics/*
         delete: /api/v1/admin/applications/*/*
       role: admin
