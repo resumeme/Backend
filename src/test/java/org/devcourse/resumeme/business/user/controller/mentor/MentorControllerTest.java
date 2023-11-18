@@ -132,7 +132,7 @@ class MentorControllerTest extends ControllerUnitTest {
         given(menteeService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v1/mentees/{mentorId}", mentorId)
+        ResultActions result = mvc.perform(patch("/api/v1/mentors/{mentorId}", mentorId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -147,7 +147,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                         parameterWithName("mentorId").description("멘토 id")
                                 ),
                                 requestFields(
-                                        fieldWithPath("realName").type(STRING).description("실명"),
+                                        fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호").attributes(constraints(" - 제외 숫자만")),
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),

@@ -7,8 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.check;
@@ -53,10 +53,6 @@ public class RequiredInfo {
         this.nickname = nickname;
     }
 
-    public void updateRealName(String realName) {
-        validateRealName(realName);
-        this.realName = realName;
-    }
     public void updatePhoneNumber(String phoneNumber) {
         validatePhoneNumber(phoneNumber);
         this.phoneNumber = phoneNumber;

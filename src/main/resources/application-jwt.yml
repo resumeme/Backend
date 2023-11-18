@@ -2,7 +2,7 @@ jwt:
   secretKey: ENC(HuboTzptLeb1a1iyym45HfoQKGvSby3M)
   access:
     headerName: Authorization
-    expiration: 86400
+    expiration: 3600
   refresh:
     headerName: Refresh-Token
     expiration: 604800
