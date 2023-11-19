@@ -6,6 +6,8 @@ import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.resume.controller.dto.BasicResumeInfo;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeMemoRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeMemoResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeResponse;
 import org.devcourse.resumeme.business.resume.domain.Resume;
@@ -58,6 +60,20 @@ public class ResumeController {
         ResumeInfo resumeInfo = request.toEntity();
 
         return new IdResponse(resumeService.updateResumeInfo(resume, resumeInfo));
+    }
+
+    @GetMapping("/{resumeId}/memo")
+    public ResumeMemoResponse getMemo(@PathVariable Long resumeId) {
+        Resume resume = resumeService.getOne(resumeId);
+
+        return new ResumeMemoResponse(resume);
+    }
+
+    @PatchMapping("/{resumeId}/memo")
+    public IdResponse updateResumeMemo(@PathVariable Long resumeId, @RequestBody ResumeMemoRequest request) {
+        Resume resume = resumeService.getOne(resumeId);
+
+        return new IdResponse(resumeService.updateMemo(resume, request.memo()));
     }
 
     @PatchMapping("/{resumeId}/title")
