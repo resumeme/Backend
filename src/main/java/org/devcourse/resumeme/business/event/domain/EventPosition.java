@@ -29,6 +29,7 @@ public class EventPosition {
     @Enumerated(STRING)
     private Position position;
 
+    @Getter
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "event_id")
     private Event event;

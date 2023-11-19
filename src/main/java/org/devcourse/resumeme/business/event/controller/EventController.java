@@ -5,6 +5,7 @@ import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
+import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
@@ -20,6 +21,8 @@ import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -90,10 +94,19 @@ public class EventController {
     }
 
     @GetMapping
-    public List<EventResponse> getAll() {
-        return eventService.getAll(new AllEventFilter(null, null)).stream()
-                .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId())))
+    public EventPageResponse getAll(Pageable pageable) {
+        Page<Event> events = eventService.getAllWithPage(new AllEventFilter(null, null), pageable);
+        List<Long> eventIds = events.getContent().stream()
+                .map(Event::getId)
                 .toList();
+
+        Map<Long, List<EventPosition>> positions = eventPositionService.getAll(eventIds);
+
+        List<EventResponse> responses = events.stream()
+                .map(event -> new EventResponse(event, positions.get(event.getId())))
+                .toList();
+
+        return new EventPageResponse(responses, events);
     }
 
 }
