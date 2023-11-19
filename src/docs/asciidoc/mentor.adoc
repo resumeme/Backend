@@ -38,7 +38,7 @@ include::{snippets}/user/mentor/events/path-parameters.adoc[]
 include::{snippets}/user/mentor/events/http-response.adoc[]
 include::{snippets}/user/mentor/events/response-fields.adoc[]
 
-=== 첨삭 코멘트 작성
+=== 첨삭 피드백 작성
 
 *Request*
 include::{snippets}/comment/create/http-request.adoc[]
@@ -48,7 +48,7 @@ include::{snippets}/comment/create/request-fields.adoc[]
 include::{snippets}/comment/create/http-response.adoc[]
 include::{snippets}/comment/create/response-fields.adoc[]
 
-=== 첨삭 코멘트 수정
+=== 첨삭 피드백 수정
 
 *Request*
 include::{snippets}/comment/update/http-request.adoc[]
@@ -58,7 +58,7 @@ include::{snippets}/comment/update/request-fields.adoc[]
 *Response*
 include::{snippets}/comment/update/http-response.adoc[]
 
-=== 첨삭 코멘트 삭제
+=== 첨삭 피드백 삭제
 
 *Request*
 include::{snippets}/comment/delete/http-request.adoc[]
@@ -69,7 +69,7 @@ include::{snippets}/comment/delete/http-response.adoc[]
 
 === 첨삭 이벤트 참여 신청 반려
 
-include::{snippets}/event/reject/exception-response.adoc
+include::{snippets}/event/reject/exception-response.adoc[]
 
 *Request*
 include::{snippets}/event/reject/http-request.adoc[]
@@ -77,3 +77,15 @@ include::{snippets}/event/reject/request-fields.adoc[]
 
 *Response*
 include::{snippets}/event/reject/http-response.adoc[]
+
+=== 첨삭 종료 총평 작성
+
+include::{snippets}/event/completeReview/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/completeReview/http-request.adoc[]
+include::{snippets}/event/completeReview/path-parameters.adoc[]
+include::{snippets}/event/completeReview/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/completeReview/http-response.adoc[]

@@ -11,7 +11,7 @@ endpoint:
         delete: /api/v1/resumes/*/**
       role: mentee
     - matcher:
-        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, api/v1/mentors/*/events
+        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, /api/v1/mentors/*/events
         post: /api/v1/events, /api/v1/resumes/*/reviews, /api/v1/events/*/resumes/*/comments
         patch: /api/v1/mentors/*
       role: mentor

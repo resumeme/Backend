@@ -82,16 +82,11 @@ include::{snippets}/resume/component/find/links/response-fields.adoc[]
 include::{snippets}/resume/component/findAll/exception-response.adoc[]
 
 *Request*
-include::{snippets}/resume/component/delete/http-request.adoc[]
-include::{snippets}/resume/component/delete/path-parameters.adoc[]
+include::{snippets}/resume/component/findAll/http-request.adoc[]
+include::{snippets}/resume/component/findAll/path-parameters.adoc[]
 
-=== 이력서 블럭 삭제
-
-include::{snippets}/resume/component/delete/exception-response.adoc[]
-
-*Request*
-include::{snippets}/resume/component/delete/http-request.adoc[]
-include::{snippets}/resume/component/delete/path-parameters.adoc[]
+*Response*
+전체 조회는 개별 조회를 합친 양식이기 때문에 따로 작성하지 않았습니다
 
 === 이력서 교육사항 조회
 *Request*
@@ -157,6 +152,15 @@ include::{snippets}/resume/findMemo/path-parameters.adoc[]
 include::{snippets}/resume/findMemo/http-response.adoc[]
 include::{snippets}/resume/findMemo/response-fields.adoc[]
 
+== [첨삭 피드백]
+=== 이력서 첨삭 피드백 조회
+*Request*
+include::{snippets}/comment/getAll/http-request.adoc[]
+include::{snippets}/comment/getAll/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/getAll/http-response.adoc[]
+include::{snippets}/comment/getAll/response-fields.adoc[]
 
 == [이벤트]
 === 이벤트 전체 조회
@@ -167,14 +171,18 @@ include::{snippets}/event/getAll/http-request.adoc[]
 include::{snippets}/event/getAll/http-response.adoc[]
 include::{snippets}/event/getAll/response-fields.adoc[]
 
-=== 이력서 첨삭 코멘트 조회
+=== 이벤트 전체 조회
+
+include::{snippets}/event/getOne/exception-response.adoc[]
+
 *Request*
-include::{snippets}/comment/getAll/http-request.adoc[]
-include::{snippets}/comment/getAll/path-parameters.adoc[]
+include::{snippets}/event/getOne/http-request.adoc[]
+include::{snippets}/event/getOne/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/comment/getAll/http-response.adoc[]
-include::{snippets}/comment/getAll/response-fields.adoc[]
+include::{snippets}/event/getOne/http-response.adoc[]
+include::{snippets}/event/getOne/response-fields.adoc[]
+
 
 == [합격 이력서]
 === 합격이력서 공유 소개글 페이징 조회

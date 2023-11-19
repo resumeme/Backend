@@ -153,7 +153,6 @@ include::{snippets}/resume/component/update/links/request-fields.adoc[]
 include::{snippets}/resume/component/update/links/http-response.adoc[]
 include::{snippets}/resume/component/update/links/response-fields.adoc[]
 
-
 === 이력서 블럭 삭제
 *Request*
 include::{snippets}/resume/component/delete/http-request.adoc[]
