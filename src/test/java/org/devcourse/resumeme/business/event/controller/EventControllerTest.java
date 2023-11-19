@@ -292,6 +292,7 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
         event.acceptMentee(2L, 4L);
+        setId(event, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
         Resume resume1 = new Resume("title", mentee1);
@@ -318,6 +319,7 @@ class EventControllerTest extends ControllerUnitTest {
                                         List.of(EVENT_NOT_FOUND.name())
                                 ),
                                 responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("이벤트 아이디"),
                                         fieldWithPath("title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
                                         fieldWithPath("content").type(STRING).description("이벤트 상세내용"),
@@ -357,6 +359,7 @@ class EventControllerTest extends ControllerUnitTest {
                                 getDocumentResponse(),
                                 responseFields(
                                         fieldWithPath("events[].info").type(OBJECT).description("이벤트 정보"),
+                                        fieldWithPath("events[].info.id").type(NUMBER).description("이벤트 아이디"),
                                         fieldWithPath("events[].info.title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("events[].info.content").type(STRING).description("이벤트 상세내용"),
                                         fieldWithPath("events[].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
