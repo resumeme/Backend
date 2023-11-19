@@ -5,13 +5,13 @@ endpoint:
         post: /api/v1/mentees, /api/v1/mentors
       role: all
     - matcher:
-        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/resumes, /api/v1/resumes/*/**, /api/v1/events, /api/v1/events/*, /api/v1/mentees/*/events
+        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/resumes, /api/v1/resumes/*/**, /api/v1/events, /api/v1/mentees/*/events
         post: /api/v1/resumes, /api/v1/resumes/*/**
         patch: /api/v1/events/*/mentee, /api/v1/resumes/*/**, /api/v1/events/*, /api/v1/mentees/*
         delete: /api/v1/resumes/*/**
       role: mentee
     - matcher:
-        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, /api/v1/mentors/*/events
+        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, /api/v1/events/* /api/v1/mentors/*/events
         post: /api/v1/events, /api/v1/resumes/*/reviews, /api/v1/events/*/resumes/*/comments
         patch: /api/v1/mentors/*
       role: mentor
