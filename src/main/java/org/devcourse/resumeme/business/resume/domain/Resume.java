@@ -44,6 +44,9 @@ public class Resume extends BaseEntity {
     @Getter
     private Long originResumeId;
 
+    @Getter
+    private String memo;
+
     private boolean openStatus;
 
     private boolean deleted = false;
@@ -91,6 +94,10 @@ public class Resume extends BaseEntity {
 
     public void updateTitle(String title) {
         this.title = title;
+    }
+
+    public void updateMeme(String memo) {
+        this.memo = memo;
     }
 
     public ResumeInfo getResumeInfo() {

@@ -5,6 +5,7 @@ import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.ResumeMemoRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
@@ -336,6 +337,65 @@ class ResumeControllerTest extends ControllerUnitTest {
                 );
     }
 
+    @Test
+    void 이력서_메모_조회에_성공한다() throws Exception {
+        // given
+        Long resumeId = 1L;
+        setMemo(resume, "간단한 메모입니다");
+        given(resumeService.getOne(resumeId)).willReturn(resume);
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/memo", resumeId));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("resume/findMemo",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("이력서 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("memo").type(STRING).description("이력서 메모")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 이력서_메모_업데이트에_성공한다() throws Exception {
+        // given
+        Long resumeId = 1L;
+        ResumeMemoRequest request = new ResumeMemoRequest("새로운 메모");
+        given(resumeService.getOne(resumeId)).willReturn(resume);
+        given(resumeService.updateMemo(resume, request.memo())).willReturn(1L);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/{resumeId}/memo", resumeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("resume/updateMemo",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("이력서 아이디")
+                                ),
+                                requestFields(
+                                        fieldWithPath("memo").type(STRING).description("새로운 이력서 메모")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("업데이트된 이력서 아이디")
+                                )
+                        )
+                );
+    }
+
     private void setModifiedAt(Object target, LocalDateTime localDateTime) throws NoSuchFieldException, IllegalAccessException {
         Field field = target.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
         field.setAccessible(true);
@@ -346,6 +406,12 @@ class ResumeControllerTest extends ControllerUnitTest {
         Field field = resume.getResumeInfo().getClass().getDeclaredField("position");
         field.setAccessible(true);
         field.set(resume.getResumeInfo(), position);
+    }
+
+    private void setMemo(Object target, String memo) throws NoSuchFieldException, IllegalAccessException {
+        Field field = target.getClass().getDeclaredField("memo");
+        field.setAccessible(true);
+        field.set(target, memo);
     }
 
 }
