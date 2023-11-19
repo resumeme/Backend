@@ -27,18 +27,21 @@ public class ResumeService {
 
     public Long updateResumeInfo(Resume resume, ResumeInfo resumeInfo) {
         resume.updateResumeInfo(resumeInfo);
+        resumeRepository.save(resume);
 
         return resume.getId();
     }
 
     public Long updateTitle(Resume resume, String title) {
         resume.updateTitle(title);
+        resumeRepository.save(resume);
 
         return resume.getId();
     }
 
     public Long updateMemo(Resume resume, String memo) {
         resume.updateMeme(memo);
+        resumeRepository.save(resume);
 
         return resume.getId();
     }
