@@ -31,7 +31,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @EntityGraph(attributePaths = {"applicants", "mentor"})
     Page<Event> findAllByMentorId(Long mentorId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"positions", "mentor"})
+    @EntityGraph(attributePaths = {"applicants", "mentor"})
     Page<Event> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"applicants", "mentor"})
