@@ -23,11 +23,14 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.domain.Position.BACK;
@@ -47,6 +50,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -288,6 +292,7 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         event.acceptMentee(1L, 1L);
         event.acceptMentee(2L, 4L);
+        setId(event, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
         Resume resume1 = new Resume("title", mentee1);
@@ -314,6 +319,7 @@ class EventControllerTest extends ControllerUnitTest {
                                         List.of(EVENT_NOT_FOUND.name())
                                 ),
                                 responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("이벤트 아이디"),
                                         fieldWithPath("title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
                                         fieldWithPath("content").type(STRING).description("이벤트 상세내용"),
@@ -335,12 +341,15 @@ class EventControllerTest extends ControllerUnitTest {
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        setId(event, 1L);
 
-        given(eventService.getAll(new AllEventFilter(null, null))).willReturn(List.of(event));
-        given(eventPositionService.getAll(1L)).willReturn(List.of(new EventPosition(BACK, event)));
+        given(eventService.getAllWithPage(new AllEventFilter(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
+        given(eventPositionService.getAll(List.of(1L))).willReturn(Map.of(1L, List.of(new EventPosition(BACK, event))));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/events"));
+        ResultActions result = mvc.perform(get("/api/v1/events")
+                .param("page", "0")
+                .param("size", "10"));
 
         // then
         result.andExpect(status().isOk())
@@ -349,21 +358,34 @@ class EventControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 responseFields(
-                                        fieldWithPath("[].info").type(OBJECT).description("이벤트 정보"),
-                                        fieldWithPath("[].info.title").type(STRING).description("이벤트 제목"),
-                                        fieldWithPath("[].info.content").type(STRING).description("이벤트 상세내용"),
-                                        fieldWithPath("[].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
-                                        fieldWithPath("[].info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
-                                        fieldWithPath("[].info.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
-                                        fieldWithPath("[].info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
-                                        fieldWithPath("[].info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
-                                        fieldWithPath("[].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
-                                        fieldWithPath("[].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
-                                        fieldWithPath("[].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
-                                        fieldWithPath("[].mentorInfo").type(OBJECT).description("멘토 정보"),
-                                        fieldWithPath("[].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
-                                        fieldWithPath("[].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
-                                        fieldWithPath("[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 주소")
+                                        fieldWithPath("events[].info").type(OBJECT).description("이벤트 정보"),
+                                        fieldWithPath("events[].info.id").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("events[].info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("events[].info.content").type(STRING).description("이벤트 상세내용"),
+                                        fieldWithPath("events[].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
+                                        fieldWithPath("events[].info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
+                                        fieldWithPath("events[].info.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("events[].info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("events[].info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
+                                        fieldWithPath("events[].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
+                                        fieldWithPath("events[].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
+                                        fieldWithPath("events[].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
+                                        fieldWithPath("events[].mentorInfo").type(OBJECT).description("멘토 정보"),
+                                        fieldWithPath("events[].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("events[].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("events[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 주소"),
+                                        fieldWithPath("pageData").type(OBJECT).description("페이징 결과 값"),
+                                        fieldWithPath("pageData.first").type(BOOLEAN).description("첫번째 페이지 여부"),
+                                        fieldWithPath("pageData.last").type(BOOLEAN).description("마지막 페이지 여부"),
+                                        fieldWithPath("pageData.number").type(NUMBER).description("몇 번째 페이지 번호"),
+                                        fieldWithPath("pageData.size").type(NUMBER).description("한 페이지에 몇개 있는지"),
+                                        fieldWithPath("pageData.sort").type(OBJECT).description("페이징 정렬"),
+                                        fieldWithPath("pageData.sort.empty").type(BOOLEAN).description("페이징 정렬"),
+                                        fieldWithPath("pageData.sort.sorted").type(BOOLEAN).description("페이징 정렬 여부"),
+                                        fieldWithPath("pageData.sort.unsorted").type(BOOLEAN).description("페이징 정렬 여부"),
+                                        fieldWithPath("pageData.totalPages").type(NUMBER).description("전체 페이지"),
+                                        fieldWithPath("pageData.totalElements").type(NUMBER).description("전체 갯수")
+
                                 )
                         )
                 );

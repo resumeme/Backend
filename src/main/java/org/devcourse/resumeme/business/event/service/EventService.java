@@ -11,6 +11,8 @@ import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.global.exception.CustomException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,14 +75,27 @@ public class EventService {
     @Transactional(readOnly = true)
     public List<Event> getAll(AllEventFilter filter) {
         if (filter.mentorId() != null) {
-            return eventRepository.findAllByMentorId(filter.mentorId());
+            return eventRepository.findAllByMentorId(filter.mentorId(), Pageable.unpaged()).getContent();
         }
 
         if (filter.menteeId() != null) {
-            return eventRepository.findAllByApplicantsMenteeId(filter.menteeId());
+            return eventRepository.findAllByApplicantsMenteeId(filter.menteeId(), Pageable.unpaged()).getContent();
         }
 
         return eventRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Event> getAllWithPage(AllEventFilter filter, Pageable pageable) {
+        if (filter.mentorId() != null) {
+            return eventRepository.findAllByMentorId(filter.mentorId(), pageable);
+        }
+
+        if (filter.menteeId() != null) {
+            return eventRepository.findAllByApplicantsMenteeId(filter.menteeId(), pageable);
+        }
+
+        return eventRepository.findAll(pageable);
     }
 
     public void completeReview(Long eventId, String request, Long resumeId) {

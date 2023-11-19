@@ -14,6 +14,7 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import java.util.Set;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -64,6 +66,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        setId(event, 1L);
         event.acceptMentee(1L, 1L);
 
         mentee = Mentee.builder()
@@ -105,22 +108,23 @@ class UserEventControllerTest extends ControllerUnitTest {
                                         parameterWithName("mentorId").description("멘토 아이디")
                                 ),
                                 responseFields(
-                                        fieldWithPath("[].info").type(OBJECT).description("이력서 아이디"),
-                                        fieldWithPath("[].info.title").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].info.content").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].info.maximumCount").type(NUMBER).description("이력서 아이디"),
-                                        fieldWithPath("[].info.currentApplicantCount").type(NUMBER).description("이력서 아이디"),
-                                        fieldWithPath("[].info.status").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].info.positions").type(ARRAY).description("이력서 아이디"),
-                                        fieldWithPath("[].info.timeInfo").type(OBJECT).description("이력서 아이디"),
-                                        fieldWithPath("[].info.timeInfo.openDateTime").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].info.timeInfo.closeDateTime").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].info.timeInfo.endDate").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].resumes").type(ARRAY).description("이력서 아이디"),
+                                        fieldWithPath("[].info").type(OBJECT).description("이벤트 정보"),
+                                        fieldWithPath("[].info.id").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("[].info.content").type(STRING).description("이벤트 내용"),
+                                        fieldWithPath("[].info.maximumCount").type(NUMBER).description("이벤트 최대 참여 인원 수"),
+                                        fieldWithPath("[].info.currentApplicantCount").type(NUMBER).description("이벤트 현재 참여 인원 수"),
+                                        fieldWithPath("[].info.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("[].info.positions").type(ARRAY).description("이벤트 참여 포지션"),
+                                        fieldWithPath("[].info.timeInfo").type(OBJECT).description("이벤트 시간 정보"),
+                                        fieldWithPath("[].info.timeInfo.openDateTime").type(STRING).description("이벤트 첨삭 참여 오픈 시간"),
+                                        fieldWithPath("[].info.timeInfo.closeDateTime").type(STRING).description("이벤트 첨삭 참여 종료 시간"),
+                                        fieldWithPath("[].info.timeInfo.endDate").type(STRING).description("이벤트 첨삭 종료 시간"),
+                                        fieldWithPath("[].resumes").type(ARRAY).description("이력서 정보"),
                                         fieldWithPath("[].resumes[].resumeId").type(NUMBER).description("이력서 아이디"),
-                                        fieldWithPath("[].resumes[].menteeName").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].resumes[].resumeTitle").type(STRING).description("이력서 아이디"),
-                                        fieldWithPath("[].resumes[].progressStatus").type(STRING).description("이력서 아이디")
+                                        fieldWithPath("[].resumes[].menteeName").type(STRING).description("이력서 작성 멘티 이름"),
+                                        fieldWithPath("[].resumes[].resumeTitle").type(STRING).description("이력서 제목"),
+                                        fieldWithPath("[].resumes[].progressStatus").type(STRING).description(generateLinkCode(PROGRESS))
                                 )
                         )
                 );
