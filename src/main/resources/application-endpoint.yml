@@ -34,4 +34,4 @@ endpoint:
         patch: /api/v1/resumes/*/*/components/*
         delete: /api/v1/resumes/*, /api/v1/resumes/*/components/*
       role: own_mentee
-  ignores: /docs/**,
+  ignores: /docs/**
