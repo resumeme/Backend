@@ -82,7 +82,7 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public EventInfoResponse getAllAttendResumes(@PathVariable Long eventId) {
+    public EventInfoResponse getOne(@PathVariable Long eventId) {
         Event event = eventService.getOne(eventId);
         List<EventPosition> positions = eventPositionService.getAll(eventId);
 
@@ -92,7 +92,7 @@ public class EventController {
     @GetMapping
     public List<EventResponse> getAll() {
         return eventService.getAll(new AllEventFilter(null, null)).stream()
-                .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId()), null))
+                .map(event -> new EventResponse(event, eventPositionService.getAll(event.getId())))
                 .toList();
     }
 

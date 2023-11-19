@@ -11,6 +11,7 @@ import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -30,19 +31,15 @@ import java.util.List;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.domain.Position.BACK;
-import static org.devcourse.resumeme.common.domain.Position.DEVOPS;
-import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -58,7 +55,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -284,7 +280,7 @@ class EventControllerTest extends ControllerUnitTest {
 
     @Test
     @WithMockCustomUser(role = "ROLE_MENTOR")
-    void 멘토는_첨삭_이벤트를_조회할수있다() throws Exception {
+    void 첨삭_이벤트_상세_조회할수있다() throws Exception {
         // given
         Long eventId = 1L;
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
@@ -308,7 +304,7 @@ class EventControllerTest extends ControllerUnitTest {
         result.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(
-                        document("event/getOwn",
+                        document("event/getOne",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 pathParameters(
@@ -328,6 +324,46 @@ class EventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
                                         fieldWithPath("timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
                                         fieldWithPath("timeInfo.endDate").type(STRING).description("첨삭 종료 일")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void 이벤트_전체를_조회할수있다() throws Exception {
+        // given
+        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
+        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
+        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+
+        given(eventService.getAll(new AllEventFilter(null, null))).willReturn(List.of(event));
+        given(eventPositionService.getAll(1L)).willReturn(List.of(new EventPosition(BACK, event)));
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/events"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("event/getAll",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("[].info").type(OBJECT).description("이벤트 정보"),
+                                        fieldWithPath("[].info.title").type(STRING).description("이벤트 제목"),
+                                        fieldWithPath("[].info.content").type(STRING).description("이벤트 상세내용"),
+                                        fieldWithPath("[].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
+                                        fieldWithPath("[].info.currentApplicantCount").type(NUMBER).description("현재 참여 인원 수"),
+                                        fieldWithPath("[].info.status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
+                                        fieldWithPath("[].info.positions").type(ARRAY).description(generateLinkCode(POSITION)),
+                                        fieldWithPath("[].info.timeInfo").type(OBJECT).description("첨삭 관련 시간 정보"),
+                                        fieldWithPath("[].info.timeInfo.openDateTime").type(STRING).description("첨삭 신청 시작 일"),
+                                        fieldWithPath("[].info.timeInfo.closeDateTime").type(STRING).description("첨삭 신청 마감 일"),
+                                        fieldWithPath("[].info.timeInfo.endDate").type(STRING).description("첨삭 종료 일"),
+                                        fieldWithPath("[].mentorInfo").type(OBJECT).description("멘토 정보"),
+                                        fieldWithPath("[].mentorInfo.mentorId").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 주소")
                                 )
                         )
                 );
