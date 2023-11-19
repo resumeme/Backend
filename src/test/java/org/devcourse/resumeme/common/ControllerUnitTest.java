@@ -27,6 +27,7 @@ import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.global.auth.filter.FilterTestController;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
+import org.devcourse.resumeme.global.auth.filter.handler.CustomLogoutHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtProperties;
@@ -45,6 +46,8 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.snippet.TemplatedSnippet;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -129,12 +132,16 @@ public abstract class ControllerUnitTest {
         oauthTokenResponseFilter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
 
         JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtService, mentorService, menteeService);
+        LogoutFilter logoutFilter =
+                new LogoutFilter(new HttpStatusReturningLogoutSuccessHandler(), new CustomLogoutHandler(mentorService, menteeService));
+        logoutFilter.setFilterProcessesUrl("/api/v1/logout");
 
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .addFilter(oauthTokenResponseFilter)
                 .addFilter(jwtAuthorizationFilter)
+                .addFilter(logoutFilter)
                 .build();
     }
 
