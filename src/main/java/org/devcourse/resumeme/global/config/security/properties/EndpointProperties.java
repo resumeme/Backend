@@ -16,7 +16,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class EndpointProperties {
     }
 
     private static List<Matcher> getMatchers(List<PropertyMatcher> matchers) {
-        Map<Request, List<String>> tempMatcher = new HashMap<>();
+        Map<Request, List<String>> tempMatcher = new LinkedHashMap<>();
 
         for (PropertyMatcher matcher : matchers) {
             String role = matcher.role.toUpperCase();
