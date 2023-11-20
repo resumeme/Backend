@@ -45,7 +45,7 @@ class CommentTest {
         Component component = new Component("career", "career", null, null, 1L, List.of());
 
         // when
-        Comment comment = new Comment(content, component, resume);
+        Comment comment = new Comment(content, 1L, resume);
 
         // then
         assertThat(comment).isNotNull();
@@ -53,9 +53,9 @@ class CommentTest {
 
     @ParameterizedTest
     @MethodSource("reviewCreate")
-    void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(String content, BlockType type, Component component, Resume resume) {
+    void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(String content, BlockType type, Long componentId, Resume resume) {
         // then
-        assertThatThrownBy(() -> new Comment(content, component, resume))
+        assertThatThrownBy(() -> new Comment(content, componentId, resume))
                 .isInstanceOf(CustomException.class);
     }
 
@@ -76,14 +76,12 @@ class CommentTest {
 
         Resume resume = new Resume("title", mentee);
 
-        Component component = new Component("career", "career", null, null, 1L, List.of());
-
         return Stream.of(
-                Arguments.of(null, null, component, null),
-                Arguments.of(content, null, component, null),
-                Arguments.of(null, type, component, null),
-                Arguments.of(null, null, component, resume),
-                Arguments.of("", type, component, null),
+                Arguments.of(null, null, 1L, null),
+                Arguments.of(content, null, 1L, null),
+                Arguments.of(null, type, 1L, null),
+                Arguments.of(null, null, 1L, resume),
+                Arguments.of("", type, 1L, null),
                 Arguments.of("   ", null, null, resume)
         );
     }
