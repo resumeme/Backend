@@ -2,6 +2,9 @@
 
 == [회원정보]
 === 멘티 정보 조회 (마이페이지)
+include::{snippets}/user/mentee/findMy/exception-response.adoc[]
+
+*Request*
 include::{snippets}/user/mentee/findMy/http-request.adoc[]
 
 *Response*
@@ -9,6 +12,8 @@ include::{snippets}/user/mentee/findMy/http-response.adoc[]
 include::{snippets}/user/mentee/findMy/response-fields.adoc[]
 
 === 멘티 정보 수정
+include::{snippets}/user/mentee/update/exception-response.adoc[]
+
 *Request*
 include::{snippets}/user/mentee/update/http-request.adoc[]
 include::{snippets}/user/mentee/update/path-parameters.adoc[]
