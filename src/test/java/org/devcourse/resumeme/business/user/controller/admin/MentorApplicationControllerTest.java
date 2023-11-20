@@ -39,7 +39,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
 
     @BeforeEach
     void SetUP() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_PENDING);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "전현무", "01034548443", Role.ROLE_PENDING);
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         refreshToken = "refreshTokenRecentlyIssued";

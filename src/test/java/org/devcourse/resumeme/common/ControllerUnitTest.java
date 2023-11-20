@@ -156,7 +156,7 @@ public abstract class ControllerUnitTest {
     }
 
     protected static ExceptionResponseFieldsSnippet exceptionResponse(List<String> exceptions) {
-        return new ExceptionResponseFieldsSnippet("exception-response", Map.of("exceptions", String.join(",", exceptions)));
+        return new ExceptionResponseFieldsSnippet("exception-response", Map.of("exceptions", String.join(", ", exceptions)));
     }
 
     protected static class ExceptionResponseFieldsSnippet extends TemplatedSnippet {

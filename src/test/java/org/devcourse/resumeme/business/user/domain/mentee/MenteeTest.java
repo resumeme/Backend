@@ -28,7 +28,7 @@ class MenteeTest {
 
     @BeforeEach
     void SetUP() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "김한주", "01034548443", Role.ROLE_MENTEE);
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "FINANCE"), "안녕하세요 취업하고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         refreshToken = "refreshTokenRecentlyIssued";
@@ -98,7 +98,7 @@ class MenteeTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .introduce(menteeRegisterInfoRequest.introduce())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("이메일이 유효하지 않습니다.");
+                .hasMessage("이메일이 유효하지 않습니다");
     }
 
     @Test

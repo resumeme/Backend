@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.MAP;
@@ -27,6 +28,13 @@ import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.RO
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.ACCESS_TOKEN_NAME;
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN_NAME;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INFO_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_EMAIL;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -60,7 +68,7 @@ class MenteeControllerTest extends ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_MENTEE);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "김백둥", "01034548443", Role.ROLE_MENTEE);
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
         mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo);
@@ -99,15 +107,18 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("user/mentee/create",
                                 getDocumentRequest(),
+                                exceptionResponse(
+                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), INFO_NOT_FOUND.name(), "INVALID_TEXT")
+                                ),
                                 requestFields(
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
-                                        fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)"),
+                                        fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)").attributes(constraints("6자 이하의 한글")),
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
                                         fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_MENTEE")),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional().attributes(constraints("100자 이하"))
                                 ),
                                 responseHeaders(
                                         headerWithName(ACCESS_TOKEN_NAME).description("액세스 토큰"),
@@ -148,6 +159,9 @@ class MenteeControllerTest extends ControllerUnitTest {
                         document("user/mentee/find",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(
+                                        List.of(MENTEE_NOT_FOUND.name(), BAD_REQUEST.name())
+                                ),
                                 pathParameters(
                                         parameterWithName("menteeId").description("멘티 id")
                                 ),
@@ -184,15 +198,18 @@ class MenteeControllerTest extends ControllerUnitTest {
                         document("user/mentee/update",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(
+                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), "INVALID_TEXT", BAD_REQUEST.name(), MENTEE_NOT_FOUND.name())
+                                ),
                                 pathParameters(
                                         parameterWithName("menteeId").description("멘티 id")
                                 ),
                                 requestFields(
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
+                                        fieldWithPath("phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional().attributes(constraints("100자 이하"))
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(MAP).description("멘티 아이디")

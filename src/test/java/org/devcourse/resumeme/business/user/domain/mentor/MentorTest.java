@@ -33,7 +33,7 @@ class MentorTest {
 
     @BeforeEach
     void SetUP() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", ROLE_PENDING);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "박백둥", "01034548443", ROLE_PENDING);
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         refreshToken = "refreshTokenRecentlyIssued";
@@ -105,7 +105,7 @@ class MentorTest {
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(lessThanOne)
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("경력 연차가 올바르지 않습니다.");
+                .hasMessage("경력 연차가 올바르지 않습니다");
 
         assertThatThrownBy(() -> Mentor.builder()
                 .id(1L)
@@ -118,7 +118,7 @@ class MentorTest {
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(moreThanEighty)
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("경력 연차가 올바르지 않습니다.");
+                .hasMessage("경력 연차가 올바르지 않습니다");
 
     }
 
@@ -137,7 +137,7 @@ class MentorTest {
                 .careerContent(mentorRegisterInfoRequest.careerContent())
                 .careerYear(mentorRegisterInfoRequest.careerYear())
                 .build()).isInstanceOf(CustomException.class)
-                .hasMessage("이메일이 유효하지 않습니다.");
+                .hasMessage("이메일이 유효하지 않습니다");
     }
 
     @Test
