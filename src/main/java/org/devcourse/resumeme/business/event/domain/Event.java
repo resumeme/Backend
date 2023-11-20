@@ -10,6 +10,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.event.domain.vo.EventRejectModel;
+import org.devcourse.resumeme.business.event.domain.vo.EventUpdateModel;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
@@ -188,4 +190,7 @@ public class Event extends BaseEntity {
         throw new EventException(RESUME_NOT_FOUND);
     }
 
+    public void update(EventRejectModel model) {
+        reject(model.getMenteeId(), model.getRejectMessage());
+    }
 }

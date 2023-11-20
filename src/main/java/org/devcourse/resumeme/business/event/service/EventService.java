@@ -10,6 +10,7 @@ import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -114,6 +115,11 @@ public class EventService {
         eventRepository.openBookedEvent(EventStatus.OPEN, LocalDateTime.now());
         eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
         eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
+    }
+
+    public void update(Long eventId, EventUpdateVo eventUpdateVo) {
+        Event event = getOne(eventId);
+//        event.update(eventUpdateVo.toModel());
     }
 
 }
