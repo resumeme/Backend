@@ -63,7 +63,12 @@ public class Career implements Converter {
     }
 
     private static List<Duty> getDuties(Map<String, String> component) {
-        return IntStream.range(0, Integer.parseInt(component.get(DUTY.name())))
+        String dutySize = component.get(DUTY.name());
+        if (dutySize == null) {
+            return List.of();
+        }
+
+        return IntStream.range(0, Integer.parseInt(dutySize))
                 .mapToObj(i -> new Duty(component, i))
                 .toList();
     }
