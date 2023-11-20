@@ -1,37 +1,33 @@
 endpoint:
   matchers:
     - matcher:
-        get: /api/v1/user
+        get: /api/v1/mentors/*, /api/v1/events/*, /api/v1/events
         post: /api/v1/mentees, /api/v1/mentors
       role: all
     - matcher:
-        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/resumes, /api/v1/resumes/*/**, /api/v1/events, /api/v1/events/*, /api/v1/mentees/*/events
-        post: /api/v1/resumes, /api/v1/resumes/*/**
-        patch: /api/v1/events/*/mentee, /api/v1/resumes/*/**, /api/v1/events/*, /api/v1/mentees/*
-        delete: /api/v1/resumes/*/**
+        get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/mentees/*/events
+        post: /api/v1/resumes, /api/v1/results
+        patch: /api/v1/mentees/*, /api/v1/events/*
       role: mentee
     - matcher:
-        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, /api/v1/events/*, /api/v1/mentors/*/events
+        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/user, /api/v1/resumes/**, /api/v1/results, /api/v1/mentors/*/events
         post: /api/v1/events, /api/v1/resumes/*/reviews, /api/v1/events/*/resumes/*/comments
         patch: /api/v1/mentors/*
       role: mentor
     - matcher:
-        get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, api/v1/mentors/*/events
+        get: /api/v1/user, /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events, api/v1/mentors/*/events
         patch: /api/v1/mentors/*
       role: pending
     - matcher:
-        get: /api/v1/admin/applications, api/v1/admin/statistics/*
-        delete: /api/v1/admin/applications/*/*
-      role: admin
-    - matcher:
-        get: /api/v1/events/*
-        post: /api/v1/events/*/resumes/*/reviews
-        patch: /api/v1/events/*/mentee/*, /api/v1/events/*, /api/v1/events/*/resumes/*/comments/*
+        get: /api/v1/events/*/resumes/*/comments
+        post: /api/v1/events/*/resumes/*/comments
+        patch: /api/v1/events/*/mentee/**, /api/v1/events/*/resumes/**, /api/v1/events/*/resumes/*/comments/*
         delete: /api/v1/events/*/resumes/*/comments/*
       role: own_mentor
     - matcher:
-        get: /api/v1/events/*/resumes/*/comments
-        patch: /api/v1/resumes/*/*/components/*
-        delete: /api/v1/resumes/*, /api/v1/resumes/*/components/*
+        get: /api/v1/resumes/**, /api/v1/events/*/resumes/*/comments
+        post: /api/v1/resumes/**
+        patch: /api/v1/resumes/**
+        delete: /api/v1/resumes/**
       role: own_mentee
-  ignores: /docs/**
+  ignores: /docs/**, /api/v1/admin/**
