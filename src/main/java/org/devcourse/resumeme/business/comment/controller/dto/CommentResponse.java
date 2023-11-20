@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record CommentResponse(Long commentId, String content, Long componentId, LocalDateTime lastModifiedAt) {
 
     public CommentResponse(Comment comment) {
-        this(comment.getId(), comment.getContent(), comment.getComponent().getId(), comment.getLastModifiedDate());
+        this(comment.getId(), comment.getContent(), comment.getComponentId(), comment.getLastModifiedDate());
     }
 
 }

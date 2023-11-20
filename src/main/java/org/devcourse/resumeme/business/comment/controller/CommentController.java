@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentCreateRequest;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentResponse;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentUpdateRequest;
-import org.devcourse.resumeme.business.event.domain.Event;
-import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.comment.domain.Comment;
-import org.devcourse.resumeme.business.event.service.EventService;
-import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.business.resume.service.ComponentService;
-import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.comment.service.CommentService;
+import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.service.EventService;
+import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -34,15 +32,12 @@ public class CommentController {
 
     private final EventService eventService;
 
-    private final ComponentService componentService;
-
     @PostMapping
     public CommentResponse createReview(@PathVariable Long resumeId, @RequestBody CommentCreateRequest request) {
         Resume resume = resumeService.getOne(resumeId);
-        Component component = componentService.getOne(request.componentId());
-        Comment review = commentService.create(request.toEntity(resume, component), resumeId);
+        Comment review = commentService.create(request.toEntity(resume), resumeId);
 
-        return new CommentResponse(review.getId(), review.getContent(), component.getId(), review.getLastModifiedDate());
+        return new CommentResponse(review.getId(), review.getContent(), request.componentId(), review.getLastModifiedDate());
     }
 
     @GetMapping
