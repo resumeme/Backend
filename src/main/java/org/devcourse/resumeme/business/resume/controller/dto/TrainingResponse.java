@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@JsonTypeName("trainings")
 public class TrainingResponse extends ComponentResponse {
 
     private String organization;
@@ -28,8 +30,8 @@ public class TrainingResponse extends ComponentResponse {
 
     private String explanation;
 
-    public TrainingResponse(Training training, Component component) {
-        super(component);
+    public TrainingResponse(String type,Training training, Component component) {
+        super(type, component);
         this.organization = training.getEducationalDetails().getOrganization();
         this.major = training.getEducationalDetails().getMajor();
         this.degree = training.getEducationalDetails().getDegree();

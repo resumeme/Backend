@@ -1,11 +1,15 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 @Data
+@NoArgsConstructor
+@JsonTypeName("foreign-languages")
 public class ForeignLanguageResponse extends ComponentResponse {
 
     private String language;
@@ -14,8 +18,8 @@ public class ForeignLanguageResponse extends ComponentResponse {
 
     private String scoreOrGrade;
 
-    public ForeignLanguageResponse(ForeignLanguage foreignLanguage, Component component) {
-        super(component);
+    public ForeignLanguageResponse(String type,ForeignLanguage foreignLanguage, Component component) {
+        super(type, component);
         this.language = foreignLanguage.getLanguage();
         this.examName = foreignLanguage.getExamName();
         this.scoreOrGrade = foreignLanguage.getScoreOrGrade();

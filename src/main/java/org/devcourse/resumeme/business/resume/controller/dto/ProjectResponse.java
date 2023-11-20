@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@JsonTypeName("projects")
 public class ProjectResponse extends ComponentResponse {
 
     private String projectName;
@@ -26,8 +28,8 @@ public class ProjectResponse extends ComponentResponse {
 
     private String projectUrl;
 
-    public ProjectResponse(Project project, Component component) {
-        super(component);
+    public ProjectResponse(String type,Project project, Component component) {
+        super(type, component);
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
         this.isTeam = !project.getTeamMembers().equals("");
