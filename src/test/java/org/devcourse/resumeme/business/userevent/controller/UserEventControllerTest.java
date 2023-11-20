@@ -110,6 +110,7 @@ class UserEventControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("[].info").type(OBJECT).description("이벤트 정보"),
                                         fieldWithPath("[].info.id").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].info.mentorId").type(NUMBER).description("멘토아이디"),
                                         fieldWithPath("[].info.title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("[].info.content").type(STRING).description("이벤트 내용"),
                                         fieldWithPath("[].info.maximumCount").type(NUMBER).description("이벤트 최대 참여 인원 수"),

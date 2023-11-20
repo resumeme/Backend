@@ -320,6 +320,7 @@ class EventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("mentorId").type(NUMBER).description("멘토 아이디"),
                                         fieldWithPath("title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
                                         fieldWithPath("content").type(STRING).description("이벤트 상세내용"),
@@ -360,6 +361,7 @@ class EventControllerTest extends ControllerUnitTest {
                                 responseFields(
                                         fieldWithPath("events[].info").type(OBJECT).description("이벤트 정보"),
                                         fieldWithPath("events[].info.id").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("events[].info.mentorId").type(NUMBER).description("멘토 아이디"),
                                         fieldWithPath("events[].info.title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("events[].info.content").type(STRING).description("이벤트 상세내용"),
                                         fieldWithPath("events[].info.maximumCount").type(NUMBER).description("참여 최대 인원 수"),
