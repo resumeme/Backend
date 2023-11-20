@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.LocalDateUtils;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
@@ -57,8 +58,8 @@ public class Career implements Converter {
     }
 
     public Career(Map<String, String> component) {
-        this(component.get(COMPANY.name()), component.get(POSITION.name()), Arrays.asList(component.get(SKILL.name()).split(",")), getDuties(component),
-                LocalDate.parse(component.get(COMPANY.startDate())), LocalDate.parse(component.get(COMPANY.endDate())), component.get(CONTENT.name()));
+        this(component.get(COMPANY.name()), component.get(POSITION.name()), Arrays.asList((component.get(SKILL.name()) == null ? "" : component.get(SKILL.name())).split(",")), getDuties(component),
+                LocalDateUtils.parse(component.get(COMPANY.startDate())), LocalDateUtils.parse(component.get(COMPANY.endDate())), component.get(CONTENT.name()));
     }
 
     private static List<Duty> getDuties(Map<String, String> component) {

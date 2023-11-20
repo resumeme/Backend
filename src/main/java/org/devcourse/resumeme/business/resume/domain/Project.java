@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.devcourse.resumeme.business.resume.domain.LocalDateUtils.parse;
 import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
 import static org.devcourse.resumeme.business.resume.domain.Property.MEMBER;
 import static org.devcourse.resumeme.business.resume.domain.Property.PROJECT;
@@ -52,8 +53,8 @@ public class Project implements Converter {
     }
 
     public Project(Map<String, String> component) {
-        this(component.get(PROJECT.name()), (long) LocalDate.parse(component.get(PROJECT.startDate())).getYear(),
-                component.get(MEMBER.name()), Arrays.asList(component.get(SKILL.name()).split(",")),
+        this(component.get(PROJECT.name()), (long) parse(component.get(PROJECT.startDate())).getYear(),
+                component.get(MEMBER.name()), Arrays.asList((component.get(SKILL.name()) == null ? "" : component.get(SKILL.name())).split(",")),
                 component.get(CONTENT.name()), component.get(URL.name()));
     }
 

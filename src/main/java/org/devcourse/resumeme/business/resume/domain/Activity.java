@@ -41,8 +41,8 @@ public class Activity implements Converter {
     }
 
     public Activity(Map<String, String> component) {
-        this(component.get(TITLE.name()), LocalDate.parse(component.get(TITLE.startDate())),
-                LocalDate.parse(component.get(TITLE.name() + END_DATE.name())), component.get(LINK.name()), component.get(DESCRIPTION.name()));
+        this(component.get(TITLE.name()), LocalDate.parse(component.get(TITLE.startDate())), LocalDateUtils.parse(component.get(TITLE.endDate())),
+                component.get(LINK.name()), component.get(DESCRIPTION.name()));
     }
 
     @Override
