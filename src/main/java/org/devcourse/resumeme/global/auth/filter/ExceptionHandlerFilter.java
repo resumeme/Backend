@@ -10,6 +10,7 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.devcourse.resumeme.global.exception.TokenException;
 import org.devcourse.resumeme.global.exception.UnAuthenticatedException;
 import org.devcourse.resumeme.global.exception.advice.ErrorResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -18,7 +19,6 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.client.HttpClientErrorException.Forbidden;
 
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
@@ -34,24 +34,21 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (TokenException e) {
-            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
-            sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN);
+
+            sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN, e);
         } catch (UnAuthenticatedException e) {
-            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
-            sendErrorResponse(response, 401, ExceptionCode.LOGIN_REQUIRED);
-        } catch (Forbidden e) {
-            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
-            sendErrorResponse(response, 400, BAD_REQUEST);
+            sendErrorResponse(response, 401, ExceptionCode.LOGIN_REQUIRED, e);
+        } catch (AccessDeniedException e) {
+            sendErrorResponse(response, 400, BAD_REQUEST, e);
         } catch (CustomException e) {
-            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
-            sendErrorResponse(response, 400, ExceptionCode.valueOf(e.getCode()));
+            sendErrorResponse(response, 400, ExceptionCode.valueOf(e.getCode()), e);
         } catch (Exception e) {
-            log.error("Exception Message : {}, \nException Type : {}", e.getMessage(), e.getClass().getSimpleName(), e);
-            sendErrorResponse(response, 500, SERVER_ERROR);
+            sendErrorResponse(response, 500, SERVER_ERROR, e);
         }
     }
 
-    private void sendErrorResponse(HttpServletResponse response, int statusCode, ExceptionCode code) throws IOException {
+    private void sendErrorResponse(HttpServletResponse response, int statusCode, ExceptionCode code, Exception exception) throws IOException {
+        log.error("Exception Message : {}, \nException Type : {}", exception.getMessage(), exception.getClass().getSimpleName(), exception);
         response.setStatus(statusCode);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
