@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_EMAIL;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -72,7 +74,7 @@ public class Mentee extends BaseEntity {
 
     @Builder
     public Mentee(Long id,String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
-        validateInputs(email, provider, imageUrl, requiredInfo);
+        validateInputs(email, provider, imageUrl, requiredInfo, introduce);
         this.id = id;
         this.email = email;
         this.provider = provider;
@@ -84,12 +86,13 @@ public class Mentee extends BaseEntity {
         this.introduce = introduce;
     }
 
-    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo) {
-        check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
+    private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String introduce) {
+        check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), INVALID_EMAIL);
         check(provider == null, NO_EMPTY_VALUE);
         check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
         check(requiredInfo == null, NO_EMPTY_VALUE);
         check(!Role.ROLE_MENTEE.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
+        check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
     }
 
     public void updateInfos(MenteeInfoUpdateRequest updateRequest) {
@@ -99,7 +102,7 @@ public class Mentee extends BaseEntity {
         this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
         updateRequest.interestedPositions().forEach(position -> this.interestedPositions.add(new MenteePosition(this, Position.valueOf(position.toUpperCase()))));
         updateRequest.interestedFields().forEach(field -> this.interestedFields.add(new MenteeField(this, Field.valueOf(field.toUpperCase()))));
-        this.introduce = updateRequest.introduce();
+        updateIntroduce(updateRequest.introduce());
     }
 
     public void updateRefreshToken(String refreshToken) {
@@ -116,6 +119,11 @@ public class Mentee extends BaseEntity {
 
     public String getRoleName() {
         return requiredInfo.getRole().getRoleName();
+    }
+
+    private void updateIntroduce(String introduce) {
+        check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
+        this.introduce = introduce;
     }
 
 }

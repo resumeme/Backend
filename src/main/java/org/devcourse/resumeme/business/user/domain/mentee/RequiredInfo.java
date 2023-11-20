@@ -17,6 +17,8 @@ import static org.devcourse.resumeme.common.util.Validator.check;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequiredInfo {
 
+    private static final String REALNAME_REGEX = "^[ㄱ-ㅎ|가-힣]*$";
+
     private static final String PHONE_REGEX = "^01(0|1|[6-9])[0-9]{3,4}[0-9]{4}$";
 
     @Getter
@@ -64,15 +66,16 @@ public class RequiredInfo {
     }
 
     private void validateNickname(String nickname) {
-        check(nickname == null || nickname.isBlank(), "INVALID_TEXT", "닉네임이 유효하지 않습니다.");
+        check(nickname == null || nickname.isBlank(), "INVALID_TEXT", "닉네임이 유효하지 않습니다");
     }
 
     private void validateRealName(String realName) {
         check(realName == null || realName.isBlank(), "INVALID_TEXT", "이름이 유효하지 않습니다.");
+        check(!(realName.matches(REALNAME_REGEX)) || realName.length() > 6, "INVALID_TEXT", "이름이 유효하지 않습니다");
     }
 
     private void validatePhoneNumber(String phoneNumber) {
-        check(phoneNumber == null || !(phoneNumber.matches(PHONE_REGEX)), "INVALID_TEXT", "전화번호가 유효하지 않습니다.");
+        check(phoneNumber == null || !(phoneNumber.matches(PHONE_REGEX)), "INVALID_TEXT", "전화번호가 유효하지 않습니다");
     }
 
     private void validateUserRole(Role role) {

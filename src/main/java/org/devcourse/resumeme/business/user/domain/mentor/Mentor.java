@@ -30,8 +30,11 @@ import static org.devcourse.resumeme.business.user.domain.Role.ROLE_ADMIN;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
 import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.CAREERYEAR_NOT_ALLOWED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_EMAIL;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -91,14 +94,16 @@ public class Mentor extends BaseEntity {
     }
 
     private void validateInputs(String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
-        check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), "INVALID_EMAIL", "이메일이 유효하지 않습니다.");
+        check(email == null || email.isBlank() || !email.matches(EMAIL_REGEX), INVALID_EMAIL);
         check(provider == null, NO_EMPTY_VALUE);
         check(imageUrl == null || imageUrl.isBlank(), NO_EMPTY_VALUE);
         check(requiredInfo == null, NO_EMPTY_VALUE);
         check(ROLE_MENTEE.equals(requiredInfo.getRole()) || ROLE_ADMIN.equals(requiredInfo.getRole()), ROLE_NOT_ALLOWED);
         check(experiencedPositions == null || experiencedPositions.size() == 0, NO_EMPTY_VALUE);
         check(careerContent == null || careerContent.isBlank(), NO_EMPTY_VALUE);
-        check(careerYear < 1 || careerYear > 80, "NUMBER_NOT_ALLOWED", "경력 연차가 올바르지 않습니다.");
+        check(careerContent.length() > 300, TEXT_OVER_LENGTH);
+        check(careerYear < 1 || careerYear > 80, CAREERYEAR_NOT_ALLOWED);
+        check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
     }
 
     public void updateRefreshToken(String refreshToken) {
@@ -117,6 +122,7 @@ public class Mentor extends BaseEntity {
     }
 
     public void updateInfos(MentorInfoUpdateRequest updateRequest) {
+        validateInputs(email, provider, imageUrl, requiredInfo,updateRequest.experiencedPositions(), updateRequest.careerContent(), updateRequest.careerYear(), updateRequest.introduce());
         this.clearPositions();
         this.requiredInfo.updateNickname(updateRequest.nickname());
         this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
