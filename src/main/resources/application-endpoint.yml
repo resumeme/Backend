@@ -5,7 +5,7 @@ endpoint:
         post: /api/v1/mentees, /api/v1/mentors
       role: all
     - matcher:
-        get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/mentees/*/events
+        get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/mentees/*/events, /api/v1/pdf/resumes/*
         post: /api/v1/resumes, /api/v1/results
         patch: /api/v1/mentees/*, /api/v1/events/*
       role: mentee
