@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
 import org.devcourse.resumeme.global.auth.service.authorization.AuthorizationResolver;
+import org.devcourse.resumeme.global.auth.service.authorization.DelegatingAuthorizationManager;
 import org.devcourse.resumeme.global.auth.service.authorization.OnlyOwn;
 import org.devcourse.resumeme.global.config.security.properties.EndpointProperties.Matcher.Request;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -43,10 +44,10 @@ public class EndpointProperties {
                 String method = entry.getKey().toUpperCase();
 
                 for (String endpoint : entry.getValue()) {
-                    Request endpoint1 = new Request(method, endpoint);
-                    List<String> roles = tempMatcher.getOrDefault(endpoint1, new ArrayList<>());
+                    Request request = new Request(method, endpoint);
+                    List<String> roles = tempMatcher.getOrDefault(request, new ArrayList<>());
                     roles.add(role);
-                    tempMatcher.put(endpoint1, roles);
+                    tempMatcher.put(request, roles);
                 }
             }
         }
@@ -114,18 +115,17 @@ public class EndpointProperties {
                 this.authorizationManager = authorizationManager;
             }
 
-            static AuthorizationManager<RequestAuthorizationContext> getManager(List<String> role) {
-                if (role.size() == 1) {
-                    String roleName = role.get(0).toUpperCase();
-
-                    for (Manager value : values()) {
-                        if (value.name().equals(roleName)) {
-                            return value.authorizationManager;
-                        }
+            static AuthorizationManager<RequestAuthorizationContext> getManager(List<String> roles) {
+                List<AuthorizationManager<RequestAuthorizationContext>> managers = new ArrayList<>();
+                for (String role : roles) {
+                    try {
+                        managers.add(Manager.valueOf(role).authorizationManager);
+                    } catch (IllegalArgumentException e) {
+                        managers.add(AuthorityAuthorizationManager.hasRole(role));
                     }
                 }
 
-                return AuthorityAuthorizationManager.hasAnyRole(role.toArray(new String[]{}));
+                return new DelegatingAuthorizationManager(managers);
             }
 
             @Component
