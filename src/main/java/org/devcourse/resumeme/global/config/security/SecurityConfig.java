@@ -48,11 +48,12 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .logout((logout) -> logout.logoutUrl("/api/v1/logout")
+                .logout(logout -> logout.logoutUrl("/api/v1/logout")
                         .addLogoutHandler(customLogoutHandler)
                         .logoutSuccessHandler(logoutSuccessHandler)
                         .permitAll()
-                );
+                )
+                .exceptionHandling(AbstractHttpConfigurer::disable);
 
         http.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
         http.addFilterAfter(jwtAuthorizationFilter, ExceptionHandlerFilter.class);
