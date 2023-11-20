@@ -30,18 +30,17 @@ public class PDFGenerator {
 
     public Path createPdf(Long resumeId, String accessToken) throws IOException, InterruptedException {
         String resumeTitle = resumeService.getOne(resumeId).getTitle();
-        Pdf pdf = getPDFofPage(RESUME_URL_FOR_PDF, resumeId, accessToken);
-        Path path = Files.write(Paths.get("./src/main/resources/pdf/"+ resumeTitle + ".pdf"), OutputType.BYTES.convertFromBase64Png(pdf.getContent()));
+        Pdf pdf = getPDFofPage(resumeId, accessToken);
 
-        return path;
+        return Files.write(Paths.get("./src/main/resources/pdf/"+ resumeTitle + ".pdf"), OutputType.BYTES.convertFromBase64Png(pdf.getContent()));
     }
 
-    private Pdf getPDFofPage(String url, Long resumeId, String accessToken) throws InterruptedException {
+    private Pdf getPDFofPage(Long resumeId, String accessToken) throws InterruptedException {
         ChromeDriver chromeDriver = new ChromeDriver(getChromeDriverService(), getChromeOptions());
 
-        chromeDriver.get(url + resumeId);
+        chromeDriver.get(RESUME_URL_FOR_PDF + resumeId);
         chromeDriver.manage().addCookie(new Cookie("authorization", accessToken));
-        chromeDriver.get(url + resumeId);
+        chromeDriver.get(RESUME_URL_FOR_PDF + resumeId);
         Thread.sleep(5000);
 
         Pdf createdPdf = chromeDriver.print(getPrintOptions());
@@ -52,7 +51,7 @@ public class PDFGenerator {
 
     private ChromeDriverService getChromeDriverService() {
         return new ChromeDriverService.Builder()
-                .usingDriverExecutable(new File("/home/ubuntu/chromedriver-linux64/chromedriver"))
+                .usingDriverExecutable(new File("/usr/bin/chromedriver"))
                 .usingAnyFreePort()
                 .build();
     }
