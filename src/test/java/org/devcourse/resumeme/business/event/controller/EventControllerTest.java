@@ -102,7 +102,7 @@ class EventControllerTest extends ControllerUnitTest {
                 .provider(Provider.valueOf("KAKAO"))
                 .email("backdong2@kakao.com")
                 .refreshToken("ddefwefer2frte")
-                .requiredInfo(new RequiredInfo("김백둥2", "백둥둥2", "01072223722", Role.ROLE_MENTEE))
+                .requiredInfo(new RequiredInfo("김백둥이", "백둥둥2", "01072223722", Role.ROLE_MENTEE))
                 .interestedPositions(Set.of())
                 .interestedFields(Set.of())
                 .introduce(null)

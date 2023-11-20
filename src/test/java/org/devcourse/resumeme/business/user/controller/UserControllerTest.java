@@ -12,11 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.INTEGER;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -76,6 +79,9 @@ class UserControllerTest extends ControllerUnitTest {
                 .andDo(print())
                 .andDo(
                         document("user/mentor/findMy",
+                                exceptionResponse(
+                                        List.of(MENTEE_NOT_FOUND.name())
+                                ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("멘토 id"),
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
@@ -110,6 +116,9 @@ class UserControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("user/mentee/findMy",
                                 getDocumentRequest(),
+                                exceptionResponse(
+                                        List.of(MENTOR_NOT_FOUND.name())
+                                ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("멘티 id"),
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),

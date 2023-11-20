@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.INTEGER;
@@ -28,6 +29,14 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentReq
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.ROLE;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.CAREERYEAR_NOT_ALLOWED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INFO_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_EMAIL;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -63,7 +72,7 @@ class MentorControllerTest extends ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "realName", "01034548443", Role.ROLE_PENDING);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "김춘추", "01034548443", Role.ROLE_PENDING);
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         mentor = mentorRegisterInfoRequest.toEntity(oAuth2TempInfo);
@@ -104,16 +113,19 @@ class MentorControllerTest extends ControllerUnitTest {
                         document("user/mentor/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(
+                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), INFO_NOT_FOUND.name(), "INVALID_TEXT", CAREERYEAR_NOT_ALLOWED.name())
+                                ),
                                 requestFields(
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
-                                        fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)"),
+                                        fieldWithPath("requiredInfo.realName").type(STRING).description("이름(실명)").attributes(constraints("6자 이하의 한글")),
                                         fieldWithPath("requiredInfo.nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("requiredInfo.phoneNumber").type(STRING).description("전화번호").attributes(constraints(" '-' 제외 숫자만")),
                                         fieldWithPath("requiredInfo.role").type(STRING).description(generateLinkCode(ROLE)).attributes(constraints("ROLE_PENDING")),
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차").attributes(constraints("1 이상의 자연수")),
-                                        fieldWithPath("careerContent").type(STRING).description("경력 사항"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("careerContent").type(STRING).description("경력 사항").attributes(constraints("300자 이하")),
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional().attributes(constraints("100자 이하"))
                                 ),
                                 responseHeaders(
                                         headerWithName("Authorization").description("액세스 토큰"),
@@ -143,6 +155,9 @@ class MentorControllerTest extends ControllerUnitTest {
                         document("user/mentor/update",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(
+                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), MENTOR_NOT_FOUND.name(), BAD_REQUEST.name(), "INVALID_TEXT", CAREERYEAR_NOT_ALLOWED.name())
+                                ),
                                 pathParameters(
                                         parameterWithName("mentorId").description("멘토 id")
                                 ),
@@ -191,6 +206,9 @@ class MentorControllerTest extends ControllerUnitTest {
                         document("user/mentor/find",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(
+                                        List.of(MENTOR_NOT_FOUND.name(), BAD_REQUEST.name())
+                                ),
                                 pathParameters(
                                         parameterWithName("mentorId").description("멘토 id")
                                 ),
