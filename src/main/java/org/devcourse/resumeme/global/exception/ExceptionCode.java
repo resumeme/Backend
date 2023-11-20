@@ -7,6 +7,7 @@ public enum ExceptionCode implements DocsEnumType {
     MENTEE_NOT_FOUND("해당 멘티를 찾을 수 없습니다"),
     MENTOR_NOT_FOUND("해당 멘토를 찾을 수 없습니다"),
     INFO_NOT_FOUND("회원 임시 정보를 찾을 수 없습니다"),
+    CAREERYEAR_NOT_ALLOWED("경력 연차가 올바르지 않습니다"),
     RESUME_NOT_FOUND("해당 이력서를 찾을 수 없습니다"),
     EVENT_NOT_FOUND("이벤트를 찾을 수 없습니다"),
     PROJECT_NOT_FOUND("해당 프로젝트를 찾을 수 없습니다"),
@@ -15,6 +16,7 @@ public enum ExceptionCode implements DocsEnumType {
     APPLICATION_NOT_FOUND("예약 이력을 찾을 수 없습니다"),
     GPA_ERROR("최대 학점은 내 학점보다 커야 합니다."),
     NO_EMPTY_VALUE("빈 값일 수 없습니다"),
+    TEXT_OVER_LENGTH("텍스트 길이가 기준을 초과합니다"),
     MENTEE_ONLY_RESUME("멘티만 이력서를 작성할 수 있습니다"),
     ROLE_NOT_ALLOWED("허용되지 않은 역할입니다"),
     MENTOR_ALREADY_APPROVED("이미 승인된 멘토입니다"),
@@ -31,7 +33,8 @@ public enum ExceptionCode implements DocsEnumType {
     SERVER_ERROR("서버 에러입니다"),
     INVALID_ACCESS_TOKEN("유효하지 않은 액세스 토큰입니다"),
     BAD_REQUEST("잘못된 요청입니다"),
-    LOGIN_REQUIRED("로그인이 필요합니다")
+    LOGIN_REQUIRED("로그인이 필요합니다"),
+    INVALID_EMAIL("이메일이 유효하지 않습니다")
     ;
 
     private final String message;
