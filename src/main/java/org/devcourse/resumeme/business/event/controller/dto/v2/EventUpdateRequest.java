@@ -1,22 +1,40 @@
 package org.devcourse.resumeme.business.event.controller.dto.v2;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.devcourse.resumeme.business.event.service.vo.EventCompleteV2;
+import org.devcourse.resumeme.business.event.service.vo.EventRejectV2;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
-)
-@JsonSubTypes(value = {
-        @JsonSubTypes.Type(value = EventRejectRequestV2.class, name = "reject"),
-        @JsonSubTypes.Type(value = CompleteEventRequestV2.class, name = "complete")
-})
-public abstract class EventUpdateRequest {
+public class EventUpdateRequest {
 
-    protected String type;
+    private Long menteeId;
 
-    public abstract EventUpdateVo toVo();
+    private String rejectMessage;
+
+    private Long resumeId;
+
+    private String completeMessage;
+
+    public EventUpdateRequest(Long menteeId, String rejectMessage, Long resumeId, String completeMessage) {
+        this.menteeId = menteeId;
+        this.rejectMessage = rejectMessage;
+        this.resumeId = resumeId;
+        this.completeMessage = completeMessage;
+    }
+
+    public EventUpdateVo toVo() {
+        if (rejectMessage != null) {
+            return toReject();
+        }
+
+        return toComplete();
+    }
+
+    private EventUpdateVo toReject() {
+        return new EventRejectV2(menteeId, rejectMessage);
+    }
+
+    private EventUpdateVo toComplete() {
+        return new EventCompleteV2(resumeId, completeMessage);
+    }
 
 }
