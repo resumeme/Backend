@@ -7,6 +7,7 @@ import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +65,14 @@ public class ComponentService {
     }
 
     public void copy(Long originResumeId, Long newResumeId) {
-        componentRepository.copy(originResumeId, newResumeId);
+        List<Component> components = componentRepository.findAllByResumeId(originResumeId);
+        List<Component> newComponents = new ArrayList<>(components);
+
+        for (Component newComponent : newComponents) {
+            newComponent.setNewInfo(newResumeId);
+        }
+
+        componentRepository.saveAll(newComponents);
     }
 
 }
