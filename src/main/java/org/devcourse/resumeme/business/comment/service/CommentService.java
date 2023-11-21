@@ -38,12 +38,7 @@ public class CommentService {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String json = objectMapper.writeValueAsString(response);
 
-                Optional<Snapshot> snapshot = snapshotRepository.findByResumeId(resumeId);
-                if (snapshot.isPresent()) {
-                    snapshot.get().updateResume(json);
-                } else {
-                    snapshotRepository.save(new Snapshot(json, resumeId));
-                }
+                snapshotRepository.save(new Snapshot(json, resumeId));
             } catch (URISyntaxException | JsonProcessingException e) {
                 throw new CustomException("NOT_FOUND_DATA", "정보를 찾을 수 없습니다");
             }
