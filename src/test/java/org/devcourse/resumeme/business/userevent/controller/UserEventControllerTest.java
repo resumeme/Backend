@@ -152,6 +152,7 @@ class UserEventControllerTest extends ControllerUnitTest {
                                         parameterWithName("menteeId").description("멘티 아이디")
                                 ),
                                 responseFields(
+                                        fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
                                         fieldWithPath("[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
                                         fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
