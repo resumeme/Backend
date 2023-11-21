@@ -9,6 +9,7 @@ import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter @Setter
@@ -22,7 +23,7 @@ public class CareerCreateRequest extends ComponentCreateRequest {
 
     private List<String> skills;
 
-    private List<DutyRequest> duties;
+    private List<DutyRequest> duties = new ArrayList<>();
 
     private boolean isCurrentlyEmployed;
 
