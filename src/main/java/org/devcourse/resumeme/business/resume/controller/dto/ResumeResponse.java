@@ -8,7 +8,8 @@ public record ResumeResponse(
         Long id,
         String title,
         LocalDateTime modifiedAt,
-        String position
+        String position,
+        String memo
 ) {
 
     public ResumeResponse(Resume resume) {
@@ -16,7 +17,8 @@ public record ResumeResponse(
                 resume.getId(),
                 resume.getTitle(),
                 resume.getLastModifiedDate(),
-                resume.getResumeInfo().getPosition()
+                resume.getResumeInfo().getPosition(),
+                resume.getMemo()
         );
     }
 }
