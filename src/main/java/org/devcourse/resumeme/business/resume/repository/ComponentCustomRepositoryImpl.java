@@ -12,15 +12,16 @@ public class ComponentCustomRepositoryImpl implements ComponentCustomRepository{
 
     public void copy(Long originResumeId, Long newResumeId) {
         em.createQuery("""
-                insert into Component (
-                    property, content, startDate, endDate, resumeId, component, createdDate, lastModifiedDate, originComponentId
-                )
-                select c.property,c.content,c.startDate,c.endDate, :newResumeId, c.component,c.createdDate,c.lastModifiedDate, c.id
-                from Component c
-                where c.resumeId = :originResumeId
-                """)
+                        insert into Component (
+                            property, content, startDate, endDate, resumeId, component, createdDate, lastModifiedDate, originComponentId, isReflectFeedBack
+                        )
+                        select c.property,c.content,c.startDate,c.endDate, :newResumeId, c.component,c.createdDate,c.lastModifiedDate, c.id, false
+                        from Component c
+                        where c.resumeId = :originResumeId
+                        """)
                 .setParameter("originResumeId", originResumeId)
-                .setParameter("newResumeId", newResumeId);
+                .setParameter("newResumeId", newResumeId)
+                .executeUpdate();
     }
 
 }
