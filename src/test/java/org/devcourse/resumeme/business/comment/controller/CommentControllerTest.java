@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -142,6 +143,9 @@ class CommentControllerTest extends ControllerUnitTest {
         lastModifiedAt.setAccessible(true);
         lastModifiedAt.set(comment, LocalDateTime.of(2023, 11, 15, 18, 0));
 
+        MenteeToEvent menteeToEvent = new MenteeToEvent(event, eventId, resumeId);
+        menteeToEvent.completeEvent("좋은 이력서에요.");
+        given(eventService.getMenteeToEvent(eventId, resumeId)).willReturn(menteeToEvent);
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
 
         // when
@@ -158,11 +162,13 @@ class CommentControllerTest extends ControllerUnitTest {
                                         parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디")
                                 ),
                                 responseFields(
-                                        fieldWithPath("[].commentId").type(NUMBER).description("리뷰 아이디"),
-                                        fieldWithPath("[].content").type(STRING).description("리뷰 내용"),
-                                        fieldWithPath("[].componentId").type(NUMBER).description("속해있는 블럭 아이디"),
-                                        fieldWithPath("[].lastModifiedAt").type(STRING).description("마지막 수정 시간")
+                                        fieldWithPath("commentResponses[].commentId").type(NUMBER).description("리뷰 아이디"),
+                                        fieldWithPath("commentResponses[].content").type(STRING).description("리뷰 내용"),
+                                        fieldWithPath("commentResponses[].componentId").type(NUMBER).description("속해있는 블럭 아이디"),
+                                        fieldWithPath("commentResponses[].lastModifiedAt").type(STRING).description("마지막 수정 시간"),
+                                        fieldWithPath("overallReview").type(STRING).description("총")
                                 )
+
 
                         )
                 );
