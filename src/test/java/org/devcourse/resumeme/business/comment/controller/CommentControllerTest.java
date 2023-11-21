@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -141,8 +142,11 @@ class CommentControllerTest extends ControllerUnitTest {
         Field lastModifiedAt = comment.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
         lastModifiedAt.setAccessible(true);
         lastModifiedAt.set(comment, LocalDateTime.of(2023, 11, 15, 18, 0));
+        MenteeToEvent menteeToEvent = new MenteeToEvent(event, mentee.getId(), resumeId);
+        menteeToEvent.completeEvent("굳!");
 
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
+        given(eventService.getMenteeToEvent(eventId, resumeId)).willReturn(menteeToEvent);
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/events/{eventId}/resumes/{resumeId}/comments", eventId, resumeId));
@@ -161,7 +165,8 @@ class CommentControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].commentId").type(NUMBER).description("리뷰 아이디"),
                                         fieldWithPath("[].content").type(STRING).description("리뷰 내용"),
                                         fieldWithPath("[].componentId").type(NUMBER).description("속해있는 블럭 아이디"),
-                                        fieldWithPath("[].lastModifiedAt").type(STRING).description("마지막 수정 시간")
+                                        fieldWithPath("[].lastModifiedAt").type(STRING).description("마지막 수정 시간"),
+                                        fieldWithPath("[].overallReview").type(STRING).description("마지막 총평")
                                 )
 
                         )

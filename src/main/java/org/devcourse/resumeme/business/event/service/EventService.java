@@ -99,13 +99,19 @@ public class EventService {
     }
 
     public void completeReview(Long eventId, String request, Long resumeId) {
+        MenteeToEvent menteeToEvent = getMenteeToEvent(eventId, resumeId);
+
+        menteeToEvent.completeEvent(request);
+    }
+
+    public MenteeToEvent getMenteeToEvent(Long eventId, Long resumeId) {
         Event event = getOne(eventId);
         MenteeToEvent menteeToEvent = event.getApplicants().stream()
                 .filter(m -> m.isSameResume(resumeId))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
 
-        menteeToEvent.completeEvent(request);
+        return menteeToEvent;
     }
 
     @Scheduled(cron = "0 0 0/1 * * *")

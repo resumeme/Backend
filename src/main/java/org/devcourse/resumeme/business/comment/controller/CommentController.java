@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentCreateRequest;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentResponse;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentUpdateRequest;
+import org.devcourse.resumeme.business.comment.controller.dto.CommentWithOverallReviewResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.service.EventService;
@@ -46,12 +48,13 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<CommentResponse> getAllOwnReviews(@PathVariable Long eventId, @PathVariable Long resumeId) {
+    public List<CommentWithOverallReviewResponse> getAllOwnReviews(@PathVariable Long eventId, @PathVariable Long resumeId) {
         Event event = eventService.getOne(eventId);
         event.checkAppliedResume(resumeId);
+        MenteeToEvent menteeToEvent = eventService.getMenteeToEvent(eventId, resumeId);
 
         return commentService.getAllWithResumeId(resumeId).stream()
-                .map(CommentResponse::new)
+                .map(comment -> new CommentWithOverallReviewResponse(comment, menteeToEvent))
                 .toList();
     }
 
