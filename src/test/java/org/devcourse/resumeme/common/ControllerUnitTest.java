@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.business.comment.controller.CommentController;
 import org.devcourse.resumeme.business.comment.service.CommentService;
 import org.devcourse.resumeme.business.event.controller.EventController;
+import org.devcourse.resumeme.business.event.controller.EventControllerV2;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
@@ -71,7 +72,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         UserController.class,
         ComponentController.class,
         FilterTestController.class,
-        UserEventController.class
+        UserEventController.class,
+        EventControllerV2.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)

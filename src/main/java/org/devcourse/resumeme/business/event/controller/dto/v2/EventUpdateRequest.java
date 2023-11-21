@@ -1,9 +1,13 @@
 package org.devcourse.resumeme.business.event.controller.dto.v2;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.event.service.vo.EventCompleteV2;
 import org.devcourse.resumeme.business.event.service.vo.EventRejectV2;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 
+@Data
+@NoArgsConstructor
 public class EventUpdateRequest {
 
     private Long menteeId;
