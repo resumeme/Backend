@@ -92,5 +92,14 @@ include::{snippets}/event/completeReview/http-request.adoc[]
 include::{snippets}/event/completeReview/path-parameters.adoc[]
 include::{snippets}/event/completeReview/request-fields.adoc[]
 
+=== 첨삭 종료 총평 조회
+
+include::{snippets}/event/completeReview/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/findOverallReview/http-request.adoc[]
+include::{snippets}/event/findOverallReview/path-parameters.adoc[]
+
+
 *Response*
-include::{snippets}/event/completeReview/http-response.adoc[]
+include::{snippets}/event/findOverallReview/http-response.adoc[]

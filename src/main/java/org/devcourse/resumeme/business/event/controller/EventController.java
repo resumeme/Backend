@@ -8,8 +8,10 @@ import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
+import org.devcourse.resumeme.business.event.controller.dto.OverallReviewResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
@@ -76,6 +78,14 @@ public class EventController {
     @PatchMapping("/{eventId}/resumes/{resumeId}/mentee")
     public void requestReview(@PathVariable Long eventId, @AuthenticationPrincipal JwtUser user) {
         eventService.requestReview(eventId, user.id());
+    }
+
+    @GetMapping("/{eventId}/resumes/{resumeId}/complete")
+    public OverallReviewResponse completeReview(
+            @PathVariable Long eventId, @PathVariable Long resumeId) {
+        MenteeToEvent menteeToEvent = eventService.getMenteeToEvent(eventId, resumeId);
+
+        return new OverallReviewResponse(menteeToEvent.getOverallReview());
     }
 
     @PatchMapping("/{eventId}/resumes/{resumeId}/complete")
