@@ -65,12 +65,10 @@ public class ComponentService {
     }
 
     public void copy(Long originResumeId, Long newResumeId) {
-        List<Component> components = componentRepository.findAllByResumeId(originResumeId);
-        List<Component> newComponents = new ArrayList<>(components);
-
-        for (Component newComponent : newComponents) {
-            newComponent.setNewInfo(newResumeId);
-        }
+        List<Component> components = getAll(originResumeId);
+        List<Component> newComponents = components.stream()
+                .map(component -> component.copy(newResumeId))
+                .toList();
 
         componentRepository.saveAll(newComponents);
     }
