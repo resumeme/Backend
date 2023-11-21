@@ -3,7 +3,9 @@ package org.devcourse.resumeme.business.resume.service;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
+import org.devcourse.resumeme.business.resume.domain.model.ResumeUpdateModel;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
+import org.devcourse.resumeme.business.resume.service.v2.ResumeUpdateVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +71,14 @@ public class ResumeService {
 
         resumeRepository.delete(resume);
     }
+
+    public void update(Long resumeId, ResumeUpdateVo update) {
+        Resume resume = getOne(resumeId);
+        ResumeUpdateModel model = update.toModel();
+
+        model.update(resume);
+    }
+
 
     public Long finishUpdate(Long resumeId) {
         Resume resume = getOne(resumeId);

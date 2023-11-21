@@ -14,6 +14,7 @@ import org.devcourse.resumeme.business.result.controller.ResultNoticeController;
 import org.devcourse.resumeme.business.result.service.ResultService;
 import org.devcourse.resumeme.business.resume.controller.ComponentController;
 import org.devcourse.resumeme.business.resume.controller.ResumeController;
+import org.devcourse.resumeme.business.resume.controller.ResumeControllerV2;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.user.controller.UserController;
@@ -25,6 +26,7 @@ import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
 import org.devcourse.resumeme.common.controller.EnumController;
+import org.devcourse.resumeme.common.support.NullableHttpRequestSnippet;
 import org.devcourse.resumeme.global.auth.filter.FilterTestController;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
@@ -73,6 +75,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ComponentController.class,
         FilterTestController.class,
         UserEventController.class,
+        ResumeControllerV2.class,
         EventControllerV2.class
 })
 @AutoConfigureRestDocs
@@ -159,6 +162,10 @@ public abstract class ControllerUnitTest {
 
     protected static ExceptionResponseFieldsSnippet exceptionResponse(List<String> exceptions) {
         return new ExceptionResponseFieldsSnippet("exception-response", Map.of("exceptions", String.join(", ", exceptions)));
+    }
+
+    protected static NullableHttpRequestSnippet nullableHttpRequestSnippet() {
+        return new NullableHttpRequestSnippet();
     }
 
     protected static class ExceptionResponseFieldsSnippet extends TemplatedSnippet {

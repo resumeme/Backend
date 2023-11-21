@@ -254,6 +254,8 @@ class ResumeControllerTest extends ControllerUnitTest {
         setModifiedAt(resume2, LocalDateTime.now());
         setPosition(resume1, "FRONT");
         setPosition(resume2, "BACK");
+        setMemo(resume1, "memo");
+        setMemo(resume2, "memo");
 
         given(resumeService.getAllByMenteeId(mentee.getId())).willReturn(List.of(resume1, resume2));
 
@@ -268,7 +270,8 @@ class ResumeControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].id").type(NUMBER).description("이력서 id"),
                                         fieldWithPath("[].title").type(STRING).description("이력서 제목"),
                                         fieldWithPath("[].modifiedAt").type(STRING).description("수정 일자"),
-                                        fieldWithPath("[].position").type(STRING).description("직무")
+                                        fieldWithPath("[].position").type(STRING).description("직무"),
+                                        fieldWithPath("[].memo").type(STRING).description("메모")
                                 )
                         )
                 );
@@ -362,32 +365,6 @@ class ResumeControllerTest extends ControllerUnitTest {
                                        parameterWithName("resumeId").description("이력서 아이디")
                                )
                        )
-                );
-    }
-
-    @Test
-    void 이력서_메모_조회에_성공한다() throws Exception {
-        // given
-        Long resumeId = 1L;
-        setMemo(resume, "간단한 메모입니다");
-        given(resumeService.getOne(resumeId)).willReturn(resume);
-
-        // when
-        ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/memo", resumeId));
-
-        // then
-        result.andExpect(status().isOk())
-                .andDo(
-                        document("resume/findMemo",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                pathParameters(
-                                        parameterWithName("resumeId").description("이력서 아이디")
-                                ),
-                                responseFields(
-                                        fieldWithPath("memo").type(STRING).description("이력서 메모")
-                                )
-                        )
                 );
     }
 
