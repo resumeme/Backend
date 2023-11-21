@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
+import org.devcourse.resumeme.business.event.domain.vo.EventUpdateModel;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
@@ -109,17 +110,18 @@ public class EventService {
         menteeToEvent.completeEvent(request);
     }
 
+    public void update(Long eventId, EventUpdateVo eventUpdateVo) {
+        Event event = getOne(eventId);
+        EventUpdateModel model = eventUpdateVo.toModel();
+        model.update(event);
+    }
+
     @Scheduled(cron = "0 0 0/1 * * *")
     public void openBookedEvents() {
         log.info("scheduler 실행 됨");
         eventRepository.openBookedEvent(EventStatus.OPEN, LocalDateTime.now());
         eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
         eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
-    }
-
-    public void update(Long eventId, EventUpdateVo eventUpdateVo) {
-        Event event = getOne(eventId);
-//        event.update(eventUpdateVo.toModel());
     }
 
 }

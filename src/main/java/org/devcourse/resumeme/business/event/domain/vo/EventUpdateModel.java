@@ -1,4 +1,9 @@
 package org.devcourse.resumeme.business.event.domain.vo;
 
-public abstract class EventUpdateModel {
+import org.devcourse.resumeme.business.event.domain.Event;
+
+public interface EventUpdateModel {
+
+    void update(Event event);
+
 }

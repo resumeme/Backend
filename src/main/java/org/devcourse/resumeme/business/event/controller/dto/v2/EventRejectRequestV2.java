@@ -1,9 +1,11 @@
 package org.devcourse.resumeme.business.event.controller.dto.v2;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.devcourse.resumeme.business.event.service.vo.EventRejectV2;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 
-public final class EventRejectRequestV2 extends EventUpdateRequest {
+@JsonTypeName("reject")
+public class EventRejectRequestV2 extends EventUpdateRequest {
 
     private final Long menteeId;
 

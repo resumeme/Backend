@@ -1,8 +1,9 @@
 package org.devcourse.resumeme.business.event.service.vo;
 
+import org.devcourse.resumeme.business.event.domain.vo.EventReject;
 import org.devcourse.resumeme.business.event.domain.vo.EventUpdateModel;
 
-public final class EventRejectV2 extends EventUpdateVo {
+public final class EventRejectV2 implements EventUpdateVo {
 
     private final Long menteeId;
 
@@ -15,7 +16,7 @@ public final class EventRejectV2 extends EventUpdateVo {
 
     @Override
     public EventUpdateModel toModel() {
-        return null;
+        return new EventReject(menteeId, rejectMessage);
     }
 
 }
