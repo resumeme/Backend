@@ -10,10 +10,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.event.domain.vo.EventUpdateModel;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.global.exception.CustomException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -106,6 +108,15 @@ public class Event extends BaseEntity {
                 });
 
         return eventInfo.remainSeats(applicants.size());
+    }
+
+    public void complete(Long resumeId, String message) {
+        MenteeToEvent menteeToEvent = applicants.stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
+
+        menteeToEvent.completeEvent(message);
     }
 
     public int reOpenEvent() {

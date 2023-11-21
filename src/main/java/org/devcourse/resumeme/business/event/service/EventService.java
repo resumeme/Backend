@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
+import org.devcourse.resumeme.business.event.domain.vo.EventUpdateModel;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -106,6 +108,12 @@ public class EventService {
                 .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
 
         menteeToEvent.completeEvent(request);
+    }
+
+    public void update(Long eventId, EventUpdateVo eventUpdateVo) {
+        Event event = getOne(eventId);
+        EventUpdateModel model = eventUpdateVo.toModel();
+        model.update(event);
     }
 
     @Scheduled(cron = "0 0 0/1 * * *")
