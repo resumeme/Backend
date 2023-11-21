@@ -217,6 +217,34 @@ class ResumeControllerTest extends ControllerUnitTest {
 
     @Test
     @WithMockCustomUser
+    void 이력서_수정완료에_성공한다() throws Exception {
+        // given
+        Long resumeId = 1L;
+
+        given(resumeService.finishUpdate(resumeId)).willReturn(1L);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/resumes/{resumeId}/complete", 1L));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/complete",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("조회 이력서 id")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("업데이트된 이력서 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
     void 참여한_이력서_리스트를_조회한다() throws Exception {
         Resume resume1 = new Resume("title1", mentee);
         Resume resume2 = new Resume("title2", mentee);

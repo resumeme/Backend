@@ -65,8 +65,10 @@ public class UserEventController {
             throw new CustomException(BAD_REQUEST);
         }
 
-        return eventService.getAll(new AllEventFilter(null, menteeId)).stream()
+        List<Event> events = eventService.getAll(new AllEventFilter(null, menteeId));
+        return events.stream()
                 .flatMap(event -> event.getApplicants().stream()
+                        .filter(applicant -> applicant.isSameMentee(user.id()))
                         .map(applicant -> new MenteeEventResponse(applicant, event))
                         .toList().stream())
                 .toList();

@@ -107,4 +107,12 @@ public class Resume extends BaseEntity {
         return resumeInfo;
     }
 
+    public boolean isOrigin() {
+        return this.originResumeId == null;
+    }
+
+    public void makeToOrigin() {
+        this.originResumeId = null;
+    }
+
 }

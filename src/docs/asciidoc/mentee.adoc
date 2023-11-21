@@ -218,6 +218,14 @@ include::{snippets}/resume/delete/path-parameters.adoc[]
 *Response*
 include::{snippets}/resume/delete/http-response.adoc[]
 
+=== 이력서 피드백 반영 완료
+*Request*
+include::{snippets}/resume/complete/http-request.adoc[]
+include::{snippets}/resume/complete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/complete/response-fields.adoc[]
+
 == [첨삭]
 === 첨삭 이벤트 참여 신청
 *Request*
