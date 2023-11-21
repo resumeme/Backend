@@ -75,6 +75,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         ComponentController.class,
         FilterTestController.class,
         UserEventController.class,
+        ResumeControllerV2.class,
         EventControllerV2.class
 })
 @AutoConfigureRestDocs
