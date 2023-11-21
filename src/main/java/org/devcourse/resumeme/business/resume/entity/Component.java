@@ -111,4 +111,8 @@ public class Component {
         }
     }
 
+    public void setNewInfo(Long newResumeId) {
+        this.id = null;
+        this.resumeId = newResumeId;
+    }
 }
