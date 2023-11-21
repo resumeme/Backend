@@ -12,7 +12,6 @@ import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.exception.TokenException;
-import org.devcourse.resumeme.global.exception.UnAuthenticatedException;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +24,6 @@ import java.util.Optional;
 
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.LOGIN_REQUIRED;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -64,7 +62,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         return;
                     }
                     log.info("리프레시 토큰이 유효하지 않습니다.");
-                    throw new UnAuthenticatedException(LOGIN_REQUIRED);
                 }, () -> {
                     log.info("액세스 토큰이 유효하지 않고, 헤더에 리프레시 토큰이 없습니다.");
                     throw new TokenException(INVALID_ACCESS_TOKEN);
