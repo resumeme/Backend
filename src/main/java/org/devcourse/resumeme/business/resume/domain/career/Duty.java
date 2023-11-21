@@ -40,7 +40,7 @@ public class Duty {
     }
 
     public Duty(Map<String, String> component, int id) {
-        this(component.get(DUTY.name() + DESCRIPTION.name() + id), LocalDate.parse(component.get(DUTY.name() + TITLE + id + START_DATE)),
+        this(component.get(DUTY.name() + TITLE.name() + id), LocalDate.parse(component.get(DUTY.name() + TITLE + id + START_DATE)),
                 LocalDate.parse(component.get(DUTY.name() + TITLE + id + END_DATE )), component.get(DUTY.name() + DESCRIPTION.name() + id));
     }
 
