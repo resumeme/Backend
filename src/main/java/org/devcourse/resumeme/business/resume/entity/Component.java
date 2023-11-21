@@ -115,4 +115,12 @@ public class Component {
         this.id = null;
         this.resumeId = newResumeId;
     }
+
+    public Component copy(Long newResumeId) {
+        List<Component> subComponents = components.stream()
+                .map(component -> component.copy(newResumeId))
+                .toList();
+
+        return new Component(property, content, startDate, endDate, newResumeId, subComponents);
+    }
 }
