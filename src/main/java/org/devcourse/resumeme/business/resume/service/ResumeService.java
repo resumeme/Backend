@@ -69,4 +69,12 @@ public class ResumeService {
 
         resumeRepository.delete(resume);
     }
+
+    public Long finishUpdate(Long resumeId) {
+        Resume resume = getOne(resumeId);
+        resume.makeToOrigin();
+
+        return resumeId;
+    }
+
 }

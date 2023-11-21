@@ -83,6 +83,11 @@ public class ResumeController {
         return new IdResponse(resumeService.updateTitle(resume, request.title()));
     }
 
+    @PatchMapping("/{resumeId}/complete")
+    public IdResponse finishUpdateResumeWithComment(@PathVariable Long resumeId) {
+        return new IdResponse(resumeService.finishUpdate(resumeId));
+    }
+
     @GetMapping
     public List<ResumeResponse> getAll(@AuthenticationPrincipal JwtUser user) {
         return resumeService.getAllByMenteeId(user.id()).stream()
