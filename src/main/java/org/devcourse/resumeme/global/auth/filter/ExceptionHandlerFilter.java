@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.devcourse.resumeme.global.exception.TokenException;
-import org.devcourse.resumeme.global.exception.UnAuthenticatedException;
 import org.devcourse.resumeme.global.exception.advice.ErrorResponse;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -34,17 +34,22 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (TokenException e) {
-
             sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN, e);
-        } catch (UnAuthenticatedException e) {
-            sendErrorResponse(response, 401, ExceptionCode.LOGIN_REQUIRED, e);
         } catch (AccessDeniedException e) {
+            if (!isAuthenticated()) {
+                sendErrorResponse(response, 401, ExceptionCode.LOGIN_REQUIRED, e);
+                return;
+            }
             sendErrorResponse(response, 400, BAD_REQUEST, e);
         } catch (CustomException e) {
             sendErrorResponse(response, 400, ExceptionCode.valueOf(e.getCode()), e);
         } catch (Exception e) {
             sendErrorResponse(response, 500, SERVER_ERROR, e);
         }
+    }
+
+    private boolean isAuthenticated() {
+        return !SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser");
     }
 
     private void sendErrorResponse(HttpServletResponse response, int statusCode, ExceptionCode code, Exception exception) throws IOException {
