@@ -22,17 +22,17 @@ import org.devcourse.resumeme.common.domain.DocsEnumType;
 import org.devcourse.resumeme.global.exception.CustomException;
 
 import java.util.Arrays;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public enum BlockType implements DocsEnumType {
 
-    ACTIVITY("활동", "activities", ActivityCreateRequest.class, component -> new ActivityResponse(new Activity(Converter.from(component)), component)),
-    CAREER("업무경험", "careers", CareerCreateRequest.class, component -> new CareerResponse(new Career(Converter.from(component)), component)),
-    CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, component -> new CertificationResponse(new Certification(Converter.from(component)), component)),
-    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, component -> new ForeignLanguageResponse(new ForeignLanguage(Converter.from(component)), component)),
-    PROJECT("프로젝트", "projects", ProjectCreateRequest.class, component -> new ProjectResponse(new Project(Converter.from(component)), component)),
-    TRAINING("교육", "trainings", TrainingCreateRequest.class, component -> new TrainingResponse(new Training(Converter.from(component)), component)),
-    LINK("외부 링크", "links", ResumeLinkRequest.class, component -> new ResumeLinkResponse(new ReferenceLink(Converter.from(component)), component));
+    ACTIVITY("활동", "activities", ActivityCreateRequest.class, (type, component) -> new ActivityResponse(type, new Activity(Converter.from(component)), component)),
+    CAREER("업무경험", "careers", CareerCreateRequest.class, (type, component) -> new CareerResponse(type, new Career(Converter.from(component)), component)),
+    CERTIFICATION("수상 및 자격증", "certifications", CertificationCreateRequest.class, (type, component) -> new CertificationResponse(type, new Certification(Converter.from(component)), component)),
+    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageCreateRequest.class, (type, component) -> new ForeignLanguageResponse(type, new ForeignLanguage(Converter.from(component)), component)),
+    PROJECT("프로젝트", "projects", ProjectCreateRequest.class, (type, component) -> new ProjectResponse(type, new Project(Converter.from(component)), component)),
+    TRAINING("교육", "trainings", TrainingCreateRequest.class, (type, component) -> new TrainingResponse(type, new Training(Converter.from(component)), component)),
+    LINK("외부 링크", "links", ResumeLinkRequest.class, (type, component) -> new ResumeLinkResponse(type, new ReferenceLink(Converter.from(component)), component));
 
     private final String description;
 
@@ -40,9 +40,9 @@ public enum BlockType implements DocsEnumType {
 
     private final Class<? extends ComponentCreateRequest> classType;
 
-    public final Function<Component, ComponentResponse> from;
+    public final BiFunction<String, Component, ComponentResponse> from;
 
-    BlockType(String description, String urlParameter, Class<? extends ComponentCreateRequest> classType, Function<Component, ComponentResponse> from) {
+    BlockType(String description, String urlParameter, Class<? extends ComponentCreateRequest> classType, BiFunction<String, Component, ComponentResponse> from) {
         this.description = description;
         this.urlParameter = urlParameter;
         this.classType = classType;
@@ -75,6 +75,6 @@ public enum BlockType implements DocsEnumType {
     }
 
     public static ComponentResponse from(String type, Component component) {
-        return of(type).from.apply(component);
+        return of(type).from.apply(type, component);
     }
 }

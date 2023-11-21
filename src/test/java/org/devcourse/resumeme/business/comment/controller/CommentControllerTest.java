@@ -92,7 +92,7 @@ class CommentControllerTest extends ControllerUnitTest {
         lastModifiedAt.setAccessible(true);
         lastModifiedAt.set(comment, LocalDateTime.of(2023, 11, 15, 18, 0));
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(reviewService.create(any(Comment.class))).willReturn(comment);
+        given(reviewService.create(any(Comment.class), any(Long.class))).willReturn(comment);
         given(componentService.getOne(request.componentId())).willReturn(component);
 
         // when

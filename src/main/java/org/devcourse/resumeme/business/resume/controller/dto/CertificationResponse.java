@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
@@ -8,6 +9,7 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 
 @Data
 @NoArgsConstructor
+@JsonTypeName("certifications")
 public class CertificationResponse extends ComponentResponse {
 
     private String certificationTitle;
@@ -20,8 +22,8 @@ public class CertificationResponse extends ComponentResponse {
 
     private String description;
 
-    public CertificationResponse(Certification certification, Component component) {
-        super(component);
+    public CertificationResponse(String type,Certification certification, Component component) {
+        super(type, component);
         this.certificationTitle = certification.getCertificationTitle();
         this.acquisitionDate = certification.getAcquisitionDate();
         this.issuingAuthority = certification.getIssuingAuthority();

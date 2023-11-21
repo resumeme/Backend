@@ -40,7 +40,7 @@ public class CommentController {
     public CommentResponse createReview(@PathVariable Long resumeId, @RequestBody CommentCreateRequest request) {
         Resume resume = resumeService.getOne(resumeId);
         Component component = componentService.getOne(request.componentId());
-        Comment review = commentService.create(request.toEntity(resume, component));
+        Comment review = commentService.create(request.toEntity(resume, component), resumeId);
 
         return new CommentResponse(review.getId(), review.getContent(), component.getId(), review.getLastModifiedDate());
     }
