@@ -15,8 +15,10 @@ import org.devcourse.resumeme.business.result.service.ResultService;
 import org.devcourse.resumeme.business.resume.controller.ComponentController;
 import org.devcourse.resumeme.business.resume.controller.ResumeController;
 import org.devcourse.resumeme.business.resume.controller.ResumeControllerV2;
+import org.devcourse.resumeme.business.resume.controller.SnapshotController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.resume.service.SnapshotService;
 import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
@@ -76,7 +78,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         FilterTestController.class,
         UserEventController.class,
         ResumeControllerV2.class,
-        EventControllerV2.class
+        EventControllerV2.class,
+        SnapshotController.class
 })
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
@@ -124,6 +127,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected EmailService emailService;
+
+    @MockBean
+    protected SnapshotService snapshotService;
 
     protected MockMvc mvc;
 
