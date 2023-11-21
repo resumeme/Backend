@@ -45,7 +45,7 @@ public class CareerCreateRequest extends ComponentCreateRequest {
         this.companyName = companyName;
         this.position = position;
         this.skills = skills;
-        this.duties = duties;
+        this.duties = duties == null ? List.of() : duties;
         this.isCurrentlyEmployed = isCurrentlyEmployed;
         this.careerStartDate = careerStartDate;
         this.endDate = endDate;
