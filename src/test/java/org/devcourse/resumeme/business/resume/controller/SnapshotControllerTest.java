@@ -37,7 +37,7 @@ class SnapshotControllerTest extends ControllerUnitTest {
         ActivityCreateRequest request = activityCreateRequest();
         Component component = request.toEntity().of(1L);
         Activity activity = new Activity(Converter.from(component));
-        ActivityResponse response = new ActivityResponse("activities", activity, component);
+        ActivityResponse response = new ActivityResponse("activities", component);
 
         List<ComponentResponse> response1 = List.of(response);
         Map<String, List<ComponentResponse>> activities = new HashMap<>();
