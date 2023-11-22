@@ -101,13 +101,16 @@ public class EventService {
     }
 
     public void completeReview(Long eventId, String request, Long resumeId) {
+        MenteeToEvent menteeToEvent = getMenteeToEvent(eventId, resumeId);
+        menteeToEvent.completeEvent(request);
+    }
+
+    public MenteeToEvent getMenteeToEvent(Long eventId, Long resumeId) {
         Event event = getOne(eventId);
-        MenteeToEvent menteeToEvent = event.getApplicants().stream()
+        return event.getApplicants().stream()
                 .filter(m -> m.isSameResume(resumeId))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND));
-
-        menteeToEvent.completeEvent(request);
     }
 
     public void update(Long eventId, EventUpdateVo eventUpdateVo) {
@@ -122,6 +125,14 @@ public class EventService {
         eventRepository.openBookedEvent(EventStatus.OPEN, LocalDateTime.now());
         eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
         eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
+    }
+
+    public String getOverallReview(Event event, Long resumeId) {
+        return event.getApplicants().stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
+                .getOverallReview();
     }
 
 }

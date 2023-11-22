@@ -10,6 +10,7 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
