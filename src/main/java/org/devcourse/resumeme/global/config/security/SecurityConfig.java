@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -65,7 +66,8 @@ public class SecurityConfig {
     private void setEndpoints(HttpSecurity http) throws Exception {
         for (Matcher matcher : properties.matchers()) {
             http.authorizeHttpRequests(registry ->
-                    registry.requestMatchers(matcher.requestMatcher()).access(matcher.manager()));
+                    registry.requestMatchers(matcher.requestMatcher()).access(matcher.manager())
+                            .requestMatchers(new IpAddressMatcher("127.0.0.1")).permitAll());
         }
 
     }
