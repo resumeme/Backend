@@ -3,7 +3,6 @@ package org.devcourse.resumeme.business.resume.controller.advice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -66,7 +65,7 @@ public class ComponentAdvice implements RequestBodyAdvice {
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return BlockType.of(getTypeFromPathVariable()).getClassType().cast(body);
+        return body;
     }
 
     @Override
