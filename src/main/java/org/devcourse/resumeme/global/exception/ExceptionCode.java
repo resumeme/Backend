@@ -34,7 +34,10 @@ public enum ExceptionCode implements DocsEnumType {
     INVALID_ACCESS_TOKEN("유효하지 않은 액세스 토큰입니다"),
     BAD_REQUEST("잘못된 요청입니다"),
     LOGIN_REQUIRED("로그인이 필요합니다"),
-    INVALID_EMAIL("이메일이 유효하지 않습니다")
+    INVALID_EMAIL("이메일이 유효하지 않습니다"),
+    FOLLOW_ALREADY_FULL("팔로우 가능한 멘토 인원이 초과되었습니다"),
+    ALREADY_FOLLOWING("이미 팔로우 중인 멘토입니다"),
+    NOT_FOLLOWING_NOW("현재 팔로우 하고있지 않은 멘토입니다")
     ;
 
     private final String message;
