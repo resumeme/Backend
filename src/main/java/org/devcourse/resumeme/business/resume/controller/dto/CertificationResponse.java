@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Certification;
+import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 @Data
@@ -22,8 +23,9 @@ public class CertificationResponse extends ComponentResponse {
 
     private String description;
 
-    public CertificationResponse(String type,Certification certification, Component component) {
+    public CertificationResponse(String type, Component component) {
         super(type, component);
+        Certification certification = new Certification(Converter.from(component));
         this.certificationTitle = certification.getCertificationTitle();
         this.acquisitionDate = certification.getAcquisitionDate();
         this.issuingAuthority = certification.getIssuingAuthority();

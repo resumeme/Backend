@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
+import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Training;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
@@ -30,8 +31,9 @@ public class TrainingResponse extends ComponentResponse {
 
     private String explanation;
 
-    public TrainingResponse(String type,Training training, Component component) {
+    public TrainingResponse(String type, Component component) {
         super(type, component);
+        Training training = new Training(Converter.from(component));
         this.organization = training.getEducationalDetails().getOrganization();
         this.major = training.getEducationalDetails().getMajor();
         this.degree = training.getEducationalDetails().getDegree();

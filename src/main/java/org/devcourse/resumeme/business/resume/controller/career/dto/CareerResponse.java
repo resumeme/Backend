@@ -3,6 +3,7 @@ package org.devcourse.resumeme.business.resume.controller.career.dto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
 import org.devcourse.resumeme.business.resume.entity.Component;
@@ -31,8 +32,9 @@ public class CareerResponse extends ComponentResponse {
 
     private String careerContent;
 
-    public CareerResponse(String type,Career career, Component component) {
+    public CareerResponse(String type, Component component) {
         super(type, component);
+        Career career = new Career(Converter.from(component));
         this.companyName = career.getCompanyName();
         this.position = career.getPosition();
         this.skills = career.getSkills();
