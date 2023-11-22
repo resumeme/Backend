@@ -83,6 +83,17 @@ include::{snippets}/event/reject/request-fields.adoc[]
 *Response*
 include::{snippets}/event/reject/http-response.adoc[]
 
+=== 첨삭 이벤트 참여 신청 반려 V2
+
+include::{snippets}/event/v2/reject/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/v2/reject/http-request.adoc[]
+include::{snippets}/event/v2/reject/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/v2/reject/http-response.adoc[]
+
 === 첨삭 종료 총평 작성
 
 include::{snippets}/event/completeReview/exception-response.adoc[]
@@ -103,3 +114,15 @@ include::{snippets}/event/findOverallReview/path-parameters.adoc[]
 
 *Response*
 include::{snippets}/event/findOverallReview/http-response.adoc[]
+
+=== 첨삭 종료 총평 작성 V2
+
+include::{snippets}/event/v2/completeReview/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/v2/completeReview/http-request.adoc[]
+include::{snippets}/event/v2/completeReview/path-parameters.adoc[]
+include::{snippets}/event/v2/completeReview/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/v2/completeReview/http-response.adoc[]
