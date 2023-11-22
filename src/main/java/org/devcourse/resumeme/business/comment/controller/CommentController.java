@@ -55,8 +55,9 @@ public class CommentController {
         List<CommentResponse> commentResponses = commentService.getAllWithResumeId(resumeId).stream()
                 .map(CommentResponse::new)
                 .toList();
-        MenteeToEvent menteeToEvent = eventService.getMenteeToEvent(eventId, resumeId);
-        return new CommentWithReviewResponse(commentResponses, menteeToEvent.getOverallReview());
+        String overallReview = eventService.getOverallReview(event, resumeId);
+
+        return new CommentWithReviewResponse(commentResponses, overallReview);
     }
 
     @PatchMapping("/{commentId}")

@@ -127,4 +127,12 @@ public class EventService {
         eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
     }
 
+    public String getOverallReview(Event event, Long resumeId) {
+        return event.getApplicants().stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
+                .getOverallReview();
+    }
+
 }

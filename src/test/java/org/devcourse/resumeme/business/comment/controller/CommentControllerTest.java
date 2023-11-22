@@ -143,9 +143,7 @@ class CommentControllerTest extends ControllerUnitTest {
         lastModifiedAt.setAccessible(true);
         lastModifiedAt.set(comment, LocalDateTime.of(2023, 11, 15, 18, 0));
 
-        MenteeToEvent menteeToEvent = new MenteeToEvent(event, eventId, resumeId);
-        menteeToEvent.completeEvent("좋은 이력서에요.");
-        given(eventService.getMenteeToEvent(eventId, resumeId)).willReturn(menteeToEvent);
+        given(eventService.getOverallReview(event, resumeId)).willReturn("좋은 이력서에요.");
         given(reviewService.getAllWithResumeId(resumeId)).willReturn(List.of(comment));
 
         // when
@@ -166,7 +164,7 @@ class CommentControllerTest extends ControllerUnitTest {
                                         fieldWithPath("commentResponses[].content").type(STRING).description("리뷰 내용"),
                                         fieldWithPath("commentResponses[].componentId").type(NUMBER).description("속해있는 블럭 아이디"),
                                         fieldWithPath("commentResponses[].lastModifiedAt").type(STRING).description("마지막 수정 시간"),
-                                        fieldWithPath("overallReview").type(STRING).description("총")
+                                        fieldWithPath("overallReview").type(STRING).description("총평")
                                 )
 
 

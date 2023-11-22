@@ -80,14 +80,6 @@ public class EventController {
         eventService.requestReview(eventId, user.id());
     }
 
-    @GetMapping("/{eventId}/resumes/{resumeId}/complete")
-    public OverallReviewResponse completeReview(
-            @PathVariable Long eventId, @PathVariable Long resumeId) {
-        MenteeToEvent menteeToEvent = eventService.getMenteeToEvent(eventId, resumeId);
-
-        return new OverallReviewResponse(menteeToEvent.getOverallReview());
-    }
-
     @PatchMapping("/{eventId}/resumes/{resumeId}/complete")
     public void completeReview(
             @PathVariable Long eventId, @PathVariable Long resumeId, @RequestBody CompleteEventRequest request, @AuthenticationPrincipal JwtUser user

@@ -284,41 +284,6 @@ class EventControllerTest extends ControllerUnitTest {
     }
 
     @Test
-    @WithMockCustomUser
-    void 이력서_총평을_조회한다() throws Exception {
-        // given
-        Long eventId = 1L;
-        Long resumeId = 1L;
-        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
-        MenteeToEvent menteeToEvent = new MenteeToEvent(event, eventId, resumeId);
-        menteeToEvent.completeEvent("좋은 이력서에요.");
-        given(eventService.getMenteeToEvent(eventId, resumeId)).willReturn(menteeToEvent);
-
-        // when
-        ResultActions result = mvc.perform(get("/api/v1/events/{eventId}/resumes/{resumeId}/complete", eventId, resumeId));
-
-        // then
-        result
-                .andExpect(status().isOk())
-                .andDo(
-                        document("event/findOverallReview",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                pathParameters(
-                                        parameterWithName("eventId").description("이벤트 아이디"),
-                                        parameterWithName("resumeId").description("이력서 아이디")
-                                ),
-                                responseFields(
-                                        fieldWithPath("overallReview").type(STRING).description("이력서 총평")
-                                )
-                        )
-                );
-    }
-
-
-    @Test
     @WithMockCustomUser(role = "ROLE_MENTOR")
     void 첨삭_이벤트_상세_조회할수있다() throws Exception {
         // given
