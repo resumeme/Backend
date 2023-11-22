@@ -67,14 +67,14 @@ public class ComponentResponse {
 
     public static ResponseFieldsSnippet foreignLanguageResponseSnippet() {
         return responseFields(
-                fieldWithPath("foreign-languages.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("foreign-languages.[].type").type(STRING).description("블럭 타입"),
-                fieldWithPath("foreign-languages.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
-                fieldWithPath("foreign-languages.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
-                fieldWithPath("foreign-languages.[].language").type(STRING).description("언어"),
-                fieldWithPath("foreign-languages.[].examName").type(STRING).description("시험명"),
-                fieldWithPath("foreign-languages.[].scoreOrGrade").type(STRING).description("점수 또는 학점"),
-                fieldWithPath("foreign-languages.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("foreignLanguages.[].componentId").type(NUMBER).description("블럭 아이디"),
+                fieldWithPath("foreignLanguages.[].type").type(STRING).description("블럭 타입"),
+                fieldWithPath("foreignLanguages.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
+                fieldWithPath("foreignLanguages.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
+                fieldWithPath("foreignLanguages.[].language").type(STRING).description("언어"),
+                fieldWithPath("foreignLanguages.[].examName").type(STRING).description("시험명"),
+                fieldWithPath("foreignLanguages.[].scoreOrGrade").type(STRING).description("점수 또는 학점"),
+                fieldWithPath("foreignLanguages.[].createdDate").type(STRING).description("생성 시간")
         );
     }
 

@@ -8,7 +8,7 @@ import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
 
 @Getter @Setter
 @NoArgsConstructor
-@JsonTypeName("foreign-languages")
+@JsonTypeName("foreignLanguages")
 public class ForeignLanguageCreateRequest extends ComponentCreateRequest {
 
     private String language;

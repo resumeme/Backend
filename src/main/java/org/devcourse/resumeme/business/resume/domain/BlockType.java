@@ -20,7 +20,7 @@ public enum BlockType implements DocsEnumType {
     ACTIVITY("활동", "activities", ActivityResponse::new),
     CAREER("업무경험", "careers", CareerResponse::new),
     CERTIFICATION("수상 및 자격증", "certifications", CertificationResponse::new),
-    FOREIGN_LANGUAGE("외국어", "foreign-languages", ForeignLanguageResponse::new),
+    FOREIGN_LANGUAGE("외국어", "foreignLanguages", ForeignLanguageResponse::new),
     PROJECT("프로젝트", "projects", ProjectResponse::new),
     TRAINING("교육", "trainings", TrainingResponse::new),
     LINK("외부 링크", "links", ResumeLinkResponse::new);
