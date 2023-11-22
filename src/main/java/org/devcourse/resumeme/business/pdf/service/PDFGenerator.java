@@ -59,7 +59,8 @@ public class PDFGenerator {
     private ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-blink-features=AutomationControlled");
-        options.addArguments("headless");
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox=new");
         options.addArguments("disable-gpu");
         options.addArguments("window-size=1920x1080");
         options.addArguments("lang=ko_KR");
