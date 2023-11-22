@@ -141,12 +141,12 @@ include::{snippets}/resume/component/find/projects/response-fields.adoc[]
 
 === 이력서 어학성적 조회
 *Request*
-include::{snippets}/resume/component/find/foreign-languages/http-request.adoc[]
-include::{snippets}/resume/component/find/foreign-languages/path-parameters.adoc[]
+include::{snippets}/resume/component/find/foreignLanguages/http-request.adoc[]
+include::{snippets}/resume/component/find/foreignLanguages/path-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/component/find/foreign-languages/http-response.adoc[]
-include::{snippets}/resume/component/find/foreign-languages/response-fields.adoc[]
+include::{snippets}/resume/component/find/foreignLanguages/http-response.adoc[]
+include::{snippets}/resume/component/find/foreignLanguages/response-fields.adoc[]
 
 === 이력서 활동사항 조회
 *Request*
@@ -156,15 +156,6 @@ include::{snippets}/resume/component/find/activities/path-parameters.adoc[]
 *Response*
 include::{snippets}/resume/component/find/activities/http-response.adoc[]
 include::{snippets}/resume/component/find/activities/response-fields.adoc[]
-
-=== 이력서 메모 조회
-*Request*
-include::{snippets}/resume/findMemo/http-request.adoc[]
-include::{snippets}/resume/findMemo/path-parameters.adoc[]
-
-*Response*
-include::{snippets}/resume/findMemo/http-response.adoc[]
-include::{snippets}/resume/findMemo/response-fields.adoc[]
 
 == [첨삭 피드백]
 === 이력서 첨삭 피드백 조회
