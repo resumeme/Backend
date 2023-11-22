@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
+import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Project;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
@@ -28,8 +29,9 @@ public class ProjectResponse extends ComponentResponse {
 
     private String projectUrl;
 
-    public ProjectResponse(String type,Project project, Component component) {
+    public ProjectResponse(String type, Component component) {
         super(type, component);
+        Project project = new Project(Converter.from(component));
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
         this.isTeam = !project.getTeamMembers().equals("");
