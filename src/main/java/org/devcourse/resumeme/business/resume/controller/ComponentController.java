@@ -31,12 +31,12 @@ public class ComponentController {
     private final ComponentService blockService;
 
     @PostMapping("/{resumeId}/{type}")
-    public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable String type) {
+    public IdResponse createComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable String type) {
         return new IdResponse(blockService.create(request.toEntity().of(resumeId), type));
     }
 
     @GetMapping({"/{resumeId}", "/{resumeId}/{type}"})
-    public Map<String, List<ComponentResponse>> getCareer(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
+    public Map<String, List<ComponentResponse>> getComponent(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
         Map<String, List<ComponentResponse>> result = new HashMap<>();
 
         List<Component> components = blockService.getAll(resumeId);
