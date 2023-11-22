@@ -6,7 +6,6 @@ import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequ
 import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
-import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +30,6 @@ public class ComponentController {
 
     private final ComponentService blockService;
 
-    private final ResumeService resumeService;
-
     @PostMapping("/{resumeId}/{type}")
     public IdResponse createCareer(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable String type) {
         return new IdResponse(blockService.create(request.toEntity().of(resumeId), type));
@@ -40,8 +37,6 @@ public class ComponentController {
 
     @GetMapping({"/{resumeId}", "/{resumeId}/{type}"})
     public Map<String, List<ComponentResponse>> getCareer(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
-        resumeService.getOne(resumeId);
-
         Map<String, List<ComponentResponse>> result = new HashMap<>();
 
         List<Component> components = blockService.getAll(resumeId);
