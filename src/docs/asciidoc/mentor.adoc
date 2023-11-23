@@ -33,6 +33,17 @@ include::{snippets}/event/create/request-fields.adoc[]
 include::{snippets}/event/create/http-response.adoc[]
 include::{snippets}/event/create/response-fields.adoc[]
 
+=== 첨삭 이벤트 수정
+
+*Request*
+include::{snippets}/event/update/http-request.adoc[]
+include::{snippets}/event/update/request-fields.adoc[]
+include::{snippets}/event/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/update/http-response.adoc[]
+include::{snippets}/event/update/response-fields.adoc[]
+
 === 첨삭 이벤트 조회
 
 *Request*
