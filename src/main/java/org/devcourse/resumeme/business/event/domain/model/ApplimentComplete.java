@@ -1,14 +1,14 @@
-package org.devcourse.resumeme.business.event.domain.vo;
+package org.devcourse.resumeme.business.event.domain.model;
 
 import org.devcourse.resumeme.business.event.domain.Event;
 
-public class EventComplete implements EventUpdateModel {
+public class ApplimentComplete implements ApplimentUpdate {
 
     private Long resumeId;
 
     private String completeMessage;
 
-    public EventComplete(Long resumeId, String completeMessage) {
+    public ApplimentComplete(Long resumeId, String completeMessage) {
         this.resumeId = resumeId;
         this.completeMessage = completeMessage;
     }
