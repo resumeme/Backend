@@ -61,11 +61,6 @@ public class EventService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Long getApplicantId(Long eventId, Long menteeId) {
-        return getOne(eventId).getApplicantId(menteeId);
-    }
-
     public void reject(EventReject reject) {
         Event event = getOne(reject.eventId());
 
