@@ -35,7 +35,10 @@ public enum ExceptionCode implements DocsEnumType {
     INVALID_ACCESS_TOKEN("유효하지 않은 액세스 토큰입니다"),
     BAD_REQUEST("잘못된 요청입니다"),
     LOGIN_REQUIRED("로그인이 필요합니다"),
-    INVALID_EMAIL("이메일이 유효하지 않습니다")
+    INVALID_EMAIL("이메일이 유효하지 않습니다"),
+    NOT_FOUND_DATA("정보를 찾을 수 없습니다"),
+    COMMENT_NOT_FOUND("작성된 피드백이 없습니다"),
+    NOT_FOUND_SNAPSHOT("저장된 스냅샷이 없습니다")
     ;
 
     private final String message;

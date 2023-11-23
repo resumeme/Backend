@@ -17,7 +17,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import static org.devcourse.resumeme.global.exception.ExceptionCode.COMMENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_DATA;
 
 @Service
 @Transactional
@@ -40,7 +42,7 @@ public class CommentService {
 
                 snapshotRepository.save(new Snapshot(json, resumeId));
             } catch (URISyntaxException | JsonProcessingException e) {
-                throw new CustomException("NOT_FOUND_DATA", "정보를 찾을 수 없습니다");
+                throw new CustomException(NOT_FOUND_DATA);
             }
         }
         return commentRepository.save(comment);
@@ -49,7 +51,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Comment getOne(Long commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow();
+                .orElseThrow(() -> new CustomException(COMMENT_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

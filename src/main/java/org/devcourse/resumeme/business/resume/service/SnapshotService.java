@@ -6,6 +6,8 @@ import org.devcourse.resumeme.business.resume.repository.SnapshotRepository;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_SNAPSHOT;
+
 @Service
 @RequiredArgsConstructor
 public class SnapshotService {
@@ -14,7 +16,7 @@ public class SnapshotService {
 
     public Snapshot getByResumeId(Long resumeId) {
         return snapshotRepository.findByResumeId(resumeId)
-                .orElseThrow(() -> new CustomException("NOT_FOUND_SNAPSHOT", "저장된 스냅샷이 없습니다"));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_SNAPSHOT));
     }
 
 }
