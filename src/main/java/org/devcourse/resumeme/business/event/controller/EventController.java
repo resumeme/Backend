@@ -54,7 +54,6 @@ public class EventController {
 
     @PostMapping
     public IdResponse createEvent(@RequestBody EventCreateRequest request, @AuthenticationPrincipal JwtUser user) {
-        /* 인증 유저 아이디를 통한 멘토 찾아오기 */
         Mentor mentor = mentorService.getOne(user.id());
         Event event = request.toEntity(mentor);
 

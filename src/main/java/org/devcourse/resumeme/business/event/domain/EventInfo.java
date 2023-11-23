@@ -15,6 +15,7 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_AVAILABLE
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_REMAIN_SEATS;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RANGE_MAXIMUM_ATTENDEE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_LENGTH_ERROR;
 
 @Embeddable
 @NoArgsConstructor(access = PROTECTED)
@@ -44,7 +45,7 @@ public class EventInfo {
 
     private void validateInput(int maximumAttendee, String title, String content) {
         check(maximumAttendee < 2 || maximumAttendee > 10, RANGE_MAXIMUM_ATTENDEE);
-        check(isBlank(title), NO_EMPTY_VALUE);
+        check(isBlank(title) || title.length() > 30, TEXT_LENGTH_ERROR);
         check(isBlank(content), NO_EMPTY_VALUE);
     }
 
