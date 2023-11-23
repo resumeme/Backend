@@ -1,6 +1,6 @@
 package org.devcourse.resumeme.business.event.controller;
 
-import org.devcourse.resumeme.business.event.controller.dto.v2.EventUpdateRequest;
+import org.devcourse.resumeme.business.event.controller.dto.v2.ApplyUpdateRequest;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,9 @@ import java.util.List;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.*;
-import static org.mockito.Mockito.doNothing;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -23,16 +24,15 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class EventControllerV2Test extends ControllerUnitTest {
+class MenteeToEventControllerTest extends ControllerUnitTest {
 
     @Test
     void 첨삭_이벤트_신청을_반려한다() throws Exception {
         // given
-        EventUpdateRequest request = new EventUpdateRequest(1L, "반려 메시지", null, null);
-        doNothing().when(eventService).update(1L, request.toVo());
+        ApplyUpdateRequest request = new ApplyUpdateRequest(1L, "반려 메시지", null, null);
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v2/events/{eventId}", 1L)
+        ResultActions result = mvc.perform(patch("/api/v1/appliments/events/{eventId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
@@ -62,11 +62,10 @@ class EventControllerV2Test extends ControllerUnitTest {
     @WithMockCustomUser
     void 첨삭_이벤트_리뷰를_완료한다() throws Exception {
         // given
-        EventUpdateRequest request = new EventUpdateRequest(null, null, 1L, "좋은 이력서에요.");
-        doNothing().when(eventService).update(1L, request.toVo());
+        ApplyUpdateRequest request = new ApplyUpdateRequest(null, null, 1L, "좋은 이력서에요.");
 
         // when
-        ResultActions result = mvc.perform(patch("/api/v2/events/{eventId}", 1L)
+        ResultActions result = mvc.perform(patch("/api/v1/appliments/events/{eventId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
 
