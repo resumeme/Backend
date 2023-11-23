@@ -20,6 +20,7 @@ public class Snapshot {
 
     @Lob
     @Getter
+    @Column(columnDefinition = "LONGTEXT")
     private String resumeData;
 
     private Long resumeId;
