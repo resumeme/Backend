@@ -59,4 +59,12 @@ public class EventTimeInfo {
         return nowDateTime.isAfter(this.openDateTime);
     }
 
+    public void update(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDateTime) {
+        validateInput(openDateTime, closeDateTime, endDateTime);
+
+        this.openDateTime = openDateTime;
+        this.closeDateTime = closeDateTime;
+        this.endDate = endDateTime;
+    }
+
 }

@@ -7,12 +7,14 @@ import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
+import org.devcourse.resumeme.business.event.controller.dto.EventUpdateRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -51,6 +53,14 @@ public class EventController {
         Event event = request.toEntity(mentor);
 
         return new IdResponse(eventService.create(event));
+    }
+
+    @PatchMapping("/{eventId}")
+    public IdResponse updateEvent(@RequestBody EventUpdateRequest request, @PathVariable Long eventId) {
+        EventUpdateVo updateVo = request.toVo(eventId);
+        eventService.update(updateVo);
+
+        return new IdResponse(eventId);
     }
 
     @PatchMapping("/{eventId}/mentee/{menteeId}")
