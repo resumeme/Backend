@@ -24,6 +24,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.INTEGER;
 import static org.assertj.core.api.Assertions.MAP;
+import static org.assertj.core.api.InstanceOfAssertFactories.LONG;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
@@ -213,9 +214,10 @@ class MentorControllerTest extends ControllerUnitTest {
                                         parameterWithName("mentorId").description("멘토 id")
                                 ),
                                 responseFields(
+                                        fieldWithPath("id").type(LONG).description("멘토 id"),
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)).optional(),
+                                        fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
                                         fieldWithPath("introduce").type(STRING).description("자기소개").optional()

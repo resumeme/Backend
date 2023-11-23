@@ -5,6 +5,7 @@ import org.devcourse.resumeme.business.user.controller.dto.FollowRequest;
 import org.devcourse.resumeme.business.user.controller.dto.FollowResponse;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
+import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,11 +26,13 @@ public class FollowController {
 
     private final FollowService followService;
 
+    private final MentorService mentorService;
+
     @GetMapping
     public List<FollowResponse> getFollowList(@AuthenticationPrincipal JwtUser user) {
         return followService.getFollowings(user.id())
                 .stream()
-                .map(FollowResponse::new)
+                .map(follow -> new FollowResponse(follow, mentorService.getOne(follow.getMentorId())))
                 .toList();
     }
 

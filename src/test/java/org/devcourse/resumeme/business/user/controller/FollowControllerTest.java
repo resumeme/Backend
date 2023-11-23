@@ -1,16 +1,25 @@
 package org.devcourse.resumeme.business.user.controller;
 
 import org.devcourse.resumeme.business.user.controller.dto.FollowRequest;
+import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
+import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
+import java.util.Set;
 
+import static org.assertj.core.api.InstanceOfAssertFactories.INTEGER;
+import static org.assertj.core.api.InstanceOfAssertFactories.LONG;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
+import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ALREADY_FOLLOWING;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EXCEEDED_FOLLOW_MAX;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,7 +29,10 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -66,16 +78,40 @@ class FollowControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 멘티의_팔로잉_하는_멘토_리스트를_조회할_수_있다() throws Exception {
         // given
+        Mentor mentorOne =  Mentor.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("progrers33@gmail.com")
+                .refreshToken("redididkeeeeegg")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("FRONT"))
+                .careerContent("금융회사 다님")
+                .careerYear(3)
+                .introduce("반가워요")
+                .build();
+
+        Mentor mentorThree =  Mentor.builder()
+                .id(2L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("progs3rs33@gmail.com")
+                .refreshToken("dddfeggegeeegegee")
+                .requiredInfo(new RequiredInfo("이기안", "기안멘토", "01022332375", Role.ROLE_MENTOR))
+                .experiencedPositions(Set.of("DEVOPS"))
+                .careerContent("제조업 종사자")
+                .careerYear(5)
+                .introduce("프로첨삭러")
+                .build();
+
         Follow followMentorOne = new Follow(1L, 1L);
         Follow followMentorThree = new Follow(1L, 3L);
-        Follow followMentorFour = new Follow(1L, 4L);
-        Follow followMentorEleven = new Follow(1L, 11L);
         setId(followMentorOne, 1L);
         setId(followMentorThree, 2L);
-        setId(followMentorFour, 4L);
-        setId(followMentorEleven, 5L);
 
-        given(followService.getFollowings(any(Long.class))).willReturn(List.of(followMentorOne, followMentorThree, followMentorFour, followMentorEleven));
+        given(followService.getFollowings(any(Long.class))).willReturn(List.of(followMentorOne, followMentorThree));
+        given(mentorService.getOne(1L)).willReturn(mentorOne);
+        given(mentorService.getOne(3L)).willReturn(mentorThree);
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/follows"));
@@ -87,15 +123,24 @@ class FollowControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("follows/getAll",
                                 responseFields(
-//                                        fieldWithPath("[]").type(ARRAY).description("이벤트 아이디"),
-                                        fieldWithPath("[0].followId").type(NUMBER).description("팔로우 아이디"),
-                                        fieldWithPath("[0].mentorId").type(NUMBER).description("팔로우 하는 멘토 아이디"),
-                                        fieldWithPath("[1].followId").type(NUMBER).description("팔로우 아이디"),
-                                        fieldWithPath("[1].mentorId").type(NUMBER).description("팔로우 하는 멘토 아이디"),
-                                        fieldWithPath("[2].followId").type(NUMBER).description("팔로우 아이디"),
-                                        fieldWithPath("[2].mentorId").type(NUMBER).description("팔로우 하는 멘토 아이디"),
-                                        fieldWithPath("[3].followId").type(NUMBER).description("팔로우 아이디"),
-                                        fieldWithPath("[3].mentorId").type(NUMBER).description("팔로우 하는 멘토 아이디")
+                                        fieldWithPath("[0].followId").type(LONG).description("팔로우 아이디"),
+                                        fieldWithPath("[0].mentorInfo").type(OBJECT).description("팔로우 하는 멘토 정보"),
+                                        fieldWithPath("[0].mentorInfo.id").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[0].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 이미지"),
+                                        fieldWithPath("[0].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[0].mentorInfo.experiencedPositions").type(ARRAY).description("팔로우 하는 멘토 아이디").description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)),
+                                        fieldWithPath("[0].mentorInfo.careerContent").type(STRING).description("경력 사항"),
+                                        fieldWithPath("[0].mentorInfo.careerYear").type(INTEGER).description("경력 연차"),
+                                        fieldWithPath("[0].mentorInfo.introduce").type(STRING).description("자기소개").optional(),
+                                        fieldWithPath("[1].followId").type(LONG).description("팔로우 아이디"),
+                                        fieldWithPath("[1].mentorInfo").type(OBJECT).description("팔로우 하는 멘토 정보"),
+                                        fieldWithPath("[1].mentorInfo.id").type(NUMBER).description("멘토 아이디"),
+                                        fieldWithPath("[1].mentorInfo.imageUrl").type(STRING).description("멘토 프로필 이미지"),
+                                        fieldWithPath("[1].mentorInfo.nickname").type(STRING).description("멘토 닉네임"),
+                                        fieldWithPath("[1].mentorInfo.experiencedPositions").type(ARRAY).description("팔로우 하는 멘토 아이디").description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)),
+                                        fieldWithPath("[1].mentorInfo.careerContent").type(STRING).description("경력 사항"),
+                                        fieldWithPath("[1].mentorInfo.careerYear").type(INTEGER).description("경력 연차"),
+                                        fieldWithPath("[1].mentorInfo.introduce").type(STRING).description("자기소개").optional()
 
                                 )
                         )
