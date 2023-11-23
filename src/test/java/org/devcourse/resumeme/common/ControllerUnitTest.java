@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.business.comment.controller.CommentController;
 import org.devcourse.resumeme.business.comment.service.CommentService;
 import org.devcourse.resumeme.business.event.controller.EventController;
+import org.devcourse.resumeme.business.event.controller.EventControllerV2;
 import org.devcourse.resumeme.business.event.controller.MenteeToEventController;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
@@ -19,11 +20,13 @@ import org.devcourse.resumeme.business.resume.controller.SnapshotController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.resume.service.SnapshotService;
+import org.devcourse.resumeme.business.user.controller.FollowController;
 import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
 import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
+import org.devcourse.resumeme.business.user.service.mentee.FollowService;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
@@ -78,6 +81,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         FilterTestController.class,
         UserEventController.class,
         ResumeControllerV2.class,
+        EventControllerV2.class,
+        SnapshotController.class,
+        FollowController.class,
         MenteeToEventController.class,
         SnapshotController.class
 })
@@ -130,6 +136,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected SnapshotService snapshotService;
+
+    @MockBean
+    protected FollowService followService;
 
     protected MockMvc mvc;
 
