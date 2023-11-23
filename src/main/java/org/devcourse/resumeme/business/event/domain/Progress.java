@@ -24,4 +24,9 @@ public enum Progress implements DocsEnumType {
     public String getDescription() {
         return description;
     }
+
+    public boolean attending() {
+        return this.equals(APPLY);
+    }
+
 }

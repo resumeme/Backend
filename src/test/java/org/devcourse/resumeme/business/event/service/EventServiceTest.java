@@ -43,6 +43,9 @@ import static org.mockito.Mockito.verify;
 class EventServiceTest {
 
     @Mock
+    private MenteeToEventService menteeToEventService;
+
+    @Mock
     private EventRepository eventRepository;
 
     @InjectMocks
@@ -125,6 +128,7 @@ class EventServiceTest {
         Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
 
         given(eventRepository.findWithLockById(1L)).willReturn(Optional.of(event));
+        given(menteeToEventService.getApplyEventCount(1L)).willReturn(0L);
 
         // when
         for (int i = 0; i < executeCount; i++) {
