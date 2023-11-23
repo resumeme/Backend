@@ -1,9 +1,9 @@
-package org.devcourse.resumeme.business.event.domain.vo;
+package org.devcourse.resumeme.business.event.domain.model;
 
 import lombok.Getter;
 import org.devcourse.resumeme.business.event.domain.Event;
 
-public class EventReject implements EventUpdateModel {
+public class ApplimentReject implements ApplimentUpdate {
 
     @Getter
     private Long menteeId;
@@ -11,7 +11,7 @@ public class EventReject implements EventUpdateModel {
     @Getter
     private String rejectMessage;
 
-    public EventReject(Long menteeId, String rejectMessage) {
+    public ApplimentReject(Long menteeId, String rejectMessage) {
         this.menteeId = menteeId;
         this.rejectMessage = rejectMessage;
     }
