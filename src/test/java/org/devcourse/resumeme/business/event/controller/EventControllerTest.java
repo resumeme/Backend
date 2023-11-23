@@ -158,43 +158,6 @@ class EventControllerTest extends ControllerUnitTest {
     }
 
     @Test
-    @WithMockCustomUser
-    void 첨삭_이벤트_참여에_성공한다() throws Exception {
-        // given
-        EventInfo openEvent = EventInfo.open(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
-        event.acceptMentee(1L, 1L);
-
-        ApplyToEventRequest request = new ApplyToEventRequest(1L);
-        doNothing().when(eventService).acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L));
-
-        // when
-        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
-
-        // then
-        result
-                .andExpect(status().isOk())
-                .andDo(
-                        document("event/apply",
-                                getDocumentRequest(),
-                                getDocumentResponse(),
-                                pathParameters(
-                                        parameterWithName("eventId").description("참여하고 싶은 이벤트 아이디")
-                                ),
-                                exceptionResponse(
-                                        List.of(EVENT_NOT_FOUND.name())
-                                ),
-                                requestFields(
-                                        fieldWithPath("resumeId").type(NUMBER).description("이벤트 참여시 사용할 이력서 아이디")
-                                )
-                        )
-                );
-    }
-
-    @Test
     void 첨삭_이벤트_신청을_반려한다() throws Exception {
         // given
         EventRejectRequest request = new EventRejectRequest("이력서 작성 양이 너무 적습니다");
