@@ -81,6 +81,7 @@ class ComponentControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("resume/component/delete",
                                 getDocumentRequest(),
+                                exceptionResponse(List.of(COMPONENT_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("resumeId").description("해당 이력서 아이디"),
                                         parameterWithName("componentId").description("삭제하고자 하는 블럭 아이디")

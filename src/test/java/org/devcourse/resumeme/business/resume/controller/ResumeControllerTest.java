@@ -34,6 +34,9 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRes
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -97,6 +100,7 @@ class ResumeControllerTest extends ControllerUnitTest {
                         document("resume/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(MENTEE_NOT_FOUND.name(), NO_EMPTY_VALUE.name())),
                                 requestFields(
                                         fieldWithPath("title").type(STRING).description("이력서 제목")
                                 ),
@@ -131,6 +135,7 @@ class ResumeControllerTest extends ControllerUnitTest {
                         document("resume/basicInfo",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("resumeId").description("이력서 아이디")
                                 ),
@@ -361,6 +366,7 @@ class ResumeControllerTest extends ControllerUnitTest {
                        document("resume/delete",
                                getDocumentRequest(),
                                getDocumentResponse(),
+                               exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
                                pathParameters(
                                        parameterWithName("resumeId").description("이력서 아이디")
                                )

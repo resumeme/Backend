@@ -40,9 +40,14 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRes
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.CAN_NOT_RESERVATION;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RANGE_MAXIMUM_ATTENDEE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TIME_ERROR;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -139,6 +144,7 @@ class EventControllerTest extends ControllerUnitTest {
                         document("event/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(MENTOR_NOT_FOUND.name(), NO_EMPTY_VALUE.name(), TIME_ERROR.name(), CAN_NOT_RESERVATION.name(), RANGE_MAXIMUM_ATTENDEE.name())),
                                 requestFields(
                                         fieldWithPath("info.title").type(STRING).description("첨삭 이벤트 제목"),
                                         fieldWithPath("info.content").type(STRING).description("첨삭 이벤트 내용"),
@@ -184,6 +190,7 @@ class EventControllerTest extends ControllerUnitTest {
                         document("event/update",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(NO_EMPTY_VALUE.name(), EVENT_NOT_FOUND.name(), NO_EMPTY_VALUE.name(), RANGE_MAXIMUM_ATTENDEE.name(), TIME_ERROR.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("수정할 이벤트 아이디")
                                 ),
@@ -298,6 +305,7 @@ class EventControllerTest extends ControllerUnitTest {
                         document("event/getOne",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(EVENT_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("멘토가 생성한 이벤트 아이디")
                                 ),
