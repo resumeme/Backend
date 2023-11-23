@@ -227,26 +227,6 @@ class EventControllerTest extends ControllerUnitTest {
 
     @Test
     @WithMockCustomUser
-    void 리뷰_재_요청을_신청한다() throws Exception {
-        // given
-        Long eventId = 1L;
-
-        // when
-        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}/resumes/{resumeId}/mentee", eventId, 1L));
-
-        // then
-        result
-                .andExpect(status().isOk())
-                .andDo(
-                        document("event/requestReview",
-                                getDocumentRequest(),
-                                getDocumentResponse()
-                        )
-                );
-    }
-
-    @Test
-    @WithMockCustomUser
     void 첨삭_이벤트_리뷰를_완료한다() throws Exception {
         // given
         Long eventId = 1L;
