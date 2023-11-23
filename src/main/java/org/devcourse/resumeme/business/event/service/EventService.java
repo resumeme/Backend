@@ -13,6 +13,7 @@ import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.global.exception.CustomException;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,6 +35,8 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
+    private final ApplyProvider applyProvider;
+
     public Long create(Event event) {
         List<Event> eventsWithMentor = eventRepository.findAllByMentor(event.getMentor());
         eventsWithMentor.stream()
@@ -45,17 +48,17 @@ public class EventService {
         return eventRepository.save(event).getId();
     }
 
-    public Event acceptMentee(AcceptMenteeToEvent ids) {
+    public void acceptMentee(AcceptMenteeToEvent ids) {
+        checkCanApply(ids.menteeId());
         Event event = eventRepository.findWithLockById(ids.eventId())
                 .orElseThrow();
         event.acceptMentee(ids.menteeId(), ids.resumeId());
-
-        return event;
     }
 
-    @Transactional(readOnly = true)
-    public Long getApplicantId(Long eventId, Long menteeId) {
-        return getOne(eventId).getApplicantId(menteeId);
+    private void checkCanApply(Long menteeId) {
+        if (applyProvider.getApplyEventCount(menteeId) > 0) {
+            throw new EventException(ExceptionCode.DUPLICATE_APPLICATION_EVENT);
+        }
     }
 
     public void reject(EventReject reject) {

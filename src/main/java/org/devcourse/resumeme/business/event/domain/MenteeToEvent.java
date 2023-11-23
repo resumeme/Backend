@@ -81,6 +81,10 @@ public class MenteeToEvent extends BaseEntity {
         return this.progress.equals(REJECT);
     }
 
+    public boolean isAttending() {
+        return this.progress.attending();
+    }
+
     public void requestReview() {
         this.progress = REQUEST;
     }

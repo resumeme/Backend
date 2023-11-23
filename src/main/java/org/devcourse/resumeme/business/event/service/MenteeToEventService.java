@@ -11,13 +11,20 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MenteeToEventService {
+public class MenteeToEventService implements ApplyProvider {
 
     private final MenteeToEventRepository menteeToEventRepository;
 
     @Transactional(readOnly = true)
     public List<MenteeToEvent> getEventsRelatedToResume(Long resumeId) {
         return menteeToEventRepository.findAllByResumeId(resumeId);
+    }
+
+    @Override
+    public Long getApplyEventCount(Long menteeId) {
+        return menteeToEventRepository.findByMenteeId(menteeId).stream()
+                .filter(MenteeToEvent::isAttending)
+                .count();
     }
 
 }

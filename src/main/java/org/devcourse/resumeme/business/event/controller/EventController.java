@@ -8,10 +8,8 @@ import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
-import org.devcourse.resumeme.business.event.controller.dto.OverallReviewResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
@@ -62,12 +60,10 @@ public class EventController {
     }
 
     @PatchMapping("/{eventId}")
-    public IdResponse applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request, @AuthenticationPrincipal JwtUser user) {
+    public void applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request, @AuthenticationPrincipal JwtUser user) {
         Long copyResumeId = resumeService.copyResume(request.resumeId());
-        Event event = eventService.acceptMentee(new AcceptMenteeToEvent(eventId, user.id(), copyResumeId));
         componentService.copy(request.resumeId(), copyResumeId);
-
-        return new IdResponse(eventService.getApplicantId(eventId, user.id()));
+        eventService.acceptMentee(new AcceptMenteeToEvent(eventId, user.id(), copyResumeId));
     }
 
     @PatchMapping("/{eventId}/mentee/{menteeId}")

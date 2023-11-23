@@ -167,8 +167,7 @@ class EventControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         ApplyToEventRequest request = new ApplyToEventRequest(1L);
-        given(eventService.acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L))).willReturn(event);
-        given(eventService.getApplicantId(1L, 1L)).willReturn(1L);
+        doNothing().when(eventService).acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L));
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", 1L)
@@ -190,9 +189,6 @@ class EventControllerTest extends ControllerUnitTest {
                                 ),
                                 requestFields(
                                         fieldWithPath("resumeId").type(NUMBER).description("이벤트 참여시 사용할 이력서 아이디")
-                                ),
-                                responseFields(
-                                        fieldWithPath("id").type(NUMBER).description("이벤트에 참여 성공후 발급된 이력 아이디")
                                 )
                         )
                 );
