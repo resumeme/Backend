@@ -21,13 +21,13 @@ endpoint:
     - matcher:
         get: /api/v1/events/*/resumes/*/comments
         post: /api/v1/events/*/resumes/*/comments
-        patch: /api/v1/events/*/mentee/**, /api/v1/events/*/resumes/**, /api/v1/events/*/resumes/*/comments/*
+        patch: /api/v1/events/*/mentee/**, /api/v1/events/*/resumes/**, /api/v1/events/*/resumes/*/comments/*, /api/v2/events/*
         delete: /api/v1/events/*/resumes/*/comments/*
       role: own_mentor
     - matcher:
         get: /api/v1/resumes/**, /api/v1/events/*/resumes/*/comments
         post: /api/v1/resumes/**
-        patch: /api/v1/resumes/**
+        patch: /api/v1/resumes/**, /api/v2/resumes/*
         delete: /api/v1/resumes/**
       role: own_mentee
   ignores: /docs/**, /api/v1/admin/**
