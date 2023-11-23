@@ -68,10 +68,6 @@ public class EventService {
                 .orElseThrow(() -> new EventException(EVENT_NOT_FOUND));
     }
 
-    public void requestReview(Long eventId, Long menteeId) {
-        getOne(eventId).requestReview(menteeId);
-    }
-
     @Transactional(readOnly = true)
     public List<Event> getAll(AllEventFilter filter) {
         if (filter.mentorId() != null) {

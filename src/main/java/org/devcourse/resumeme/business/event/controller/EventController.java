@@ -72,11 +72,6 @@ public class EventController {
         eventService.reject(new EventReject(eventId, menteeId, request.rejectMessage()));
     }
 
-    @PatchMapping("/{eventId}/resumes/{resumeId}/mentee")
-    public void requestReview(@PathVariable Long eventId, @AuthenticationPrincipal JwtUser user) {
-        eventService.requestReview(eventId, user.id());
-    }
-
     @PatchMapping("/{eventId}/resumes/{resumeId}/complete")
     public void completeReview(
             @PathVariable Long eventId, @PathVariable Long resumeId, @RequestBody CompleteEventRequest request, @AuthenticationPrincipal JwtUser user
