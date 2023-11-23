@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -93,18 +95,31 @@ public class EventController {
 
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
-        Page<Event> events = eventService.getAllWithPage(new AllEventFilter(null, null), pageable);
-        List<Long> eventIds = events.getContent().stream()
-                .map(Event::getId)
-                .toList();
+        Page<Event> pageAbleEvent = eventService.getAllWithPage(new AllEventFilter(null, null), pageable);
 
-        Map<Long, List<EventPosition>> positions = eventPositionService.getAll(eventIds);
+        List<Event> events = getEvents(pageAbleEvent);
+        Map<Long, List<EventPosition>> positions = getPositions(events);
 
         List<EventResponse> responses = events.stream()
                 .map(event -> new EventResponse(event, positions.get(event.getId())))
                 .toList();
 
-        return new EventPageResponse(responses, events);
+        return new EventPageResponse(responses, pageAbleEvent);
+    }
+
+    private static List<Event> getEvents(Page<Event> events) {
+        List<Event> content = new ArrayList<>(events.getContent());
+        Collections.sort(content);
+
+        return content;
+    }
+
+    private Map<Long, List<EventPosition>> getPositions(List<Event> content) {
+        List<Long> eventIds = content.stream()
+                .map(Event::getId)
+                .toList();
+
+        return eventPositionService.getAll(eventIds);
     }
 
 }
