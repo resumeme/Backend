@@ -154,18 +154,6 @@ public class Event extends BaseEntity implements Comparable<Event> {
         }
     }
 
-    public void requestReview(Long menteeId) {
-        applicants.stream()
-                .filter(applicant -> applicant.isSameMentee(menteeId))
-                .findFirst()
-                .ifPresentOrElse(
-                        MenteeToEvent::requestReview,
-                        () -> {
-                            throw new EventException(MENTEE_NOT_FOUND);
-                        }
-                );
-    }
-
     public String title() {
         return eventInfo.getTitle();
     }
