@@ -25,6 +25,7 @@ import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
+import static org.devcourse.resumeme.business.event.domain.EventStatus.FINISH;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.APPLICATION_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
@@ -34,7 +35,7 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_F
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class Event extends BaseEntity {
+public class Event extends BaseEntity implements Comparable<Event> {
 
     @Id
     @Getter
@@ -197,6 +198,15 @@ public class Event extends BaseEntity {
         }
 
         throw new EventException(RESUME_NOT_FOUND);
+    }
+
+    @Override
+    public int compareTo(Event other) {
+        if (other.eventInfo.getStatus().equals(FINISH)) {
+            return -1;
+        }
+
+        return eventTimeInfo.getOpenDateTime().compareTo(other.eventTimeInfo.getOpenDateTime());
     }
 
 }
