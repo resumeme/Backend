@@ -16,6 +16,7 @@ public enum ExceptionCode implements DocsEnumType {
     APPLICATION_NOT_FOUND("예약 이력을 찾을 수 없습니다"),
     GPA_ERROR("최대 학점은 내 학점보다 커야 합니다."),
     NO_EMPTY_VALUE("빈 값일 수 없습니다"),
+    TEXT_LENGTH_ERROR("텍스트 길이를 다시 확인해주세요"),
     TEXT_OVER_LENGTH("텍스트 길이가 기준을 초과합니다"),
     MENTEE_ONLY_RESUME("멘티만 이력서를 작성할 수 있습니다"),
     ROLE_NOT_ALLOWED("허용되지 않은 역할입니다"),
