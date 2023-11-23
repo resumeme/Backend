@@ -16,11 +16,9 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Field;
 import org.devcourse.resumeme.common.domain.Position;
-import org.devcourse.resumeme.global.exception.CustomException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,10 +26,7 @@ import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static org.devcourse.resumeme.common.util.Validator.check;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.ALREADY_FOLLOWING;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.FOLLOW_ALREADY_FULL;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_EMAIL;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOLLOWING_NOW;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
@@ -41,8 +36,6 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LE
 public class Mentee extends BaseEntity {
 
     static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
-
-    static final int MAX_FOLLOW_SIZE = 3;
 
     @Id
     @Getter
@@ -78,9 +71,6 @@ public class Mentee extends BaseEntity {
 
     @Getter
     private String introduce;
-
-    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<Follow> followings = new HashSet<>();
 
     @Builder
     public Mentee(Long id,String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String refreshToken, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
@@ -134,21 +124,6 @@ public class Mentee extends BaseEntity {
     private void updateIntroduce(String introduce) {
         check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
         this.introduce = introduce;
-    }
-
-    private void follow(Mentor mentor) {
-        if (followings.size() > MAX_FOLLOW_SIZE - 1) {
-            throw new CustomException(FOLLOW_ALREADY_FULL);
-        }
-        if (!followings.add(new Follow(this, mentor))) {
-            throw new CustomException(ALREADY_FOLLOWING);
-        }
-    }
-
-    private void unfollow(Mentor mentor) {
-        if (!followings.remove(new Follow(this, mentor))) {
-            throw new CustomException(NOT_FOLLOWING_NOW);
-        }
     }
 
 }

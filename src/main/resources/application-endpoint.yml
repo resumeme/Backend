@@ -8,6 +8,7 @@ endpoint:
         get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/mentees/*/events, /api/v1/snapshot
         post: /api/v1/resumes, /api/v1/results, /api/v1/pdf/resumes/*, /api/v1/resumes/*/**, /api/v1/appliments/events/*
         patch: /api/v1/mentees/*, /api/v1/resumes/*, /api/v1/resumes/*/**
+        delete: /api/v1/follows/*
       role: mentee
     - matcher:
         get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/user, /api/v1/resumes/**, /api/v1/results, /api/v1/mentors/*/events
