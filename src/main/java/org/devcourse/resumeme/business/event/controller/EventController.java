@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.business.event.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
@@ -12,11 +11,8 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
-import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
-import org.devcourse.resumeme.business.resume.service.ComponentService;
-import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -44,13 +40,9 @@ public class EventController {
 
     private final EventService eventService;
 
-    private final ResumeService resumeService;
-
     private final MentorService mentorService;
 
     private final EventPositionService eventPositionService;
-
-    private final ComponentService componentService;
 
     @PostMapping
     public IdResponse createEvent(@RequestBody EventCreateRequest request, @AuthenticationPrincipal JwtUser user) {
@@ -58,13 +50,6 @@ public class EventController {
         Event event = request.toEntity(mentor);
 
         return new IdResponse(eventService.create(event));
-    }
-
-    @PatchMapping("/{eventId}")
-    public void applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request, @AuthenticationPrincipal JwtUser user) {
-        Long copyResumeId = resumeService.copyResume(request.resumeId());
-        componentService.copy(request.resumeId(), copyResumeId);
-        eventService.acceptMentee(new AcceptMenteeToEvent(eventId, user.id(), copyResumeId));
     }
 
     @PatchMapping("/{eventId}/mentee/{menteeId}")
