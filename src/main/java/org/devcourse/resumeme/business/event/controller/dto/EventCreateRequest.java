@@ -9,9 +9,14 @@ import org.devcourse.resumeme.common.domain.Position;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.devcourse.resumeme.common.util.Validator.check;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+
 public record EventCreateRequest(EventInfoRequest info, EventTimeRequest time, List<String> positions) {
 
     public Event toEntity(Mentor mentor) {
+        check(positions == null || positions.isEmpty(), NO_EMPTY_VALUE);
+
         List<Position> positionEntities = positions.stream()
                 .map(position -> Position.valueOf(position.toUpperCase()))
                 .toList();
