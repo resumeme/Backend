@@ -8,10 +8,8 @@ import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
-import org.devcourse.resumeme.business.event.controller.dto.OverallReviewResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
@@ -54,7 +52,6 @@ public class EventController {
 
     @PostMapping
     public IdResponse createEvent(@RequestBody EventCreateRequest request, @AuthenticationPrincipal JwtUser user) {
-        /* 인증 유저 아이디를 통한 멘토 찾아오기 */
         Mentor mentor = mentorService.getOne(user.id());
         Event event = request.toEntity(mentor);
 
