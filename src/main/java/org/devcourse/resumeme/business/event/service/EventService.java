@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
@@ -35,12 +34,8 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public Long create(Event event) {
-        List<Event> eventsWithMentor = eventRepository.findAllByMentor(event.getMentor());
-        eventsWithMentor.stream()
-                .filter(Event::isOpen)
-                .forEach(eventWithMentor -> {
-                    throw new EventException(DUPLICATED_EVENT_OPEN);
-                });
+        eventRepository.findAllByMentor(event.getMentor())
+                .forEach(Event::checkOpen);
 
         return eventRepository.save(event).getId();
     }

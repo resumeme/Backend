@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.event.domain.vo.EventUpdateModel;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
@@ -27,6 +26,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.APPLICATION_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_OPEN_TIME;
@@ -147,8 +147,10 @@ public class Event extends BaseEntity {
         return mentor;
     }
 
-    public boolean isOpen() {
-        return eventInfo.isOpen();
+    public void checkOpen() {
+        if (eventInfo.isOpen()) {
+            throw new EventException(DUPLICATED_EVENT_OPEN);
+        }
     }
 
     public void requestReview(Long menteeId) {
