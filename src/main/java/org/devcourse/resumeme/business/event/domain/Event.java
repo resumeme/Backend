@@ -26,7 +26,6 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.EventStatus.FINISH;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.APPLICATION_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
@@ -134,16 +133,6 @@ public class Event extends BaseEntity implements Comparable<Event> {
         eventInfo.open();
     }
 
-    public Long getApplicantId(Long menteeId) {
-        for (MenteeToEvent applicant : applicants) {
-            if (applicant.isSameMentee(menteeId)) {
-                return applicant.getId();
-            }
-        }
-
-        throw new EventException(APPLICATION_NOT_FOUND);
-    }
-
     public Mentor getMentor() {
         return mentor;
     }
@@ -197,6 +186,29 @@ public class Event extends BaseEntity implements Comparable<Event> {
         }
 
         return eventTimeInfo.getOpenDateTime().compareTo(other.eventTimeInfo.getOpenDateTime());
+    }
+
+    public void updateInfo(String title, String content, int maximumAttendee) {
+        this.eventInfo.update(title, content, maximumAttendee);
+    }
+
+    public void updatePosition(List<Position> positions) {
+        for (int i = 0; i < this.positions.size(); i++) {
+            this.positions.remove(i--);
+        }
+
+        List<EventPosition> newPositions = getNewPosition(positions);
+        this.positions.addAll(newPositions);
+    }
+
+    private List<EventPosition> getNewPosition(List<Position> positions) {
+        return new ArrayList<>(positions.stream()
+                .map(position -> new EventPosition(position, this))
+                .toList());
+    }
+
+    public void updateTimeInfo(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDateTime) {
+        this.eventTimeInfo.update(openDateTime, closeDateTime, endDateTime);
     }
 
 }

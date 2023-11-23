@@ -95,4 +95,12 @@ public class EventInfo {
         return this.status.isOpen();
     }
 
+    public void update(String title, String content, int maximumAttendee) {
+        validateInput(maximumAttendee, title, content);
+
+        this.title = title;
+        this.content = content;
+        this.maximumAttendee = maximumAttendee;
+    }
+
 }
