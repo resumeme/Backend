@@ -16,6 +16,7 @@ import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
@@ -59,7 +60,7 @@ public class Resume extends BaseEntity {
     }
 
     private static void validateResume(String title, Mentee mentee) {
-        notNull(title);
+        isBlank(title.trim());
         notNull(mentee);
     }
 
