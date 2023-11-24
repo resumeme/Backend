@@ -14,7 +14,9 @@ import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
@@ -92,7 +94,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         // given
         Long mentorId = 1L;
 
-        given(eventService.getAll(new AllEventFilter(mentorId, null))).willReturn(List.of(event));
+        given(eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
         given(eventPositionService.getAll(event.getId())).willReturn(List.of());
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
 
@@ -139,7 +141,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         // given
         Long menteeId = 1L;
 
-        given(eventService.getAll(new AllEventFilter(null, menteeId))).willReturn(List.of(event));
+        given(eventService.getAllWithPage(new AllEventFilter(null, menteeId), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));

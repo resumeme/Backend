@@ -132,7 +132,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         ApplyToEventRequest request = new ApplyToEventRequest(1L);
-        doNothing().when(eventService).acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L));
+        doNothing().when(menteeToEventService).acceptMentee(new AcceptMenteeToEvent(1L, 1L, 1L));
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/appliments/events/{eventId}", 1L)

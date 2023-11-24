@@ -13,8 +13,6 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 
 @Service
@@ -25,11 +23,6 @@ public class MenteeToEventService {
     private final MenteeToEventRepository menteeToEventRepository;
 
     private final EventRepository eventRepository;
-
-    @Transactional(readOnly = true)
-    public List<MenteeToEvent> getEventsRelatedToResume(Long resumeId) {
-        return menteeToEventRepository.findAllByResumeId(resumeId);
-    }
 
     public void update(Long eventId, ApplyUpdateVo applyUpdateVo) {
         Event event = eventRepository.findWithApplicantsById(eventId)

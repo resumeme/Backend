@@ -17,7 +17,6 @@ import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.Progress.APPLY;
 import static org.devcourse.resumeme.business.event.domain.Progress.COMPLETE;
 import static org.devcourse.resumeme.business.event.domain.Progress.REJECT;
-import static org.devcourse.resumeme.business.event.domain.Progress.REQUEST;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
@@ -83,10 +82,6 @@ public class MenteeToEvent extends BaseEntity {
 
     public boolean isAttending() {
         return this.progress.attending();
-    }
-
-    public void requestReview() {
-        this.progress = REQUEST;
     }
 
     public void completeEvent(String overallReview) {
