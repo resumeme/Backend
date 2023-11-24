@@ -92,7 +92,7 @@ class FollowControllerTest extends ControllerUnitTest {
                 .build();
 
         Mentor mentorThree =  Mentor.builder()
-                .id(2L)
+                .id(3L)
                 .imageUrl("profile.png")
                 .provider(Provider.valueOf("KAKAO"))
                 .email("progs3rs33@gmail.com")
@@ -110,8 +110,7 @@ class FollowControllerTest extends ControllerUnitTest {
         setId(followMentorThree, 2L);
 
         given(followService.getFollowings(any(Long.class))).willReturn(List.of(followMentorOne, followMentorThree));
-        given(mentorService.getOne(1L)).willReturn(mentorOne);
-        given(mentorService.getOne(3L)).willReturn(mentorThree);
+        given(mentorService.getAllByIds(any())).willReturn(List.of(mentorOne, mentorThree));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/follows"));

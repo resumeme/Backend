@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.business.comment.controller.CommentController;
 import org.devcourse.resumeme.business.comment.service.CommentService;
 import org.devcourse.resumeme.business.event.controller.EventController;
-import org.devcourse.resumeme.business.event.controller.EventControllerV2;
 import org.devcourse.resumeme.business.event.controller.MenteeToEventController;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
@@ -81,7 +80,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         FilterTestController.class,
         UserEventController.class,
         ResumeControllerV2.class,
-        EventControllerV2.class,
         SnapshotController.class,
         FollowController.class,
         MenteeToEventController.class,

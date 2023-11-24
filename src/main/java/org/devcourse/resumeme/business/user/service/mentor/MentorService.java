@@ -10,6 +10,8 @@ import org.devcourse.resumeme.business.user.repository.mentor.MentorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
 
 @Service
@@ -60,4 +62,7 @@ public class MentorService {
         updateRefreshToken(id, null);
     }
 
+    public List<Mentor> getAllByIds(List<Long> mentorIds) {
+        return mentorRepository.findAllById(mentorIds);
+    }
 }
