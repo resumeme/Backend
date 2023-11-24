@@ -10,6 +10,7 @@ import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.data.domain.Page;
@@ -119,6 +120,11 @@ public class EventService {
                 .findFirst()
                 .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
                 .getOverallReview();
+    }
+
+    public void update(EventUpdateVo updateVo) {
+        Event event = getOne(updateVo.getEventId());
+        updateVo.update(event);
     }
 
 }

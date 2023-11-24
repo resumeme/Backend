@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -74,6 +75,7 @@ class ResultNoticeControllerTest extends ControllerUnitTest {
                         document("result/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
                                 requestFields(
                                         fieldWithPath("resumeId").type(NUMBER).description("소개 할 합격 이력서 아이디"),
                                         fieldWithPath("content").type(STRING).description("작성 된 소개 글")

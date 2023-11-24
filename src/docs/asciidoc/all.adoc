@@ -159,6 +159,9 @@ include::{snippets}/resume/component/find/activities/response-fields.adoc[]
 
 == [첨삭 피드백]
 === 이력서 첨삭 피드백 조회
+
+include::{snippets}/comment/getAll/exception-response.adoc[]
+
 *Request*
 include::{snippets}/comment/getAll/http-request.adoc[]
 include::{snippets}/comment/getAll/path-parameters.adoc[]

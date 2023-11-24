@@ -24,6 +24,9 @@ include::{snippets}/user/mentee/update/response-fields.adoc[]
 
 == [이력서]
 === 이력서 작성
+
+include::{snippets}/resume/create/exception-response.adoc[]
+
 *Request*
 include::{snippets}/resume/create/http-request.adoc[]
 include::{snippets}/resume/create/request-fields.adoc[]
@@ -176,6 +179,9 @@ include::{snippets}/resume/updateTitle/http-response.adoc[]
 include::{snippets}/resume/updateTitle/response-fields.adoc[]
 
 === 이력서 제목 수정 V2
+
+include::{snippets}/resume/v2/updateTitle/exception-response.adoc[]
+
 *Request*
 include::{snippets}/resume/v2/updateTitle/http-request.adoc[]
 include::{snippets}/resume/v2/updateTitle/path-parameters.adoc[]
@@ -194,6 +200,9 @@ include::{snippets}/resume/update/http-response.adoc[]
 include::{snippets}/resume/update/response-fields.adoc[]
 
 === 이력서 기본정보 수정 V2
+
+include::{snippets}/resume/v2/updateBasicInfo/exception-response.adoc[]
+
 *Request*
 include::{snippets}/resume/v2/updateBasicInfo/http-request.adoc[]
 include::{snippets}/resume/v2/updateBasicInfo/path-parameters.adoc[]
@@ -212,6 +221,9 @@ include::{snippets}/resume/updateMemo/http-response.adoc[]
 include::{snippets}/resume/updateMemo/response-fields.adoc[]
 
 === 이력서 메모 수정 V2
+
+include::{snippets}/resume/v2/updateMemo/exception-response.adoc[]
+
 *Request*
 include::{snippets}/resume/v2/updateMemo/http-request.adoc[]
 include::{snippets}/resume/v2/updateMemo/path-parameters.adoc[]
@@ -238,6 +250,8 @@ include::{snippets}/resume/findEvents/http-response.adoc[]
 include::{snippets}/resume/findEvents/response-fields.adoc[]
 
 === 이력서 삭제
+include::{snippets}/resume/delete/exception-response.adoc[]
+
 *Request*
 include::{snippets}/resume/delete/http-request.adoc[]
 include::{snippets}/resume/delete/path-parameters.adoc[]
@@ -246,6 +260,7 @@ include::{snippets}/resume/delete/path-parameters.adoc[]
 include::{snippets}/resume/delete/http-response.adoc[]
 
 === 이력서 피드백 반영 완료
+
 *Request*
 include::{snippets}/resume/complete/http-request.adoc[]
 include::{snippets}/resume/complete/path-parameters.adoc[]
@@ -254,6 +269,9 @@ include::{snippets}/resume/complete/path-parameters.adoc[]
 include::{snippets}/resume/complete/response-fields.adoc[]
 
 === 이력서 스냅샷 조회
+include::{snippets}/resume/snapshot/exception-response.adoc[]
+
+
 *Request*
 include::{snippets}/resume/snapshot/http-request.adoc[]
 include::{snippets}/resume/snapshot/query-parameters.adoc[]
@@ -264,6 +282,8 @@ include::{snippets}/resume/snapshot/response-body.adoc[]
 
 == [첨삭]
 === 첨삭 이벤트 참여 신청
+include::{snippets}/event/apply/exception-response.adoc[]
+
 *Request*
 include::{snippets}/event/apply/http-request.adoc[]
 include::{snippets}/event/apply/request-fields.adoc[]
@@ -273,6 +293,8 @@ include::{snippets}/event/apply/http-response.adoc[]
 include::{snippets}/event/apply/response-fields.adoc[]
 
 === 첨삭 이벤트 참여 리스트 조회
+include::{snippets}/user/mentee/events/exception-response.adoc[]
+
 *Request*
 include::{snippets}/user/mentee/events/http-request.adoc[]
 include::{snippets}/user/mentee/events/path-parameters.adoc[]
@@ -290,6 +312,8 @@ include::{snippets}/event/requestReview/http-request.adoc[]
 include::{snippets}/event/requestReview/http-response.adoc[]
 
 === 첨삭 내용 전체 조회
+include::{snippets}/comment/getAll/exception-response.adoc[]
+
 *Request*
 include::{snippets}/comment/getAll/http-request.adoc[]
 include::{snippets}/comment/getAll/path-parameters.adoc[]
@@ -301,6 +325,7 @@ include::{snippets}/comment/getAll/response-fields.adoc[]
 
 == [합격 이력서]
 === 합격이력서 공유 소개글 작성
+include::{snippets}/resume/create/exception-response.adoc[]
 
 *Request*
 include::{snippets}/result/create/http-request.adoc[]

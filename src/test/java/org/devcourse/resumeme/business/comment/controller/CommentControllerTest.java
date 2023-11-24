@@ -28,6 +28,11 @@ import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.COMMENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_DATA;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -108,6 +113,7 @@ class CommentControllerTest extends ControllerUnitTest {
                         document("comment/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name(), COMPONENT_NOT_FOUND.name(), NOT_FOUND_DATA.name())),
                                 requestFields(
                                         fieldWithPath("componentId").type(NUMBER).description("이력서 component 아이디"),
                                         fieldWithPath("content").type(STRING).description("리뷰 내용")
@@ -155,6 +161,7 @@ class CommentControllerTest extends ControllerUnitTest {
                         document("comment/getAll",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(EVENT_NOT_FOUND.name(), RESUME_NOT_FOUND.name(), NOT_FOUND_DATA.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("참여한 이벤트 아이디"),
                                         parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디")
@@ -192,6 +199,7 @@ class CommentControllerTest extends ControllerUnitTest {
                         document("comment/update",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(COMMENT_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("참여한 이벤트 아이디"),
                                         parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디"),
@@ -221,6 +229,7 @@ class CommentControllerTest extends ControllerUnitTest {
                         document("comment/delete",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(COMMENT_NOT_FOUND.name(), RESUME_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("참여한 이벤트 아이디"),
                                         parameterWithName("resumeId").description("이벤트에 참여 시 사용한 이력서 아이디"),

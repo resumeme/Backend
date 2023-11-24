@@ -26,6 +26,7 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRes
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PROGRESS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -104,6 +105,7 @@ class UserEventControllerTest extends ControllerUnitTest {
                         document("user/mentor/events",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(BAD_REQUEST.name())),
                                 pathParameters(
                                         parameterWithName("mentorId").description("멘토 아이디")
                                 ),
@@ -148,6 +150,7 @@ class UserEventControllerTest extends ControllerUnitTest {
                         document("user/mentee/events",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(BAD_REQUEST.name())),
                                 pathParameters(
                                         parameterWithName("menteeId").description("멘티 아이디")
                                 ),

@@ -1,19 +1,18 @@
 package org.devcourse.resumeme.business.event.controller;
 
-import org.devcourse.resumeme.business.event.controller.dto.ApplyToEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventTimeRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
+import org.devcourse.resumeme.business.event.controller.dto.EventUpdateRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
-import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventReject;
+import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
@@ -41,9 +40,14 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRes
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.CAN_NOT_RESERVATION;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RANGE_MAXIMUM_ATTENDEE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.TIME_ERROR;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -140,11 +144,60 @@ class EventControllerTest extends ControllerUnitTest {
                         document("event/create",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(MENTOR_NOT_FOUND.name(), NO_EMPTY_VALUE.name(), TIME_ERROR.name(), CAN_NOT_RESERVATION.name(), RANGE_MAXIMUM_ATTENDEE.name())),
                                 requestFields(
                                         fieldWithPath("info.title").type(STRING).description("첨삭 이벤트 제목"),
                                         fieldWithPath("info.content").type(STRING).description("첨삭 이벤트 내용"),
                                         fieldWithPath("info.maximumAttendee").type(NUMBER).description("최대 첨삭 이벤트 참여 가능 멘티 인원"),
                                         fieldWithPath("time.now").type(STRING).description("첨삭 이벤트 생성 요청 시간"),
+                                        fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간").optional().attributes(constraints("이벤트 오픈 예약 시 필수")),
+                                        fieldWithPath("time.closeDateTime").type(STRING).description("첨삭 이벤트 신청 마감 시간").attributes(constraints("오픈 시간보다 느리게")),
+                                        fieldWithPath("time.endDate").type(STRING).description("첨삭 종료 시간").optional().attributes(constraints("마감 시간보다 늦어야 함")),
+                                        fieldWithPath("positions").type(ARRAY).description(generateLinkCode(POSITION))
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("생성된 첨삭 이벤트 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 첨삭_이벤트_수정에_성공한다() throws Exception {
+        // given
+        EventUpdateRequest.EventTimeRequest eventTimeRequest = new EventUpdateRequest.EventTimeRequest(
+                LocalDateTime.of(2023, 10, 23, 12, 0),
+                LocalDateTime.of(2023, 10, 24, 12, 0),
+                LocalDateTime.of(2023, 10, 30, 23, 0)
+        );
+        EventUpdateRequest.EventInfoRequest eventInfoRequest = new EventUpdateRequest.EventInfoRequest("title", "content", 3);
+        EventUpdateRequest eventUpdateRequest = new EventUpdateRequest(eventInfoRequest, eventTimeRequest, List.of("BACK", "FRONT"));
+        /* 로그인 기능 완료 후 멘토 주입 값 추후 변경 예정 */
+        EventUpdateVo vo = eventUpdateRequest.toVo(1L);
+
+        doNothing().when(eventService).update(vo);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(eventUpdateRequest)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/update",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                exceptionResponse(List.of(NO_EMPTY_VALUE.name(), EVENT_NOT_FOUND.name(), NO_EMPTY_VALUE.name(), RANGE_MAXIMUM_ATTENDEE.name(), TIME_ERROR.name())),
+                                pathParameters(
+                                        parameterWithName("eventId").description("수정할 이벤트 아이디")
+                                ),
+                                requestFields(
+                                        fieldWithPath("info.title").type(STRING).description("첨삭 이벤트 제목"),
+                                        fieldWithPath("info.content").type(STRING).description("첨삭 이벤트 내용"),
+                                        fieldWithPath("info.maximumAttendee").type(NUMBER).description("최대 첨삭 이벤트 참여 가능 멘티 인원"),
                                         fieldWithPath("time.openDateTime").type(STRING).description("첨삭 이벤트 신청 오픈 시간").optional().attributes(constraints("이벤트 오픈 예약 시 필수")),
                                         fieldWithPath("time.closeDateTime").type(STRING).description("첨삭 이벤트 신청 마감 시간").attributes(constraints("오픈 시간보다 느리게")),
                                         fieldWithPath("time.endDate").type(STRING).description("첨삭 종료 시간").optional().attributes(constraints("마감 시간보다 늦어야 함")),
@@ -252,6 +305,7 @@ class EventControllerTest extends ControllerUnitTest {
                         document("event/getOne",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(EVENT_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("멘토가 생성한 이벤트 아이디")
                                 ),

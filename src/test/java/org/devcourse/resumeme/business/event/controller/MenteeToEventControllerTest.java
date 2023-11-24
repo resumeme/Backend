@@ -22,8 +22,11 @@ import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_REMAIN_SEATS;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -55,6 +58,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
                 .andDo(
                         document("event/v2/reject",
                                 getDocumentRequest(),
+                                exceptionResponse(List.of(EVENT_NOT_FOUND.name(), MENTEE_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("이벤트 아이디")
                                 ),
@@ -89,6 +93,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
                         document("event/v2/completeReview",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(EVENT_NOT_FOUND.name(), RESUME_NOT_FOUND.name(), EVENT_REJECTED.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("이벤트 아이디")
                                 ),
@@ -141,6 +146,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
                         document("event/apply",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name(), DUPLICATE_APPLICATION_EVENT.name(), NO_REMAIN_SEATS.name())),
                                 pathParameters(
                                         parameterWithName("eventId").description("참여하고 싶은 이벤트 아이디")
                                 ),

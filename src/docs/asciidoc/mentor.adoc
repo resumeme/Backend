@@ -25,6 +25,8 @@ include::{snippets}/user/mentor/update/response-fields.adoc[]
 == [첨삭 이벤트]
 === 첨삭 이벤트 생성
 
+include::{snippets}/event/create/exception-response.adoc[]
+
 *Request*
 include::{snippets}/event/create/http-request.adoc[]
 include::{snippets}/event/create/request-fields.adoc[]
@@ -33,7 +35,22 @@ include::{snippets}/event/create/request-fields.adoc[]
 include::{snippets}/event/create/http-response.adoc[]
 include::{snippets}/event/create/response-fields.adoc[]
 
+=== 첨삭 이벤트 수정
+
+include::{snippets}/event/update/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/update/http-request.adoc[]
+include::{snippets}/event/update/request-fields.adoc[]
+include::{snippets}/event/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/update/http-response.adoc[]
+include::{snippets}/event/update/response-fields.adoc[]
+
 === 첨삭 이벤트 조회
+
+include::{snippets}/user/mentor/events/exception-response.adoc[]
 
 *Request*
 include::{snippets}/user/mentor/events/http-request.adoc[]
@@ -45,6 +62,8 @@ include::{snippets}/user/mentor/events/response-fields.adoc[]
 
 === 첨삭 피드백 작성
 
+include::{snippets}/comment/create/exception-response.adoc[]
+
 *Request*
 include::{snippets}/comment/create/http-request.adoc[]
 include::{snippets}/comment/create/request-fields.adoc[]
@@ -55,6 +74,8 @@ include::{snippets}/comment/create/response-fields.adoc[]
 
 === 첨삭 피드백 수정
 
+include::{snippets}/comment/update/exception-response.adoc[]
+
 *Request*
 include::{snippets}/comment/update/http-request.adoc[]
 include::{snippets}/comment/update/path-parameters.adoc[]
@@ -64,6 +85,8 @@ include::{snippets}/comment/update/request-fields.adoc[]
 include::{snippets}/comment/update/http-response.adoc[]
 
 === 첨삭 피드백 삭제
+
+include::{snippets}/comment/delete/exception-response.adoc[]
 
 *Request*
 include::{snippets}/comment/delete/http-request.adoc[]

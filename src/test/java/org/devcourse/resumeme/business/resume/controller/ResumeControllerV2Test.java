@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
@@ -41,6 +42,7 @@ class ResumeControllerV2Test extends ControllerUnitTest {
                         document("resume/v2/updateTitle",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("resumeId").description("조회 이력서 id")
                                 ),
@@ -76,6 +78,7 @@ class ResumeControllerV2Test extends ControllerUnitTest {
                         document("resume/v2/updateMemo",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("resumeId").description("조회 이력서 id")
                                 ),
@@ -111,6 +114,7 @@ class ResumeControllerV2Test extends ControllerUnitTest {
                         document("resume/v2/updateBasicInfo",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
                                 pathParameters(
                                         parameterWithName("resumeId").description("조회 이력서 id")
                                 ),

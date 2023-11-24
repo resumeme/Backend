@@ -20,6 +20,7 @@ import java.util.Map;
 import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.activityCreateRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_SNAPSHOT;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -54,6 +55,7 @@ class SnapshotControllerTest extends ControllerUnitTest {
                         document("resume/snapshot",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
+                                exceptionResponse(List.of(NOT_FOUND_SNAPSHOT.name())),
                                 queryParameters(
                                         parameterWithName("resumeId").description("원본 이력서 아이디")
                                 )
