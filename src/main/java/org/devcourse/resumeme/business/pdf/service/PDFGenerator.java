@@ -26,7 +26,7 @@ public class PDFGenerator {
 
     private final ResumeService resumeService;
 
-    private final String RESUME_URL_FOR_PDF = "https://resumeme.vercel.app/resume";
+    private final String RESUME_URL_FOR_PDF = "https://resumeme.vercel.app/resume/";
 
     public Path createPdf(Long resumeId, String accessToken) throws IOException, InterruptedException {
         String resumeTitle = resumeService.getOne(resumeId).getTitle();
