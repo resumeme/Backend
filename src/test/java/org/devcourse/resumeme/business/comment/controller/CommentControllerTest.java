@@ -170,7 +170,8 @@ class CommentControllerTest extends ControllerUnitTest {
                                         fieldWithPath("commentResponses[].content").type(STRING).description("리뷰 내용"),
                                         fieldWithPath("commentResponses[].componentId").type(NUMBER).description("속해있는 블럭 아이디"),
                                         fieldWithPath("commentResponses[].lastModifiedAt").type(STRING).description("마지막 수정 시간"),
-                                        fieldWithPath("overallReview").type(STRING).description("총평")
+                                        fieldWithPath("overallReview").type(STRING).description("총평"),
+                                        fieldWithPath("mentorId").type(NUMBER).description("멘토 아이디")
                                 )
 
 
