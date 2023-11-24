@@ -48,6 +48,19 @@ include::{snippets}/event/update/path-parameters.adoc[]
 include::{snippets}/event/update/http-response.adoc[]
 include::{snippets}/event/update/response-fields.adoc[]
 
+=== 첨삭 이벤트 재오픈
+
+include::{snippets}/event/reopen/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/reopen/http-request.adoc[]
+include::{snippets}/event/reopen/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/reopen/http-response.adoc[]
+include::{snippets}/event/reopen/response-fields.adoc[]
+
+
 === 첨삭 이벤트 조회
 
 include::{snippets}/user/mentor/events/exception-response.adoc[]

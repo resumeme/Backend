@@ -173,7 +173,6 @@ class EventControllerTest extends ControllerUnitTest {
         );
         EventUpdateRequest.EventInfoRequest eventInfoRequest = new EventUpdateRequest.EventInfoRequest("title", "content", 3);
         EventUpdateRequest eventUpdateRequest = new EventUpdateRequest(eventInfoRequest, eventTimeRequest, List.of("BACK", "FRONT"));
-        /* 로그인 기능 완료 후 멘토 주입 값 추후 변경 예정 */
         EventUpdateVo vo = eventUpdateRequest.toVo(1L);
 
         doNothing().when(eventService).update(vo);
@@ -205,6 +204,39 @@ class EventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(NUMBER).description("생성된 첨삭 이벤트 아이디")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 첨삭_이벤트_재오픈에_성공한다() throws Exception {
+        // given
+        EventUpdateRequest eventUpdateRequest = new EventUpdateRequest(null, null, null);
+        EventUpdateVo vo = eventUpdateRequest.toVo(1L);
+
+        doNothing().when(eventService).update(vo);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v1/events/{eventId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(eventUpdateRequest)));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/reopen",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                nullableHttpRequestSnippet(),
+                                exceptionResponse(List.of(NO_EMPTY_VALUE.name(), EVENT_NOT_FOUND.name(), NO_EMPTY_VALUE.name(), RANGE_MAXIMUM_ATTENDEE.name(), TIME_ERROR.name())),
+                                pathParameters(
+                                        parameterWithName("eventId").description("수정할 이벤트 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("수정된 첨삭 이벤트 아이디")
                                 )
                         )
                 );
