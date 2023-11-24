@@ -133,4 +133,33 @@ class ResumeControllerV2Test extends ControllerUnitTest {
                 );
     }
 
+    @Test
+    void 이력서_피드백_반영에_성공한다() throws Exception {
+        // given
+        ResumeUpdateRequest request = new ResumeUpdateRequest(null, null, null, null, null);
+
+        // when
+        ResultActions result = mvc.perform(patch("/api/v2/resumes/{resumeId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("resume/v2/reflectFeedback",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                exceptionResponse(List.of(RESUME_NOT_FOUND.name())),
+                                pathParameters(
+                                        parameterWithName("resumeId").description("조회 이력서 id")
+                                ),
+                                nullableHttpRequestSnippet(),
+                                responseFields(
+                                        fieldWithPath("id").description("업데이트된 이력서 아이디")
+                                )
+                        )
+                );
+    }
+
 }
