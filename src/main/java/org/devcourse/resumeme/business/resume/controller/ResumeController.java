@@ -1,8 +1,6 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.event.controller.dto.EventsResponse;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.resume.controller.dto.BasicResumeInfo;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
@@ -85,15 +83,6 @@ public class ResumeController {
         return resumeService.getAllByMenteeId(user.id()).stream()
                 .filter(Resume::isOrigin)
                 .map(ResumeResponse::new)
-                .toList();
-    }
-
-    @GetMapping("/{resumeId}/related-events")
-    public List<EventsResponse> getEvents(@PathVariable Long resumeId) {
-        List<MenteeToEvent> relatedEvents = menteeToEventService.getEventsRelatedToResume(resumeId);
-
-        return relatedEvents.stream()
-                .map(menteeToEvent -> new EventsResponse(menteeToEvent.getEvent()))
                 .toList();
     }
 

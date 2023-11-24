@@ -1,11 +1,9 @@
 package org.devcourse.resumeme.business.event.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
-import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventUpdateRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
@@ -13,7 +11,6 @@ import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
-import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
@@ -60,18 +57,6 @@ public class EventController {
         eventService.update(updateVo);
 
         return new IdResponse(eventId);
-    }
-
-    @PatchMapping("/{eventId}/mentee/{menteeId}")
-    public void rejectApply(@PathVariable Long eventId, @PathVariable Long menteeId, @RequestBody EventRejectRequest request) {
-        eventService.reject(new EventReject(eventId, menteeId, request.rejectMessage()));
-    }
-
-    @PatchMapping("/{eventId}/resumes/{resumeId}/complete")
-    public void completeReview(
-            @PathVariable Long eventId, @PathVariable Long resumeId, @RequestBody CompleteEventRequest request, @AuthenticationPrincipal JwtUser user
-    ) {
-        eventService.completeReview(eventId, request.comment(), resumeId);
     }
 
     @GetMapping("/{eventId}")

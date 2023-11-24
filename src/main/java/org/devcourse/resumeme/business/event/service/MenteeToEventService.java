@@ -7,34 +7,22 @@ import org.devcourse.resumeme.business.event.domain.model.ApplimentUpdate;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
+import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MenteeToEventService implements ApplyProvider {
+public class MenteeToEventService {
 
     private final MenteeToEventRepository menteeToEventRepository;
 
     private final EventRepository eventRepository;
-
-    @Transactional(readOnly = true)
-    public List<MenteeToEvent> getEventsRelatedToResume(Long resumeId) {
-        return menteeToEventRepository.findAllByResumeId(resumeId);
-    }
-
-    @Override
-    public Long getApplyEventCount(Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId).stream()
-                .filter(MenteeToEvent::isAttending)
-                .count();
-    }
 
     public void update(Long eventId, ApplyUpdateVo applyUpdateVo) {
         Event event = eventRepository.findWithApplicantsById(eventId)
@@ -42,6 +30,27 @@ public class MenteeToEventService implements ApplyProvider {
 
         ApplimentUpdate model = applyUpdateVo.toModel();
         model.update(event);
+    }
+
+    public void acceptMentee(AcceptMenteeToEvent ids) {
+        checkCanApply(ids.menteeId());
+        Event event = eventRepository.findWithLockById(ids.eventId())
+                .orElseThrow();
+
+        event.acceptMentee(ids.menteeId(), ids.resumeId());
+    }
+
+    private void checkCanApply(Long menteeId) {
+        Long menteeApplyCount = getApplyEventCount(menteeId);
+        if (menteeApplyCount > 0) {
+            throw new EventException(ExceptionCode.DUPLICATE_APPLICATION_EVENT);
+        }
+    }
+
+    private Long getApplyEventCount(Long menteeId) {
+        return menteeToEventRepository.findByMenteeId(menteeId).stream()
+                .filter(MenteeToEvent::isAttending)
+                .count();
     }
 
 }
