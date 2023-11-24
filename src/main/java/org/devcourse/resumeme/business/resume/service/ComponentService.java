@@ -1,6 +1,9 @@
 package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.comment.controller.dto.CommentResponse;
+import org.devcourse.resumeme.business.comment.domain.Comment;
+import org.devcourse.resumeme.business.comment.repository.CommentRepository;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -19,6 +22,8 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NO
 public class ComponentService {
 
     private final ComponentRepository componentRepository;
+
+    private final CommentRepository commentRepository;
 
     public Long create(Component block, String type) {
         Long resumeId = block.getResumeId();
@@ -61,7 +66,10 @@ public class ComponentService {
 
         newComponent.updateOriginDate(component.getCreatedDate());
 
-        return create(newComponent, type);
+        Long newComponentId = create(newComponent, type);
+        commentRepository.updateComment(newComponentId, componentId);
+
+        return newComponentId;
     }
 
     public void copy(Long originResumeId, Long newResumeId) {
