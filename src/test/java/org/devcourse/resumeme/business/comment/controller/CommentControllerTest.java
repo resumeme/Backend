@@ -6,7 +6,6 @@ import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -91,7 +90,7 @@ class CommentControllerTest extends ControllerUnitTest {
         Component component = new Component("career", "career", null, null, resumeId, List.of());
         Resume resume = new Resume("titlem", mentee);
 
-        Comment comment = request.toEntity(resume, component);
+        Comment comment = request.toEntity(resume);
         setId(comment, 1L);
         setId(component, 1L);
         Field lastModifiedAt = comment.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
@@ -142,7 +141,7 @@ class CommentControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Comment comment = new Comment("리뷰 내용내용", component, new Resume("title", mentee));
+        Comment comment = new Comment("리뷰 내용내용", 1L, new Resume("title", mentee));
         setId(comment, 1L);
         setId(component, 1L);
         Field lastModifiedAt = comment.getClass().getSuperclass().getDeclaredField("lastModifiedDate");
