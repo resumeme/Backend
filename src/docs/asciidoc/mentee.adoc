@@ -240,15 +240,6 @@ include::{snippets}/resume/getOwn/http-request.adoc[]
 include::{snippets}/resume/getOwn/http-response.adoc[]
 include::{snippets}/resume/getOwn/response-fields.adoc[]
 
-=== 이력서로 참여한 첨삭 이벤트 조회
-*Request*
-include::{snippets}/resume/findEvents/http-request.adoc[]
-include::{snippets}/resume/findEvents/path-parameters.adoc[]
-
-*Response*
-include::{snippets}/resume/findEvents/http-response.adoc[]
-include::{snippets}/resume/findEvents/response-fields.adoc[]
-
 === 이력서 삭제
 include::{snippets}/resume/delete/exception-response.adoc[]
 
@@ -290,7 +281,6 @@ include::{snippets}/event/apply/request-fields.adoc[]
 
 *Response*
 include::{snippets}/event/apply/http-response.adoc[]
-include::{snippets}/event/apply/response-fields.adoc[]
 
 === 첨삭 이벤트 참여 리스트 조회
 include::{snippets}/user/mentee/events/exception-response.adoc[]
@@ -302,14 +292,6 @@ include::{snippets}/user/mentee/events/path-parameters.adoc[]
 *Response*
 include::{snippets}/user/mentee/events/http-response.adoc[]
 include::{snippets}/user/mentee/events/response-fields.adoc[]
-
-=== 첨삭 재요청
-
-*Request*
-include::{snippets}/event/requestReview/http-request.adoc[]
-
-*Response*
-include::{snippets}/event/requestReview/http-response.adoc[]
 
 === 첨삭 내용 전체 조회
 include::{snippets}/comment/getAll/exception-response.adoc[]

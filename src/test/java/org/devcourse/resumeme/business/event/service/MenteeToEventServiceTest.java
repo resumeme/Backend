@@ -106,21 +106,6 @@ class MenteeToEventServiceTest {
     }
 
     @Test
-    void 하나의_이력서로_참여한_이벤트_목록_조회에_성공한다() {
-        //given
-        MenteeToEvent menteeToEventFirst = new MenteeToEvent(eventOne, 1L, 1L);
-        MenteeToEvent menteeToEventSecond = new MenteeToEvent(eventTwo, 1L, 1L);
-
-        given(menteeToEventRepository.findAllByResumeId(1L)).willReturn(List.of(menteeToEventFirst, menteeToEventSecond));
-
-        //when
-        List<MenteeToEvent> eventsRelatedToResume = menteeToEventService.getEventsRelatedToResume(1L);
-
-        //then
-        assertThat(eventsRelatedToResume.size()).isEqualTo(2);
-    }
-
-    @Test
     void 여러스레드를_이용하여_선착순으로_진행한_이벤트참여신청에_최대_참여수만큼_성공한다() throws InterruptedException {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
