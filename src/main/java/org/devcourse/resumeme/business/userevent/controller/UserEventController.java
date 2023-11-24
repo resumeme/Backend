@@ -12,6 +12,7 @@ import org.devcourse.resumeme.business.userevent.controller.dto.MenteeEventRespo
 import org.devcourse.resumeme.business.userevent.controller.dto.MentorEventResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.exception.CustomException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class UserEventController {
             throw new CustomException(BAD_REQUEST);
         }
 
-        return eventService.getAll(new AllEventFilter(mentorId, null)).stream()
+        return eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged()).stream()
                 .map(event -> new MentorEventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event)))
                 .toList();
     }
@@ -65,8 +66,7 @@ public class UserEventController {
             throw new CustomException(BAD_REQUEST);
         }
 
-        List<Event> events = eventService.getAll(new AllEventFilter(null, menteeId));
-        return events.stream()
+        return eventService.getAllWithPage(new AllEventFilter(null, menteeId), Pageable.unpaged()).stream()
                 .flatMap(event -> event.getApplicants().stream()
                         .filter(applicant -> applicant.isSameMentee(user.id()))
                         .map(applicant -> new MenteeEventResponse(applicant, event))
