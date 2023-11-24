@@ -13,13 +13,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
-import org.devcourse.resumeme.common.util.Validator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 
 @Entity
 @Where(clause = "deleted = false")
@@ -62,7 +60,7 @@ public class Resume extends BaseEntity {
     }
 
     private static void validateResume(String title, Mentee mentee) {
-        Validator.check(isBlank(title), NO_EMPTY_VALUE);
+        isBlank(title.trim());
         notNull(mentee);
     }
 
