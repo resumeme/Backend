@@ -9,7 +9,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.global.exception.CustomException;
 
@@ -35,22 +34,20 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Getter
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "component_id")
-    private Component component;
+    private Long componentId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
-    public Comment(String content, Component component, Resume resume) {
+    public Comment(String content, Long componentId, Resume resume) {
         check(isBlank(content), NO_EMPTY_VALUE);
         notNull(resume);
-        notNull(component);
+        notNull(componentId);
 
         this.content = content;
         this.resume = resume;
-        this.component = component;
+        this.componentId = componentId;
     }
 
     public void checkSameResume(Long resumeId) {
