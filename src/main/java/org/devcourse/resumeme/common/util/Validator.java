@@ -33,7 +33,7 @@ public class Validator {
     public static class Condition {
 
         public static boolean isBlank(String target) {
-            return !StringUtils.hasLength(target);
+            return !StringUtils.hasLength(target.trim());
         }
 
     }
