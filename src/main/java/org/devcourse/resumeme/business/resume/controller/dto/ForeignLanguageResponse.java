@@ -10,7 +10,7 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 
 @Data
 @NoArgsConstructor
-@JsonTypeName("foreign-languages")
+@JsonTypeName("foreignLanguages")
 public class ForeignLanguageResponse extends ComponentResponse {
 
     private String language;

@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
         @JsonSubTypes.Type(value = ActivityResponse.class, name = "activities"),
         @JsonSubTypes.Type(value = CareerResponse.class, name = "careers"),
         @JsonSubTypes.Type(value = CertificationResponse.class, name = "certifications"),
-        @JsonSubTypes.Type(value = ForeignLanguageResponse.class, name = "foreign-languages"),
+        @JsonSubTypes.Type(value = ForeignLanguageResponse.class, name = "foreignLanguages"),
         @JsonSubTypes.Type(value = ProjectResponse.class, name = "projects"),
         @JsonSubTypes.Type(value = TrainingResponse.class, name = "trainings"),
         @JsonSubTypes.Type(value = ResumeLinkResponse.class, name = "links")
