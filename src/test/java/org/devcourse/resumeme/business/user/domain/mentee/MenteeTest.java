@@ -28,7 +28,7 @@ class MenteeTest {
 
     @BeforeEach
     void SetUP() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "김한주", "01034548443", Role.ROLE_MENTEE);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "김한주", "01034548443", "mentee");
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "FINANCE"), "안녕하세요 취업하고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         refreshToken = "refreshTokenRecentlyIssued";
@@ -42,7 +42,7 @@ class MenteeTest {
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
                 .email(oAuth2TempInfo.getEmail())
                 .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
+                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), Role.of(requiredInfoRequest.role())))
                 .interestedPositions(menteeRegisterInfoRequest.interestedPositions())
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .introduce(menteeRegisterInfoRequest.introduce())
@@ -76,7 +76,7 @@ class MenteeTest {
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
                 .email(oAuth2TempInfo.getEmail())
                 .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
+                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), Role.of(requiredInfoRequest.role())))
                 .interestedPositions(emptyInterestedPositions)
                 .interestedFields(emptyInterestedFields)
                 .introduce(menteeRegisterInfoRequest.introduce())
@@ -93,7 +93,7 @@ class MenteeTest {
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
                 .email(invalidEmail)
                 .refreshToken(refreshToken)
-                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), requiredInfoRequest.role()))
+                .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), Role.of(requiredInfoRequest.role())))
                 .interestedPositions(menteeRegisterInfoRequest.interestedPositions())
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .introduce(menteeRegisterInfoRequest.introduce())

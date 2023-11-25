@@ -5,7 +5,6 @@ import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpda
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
@@ -72,7 +71,7 @@ class MentorControllerTest extends ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "김춘추", "01034548443", Role.ROLE_PENDING);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "김춘추", "01034548443", "pending");
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
         mentor = mentorRegisterInfoRequest.toEntity(oAuth2TempInfo);
@@ -114,7 +113,7 @@ class MentorControllerTest extends ControllerUnitTest {
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 exceptionResponse(
-                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), INFO_NOT_FOUND.name(), "INVALID_TEXT", CAREERYEAR_NOT_ALLOWED.name())
+                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), INFO_NOT_FOUND.name(), "INVALID_TEXT", CAREERYEAR_NOT_ALLOWED.name(), INFO_NOT_FOUND.name())
                                 ),
                                 requestFields(
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
