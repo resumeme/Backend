@@ -291,3 +291,33 @@ include::{snippets}/result/create/request-fields.adoc[]
 *Response*
 include::{snippets}/result/create/http-response.adoc[]
 include::{snippets}/result/create/response-fields.adoc[]
+
+== [관심 멘토 팔로우]
+=== 멘토 팔로우하기
+include::{snippets}/follows/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/follows/create/http-request.adoc[]
+include::{snippets}/follows/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/follows/create/http-response.adoc[]
+include::{snippets}/follows/create/response-fields.adoc[]
+
+=== 팔로우 중인 멘토 리스트 조회하기
+
+*Request*
+include::{snippets}/follows/getAll/http-request.adoc[]
+
+*Response*
+include::{snippets}/follows/getAll/http-response.adoc[]
+include::{snippets}/follows/getAll/response-fields.adoc[]
+
+=== 멘토 팔로우 취소하기
+
+*Request*
+include::{snippets}/follows/delete/http-request.adoc[]
+include::{snippets}/follows/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/follows/delete/http-response.adoc[]

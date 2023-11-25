@@ -13,12 +13,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.BaseEntity;
-import org.devcourse.resumeme.common.domain.Field;
-import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.common.domain.Field;
+import org.devcourse.resumeme.common.domain.Position;
 
 import java.util.HashSet;
 import java.util.Set;

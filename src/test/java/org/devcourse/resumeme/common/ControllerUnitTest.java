@@ -19,11 +19,13 @@ import org.devcourse.resumeme.business.resume.controller.SnapshotController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.resume.service.SnapshotService;
+import org.devcourse.resumeme.business.user.controller.FollowController;
 import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
 import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
+import org.devcourse.resumeme.business.user.service.mentee.FollowService;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
@@ -78,6 +80,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         FilterTestController.class,
         UserEventController.class,
         ResumeControllerV2.class,
+        SnapshotController.class,
+        FollowController.class,
         MenteeToEventController.class,
         SnapshotController.class
 })
@@ -130,6 +134,9 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected SnapshotService snapshotService;
+
+    @MockBean
+    protected FollowService followService;
 
     protected MockMvc mvc;
 
