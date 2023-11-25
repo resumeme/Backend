@@ -51,7 +51,7 @@ public class CommentController {
                 .toList();
         String overallReview = eventService.getOverallReview(event, resumeId);
 
-        return new CommentWithReviewResponse(commentResponses, overallReview);
+        return new CommentWithReviewResponse(commentResponses, overallReview, event.getMentor().getId());
     }
 
     @PatchMapping("/{commentId}")
