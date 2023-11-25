@@ -73,6 +73,11 @@ public class Component {
         this(property.name(), content, startDate, endDate, resumeId, components);
     }
 
+    public Component(String property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, Long originComponentId, List<Component> components) {
+        this(property, content, startDate, endDate, resumeId, components);
+        this.originComponentId = originComponentId;
+    }
+
     public Component(String property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
         this.property = property;
         this.content = content;
@@ -121,6 +126,6 @@ public class Component {
                 .map(component -> component.copy(newResumeId))
                 .toList();
 
-        return new Component(property, content, startDate, endDate, newResumeId, subComponents);
+        return new Component(property, content, startDate, endDate, newResumeId, id, subComponents);
     }
 }
