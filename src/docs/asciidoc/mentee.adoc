@@ -169,15 +169,6 @@ include::{snippets}/resume/component/delete/path-parameters.adoc[]
 *Response*
 include::{snippets}/resume/component/delete/http-response.adoc[]
 
-=== 이력서 제목 수정
-*Request*
-include::{snippets}/resume/updateTitle/http-request.adoc[]
-include::{snippets}/resume/updateTitle/request-fields.adoc[]
-
-*Response*
-include::{snippets}/resume/updateTitle/http-response.adoc[]
-include::{snippets}/resume/updateTitle/response-fields.adoc[]
-
 === 이력서 제목 수정 V2
 
 include::{snippets}/resume/v2/updateTitle/exception-response.adoc[]
@@ -189,15 +180,6 @@ include::{snippets}/resume/v2/updateTitle/path-parameters.adoc[]
 *Response*
 include::{snippets}/resume/v2/updateTitle/http-response.adoc[]
 include::{snippets}/resume/v2/updateTitle/response-fields.adoc[]
-
-=== 이력서 기본정보 수정
-*Request*
-include::{snippets}/resume/update/http-request.adoc[]
-include::{snippets}/resume/update/request-fields.adoc[]
-
-*Response*
-include::{snippets}/resume/update/http-response.adoc[]
-include::{snippets}/resume/update/response-fields.adoc[]
 
 === 이력서 기본정보 수정 V2
 
@@ -211,15 +193,6 @@ include::{snippets}/resume/v2/updateBasicInfo/path-parameters.adoc[]
 include::{snippets}/resume/v2/updateBasicInfo/http-response.adoc[]
 include::{snippets}/resume/v2/updateBasicInfo/response-fields.adoc[]
 
-=== 이력서 메모 수정
-*Request*
-include::{snippets}/resume/updateMemo/http-request.adoc[]
-include::{snippets}/resume/updateMemo/request-fields.adoc[]
-
-*Response*
-include::{snippets}/resume/updateMemo/http-response.adoc[]
-include::{snippets}/resume/updateMemo/response-fields.adoc[]
-
 === 이력서 메모 수정 V2
 
 include::{snippets}/resume/v2/updateMemo/exception-response.adoc[]
@@ -231,6 +204,18 @@ include::{snippets}/resume/v2/updateMemo/path-parameters.adoc[]
 *Response*
 include::{snippets}/resume/v2/updateMemo/http-response.adoc[]
 include::{snippets}/resume/v2/updateMemo/response-fields.adoc[]
+
+=== 이력서 피드백 반영 완료
+
+include::{snippets}/resume/v2/reflectFeedback/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/v2/reflectFeedback/http-request.adoc[]
+include::{snippets}/resume/v2/reflectFeedback/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/v2/reflectFeedback/http-response.adoc[]
+include::{snippets}/resume/v2/reflectFeedback/response-fields.adoc[]
 
 === 멘티 이력서 리스트 조회
 *Request*
@@ -250,18 +235,8 @@ include::{snippets}/resume/delete/path-parameters.adoc[]
 *Response*
 include::{snippets}/resume/delete/http-response.adoc[]
 
-=== 이력서 피드백 반영 완료
-
-*Request*
-include::{snippets}/resume/complete/http-request.adoc[]
-include::{snippets}/resume/complete/path-parameters.adoc[]
-
-*Response*
-include::{snippets}/resume/complete/response-fields.adoc[]
-
 === 이력서 스냅샷 조회
 include::{snippets}/resume/snapshot/exception-response.adoc[]
-
 
 *Request*
 include::{snippets}/resume/snapshot/http-request.adoc[]

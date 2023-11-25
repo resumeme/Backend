@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.resume.controller.dto.v2;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.service.v2.ResumeReflectFeedback;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeBasicInfoUpdate;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeMemoUpdate;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTitleUpdate;
@@ -33,6 +34,10 @@ public class ResumeUpdateRequest {
     }
 
     public ResumeUpdateVo toVo() {
+        if (position == null && introduce == null && memo == null && title == null) {
+            return new ResumeReflectFeedback();
+        }
+
         if (title != null) {
             return new ResumeTitleUpdate(title);
         }
