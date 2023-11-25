@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
+import org.devcourse.resumeme.common.util.Validator;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -60,7 +62,7 @@ public class Resume extends BaseEntity {
     }
 
     private static void validateResume(String title, Mentee mentee) {
-        isBlank(title.trim());
+        Validator.check(isBlank(title.trim()), ExceptionCode.NO_EMPTY_VALUE);
         notNull(mentee);
     }
 
@@ -94,6 +96,7 @@ public class Resume extends BaseEntity {
     }
 
     public void updateTitle(String title) {
+        Validator.check(isBlank(title.trim()), ExceptionCode.NO_EMPTY_VALUE);
         this.title = title;
     }
 
