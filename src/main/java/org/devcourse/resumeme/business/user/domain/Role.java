@@ -20,7 +20,7 @@ public enum Role implements DocsEnumType {
 
     public static Role of(String roleName) {
         return Arrays.stream(values())
-                .filter(role -> role.getDescription().equals(roleName))
+                .filter(role -> role.getRoleName().equals(roleName))
                 .findAny()
                 .orElseThrow(() -> new CustomException("INVALID_ROLE", "존재하지 않는 권한입니다."));
     }

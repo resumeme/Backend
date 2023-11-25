@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.user.controller.mentor.dto;
 
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
@@ -16,7 +17,7 @@ public record MentorRegisterInfoRequest(String cacheKey, RequiredInfoRequest req
                 .provider(Provider.valueOf(oAuth2TempInfo.getProvider().toUpperCase()))
                 .imageUrl(oAuth2TempInfo.getImageUrl())
                 .requiredInfo(
-                        new RequiredInfo(requiredInfo().realName(), requiredInfo().nickname(), requiredInfo().phoneNumber(), requiredInfo().role())
+                        new RequiredInfo(requiredInfo().realName(), requiredInfo().nickname(), requiredInfo().phoneNumber(), Role.of(requiredInfo().role()))
                 )
                 .introduce(introduce)
                 .experiencedPositions(experiencedPositions)
