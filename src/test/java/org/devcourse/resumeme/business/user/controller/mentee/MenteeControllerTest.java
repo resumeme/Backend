@@ -4,7 +4,6 @@ import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
@@ -68,7 +67,7 @@ class MenteeControllerTest extends ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        requiredInfoRequest = new RequiredInfoRequest("nickname", "김백둥", "01034548443", Role.ROLE_MENTEE);
+        requiredInfoRequest = new RequiredInfoRequest("nickname", "김백둥", "01034548443", "mentee");
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
         mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo);
@@ -108,7 +107,7 @@ class MenteeControllerTest extends ControllerUnitTest {
                         document("user/mentee/create",
                                 getDocumentRequest(),
                                 exceptionResponse(
-                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), INFO_NOT_FOUND.name(), "INVALID_TEXT")
+                                        List.of(INVALID_EMAIL.name(), NO_EMPTY_VALUE.name(), ROLE_NOT_ALLOWED.name(), TEXT_OVER_LENGTH.name(), INFO_NOT_FOUND.name(), "INVALID_TEXT", INFO_NOT_FOUND.name())
                                 ),
                                 requestFields(
                                         fieldWithPath("cacheKey").type(STRING).description("임시 저장된 소셜로그인 값의 키"),
