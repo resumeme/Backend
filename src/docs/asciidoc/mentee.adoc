@@ -236,15 +236,26 @@ include::{snippets}/resume/delete/path-parameters.adoc[]
 include::{snippets}/resume/delete/http-response.adoc[]
 
 === 이력서 스냅샷 조회
-include::{snippets}/resume/snapshot/exception-response.adoc[]
+include::{snippets}/resume/snapshot/resume/exception-response.adoc[]
 
 *Request*
-include::{snippets}/resume/snapshot/http-request.adoc[]
-include::{snippets}/resume/snapshot/query-parameters.adoc[]
+include::{snippets}/resume/snapshot/resume/http-request.adoc[]
+include::{snippets}/resume/snapshot/resume/query-parameters.adoc[]
 
 *Response*
-include::{snippets}/resume/snapshot/response-body.adoc[]
+include::{snippets}/resume/snapshot/resume/response-body.adoc[]
 블럭 전체조회랑 같은 양식입니다
+
+=== 피드백 스냅샷 조회
+include::{snippets}/resume/snapshot/comment/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/snapshot/comment/http-request.adoc[]
+include::{snippets}/resume/snapshot/comment/query-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/snapshot/comment/response-body.adoc[]
+피드백 전체조회랑 같은 양식입니다
 
 == [첨삭]
 === 첨삭 이벤트 참여 신청
