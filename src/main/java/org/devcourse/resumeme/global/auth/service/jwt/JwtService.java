@@ -51,18 +51,20 @@ public class JwtService {
     }
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(jwtProperties.refresh().headerName()))
+        return extractToken(request, jwtProperties.refresh().headerName());
+    }
+
+    public Optional<String> extractAccessToken(HttpServletRequest request) {
+        return extractToken(request, jwtProperties.access().headerName());
+    }
+
+    private Optional<String> extractToken(HttpServletRequest request, String tokenType) {
+        return Optional.ofNullable(request.getHeader(tokenType))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .filter(this::isNotManipulated)
                 .map(JwtService::refineToken);
     }
 
-    public Optional<String> extractAccessToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(jwtProperties.access().headerName()))
-                .filter(accessToken -> accessToken.startsWith(BEARER))
-                .filter(this::isNotManipulated)
-                .map(JwtService::refineToken);
-    }
 
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
         response.setHeader(jwtProperties.access().headerName(), accessToken);
