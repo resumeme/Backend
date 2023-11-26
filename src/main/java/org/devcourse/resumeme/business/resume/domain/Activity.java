@@ -3,11 +3,11 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
 import static org.devcourse.resumeme.business.resume.domain.Property.LINK;
@@ -39,12 +39,12 @@ public class Activity implements Converter {
         this.description = description;
     }
 
-    public Activity(Map<Property, Component> components) {
-        this.activityName = components.get(TITLE).getContent();
-        this.startDate = components.get(TITLE).getStartDate();
-        this.endDate = components.get(TITLE).getEndDate();
-        this.link = components.get(LINK).getContent();
-        this.description = components.get(DESCRIPTION).getContent();
+    public Activity(Components components) {
+        this.activityName = components.getContent(TITLE);
+        this.startDate = components.getStartDate(TITLE);
+        this.endDate = components.getEndDate(TITLE);
+        this.link = components.getContent(LINK);
+        this.description = components.getContent(DESCRIPTION);
     }
 
     @Override

@@ -3,13 +3,12 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
-import static org.devcourse.resumeme.business.resume.domain.ComponentUtils.toDouble;
 import static org.devcourse.resumeme.business.resume.domain.Property.DEGREE;
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
 import static org.devcourse.resumeme.business.resume.domain.Property.MAJOR;
@@ -37,11 +36,11 @@ public class Training implements Converter {
         this.explanation = explanation;
     }
 
-    public Training(Map<Property, Component> components) {
-        this.educationalDetails = new EducationalDetails(components.get(TRAINING).getContent(), components.get(MAJOR).getContent(), components.get(DEGREE).getContent());
-        this.dateDetails = new DateDetails(components.get(TRAINING).getStartDate(), components.get(TRAINING).getEndDate());
-        this.gpaDetails = new GPADetails(toDouble(components.get(SCORE)), toDouble(components.get(MAX_SCORE)));
-        this.explanation = components.get(DESCRIPTION).getContent();
+    public Training(Components components) {
+        this.educationalDetails = new EducationalDetails(components.getContent(TRAINING), components.getContent(MAJOR), components.getContent(DEGREE));
+        this.dateDetails = new DateDetails(components.getStartDate(TRAINING), components.getEndDate(TRAINING));
+        this.gpaDetails = new GPADetails(components.toDouble(SCORE), components.toDouble(MAX_SCORE));
+        this.explanation = components.getContent(DESCRIPTION);
     }
 
     @Override

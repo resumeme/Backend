@@ -3,10 +3,10 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.devcourse.resumeme.business.resume.domain.Property.TYPE;
 import static org.devcourse.resumeme.business.resume.domain.Property.URL;
@@ -24,9 +24,9 @@ public class ReferenceLink implements Converter {
         this.address = address;
     }
 
-    public ReferenceLink(Map<Property, Component> components) {
-        this.linkType = LinkType.valueOf(components.get(TYPE).getContent());
-        this.address = components.get(URL).getContent();
+    public ReferenceLink(Components components) {
+        this.linkType = LinkType.valueOf(components.getContent(TYPE));
+        this.address = components.getContent(URL);
     }
 
     @Override

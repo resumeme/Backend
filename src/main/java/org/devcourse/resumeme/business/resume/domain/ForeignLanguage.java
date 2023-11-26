@@ -3,10 +3,10 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.devcourse.resumeme.business.resume.domain.Property.EXAM_NAME;
 import static org.devcourse.resumeme.business.resume.domain.Property.LANGUAGE;
@@ -33,10 +33,10 @@ public class ForeignLanguage implements Converter {
         this.scoreOrGrade = scoreOrGrade;
     }
 
-    public ForeignLanguage(Map<Property, Component> components) {
-        this.language = components.get(LANGUAGE).getContent();
-        this.examName = components.get(EXAM_NAME).getContent();
-        this.scoreOrGrade = components.get(SCORE).getContent();
+    public ForeignLanguage(Components components) {
+        this.language = components.getContent(LANGUAGE);
+        this.examName = components.getContent(EXAM_NAME);
+        this.scoreOrGrade = components.getContent(SCORE);
     }
 
     @Override

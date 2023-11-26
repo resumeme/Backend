@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Converter;
-import org.devcourse.resumeme.business.resume.domain.Property;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
@@ -12,9 +12,7 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static org.devcourse.resumeme.business.resume.domain.ComponentUtils.toList;
 import static org.devcourse.resumeme.business.resume.domain.Property.COMPANY;
 import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
@@ -56,13 +54,13 @@ public class Career implements Converter {
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    public Career(Map<Property, Component> component) {
-        this.companyName = component.get(COMPANY).getContent();
-        this.position = component.get(POSITION).getContent();
-        this.skills = toList(component.get(SKILL));
-        this.duties = getDuties(component.get(DUTY));
-        this.careerPeriod = new CareerPeriod(component.get(COMPANY).getStartDate(), component.get(COMPANY).getEndDate());
-        this.careerContent = component.get(CONTENT).getContent();
+    public Career(Components component) {
+        this.companyName = component.getContent(COMPANY);
+        this.position = component.getContent(POSITION);
+        this.skills = component.toList(SKILL);
+        this.duties = getDuties(component.getComponent(DUTY));
+        this.careerPeriod = new CareerPeriod(component.getStartDate(COMPANY), component.getEndDate(COMPANY));
+        this.careerContent = component.getContent(CONTENT);
     }
 
     private static List<Duty> getDuties(Component component) {

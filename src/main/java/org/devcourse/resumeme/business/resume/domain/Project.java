@@ -3,15 +3,14 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
-import static org.devcourse.resumeme.business.resume.domain.ComponentUtils.toList;
 import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
 import static org.devcourse.resumeme.business.resume.domain.Property.MEMBER;
 import static org.devcourse.resumeme.business.resume.domain.Property.PROJECT;
@@ -51,13 +50,13 @@ public class Project implements Converter {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    public Project(Map<Property, Component> components) {
-        this.projectName = components.get(PROJECT).getContent();
-        this.productionYear = (long) components.get(PROJECT).getStartDate().getYear();
-        this.teamMembers = components.get(MEMBER).getContent();
-        this.skills = toList(components.get(SKILL));
-        this.projectContent = components.get(CONTENT).getContent();
-        this.projectUrl = components.get(URL).getContent();
+    public Project(Components components) {
+        this.projectName = components.getContent(PROJECT);
+        this.productionYear = (long) components.getStartDate(PROJECT).getYear();
+        this.teamMembers = components.getContent(MEMBER);
+        this.skills = components.toList(SKILL);
+        this.projectContent = components.getContent(CONTENT);
+        this.projectUrl = components.getContent(URL);
     }
 
     @Override

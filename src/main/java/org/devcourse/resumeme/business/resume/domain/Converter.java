@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.domain;
 
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.ArrayList;
@@ -14,9 +15,11 @@ public interface Converter {
 
     Component of(Long resumeId);
 
-    static Map<Property, Component> convert(Component component) {
-        return flatComponents(component).stream()
+    static Components convert(Component component) {
+        Map<Property, Component> components = flatComponents(component).stream()
                 .collect(toMap(c -> Property.valueOf(c.getProperty()), Function.identity()));
+
+        return new Components(components);
     }
 
     private static List<Component> flatComponents(Component component) {
