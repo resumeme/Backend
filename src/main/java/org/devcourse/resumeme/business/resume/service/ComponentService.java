@@ -1,8 +1,6 @@
 package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.comment.controller.dto.CommentResponse;
-import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
@@ -10,7 +8,6 @@ import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +62,7 @@ public class ComponentService {
         componentRepository.delete(component);
 
         newComponent.updateOriginDate(component.getCreatedDate());
+        newComponent.updateOriginComponentId(component.getOriginComponentId());
 
         Long newComponentId = create(newComponent, type);
         commentRepository.updateComment(newComponentId, componentId);
