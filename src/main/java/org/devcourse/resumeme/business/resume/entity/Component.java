@@ -128,4 +128,9 @@ public class Component {
 
         return new Component(property, content, startDate, endDate, newResumeId, id, subComponents);
     }
+
+    public void updateOriginComponentId(Long originComponentId) {
+        this.originComponentId = originComponentId;
+    }
+
 }
