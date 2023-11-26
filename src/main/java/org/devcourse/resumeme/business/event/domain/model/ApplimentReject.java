@@ -18,8 +18,10 @@ public class ApplimentReject implements ApplimentUpdate {
 
 
     @Override
-    public void update(Event event) {
+    public Long update(Event event) {
         event.reject(menteeId, rejectMessage);
+
+        return 0L;
     }
 
 }
