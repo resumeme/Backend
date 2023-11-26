@@ -43,15 +43,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         Optional<String> accessToken = jwtService.extractAccessToken(request);
         if (accessToken.isPresent()) {
             accessToken.filter(jwtService::isNotExpired)
-                    .ifPresentOrElse(this::saveAuthentication, () -> checkRefreshToken(accessToken.get(), request, response));
+                    .ifPresentOrElse(this::saveAuthentication, () -> checkRefreshToken(jwtService.extractClaim(accessToken.get()), request, response));
         }
         filterChain.doFilter(request, response);
     }
 
-    private void checkRefreshToken(String accessToken, HttpServletRequest request, HttpServletResponse response) {
-        Claims claims = jwtService.extractClaim(accessToken);
+    private void checkRefreshToken(Claims claims, HttpServletRequest request, HttpServletResponse response) {
         Optional<String> refreshToken = jwtService.extractRefreshToken(request);
-
         if (refreshToken.isPresent()) {
             if (jwtService.isNotExpired(refreshToken.get()) && jwtService.compareTokens(findSavedTokenWithClaims(claims), refreshToken.get())) {
                 log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
