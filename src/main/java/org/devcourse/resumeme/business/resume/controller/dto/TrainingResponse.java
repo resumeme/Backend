@@ -31,9 +31,9 @@ public class TrainingResponse extends ComponentResponse {
 
     private String explanation;
 
-    public TrainingResponse(String type, Component component) {
-        super(type, component);
-        Training training = new Training(Converter.from(component));
+    public TrainingResponse(Component component) {
+        super("trainings", component);
+        Training training = new Training(Converter.convert(component));
         this.organization = training.getEducationalDetails().getOrganization();
         this.major = training.getEducationalDetails().getMajor();
         this.degree = training.getEducationalDetails().getDegree();

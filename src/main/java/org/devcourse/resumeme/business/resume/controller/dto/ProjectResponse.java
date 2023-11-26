@@ -29,9 +29,9 @@ public class ProjectResponse extends ComponentResponse {
 
     private String projectUrl;
 
-    public ProjectResponse(String type, Component component) {
-        super(type, component);
-        Project project = new Project(Converter.from(component));
+    public ProjectResponse(Component component) {
+        super("projects", component);
+        Project project = new Project(Converter.convert(component));
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
         this.isTeam = !project.getTeamMembers().equals("");

@@ -44,7 +44,7 @@ public class ComponentController {
             if (component.isType(type)) {
                 for (Component subComponent : component.getComponents()) {
                     List<ComponentResponse> response = result.getOrDefault(component.getProperty(), new ArrayList<>());
-                    response.add(BlockType.from(component.getProperty(), subComponent));
+                    response.add(BlockType.convert(component.getProperty(), subComponent));
                     result.put(component.getProperty(), response);
                 }
             }

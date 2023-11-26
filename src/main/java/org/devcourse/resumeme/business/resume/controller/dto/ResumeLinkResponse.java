@@ -16,9 +16,9 @@ public class ResumeLinkResponse extends ComponentResponse {
     private String linkType;
     private String url;
 
-    public ResumeLinkResponse(String type, Component component) {
-        super(type, component);
-        ReferenceLink referenceLink = new ReferenceLink(Converter.from(component));
+    public ResumeLinkResponse(Component component) {
+        super("links", component);
+        ReferenceLink referenceLink = new ReferenceLink(Converter.convert(component));
         this.linkType = referenceLink.getLinkType().name();
         this.url = referenceLink.getAddress();
     }
