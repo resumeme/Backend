@@ -40,7 +40,7 @@ public class CommentService {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String json = objectMapper.writeValueAsString(response);
 
-                snapshotRepository.save(new Snapshot(json, resumeId));
+                snapshotRepository.save(new Snapshot(json, null, resumeId));
             } catch (URISyntaxException | JsonProcessingException e) {
                 throw new CustomException(NOT_FOUND_DATA);
             }

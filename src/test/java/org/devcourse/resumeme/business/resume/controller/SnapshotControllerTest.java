@@ -44,7 +44,7 @@ class SnapshotControllerTest extends ControllerUnitTest {
         Map<String, List<ComponentResponse>> activities = new HashMap<>();
         activities.put("activities", response1);
         String s = objectMapper.writeValueAsString(activities);
-        given(snapshotService.getByResumeId(1L)).willReturn(new Snapshot(s, 1L));
+        given(snapshotService.getByResumeId(1L)).willReturn(new Snapshot(s, null, 1L));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/snapshot?resumeId=" + 1L));
