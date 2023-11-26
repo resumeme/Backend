@@ -24,8 +24,9 @@ public class ReferenceLink implements Converter {
         this.address = address;
     }
 
-    public ReferenceLink(Map<String, String> component) {
-        this(LinkType.valueOf(component.get(TYPE.name())), component.get(URL.name()));
+    public ReferenceLink(Map<Property, Component> components) {
+        this.linkType = LinkType.valueOf(components.get(TYPE).getContent());
+        this.address = components.get(URL).getContent();
     }
 
     @Override

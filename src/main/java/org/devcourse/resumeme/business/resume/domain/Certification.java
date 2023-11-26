@@ -39,9 +39,12 @@ public class Certification implements Converter {
         this.description = description;
     }
 
-    public Certification(Map<String, String> component) {
-        this(component.get(TITLE.name()), component.get(TITLE.startDate()), component.get(AUTHORITY.name()),
-                component.get(LINK.name()), component.get(DESCRIPTION.name()));
+    public Certification(Map<Property, Component> components) {
+        this.certificationTitle = components.get(TITLE).getContent();
+        this.acquisitionDate = components.get(TITLE).getStartDate().toString();
+        this.issuingAuthority = components.get(AUTHORITY).getContent();
+        this.link = components.get(LINK).getContent();
+        this.description = components.get(DESCRIPTION).getContent();
     }
 
     @Override

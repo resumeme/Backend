@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
-import static org.devcourse.resumeme.business.resume.domain.Property.END_DATE;
 import static org.devcourse.resumeme.business.resume.domain.Property.LINK;
 import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
@@ -40,9 +39,12 @@ public class Activity implements Converter {
         this.description = description;
     }
 
-    public Activity(Map<String, String> component) {
-        this(component.get(TITLE.name()), LocalDate.parse(component.get(TITLE.startDate())), LocalDateUtils.parse(component.get(TITLE.endDate())),
-                component.get(LINK.name()), component.get(DESCRIPTION.name()));
+    public Activity(Map<Property, Component> components) {
+        this.activityName = components.get(TITLE).getContent();
+        this.startDate = components.get(TITLE).getStartDate();
+        this.endDate = components.get(TITLE).getEndDate();
+        this.link = components.get(LINK).getContent();
+        this.description = components.get(DESCRIPTION).getContent();
     }
 
     @Override

@@ -4,18 +4,17 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Converter;
-import org.devcourse.resumeme.business.resume.domain.LocalDateUtils;
+import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
+import static org.devcourse.resumeme.business.resume.domain.ComponentUtils.toList;
 import static org.devcourse.resumeme.business.resume.domain.Property.COMPANY;
 import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
@@ -57,19 +56,18 @@ public class Career implements Converter {
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    public Career(Map<String, String> component) {
-        this(component.get(COMPANY.name()), component.get(POSITION.name()), Arrays.asList((component.get(SKILL.name()) == null ? "" : component.get(SKILL.name())).split(",")), getDuties(component),
-                LocalDateUtils.parse(component.get(COMPANY.startDate())), LocalDateUtils.parse(component.get(COMPANY.endDate())), component.get(CONTENT.name()));
+    public Career(Map<Property, Component> component) {
+        this.companyName = component.get(COMPANY).getContent();
+        this.position = component.get(POSITION).getContent();
+        this.skills = toList(component.get(SKILL));
+        this.duties = getDuties(component.get(DUTY));
+        this.careerPeriod = new CareerPeriod(component.get(COMPANY).getStartDate(), component.get(COMPANY).getEndDate());
+        this.careerContent = component.get(CONTENT).getContent();
     }
 
-    private static List<Duty> getDuties(Map<String, String> component) {
-        String dutySize = component.get(DUTY.name());
-        if (dutySize == null) {
-            return List.of();
-        }
-
-        return IntStream.range(0, Integer.parseInt(dutySize))
-                .mapToObj(i -> new Duty(component, i))
+    private static List<Duty> getDuties(Component component) {
+        return component.getComponents().stream()
+                .map(Duty::new)
                 .toList();
     }
 
@@ -88,11 +86,9 @@ public class Career implements Converter {
 
     private List<Component> getDuties(Long resumeId) {
         List<Component> result = new ArrayList<>();
-        for (int i = 0; i < duties.size(); i++) {
-            Duty duty = duties.get(i);
-
-            Component description = new Component(DUTY.name() + DESCRIPTION.name() + i, duty.getDescription(), resumeId);
-            result.add(new Component(DUTY.name() + TITLE.name() + i, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, List.of(description)));
+        for (Duty duty : duties) {
+            Component description = new Component(DESCRIPTION, duty.getDescription(), resumeId);
+            result.add(new Component(TITLE, duty.getTitle(), duty.getStartDate(), duty.getEndDate(), resumeId, List.of(description)));
         }
 
         return result;

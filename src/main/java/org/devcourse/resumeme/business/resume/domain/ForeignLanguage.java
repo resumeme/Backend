@@ -33,8 +33,10 @@ public class ForeignLanguage implements Converter {
         this.scoreOrGrade = scoreOrGrade;
     }
 
-    public ForeignLanguage(Map<String, String> component) {
-        this(component.get(LANGUAGE.name()), component.get(EXAM_NAME.name()), component.get(SCORE.name()));
+    public ForeignLanguage(Map<Property, Component> components) {
+        this.language = components.get(LANGUAGE).getContent();
+        this.examName = components.get(EXAM_NAME).getContent();
+        this.scoreOrGrade = components.get(SCORE).getContent();
     }
 
     @Override

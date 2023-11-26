@@ -8,11 +8,10 @@ import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.devcourse.resumeme.business.resume.domain.LocalDateUtils.parse;
+import static org.devcourse.resumeme.business.resume.domain.ComponentUtils.toList;
 import static org.devcourse.resumeme.business.resume.domain.Property.CONTENT;
 import static org.devcourse.resumeme.business.resume.domain.Property.MEMBER;
 import static org.devcourse.resumeme.business.resume.domain.Property.PROJECT;
@@ -52,10 +51,13 @@ public class Project implements Converter {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    public Project(Map<String, String> component) {
-        this(component.get(PROJECT.name()), (long) parse(component.get(PROJECT.startDate())).getYear(),
-                component.get(MEMBER.name()), Arrays.asList((component.get(SKILL.name()) == null ? "" : component.get(SKILL.name())).split(",")),
-                component.get(CONTENT.name()), component.get(URL.name()));
+    public Project(Map<Property, Component> components) {
+        this.projectName = components.get(PROJECT).getContent();
+        this.productionYear = (long) components.get(PROJECT).getStartDate().getYear();
+        this.teamMembers = components.get(MEMBER).getContent();
+        this.skills = toList(components.get(SKILL));
+        this.projectContent = components.get(CONTENT).getContent();
+        this.projectUrl = components.get(URL).getContent();
     }
 
     @Override

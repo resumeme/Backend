@@ -9,8 +9,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static org.devcourse.resumeme.business.resume.domain.LocalDateUtils.parse;
-import static org.devcourse.resumeme.business.resume.domain.Property.*;
+import static org.devcourse.resumeme.business.resume.domain.ComponentUtils.toDouble;
+import static org.devcourse.resumeme.business.resume.domain.Property.DEGREE;
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.MAJOR;
+import static org.devcourse.resumeme.business.resume.domain.Property.MAX_SCORE;
+import static org.devcourse.resumeme.business.resume.domain.Property.SCORE;
+import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,12 +37,11 @@ public class Training implements Converter {
         this.explanation = explanation;
     }
 
-    public Training(Map<String, String> component) {
-        this(component.get(TRAINING.name()), component.get(MAJOR.name()), component.get(DEGREE.name()),
-                parse(component.get(TRAINING.startDate())), parse(component.get(TRAINING.endDate())),
-                Double.parseDouble(component.get(SCORE.name()) == null ? "0" : component.get(SCORE.name())),
-                Double.parseDouble(component.get(MAX_SCORE.name()) == null ? "0" : component.get(MAX_SCORE.name())),
-                component.get(DESCRIPTION.name()));
+    public Training(Map<Property, Component> components) {
+        this.educationalDetails = new EducationalDetails(components.get(TRAINING).getContent(), components.get(MAJOR).getContent(), components.get(DEGREE).getContent());
+        this.dateDetails = new DateDetails(components.get(TRAINING).getStartDate(), components.get(TRAINING).getEndDate());
+        this.gpaDetails = new GPADetails(toDouble(components.get(SCORE)), toDouble(components.get(MAX_SCORE)));
+        this.explanation = components.get(DESCRIPTION).getContent();
     }
 
     @Override
