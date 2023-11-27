@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static org.devcourse.resumeme.business.event.EventCreation.*;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
@@ -35,7 +36,8 @@ public class EventService {
         eventRepository.findAllByMentor(event.getMentor())
                 .forEach(Event::checkOpen);
         Event savedEvent = eventRepository.save(event);
-        eventCreationPublisher.publishEventCreation(savedEvent);
+        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent);
+        eventCreationPublisher.publishEventCreation(eventNoticeInfo);
 
         return savedEvent.getId();
     }

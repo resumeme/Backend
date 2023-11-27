@@ -25,14 +25,14 @@ public class EventCreationListener implements ApplicationListener<EventCreation>
 
     @Override
     public void onApplicationEvent(EventCreation eventCreation) {
-        Long mentorId = eventCreation.getEvent().getMentor().getId();
+        Long mentorId = eventCreation.getEventNoticeInfo().mentorId();
         List<Long> followerIds = followService.getFollowers(mentorId)
                 .stream()
                 .map(Follow::getMenteeId)
                 .toList();
         List<Mentee> followers = menteeService.getAllIn(followerIds);
 
-        emailService.sendEmail(createEventCreationMail(followers, eventCreation.getEvent()));
+        emailService.sendEmail(createEventCreationMail(followers, eventCreation.getEventNoticeInfo()));
     }
 
 }

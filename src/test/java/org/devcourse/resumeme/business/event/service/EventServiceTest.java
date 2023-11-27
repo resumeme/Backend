@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.devcourse.resumeme.business.event.EventCreation.EventNoticeInfo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -89,7 +90,7 @@ class EventServiceTest {
 
         given(eventRepository.findAllByMentor(mentor)).willReturn(List.of());
         given(eventRepository.save(event)).willReturn(event);
-        doNothing().when(eventCreationPublisher).publishEventCreation(any(Event.class));
+        doNothing().when(eventCreationPublisher).publishEventCreation(any(EventNoticeInfo.class));
 
         // when
         eventService.create(event);
