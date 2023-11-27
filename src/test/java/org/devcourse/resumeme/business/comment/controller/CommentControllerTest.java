@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.resume.domain.Property.CAREERS;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.COMMENT_NOT_FOUND;
@@ -87,7 +88,7 @@ class CommentControllerTest extends ControllerUnitTest {
         // given
         CommentCreateRequest request = new CommentCreateRequest(1L, "이력서가 맘에 안들어요");
         Long resumeId = 1L;
-        Component component = new Component("career", "career", null, null, resumeId, List.of());
+        Component component = new Component(CAREERS, "career", null, null, resumeId, List.of());
         Resume resume = new Resume("titlem", mentee);
 
         Comment comment = request.toEntity(resume);
@@ -133,7 +134,7 @@ class CommentControllerTest extends ControllerUnitTest {
         long eventId = 1L;
         long resumeId = 1L;
 
-        Component component = new Component("career", "career", null, null, resumeId, List.of());
+        Component component = new Component(CAREERS, "career", null, null, resumeId, List.of());
 
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));

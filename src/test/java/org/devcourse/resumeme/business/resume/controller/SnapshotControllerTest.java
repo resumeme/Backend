@@ -4,33 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentResponse;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
-import org.devcourse.resumeme.business.comment.domain.Comment;
-import org.devcourse.resumeme.business.event.domain.Event;
-import org.devcourse.resumeme.business.event.domain.EventInfo;
-import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ActivityCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ActivityResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
-import org.devcourse.resumeme.business.resume.domain.Converter;
-import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.entity.Snapshot;
-import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.activityCreateRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
@@ -51,8 +37,8 @@ class SnapshotControllerTest extends ControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         ActivityCreateRequest request = activityCreateRequest();
-        Component component = request.toEntity().of(1L);
-        ActivityResponse response = new ActivityResponse(component);
+        Activity entity = request.toEntity();
+        ActivityResponse response = new ActivityResponse(entity);
 
         List<ComponentResponse> response1 = List.of(response);
         Map<String, List<ComponentResponse>> activities = new HashMap<>();

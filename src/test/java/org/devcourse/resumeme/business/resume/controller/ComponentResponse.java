@@ -1,7 +1,27 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.entity.Component;
+import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.activityCreateRequest;
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.careerCreateRequest;
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.certificationCreateRequest;
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.foreignLanguageCreateRequest;
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.projectCreateRequest;
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.resumeLinkRequest;
+import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.trainingCreateRequest;
+import static org.devcourse.resumeme.business.resume.domain.Property.ACTIVITIES;
+import static org.devcourse.resumeme.business.resume.domain.Property.CAREERS;
+import static org.devcourse.resumeme.business.resume.domain.Property.CERTIFICATIONS;
+import static org.devcourse.resumeme.business.resume.domain.Property.FOREIGNLANGUAGES;
+import static org.devcourse.resumeme.business.resume.domain.Property.LINKS;
+import static org.devcourse.resumeme.business.resume.domain.Property.PROJECTS;
+import static org.devcourse.resumeme.business.resume.domain.Property.TRAININGS;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.BLOCK_TYPE;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
@@ -13,10 +33,163 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 
 public class ComponentResponse {
 
+    public static ResumeTemplate activityResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = activityCreateRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(ACTIVITIES, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(converters)
+                .career(List.of())
+                .certification(List.of())
+                .foreignLanguage(List.of())
+                .project(List.of())
+                .training(List.of())
+                .referenceLink(List.of())
+                .build();
+    }
+
+    public static ResumeTemplate careerResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = careerCreateRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(CAREERS, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(List.of())
+                .career(converters)
+                .certification(List.of())
+                .foreignLanguage(List.of())
+                .project(List.of())
+                .training(List.of())
+                .referenceLink(List.of())
+                .build();
+    }
+
+    public static ResumeTemplate certificationResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = certificationCreateRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(CERTIFICATIONS, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(List.of())
+                .career(List.of())
+                .foreignLanguage(List.of())
+                .project(List.of())
+                .training(List.of())
+                .referenceLink(List.of())
+                .certification(converters)
+                .build();
+    }
+
+    public static ResumeTemplate foreignLanguageResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = foreignLanguageCreateRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(FOREIGNLANGUAGES, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(List.of())
+                .career(List.of())
+                .certification(List.of())
+                .project(List.of())
+                .training(List.of())
+                .referenceLink(List.of())
+                .foreignLanguage(converters)
+                .build();
+    }
+
+    public static ResumeTemplate referenceLinkResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = resumeLinkRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(LINKS, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(List.of())
+                .career(List.of())
+                .certification(List.of())
+                .foreignLanguage(List.of())
+                .project(List.of())
+                .training(List.of())
+                .referenceLink(converters)
+                .build();
+    }
+
+    public static ResumeTemplate projectResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = projectCreateRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(PROJECTS, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(List.of())
+                .career(List.of())
+                .certification(List.of())
+                .foreignLanguage(List.of())
+                .training(List.of())
+                .referenceLink(List.of())
+                .project(converters)
+                .build();
+    }
+
+    public static ResumeTemplate trainingResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
+        Component component = trainingCreateRequest().toEntity().toComponent(1L);
+        Component superComponent = new Component(TRAININGS, null, null, null, 1L, List.of(component));
+        Field id = component.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(component, 1L);
+        Field field = component.getClass().getDeclaredField("originComponentId");
+        field.setAccessible(true);
+        field.set(component, 2L);
+        List<Converter> converters = Converter.of(superComponent);
+
+        return ResumeTemplate.builder()
+                .activity(List.of())
+                .career(List.of())
+                .certification(List.of())
+                .foreignLanguage(List.of())
+                .project(List.of())
+                .referenceLink(List.of())
+                .training(converters)
+                .build();
+    }
+
     public static ResponseFieldsSnippet activityResponseSnippet() {
         return responseFields(
                 fieldWithPath("activities.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("activities.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("activities.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("activities.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("activities.[].activityName").type(STRING).description("활동명"),
@@ -25,14 +198,18 @@ public class ComponentResponse {
                 fieldWithPath("activities.[].inProgress").type(BOOLEAN).description("진행 중 여부"),
                 fieldWithPath("activities.[].link").type(STRING).description("링크"),
                 fieldWithPath("activities.[].description").type(STRING).description("설명"),
-                fieldWithPath("activities.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("careers.").ignored(),
+                fieldWithPath("certifications.").ignored(),
+                fieldWithPath("foreignLanguages.").ignored(),
+                fieldWithPath("links.").ignored(),
+                fieldWithPath("projects.").ignored(),
+                fieldWithPath("trainings.").ignored()
         );
     }
 
     public static ResponseFieldsSnippet careerResponseSnippet() {
         return responseFields(
                 fieldWithPath("careers.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("careers.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("careers.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("careers.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("careers.[].companyName").type(STRING).description("회사명"),
@@ -46,14 +223,18 @@ public class ComponentResponse {
                 fieldWithPath("careers.[].careerStartDate").type(STRING).description("경력 시작일"),
                 fieldWithPath("careers.[].endDate").type(STRING).description("경력 종료일"),
                 fieldWithPath("careers.[].careerContent").type(STRING).description("경력 상세 내용"),
-                fieldWithPath("careers.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("activities").ignored(),
+                fieldWithPath("certifications").ignored(),
+                fieldWithPath("foreignLanguages").ignored(),
+                fieldWithPath("links").ignored(),
+                fieldWithPath("projects").ignored(),
+                fieldWithPath("trainings").ignored()
         );
     }
 
     public static ResponseFieldsSnippet certificationResponseSnippet() {
         return responseFields(
                 fieldWithPath("certifications.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("certifications.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("certifications.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("certifications.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("certifications.[].certificationTitle").type(STRING).description("자격증 제목"),
@@ -61,39 +242,51 @@ public class ComponentResponse {
                 fieldWithPath("certifications.[].issuingAuthority").type(STRING).description("발급 기관"),
                 fieldWithPath("certifications.[].link").type(STRING).description("링크"),
                 fieldWithPath("certifications.[].description").type(STRING).description("설명"),
-                fieldWithPath("certifications.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("activities").ignored(),
+                fieldWithPath("careers").ignored(),
+                fieldWithPath("foreignLanguages").ignored(),
+                fieldWithPath("links").ignored(),
+                fieldWithPath("projects").ignored(),
+                fieldWithPath("trainings").ignored()
         );
     }
 
     public static ResponseFieldsSnippet foreignLanguageResponseSnippet() {
         return responseFields(
                 fieldWithPath("foreignLanguages.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("foreignLanguages.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("foreignLanguages.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("foreignLanguages.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("foreignLanguages.[].language").type(STRING).description("언어"),
                 fieldWithPath("foreignLanguages.[].examName").type(STRING).description("시험명"),
                 fieldWithPath("foreignLanguages.[].scoreOrGrade").type(STRING).description("점수 또는 학점"),
-                fieldWithPath("foreignLanguages.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("activities").ignored(),
+                fieldWithPath("careers").ignored(),
+                fieldWithPath("certifications").ignored(),
+                fieldWithPath("links").ignored(),
+                fieldWithPath("projects").ignored(),
+                fieldWithPath("trainings").ignored()
         );
     }
 
     public static ResponseFieldsSnippet linkResponseSnippet() {
         return responseFields(
                 fieldWithPath("links.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("links.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("links.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("links.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("links.[].linkType").type(STRING).description(generateLinkCode(BLOCK_TYPE)),
                 fieldWithPath("links.[].url").type(STRING).description("링크 URL"),
-                fieldWithPath("links.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("activities").ignored(),
+                fieldWithPath("careers").ignored(),
+                fieldWithPath("certifications").ignored(),
+                fieldWithPath("foreignLanguages").ignored(),
+                fieldWithPath("projects").ignored(),
+                fieldWithPath("trainings").ignored()
         );
     }
 
     public static ResponseFieldsSnippet projectResponseSnippet() {
         return responseFields(
                 fieldWithPath("projects.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("projects.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("projects.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("projects.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("projects.[]projectName").type(STRING).description("프로젝트명"),
@@ -103,14 +296,18 @@ public class ComponentResponse {
                 fieldWithPath("projects.[]skills").type(ARRAY).description("기술 목록"),
                 fieldWithPath("projects.[]projectContent").type(STRING).description("프로젝트 내용"),
                 fieldWithPath("projects.[]projectUrl").type(STRING).description("프로젝트 URL"),
-                fieldWithPath("projects.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("activities").ignored(),
+                fieldWithPath("careers").ignored(),
+                fieldWithPath("certifications").ignored(),
+                fieldWithPath("foreignLanguages").ignored(),
+                fieldWithPath("links").ignored(),
+                fieldWithPath("trainings").ignored()
         );
     }
 
     public static ResponseFieldsSnippet trainingResponseSnippet() {
         return responseFields(
                 fieldWithPath("trainings.[].componentId").type(NUMBER).description("블럭 아이디"),
-                fieldWithPath("trainings.[].type").type(STRING).description("블럭 타입"),
                 fieldWithPath("trainings.[].originComponentId").type(NUMBER).description("원본 이력서 블럭 아이디 (Null 가능)"),
                 fieldWithPath("trainings.[].reflectFeedback").type(BOOLEAN).description("피드백 반영 여부"),
                 fieldWithPath("trainings.[].organization").type(STRING).description("기관명"),
@@ -121,7 +318,12 @@ public class ComponentResponse {
                 fieldWithPath("trainings.[].gpa").type(NUMBER).description("평점"),
                 fieldWithPath("trainings.[].maxGpa").type(NUMBER).description("최고 평점"),
                 fieldWithPath("trainings.[].explanation").type(STRING).description("설명"),
-                fieldWithPath("trainings.[].createdDate").type(STRING).description("생성 시간")
+                fieldWithPath("activities").ignored(),
+                fieldWithPath("careers").ignored(),
+                fieldWithPath("certifications").ignored(),
+                fieldWithPath("foreignLanguages").ignored(),
+                fieldWithPath("links").ignored(),
+                fieldWithPath("projects").ignored()
         );
     }
 
