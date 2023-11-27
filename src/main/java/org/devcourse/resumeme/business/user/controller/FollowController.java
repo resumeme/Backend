@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/follows")
@@ -40,8 +41,16 @@ public class FollowController {
                 .toList();
     }
 
+    @GetMapping("/mentors/{mentorId}")
+    public IdResponse getFollow(@AuthenticationPrincipal JwtUser user, @PathVariable Long mentorId) {
+        Optional<Follow> optionalFollow = followService.getFollow(user.id(), mentorId);
+
+        return optionalFollow.map(follow -> new IdResponse(follow.getId())).orElseGet(() -> new IdResponse(null));
+    }
+
     @PostMapping
     public IdResponse doFollow(@RequestBody FollowRequest request, @AuthenticationPrincipal JwtUser user) {
+        mentorService.getOne(request.mentorId());
         Follow follow = new Follow(user.id(), request.mentorId());
         Long followId = followService.create(follow);
 
