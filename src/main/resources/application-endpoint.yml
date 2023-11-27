@@ -31,4 +31,8 @@ endpoint:
         patch: /api/v1/resumes/**, /api/v2/resumes/*
         delete: /api/v1/resumes/**
       role: own_mentee
-  ignores: /docs/**, /api/v1/admin/**
+    - matcher:
+        get: /api/v1/admin/**
+        post: /api/v1/admin/**
+      role: admin
+  ignores: /docs/**
