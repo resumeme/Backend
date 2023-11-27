@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.resume.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -31,7 +33,8 @@ public class Component {
     @Column(name = "block_id")
     private Long id;
 
-    private String property;
+    @Enumerated(STRING)
+    private Property property;
 
     private String content;
 
@@ -61,24 +64,16 @@ public class Component {
 
     private LocalDateTime lastModifiedDate;
 
-    public Component(String property, String content, Long resumeId) {
-        this(property, content, null, null, resumeId, null);
-    }
-
     public Component(Property property, String content, Long resumeId) {
         this(property, content, null, null, resumeId, null);
     }
 
-    public Component(Property property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
-        this(property.name(), content, startDate, endDate, resumeId, components);
-    }
-
-    public Component(String property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, Long originComponentId, List<Component> components) {
+    public Component(Property property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, Long originComponentId, List<Component> components) {
         this(property, content, startDate, endDate, resumeId, components);
         this.originComponentId = originComponentId;
     }
 
-    public Component(String property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
+    public Component(Property property, String content, LocalDate startDate, LocalDate endDate, Long resumeId, List<Component> components) {
         this.property = property;
         this.content = content;
         this.startDate = startDate;
@@ -99,7 +94,7 @@ public class Component {
         this.components.add(component);
     }
 
-    public boolean isType(String type) {
+    public boolean isType(Property type) {
         return type == null || property.equals(type);
     }
 

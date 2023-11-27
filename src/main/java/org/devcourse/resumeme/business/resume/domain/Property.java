@@ -1,6 +1,13 @@
 package org.devcourse.resumeme.business.resume.domain;
 
 public enum Property {
+    ACTIVITIES,
+    CAREERS,
+    CERTIFICATIONS,
+    FOREIGNLANGUAGES,
+    PROJECTS,
+    TRAININGS,
+    LINKS,
     COMPANY,
     POSITION,
     SKILL,

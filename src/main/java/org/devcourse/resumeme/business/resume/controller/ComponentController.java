@@ -31,24 +31,13 @@ public class ComponentController {
     private final ComponentService blockService;
 
     @PostMapping("/{resumeId}/{type}")
-    public IdResponse createComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable String type) {
-        return new IdResponse(blockService.create(request.toEntity().of(resumeId), type));
+    public IdResponse createComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable Property type) {
+        return new IdResponse(blockService.create(request.toEntity().toComponent(resumeId), type));
     }
 
     @GetMapping({"/{resumeId}", "/{resumeId}/{type}"})
-    public Map<String, List<ComponentResponse>> getComponent(@PathVariable Long resumeId, @PathVariable(required = false) String type) {
-        Map<String, List<ComponentResponse>> result = new HashMap<>();
-
-        List<Component> components = blockService.getAll(resumeId);
-        for (Component component : components) {
-            if (component.isType(type)) {
-                for (Component subComponent : component.getComponents()) {
-                    List<ComponentResponse> response = result.getOrDefault(component.getProperty(), new ArrayList<>());
-                    response.add(BlockType.convert(component.getProperty(), subComponent));
-                    result.put(component.getProperty(), response);
-                }
-            }
-        }
+    public AllComponentResponse getComponent(@PathVariable Long resumeId, @PathVariable(required = false) Property type) {
+        List<Converter> all = blockService.getAll(resumeId, type);
 
         for (List<ComponentResponse> responses : result.values()) {
             responses.sort(comparing(ComponentResponse::getCreatedDate));
@@ -58,8 +47,8 @@ public class ComponentController {
     }
 
     @PatchMapping("/{resumeId}/{type}/components/{componentId}")
-    public IdResponse updateComponent(@PathVariable Long resumeId, @PathVariable String type, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
-        return new IdResponse(blockService.update(componentId, request.toEntity().of(resumeId), type));
+    public IdResponse updateComponent(@PathVariable Long resumeId, @PathVariable Property type, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
+        return new IdResponse(blockService.update(componentId, request.toEntity().toComponent(resumeId), type));
     }
 
     @DeleteMapping("/{resumeId}/components/{componentId}")

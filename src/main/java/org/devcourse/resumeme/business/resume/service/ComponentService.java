@@ -2,6 +2,8 @@ package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
+import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -22,14 +24,14 @@ public class ComponentService {
 
     private final CommentRepository commentRepository;
 
-    public Long create(Component component, String type) {
+    public Long create(Component component, Property type) {
         Component createdComponent = createComponent(component, type);
         componentRepository.save(createdComponent);
 
         return component.getId();
     }
 
-    private Component createComponent(Component newComponent, String type) {
+    private Component createComponent(Component newComponent, Property type) {
         Long resumeId = newComponent.getResumeId();
         Optional<Component> existBlock1 = componentRepository.findExistBlock(resumeId, type);
         if (existBlock1.isPresent()) {
@@ -42,9 +44,14 @@ public class ComponentService {
         return new Component(type, null, null, null, resumeId, List.of(newComponent));
     }
 
-    public List<Component> getAll(Long resumeId) {
-        return componentRepository.findAllByResumeId(resumeId).stream()
+    public List<Converter> getAll(Long resumeId, Property type) {
+        List<Component> components = componentRepository.findAllByResumeId(resumeId).stream()
                 .filter(component -> component.getComponent() == null)
+                .filter(component -> component.getProperty().equals(type))
+                .toList();
+
+        return components.stream()
+                .map(Converter::of)
                 .toList();
     }
 
@@ -53,14 +60,12 @@ public class ComponentService {
                 .orElseThrow(() -> new CustomException(COMPONENT_NOT_FOUND));
     }
 
-    public String delete(Long componentId) {
+    public void delete(Long componentId) {
         Component component = getOne(componentId);
         componentRepository.delete(component);
-
-        return component.getProperty();
     }
 
-    public Long update(Long componentId, Component newComponent, String type) {
+    public Long update(Long componentId, Component newComponent, Property type) {
         Component component = getOne(componentId);
         componentRepository.delete(component);
 
@@ -74,7 +79,10 @@ public class ComponentService {
     }
 
     public void copy(Long originResumeId, Long newResumeId) {
-        List<Component> components = getAll(originResumeId);
+        List<Component> components = componentRepository.findAllByResumeId(originResumeId).stream()
+                .filter(component -> component.getComponent() == null)
+                .toList();
+
         List<Component> newComponents = components.stream()
                 .map(component -> component.copy(newResumeId))
                 .toList();

@@ -40,7 +40,7 @@ public abstract class Converter {
     }
 
     private static List<Component> flatComponents(Component component) {
-        if (component.isType(DUTY.name())) {
+        if (component.isType(DUTY)) {
             return List.of(component);
         }
 
