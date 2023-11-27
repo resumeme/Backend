@@ -37,36 +37,28 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        jwtService.extractAccessToken(request)
-                .filter(jwtService::validate)
-                .ifPresentOrElse(this::saveAuthentication, () -> checkRefreshToken(request, response));
-
+        Optional<String> accessToken = jwtService.extractAccessToken(request);
+        if (accessToken.isPresent()) {
+            accessToken.filter(jwtService::isNotExpired)
+                    .ifPresentOrElse(this::saveAuthentication, () -> checkRefreshToken(jwtService.extractClaim(accessToken.get()), request, response));
+        }
         filterChain.doFilter(request, response);
     }
 
-    private void checkRefreshToken(HttpServletRequest request, HttpServletResponse response) {
-        Claims claims;
-        Optional<String> accessToken = jwtService.extractAccessToken(request);
-        if (accessToken.isEmpty()) {
-            return;
+    private void checkRefreshToken(Claims claims, HttpServletRequest request, HttpServletResponse response) {
+        Optional<String> refreshToken = jwtService.extractRefreshToken(request);
+        if (refreshToken.isPresent()) {
+            if (jwtService.isNotExpired(refreshToken.get()) && jwtService.compareTokens(findSavedTokenWithClaims(claims), refreshToken.get())) {
+                log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
+                Claims claimForNewToken = new Claims(claims.id(), claims.role(), new Date());
+                String issuedAccessToken = jwtService.createAccessToken(claimForNewToken);
+                saveAuthentication(issuedAccessToken);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                jwtService.setAccessTokenHeader(response, issuedAccessToken);
+            }
+        } else {
+            throw new TokenException(INVALID_ACCESS_TOKEN);
         }
-        claims = jwtService.extractClaim(accessToken.get());
-
-        jwtService.extractRefreshToken(request).ifPresentOrElse(token -> {
-                    if (jwtService.validate(token) && jwtService.compareTokens(findSavedTokenWithClaims(claims), token)) {
-                        log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
-                        String issuedAccessToken = jwtService.createAccessToken(new Claims(claims.id(), claims.role(), new Date()));
-                        saveAuthentication(issuedAccessToken);
-                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                        jwtService.setAccessTokenHeader(response, issuedAccessToken);
-                        return;
-                    }
-                    log.info("리프레시 토큰이 유효하지 않습니다.");
-                }, () -> {
-                    log.info("액세스 토큰이 유효하지 않고, 헤더에 리프레시 토큰이 없습니다.");
-                    throw new TokenException(INVALID_ACCESS_TOKEN);
-                }
-        );
     }
 
     private String findSavedTokenWithClaims(Claims claims) {

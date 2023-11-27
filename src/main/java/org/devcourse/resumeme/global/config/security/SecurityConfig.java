@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
+import org.devcourse.resumeme.global.auth.filter.RoleConsistencyCheckFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.CustomLogoutHandler;
 import org.devcourse.resumeme.global.config.security.properties.EndpointProperties;
 import org.devcourse.resumeme.global.config.security.properties.EndpointProperties.Matcher;
@@ -26,6 +27,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final EndpointProperties properties;
+
+    private final RoleConsistencyCheckFilter roleConsistencyCheckFilter;
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
@@ -62,7 +65,8 @@ public class SecurityConfig {
 
         http.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
         http.addFilterAfter(jwtAuthorizationFilter, ExceptionHandlerFilter.class);
-        http.addFilterAfter(oAuthTokenResponseFilter, JwtAuthorizationFilter.class);
+        http.addFilterAfter(roleConsistencyCheckFilter, JwtAuthorizationFilter.class);
+        http.addFilterAfter(oAuthTokenResponseFilter, RoleConsistencyCheckFilter.class);
 
         return http.build();
     }

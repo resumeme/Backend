@@ -35,14 +35,15 @@ class JwtServiceTest {
 
     @Test
     void 액세스_토큰_검증에_성공한다() {
-        jwtService.validate(accessToken);
+        Assertions.assertThat(jwtService.isNotManipulated(accessToken)).isTrue();
+        Assertions.assertThat(jwtService.isNotExpired(accessToken)).isTrue();
     }
 
     @Test
     void 만료된_액세스_토큰은_검증에_실패한다() throws InterruptedException {
         String accessTokenExpiresIn2sec = jwtService.createAccessToken(new Claims(2L, ROLE_MENTEE.name(), new Date()));
         Thread.sleep(2000);
-        Assertions.assertThat(jwtService.validate(accessTokenExpiresIn2sec)).isFalse();
+        Assertions.assertThat(jwtService.isNotExpired(accessTokenExpiresIn2sec)).isFalse();
     }
 
 

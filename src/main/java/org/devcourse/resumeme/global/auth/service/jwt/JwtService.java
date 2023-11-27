@@ -2,6 +2,7 @@ package org.devcourse.resumeme.global.auth.service.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,16 +51,20 @@ public class JwtService {
     }
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(jwtProperties.refresh().headerName()))
-                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(JwtService::refineToken);
+        return extractToken(request, jwtProperties.refresh().headerName());
     }
 
     public Optional<String> extractAccessToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(jwtProperties.access().headerName()))
+        return extractToken(request, jwtProperties.access().headerName());
+    }
+
+    private Optional<String> extractToken(HttpServletRequest request, String tokenType) {
+        return Optional.ofNullable(request.getHeader(tokenType))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
+                .filter(this::isNotManipulated)
                 .map(JwtService::refineToken);
     }
+
 
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
         response.setHeader(jwtProperties.access().headerName(), accessToken);
@@ -69,13 +74,26 @@ public class JwtService {
         response.setHeader(jwtProperties.refresh().headerName(), refreshToken);
     }
 
-    public boolean validate(String token) {
+    public boolean isNotManipulated(String token) {
         try {
             String tokenRefined = refineToken(token);
             JWT.require(Algorithm.HMAC512(jwtProperties.secretKey())).build().verify(tokenRefined);
 
             return true;
+        } catch (TokenExpiredException e) {
+            return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isNotExpired(String token) {
+        try {
+            String tokenRefined = refineToken(token);
+            JWT.require(Algorithm.HMAC512(jwtProperties.secretKey())).build().verify(tokenRefined);
+
+            return true;
+        } catch (TokenExpiredException e) {
             return false;
         }
     }

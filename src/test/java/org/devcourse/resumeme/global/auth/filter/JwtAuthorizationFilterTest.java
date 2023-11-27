@@ -27,7 +27,8 @@ class JwtAuthorizationFilterTest extends ControllerUnitTest {
     void 액세스토큰_인증_성공으로인한_성공_테스트() throws Exception {
         // given
         given(jwtService.extractAccessToken(any(HttpServletRequest.class))).willReturn(Optional.of("accessToken"));
-        given(jwtService.validate("accessToken")).willReturn(true);
+        given(jwtService.isNotExpired("accessToken")).willReturn(true);
+        given(jwtService.isNotManipulated("accessToken")).willReturn(true);
         given(jwtService.extractClaim("accessToken")).willReturn(new Claims(1L, "ROLE_MENTEE", new Date()));
 
         // when
@@ -53,10 +54,10 @@ class JwtAuthorizationFilterTest extends ControllerUnitTest {
                 .build();
 
         given(jwtService.extractAccessToken(any(HttpServletRequest.class))).willReturn(Optional.of("accessToken"));
-        given(jwtService.validate("accessToken")).willReturn(false);
+        given(jwtService.isNotManipulated("accessToken")).willReturn(false);
         given(jwtService.extractClaim(any())).willReturn(new Claims(1L, "ROLE_MENTEE", new Date()));
         given(jwtService.extractRefreshToken(any(HttpServletRequest.class))).willReturn(Optional.of("refreshToken"));
-        given(jwtService.validate("refreshToken")).willReturn(true);
+        given(jwtService.isNotManipulated("refreshToken")).willReturn(true);
         given(menteeService.getOneSimple(1L)).willReturn(mentee);
         given(jwtService.compareTokens("refreshToken", "refreshToken")).willReturn(true);
 
@@ -71,7 +72,7 @@ class JwtAuthorizationFilterTest extends ControllerUnitTest {
     void 리프레시토큰_유효성_검증_실패로인한_예외_발생() {
         // given
         given(jwtService.extractAccessToken(any(HttpServletRequest.class))).willReturn(Optional.of("accessToken"));
-        given(jwtService.validate("accessToken")).willReturn(false);
+        given(jwtService.isNotManipulated("accessToken")).willReturn(false);
         given(jwtService.extractClaim(any())).willReturn(new Claims(1L, "ROLE_MENTEE", new Date()));
         given(jwtService.extractRefreshToken(any(HttpServletRequest.class))).willReturn(Optional.empty());
 
