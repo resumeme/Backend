@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.comment.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
@@ -38,6 +39,8 @@ public class CommentService {
                 RestTemplate restTemplate = new RestTemplate();
                 Map<String, List<ComponentResponse>> response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/resumes/" + resumeId), Map.class);
                 ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
+
                 String json = objectMapper.writeValueAsString(response);
 
                 snapshotRepository.save(new Snapshot(json, null, resumeId));
