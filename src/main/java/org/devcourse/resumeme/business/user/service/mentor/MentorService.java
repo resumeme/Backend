@@ -1,12 +1,12 @@
 package org.devcourse.resumeme.business.user.service.mentor;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
 import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
-import org.devcourse.resumeme.global.exception.CustomException;
+import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.repository.mentor.MentorRepository;
+import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +63,6 @@ public class MentorService {
     }
 
     public List<Mentor> getAllByIds(List<Long> mentorIds) {
-        return mentorRepository.findAllById(mentorIds);
+        return mentorRepository.findAllByIds(mentorIds);
     }
 }
