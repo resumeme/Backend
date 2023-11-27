@@ -1,13 +1,18 @@
 package org.devcourse.resumeme.business.resume.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
+import java.sql.Ref;
 import java.util.List;
+import java.util.Map;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import static org.devcourse.resumeme.business.resume.domain.Property.TYPE;
 import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
@@ -19,21 +24,60 @@ public class ReferenceLink implements Converter {
 
     private String address;
 
+    @Builder
     public ReferenceLink(LinkType linkType, String address) {
         this.linkType = linkType;
         this.address = address;
     }
 
-    public ReferenceLink(Components components) {
-        this.linkType = LinkType.valueOf(components.getContent(TYPE));
-        this.address = components.getContent(URL);
-    }
-
     @Override
-    public Component of(Long resumeId) {
+    public Component toComponent(Long resumeId) {
         Component address = new Component(URL, this.address, resumeId);
 
         return new Component(TYPE, linkType.name(), null, null, resumeId, List.of(address));
+    }
+
+    private static ReferenceLink of(List<Component> components) {
+        ReferenceLinkConverter converter = ReferenceLinkConverter.of(components);
+
+        return ReferenceLink.of(converter);
+    }
+
+    private static ReferenceLink of(ReferenceLinkConverter converter) {
+        return ReferenceLink.builder()
+                .linkType(LinkType.valueOf(converter.type.getContent()))
+                .address(converter.details.address.getContent())
+                .build();
+    }
+
+    @Builder
+    private static class ReferenceLinkConverter {
+
+        private Component type;
+
+        private ReferenceLinkDetails details;
+
+        @Builder
+        private static class ReferenceLinkDetails {
+
+            private Component address;
+
+        }
+
+        private static ReferenceLinkConverter of(List<Component> components) {
+            Map<Property, Component> componentMap = components.stream()
+                    .collect(toMap(Component::getProperty, identity()));
+
+            ReferenceLinkDetails details = ReferenceLinkDetails.builder()
+                    .address(componentMap.get(URL))
+                    .build();
+
+            return ReferenceLinkConverter.builder()
+                    .type(componentMap.get(TYPE))
+                    .details(details)
+                    .build();
+        }
+
     }
 
 }

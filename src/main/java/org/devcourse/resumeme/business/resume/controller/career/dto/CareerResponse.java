@@ -1,19 +1,13 @@
 package org.devcourse.resumeme.business.resume.controller.career.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.Converter;
+import lombok.Getter;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
-import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@JsonTypeName("careers")
+@Getter
 public class CareerResponse extends ComponentResponse {
 
     private String companyName;
@@ -32,10 +26,8 @@ public class CareerResponse extends ComponentResponse {
 
     private String careerContent;
 
-    public CareerResponse(Component component) {
-        super("careers", component);
-
-        Career career = new Career(Converter.convert(component));
+    public CareerResponse(Career career) {
+        super(career);
         this.companyName = career.getCompanyName();
         this.position = career.getPosition();
         this.skills = career.getSkills();
