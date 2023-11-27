@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
+import org.devcourse.resumeme.global.auth.filter.RoleConsistencyCheckFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2FailureHandler;
 import org.devcourse.resumeme.global.auth.filter.handler.OAuth2SuccessHandler;
 import org.devcourse.resumeme.global.auth.filter.resolver.OAuthTokenProvider;
@@ -84,6 +85,11 @@ public class SecurityServiceConfig {
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter(JwtService jwtService, MenteeService menteeService, MentorService mentorService) {
         return new JwtAuthorizationFilter(jwtService, mentorService, menteeService);
+    }
+
+    @Bean
+    public RoleConsistencyCheckFilter roleConsistencyCheckFilter(MentorService mentorService) {
+        return new RoleConsistencyCheckFilter(mentorService);
     }
 
     @Bean

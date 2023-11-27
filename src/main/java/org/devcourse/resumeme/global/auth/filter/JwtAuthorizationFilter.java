@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
@@ -24,8 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
-import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
-import static org.devcourse.resumeme.business.user.domain.Role.ROLE_PENDING;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
 @Slf4j
@@ -75,10 +72,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private void saveAuthentication(String accessToken) {
         Claims claims = jwtService.extractClaim(accessToken);
-        if (isOutdatedClaim(claims)) {
-            log.info("pending -> mentor : 새로 로그인 해야합니다.");
-            return;
-        }
         SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
         log.info("Authentication 을 만들기 위한 Claims = {}", claims);
         log.info("context에 Authentication를 저장했습니다.");
@@ -86,12 +79,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken createAuthentication(Claims claims) {
         return new UsernamePasswordAuthenticationToken(new JwtUser(claims.id()), null, List.of(claims::role));
-    }
-
-    private boolean isOutdatedClaim(Claims claims) {
-        Long id = claims.id();
-        Role role = Role.valueOf(claims.role());
-        return role.equals(ROLE_PENDING) && mentorService.getOne(id).getRole().equals(ROLE_MENTOR);
     }
 
 }
