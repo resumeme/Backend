@@ -32,9 +32,10 @@ public class CareerResponse extends ComponentResponse {
 
     private String careerContent;
 
-    public CareerResponse(String type, Component component) {
-        super(type, component);
-        Career career = new Career(Converter.from(component));
+    public CareerResponse(Component component) {
+        super("careers", component);
+
+        Career career = new Career(Converter.convert(component));
         this.companyName = career.getCompanyName();
         this.position = career.getPosition();
         this.skills = career.getSkills();

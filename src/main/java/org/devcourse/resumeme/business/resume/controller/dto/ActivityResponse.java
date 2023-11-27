@@ -27,9 +27,9 @@ public class ActivityResponse extends ComponentResponse {
 
     private String description;
 
-    public ActivityResponse(String type, Component component) {
-        super(type, component);
-        Activity activity = new Activity(Converter.from(component));
+    public ActivityResponse(Component component) {
+        super("activities", component);
+        Activity activity = new Activity(Converter.convert(component));
         this.activityName = activity.getActivityName();
         this.startDate = activity.getStartDate();
         this.endDate = activity.getEndDate();

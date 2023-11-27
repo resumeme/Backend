@@ -23,9 +23,9 @@ public class CertificationResponse extends ComponentResponse {
 
     private String description;
 
-    public CertificationResponse(String type, Component component) {
-        super(type, component);
-        Certification certification = new Certification(Converter.from(component));
+    public CertificationResponse(Component component) {
+        super("certifications", component);
+        Certification certification = new Certification(Converter.convert(component));
         this.certificationTitle = certification.getCertificationTitle();
         this.acquisitionDate = certification.getAcquisitionDate();
         this.issuingAuthority = certification.getIssuingAuthority();

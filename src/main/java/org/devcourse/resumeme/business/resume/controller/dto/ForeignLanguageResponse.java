@@ -19,9 +19,9 @@ public class ForeignLanguageResponse extends ComponentResponse {
 
     private String scoreOrGrade;
 
-    public ForeignLanguageResponse(String type, Component component) {
-        super(type, component);
-        ForeignLanguage foreignLanguage = new ForeignLanguage(Converter.from(component));
+    public ForeignLanguageResponse(Component component) {
+        super("foreignLanguages", component);
+        ForeignLanguage foreignLanguage = new ForeignLanguage(Converter.convert(component));
         this.language = foreignLanguage.getLanguage();
         this.examName = foreignLanguage.getExamName();
         this.scoreOrGrade = foreignLanguage.getScoreOrGrade();

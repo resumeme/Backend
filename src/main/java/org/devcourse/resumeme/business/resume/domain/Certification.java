@@ -3,11 +3,11 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import static org.devcourse.resumeme.business.resume.domain.Property.AUTHORITY;
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
@@ -39,9 +39,12 @@ public class Certification implements Converter {
         this.description = description;
     }
 
-    public Certification(Map<String, String> component) {
-        this(component.get(TITLE.name()), component.get(TITLE.startDate()), component.get(AUTHORITY.name()),
-                component.get(LINK.name()), component.get(DESCRIPTION.name()));
+    public Certification(Components components) {
+        this.certificationTitle = components.getContent(TITLE);
+        this.acquisitionDate = components.getStartDate(TITLE).toString();
+        this.issuingAuthority = components.getContent(AUTHORITY);
+        this.link = components.getContent(LINK);
+        this.description = components.getContent(DESCRIPTION);
     }
 
     @Override

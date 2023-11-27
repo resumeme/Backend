@@ -13,7 +13,7 @@ import org.devcourse.resumeme.common.domain.DocsEnumType;
 import org.devcourse.resumeme.global.exception.CustomException;
 
 import java.util.Arrays;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public enum BlockType implements DocsEnumType {
 
@@ -29,9 +29,9 @@ public enum BlockType implements DocsEnumType {
 
     private final String urlParameter;
 
-    public final BiFunction<String, Component, ComponentResponse> from;
+    public final Function<Component, ComponentResponse> from;
 
-    BlockType(String description, String urlParameter, BiFunction<String, Component, ComponentResponse> from) {
+    BlockType(String description, String urlParameter, Function<Component, ComponentResponse> from) {
         this.description = description;
         this.urlParameter = urlParameter;
         this.from = from;
@@ -58,7 +58,7 @@ public enum BlockType implements DocsEnumType {
                 .orElseThrow(() -> new CustomException("", ""));
     }
 
-    public static ComponentResponse from(String type, Component component) {
-        return of(type).from.apply(type, component);
+    public static ComponentResponse convert(String type, Component component) {
+        return of(type).from.apply(component);
     }
 }

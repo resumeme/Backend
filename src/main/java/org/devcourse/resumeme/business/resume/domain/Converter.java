@@ -1,35 +1,43 @@
 package org.devcourse.resumeme.business.resume.domain;
 
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
-import static org.devcourse.resumeme.business.resume.domain.Property.END_DATE;
-import static org.devcourse.resumeme.business.resume.domain.Property.START_DATE;
+import static java.util.stream.Collectors.toMap;
+import static org.devcourse.resumeme.business.resume.domain.Property.DUTY;
 
 public interface Converter {
 
     Component of(Long resumeId);
 
-    static Map<String, String> from(Component component) {
-        Map<String, String> result = new HashMap<>();
+    static Components convert(Component component) {
+        Map<Property, Component> components = flatComponents(component).stream()
+                .collect(toMap(c -> Property.valueOf(c.getProperty()), Function.identity()));
 
-        result.put(component.getProperty(), component.getContent());
-        if (component.getStartDate() != null) {
-            result.put(component.getProperty() + START_DATE, component.getStartDate().toString());
-        }
-        if (component.getEndDate() != null) {
-            result.put(component.getProperty() + END_DATE, component.getEndDate().toString());
+        return new Components(components);
+    }
+
+    private static List<Component> flatComponents(Component component) {
+        if (component.isType(DUTY.name())) {
+            return List.of(component);
         }
 
-        if (component.getComponents() != null) {
-            for (Component subComponent : component.getComponents()) {
-                result.putAll(from(subComponent));
+        List<Component> result = new ArrayList<>();
+
+        result.add(component);
+        for (Component subComponent : component.getComponents()) {
+            if (subComponent.getComponents() != null) {
+                result.addAll(flatComponents(subComponent));
             }
         }
 
         return result;
     }
+
 
 }

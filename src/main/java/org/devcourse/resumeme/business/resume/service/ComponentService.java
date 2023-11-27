@@ -22,21 +22,24 @@ public class ComponentService {
 
     private final CommentRepository commentRepository;
 
-    public Long create(Component block, String type) {
-        Long resumeId = block.getResumeId();
+    public Long create(Component component, String type) {
+        Component createdComponent = createComponent(component, type);
+        componentRepository.save(createdComponent);
+
+        return component.getId();
+    }
+
+    private Component createComponent(Component newComponent, String type) {
+        Long resumeId = newComponent.getResumeId();
         Optional<Component> existBlock1 = componentRepository.findExistBlock(resumeId, type);
-
         if (existBlock1.isPresent()) {
-            Component component = existBlock1.get();
-            component.addSubComponent(block);
-            componentRepository.save(component);
+            Component existComponent = existBlock1.get();
+            existComponent.addSubComponent(newComponent);
 
-            return block.getId();
+            return existComponent;
         }
 
-        componentRepository.save(new Component(type, null, null, null, resumeId, List.of(block))).getId();
-
-        return block.getId();
+        return new Component(type, null, null, null, resumeId, List.of(newComponent));
     }
 
     public List<Component> getAll(Long resumeId) {

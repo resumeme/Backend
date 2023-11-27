@@ -3,14 +3,18 @@ package org.devcourse.resumeme.business.resume.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
-import static org.devcourse.resumeme.business.resume.domain.LocalDateUtils.parse;
-import static org.devcourse.resumeme.business.resume.domain.Property.*;
+import static org.devcourse.resumeme.business.resume.domain.Property.DEGREE;
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.MAJOR;
+import static org.devcourse.resumeme.business.resume.domain.Property.MAX_SCORE;
+import static org.devcourse.resumeme.business.resume.domain.Property.SCORE;
+import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,12 +36,11 @@ public class Training implements Converter {
         this.explanation = explanation;
     }
 
-    public Training(Map<String, String> component) {
-        this(component.get(TRAINING.name()), component.get(MAJOR.name()), component.get(DEGREE.name()),
-                parse(component.get(TRAINING.startDate())), parse(component.get(TRAINING.endDate())),
-                Double.parseDouble(component.get(SCORE.name()) == null ? "0" : component.get(SCORE.name())),
-                Double.parseDouble(component.get(MAX_SCORE.name()) == null ? "0" : component.get(MAX_SCORE.name())),
-                component.get(DESCRIPTION.name()));
+    public Training(Components components) {
+        this.educationalDetails = new EducationalDetails(components.getContent(TRAINING), components.getContent(MAJOR), components.getContent(DEGREE));
+        this.dateDetails = new DateDetails(components.getStartDate(TRAINING), components.getEndDate(TRAINING));
+        this.gpaDetails = new GPADetails(components.toDouble(SCORE), components.toDouble(MAX_SCORE));
+        this.explanation = components.getContent(DESCRIPTION);
     }
 
     @Override
