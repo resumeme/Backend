@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.comment.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
 import org.devcourse.resumeme.business.resume.entity.Snapshot;
@@ -29,6 +30,8 @@ public class CommentSnapEventListener implements ApplicationListener<CommentSnap
             RestTemplate restTemplate = new RestTemplate();
             CommentWithReviewResponse response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/events/" + eventId + "/resumes/" + resumeId + "/comments"), CommentWithReviewResponse.class);
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+
             String commentData = objectMapper.writeValueAsString(response);
             Optional<Snapshot> snapshotOption = snapshotRepository.findByResumeId(resumeId);
             if (snapshotOption.isPresent()) {
