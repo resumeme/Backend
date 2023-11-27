@@ -27,7 +27,7 @@ public class CommentSnapEventListener implements ApplicationListener<CommentSnap
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            CommentWithReviewResponse response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/events/" + eventId + "/resumes" + resumeId + "/comments"), CommentWithReviewResponse.class);
+            CommentWithReviewResponse response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/events/" + eventId + "/resumes/" + resumeId + "/comments"), CommentWithReviewResponse.class);
             ObjectMapper objectMapper = new ObjectMapper();
             String commentData = objectMapper.writeValueAsString(response);
             Optional<Snapshot> snapshotOption = snapshotRepository.findByResumeId(resumeId);
