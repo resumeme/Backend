@@ -23,15 +23,29 @@ public class Snapshot {
     @Column(columnDefinition = "LONGTEXT")
     private String resumeData;
 
+    @Lob
+    @Getter
+    @Column(columnDefinition = "LONGTEXT")
+    private String commentData;
+
     private Long resumeId;
 
-    public Snapshot(String resumeData, Long resumeId) {
+    public Snapshot(String resumeData, String commentData, Long resumeId) {
         this.resumeData = resumeData;
+        this.commentData = commentData;
         this.resumeId = resumeId;
     }
 
-    public void updateResume(String json) {
-        this.resumeData = json;
+    public void updateComment(String commentData) {
+        this.commentData = commentData;
+    }
+
+    public String get(String type) {
+        if (type.equals("resume")) {
+            return resumeData;
+        }
+
+        return commentData;
     }
 
 }

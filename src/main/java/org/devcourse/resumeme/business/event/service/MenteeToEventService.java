@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.comment.service.CommentSnapService;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.domain.model.ApplimentUpdate;
@@ -24,12 +25,18 @@ public class MenteeToEventService {
 
     private final EventRepository eventRepository;
 
+    private final CommentSnapService commentSnapService;
+
     public void update(Long eventId, ApplyUpdateVo applyUpdateVo) {
         Event event = eventRepository.findWithApplicantsById(eventId)
                 .orElseThrow(() -> new EventException(EVENT_NOT_FOUND));
 
         ApplimentUpdate model = applyUpdateVo.toModel();
-        model.update(event);
+        Long resumeId = model.update(event);
+
+        if (resumeId != 0) {
+            commentSnapService.snapComment(resumeId, eventId);
+        }
     }
 
     public void acceptMentee(AcceptMenteeToEvent ids) {

@@ -14,8 +14,10 @@ public class ApplimentComplete implements ApplimentUpdate {
     }
 
     @Override
-    public void update(Event event) {
+    public Long update(Event event) {
         event.complete(resumeId, completeMessage);
+
+        return resumeId;
     }
 
 }
