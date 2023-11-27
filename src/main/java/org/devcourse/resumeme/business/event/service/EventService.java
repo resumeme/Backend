@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.business.event.EventCreationPublisher;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.exception.EventException;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static org.devcourse.resumeme.business.event.EventCreation.*;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
@@ -26,13 +28,18 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_F
 @RequiredArgsConstructor
 public class EventService {
 
+    private final EventCreationPublisher eventCreationPublisher;
+
     private final EventRepository eventRepository;
 
     public Long create(Event event) {
         eventRepository.findAllByMentor(event.getMentor())
                 .forEach(Event::checkOpen);
+        Event savedEvent = eventRepository.save(event);
+        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent);
+        eventCreationPublisher.publishEventCreation(eventNoticeInfo);
 
-        return eventRepository.save(event).getId();
+        return savedEvent.getId();
     }
 
     @Transactional(readOnly = true)

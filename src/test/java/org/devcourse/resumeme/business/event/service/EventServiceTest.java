@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.event.service;
 
+import org.devcourse.resumeme.business.event.EventCreationPublisher;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
@@ -27,13 +28,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.devcourse.resumeme.business.event.EventCreation.EventNoticeInfo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class EventServiceTest {
+
+    @Mock
+    private EventCreationPublisher eventCreationPublisher;
 
     @Mock
     private EventRepository eventRepository;
@@ -83,6 +90,7 @@ class EventServiceTest {
 
         given(eventRepository.findAllByMentor(mentor)).willReturn(List.of());
         given(eventRepository.save(event)).willReturn(event);
+        doNothing().when(eventCreationPublisher).publishEventCreation(any(EventNoticeInfo.class));
 
         // when
         eventService.create(event);

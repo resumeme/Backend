@@ -39,6 +39,11 @@ public class FollowService {
         return followRepository.findAllByMenteeId(menteeId);
     }
 
+    @Transactional(readOnly = true)
+    public List<Follow> getFollowers(Long mentorId) {
+        return followRepository.findAllByMentorId(mentorId);
+    }
+
     public void unfollow(Long followId) {
         followRepository.deleteById(followId);
     }
