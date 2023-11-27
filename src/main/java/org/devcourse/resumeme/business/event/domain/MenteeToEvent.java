@@ -16,6 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.Progress.APPLY;
 import static org.devcourse.resumeme.business.event.domain.Progress.COMPLETE;
+import static org.devcourse.resumeme.business.event.domain.Progress.FEEDBACK_COMPLETE;
 import static org.devcourse.resumeme.business.event.domain.Progress.REJECT;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
@@ -93,8 +94,12 @@ public class MenteeToEvent extends BaseEntity {
 
         if (progress != COMPLETE) {
             this.overallReview = overallReview;
-            this.progress = COMPLETE;
+            this.progress = FEEDBACK_COMPLETE;
         }
+    }
+
+    public void editComplete() {
+        this.progress = COMPLETE;
     }
 
 }
