@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.business.event.EventCreationPublisher;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.exception.EventException;
@@ -26,13 +27,17 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_F
 @RequiredArgsConstructor
 public class EventService {
 
+    private final EventCreationPublisher eventCreationPublisher;
+
     private final EventRepository eventRepository;
 
     public Long create(Event event) {
         eventRepository.findAllByMentor(event.getMentor())
                 .forEach(Event::checkOpen);
+        Event savedEvent = eventRepository.save(event);
+        eventCreationPublisher.publishEventCreation(savedEvent);
 
-        return eventRepository.save(event).getId();
+        return savedEvent.getId();
     }
 
     @Transactional(readOnly = true)
