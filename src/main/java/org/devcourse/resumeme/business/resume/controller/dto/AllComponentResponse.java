@@ -1,12 +1,14 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerResponse;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class AllComponentResponse {
 
     private List<ActivityResponse> activities;

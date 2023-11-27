@@ -1,20 +1,24 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Project;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Getter
+@NoArgsConstructor(access = PRIVATE)
 public class ProjectResponse extends ComponentResponse {
 
     private String projectName;
 
     private Long productionYear;
 
-    private boolean isTeam;
+    private boolean team;
 
     private String teamMembers;
 
@@ -29,7 +33,7 @@ public class ProjectResponse extends ComponentResponse {
         Project project = (Project) converter;
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
-        this.isTeam = !project.getTeamMembers().equals("");
+        this.team = !project.getTeamMembers().equals("");
         this.teamMembers = project.getTeamMembers();
         this.skills = project.getSkills();
         this.projectContent = project.getProjectContent();

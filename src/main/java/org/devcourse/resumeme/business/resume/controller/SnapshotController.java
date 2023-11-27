@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
-import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.CommentSnapshotResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ResumeSnapshotResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.SnapshotResponse;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class SnapshotController {
         objectMapper.registerModule(new JavaTimeModule());
 
         if (type.equals("resume")) {
-            Map<String, List<ComponentResponse>> response = objectMapper.readValue(data, new TypeReference<>() {});
+            AllComponentResponse response = objectMapper.readValue(data, new TypeReference<>() {});
 
             return new ResumeSnapshotResponse(response);
         }

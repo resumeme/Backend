@@ -6,7 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
-import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
 import org.devcourse.resumeme.business.resume.entity.Snapshot;
 import org.devcourse.resumeme.business.resume.repository.SnapshotRepository;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
 import static org.devcourse.resumeme.global.exception.ExceptionCode.COMMENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_DATA;
@@ -37,7 +36,7 @@ public class CommentService {
             try {
                 // 이력서 원본 데이터 저장
                 RestTemplate restTemplate = new RestTemplate();
-                Map<String, List<ComponentResponse>> response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/resumes/" + resumeId), Map.class);
+                AllComponentResponse response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/resumes/" + resumeId), AllComponentResponse.class);
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
 

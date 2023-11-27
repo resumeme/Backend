@@ -1,13 +1,17 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
 import org.devcourse.resumeme.business.resume.domain.Converter;
 
 import java.time.LocalDate;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Getter
+@NoArgsConstructor(access = PRIVATE)
 public class ActivityResponse extends ComponentResponse {
 
     private String activityName;
