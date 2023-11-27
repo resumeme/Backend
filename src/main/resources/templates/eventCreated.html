@@ -11,9 +11,9 @@
 <body>
 <div class="card-body">
     <div style="background-color: rgb(32, 32, 32); color: rgb(33, 255, 144); padding: 1em; border-radius: 1em">
-        <h4> 00 멘토님의 첨삭 이벤트가 열렸습니다! 첨삭 신청하러 GOGO~ </h4>
+        <h4><span th:text="${mentorNickname}"></span> 멘토님의 첨삭 이벤트가 등록되었습니다! 확인하러 GOGO~ </h4>
     </div>
 </div>
-<h4><a th:href="${link}">첨삭 신청 지금 바로 하기!</a></h4>
+<h4><a th:href="${link}">첨삭 이벤트 정보 보러가기!</a></h4>
 </body>
 </html>
