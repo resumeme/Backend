@@ -23,7 +23,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Project implements Converter {
+public class Project extends Converter {
 
     private String projectName;
 
@@ -37,9 +37,22 @@ public class Project implements Converter {
 
     private String projectUrl;
 
-    @Builder
     public Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
             String projectContent, String projectUrl) {
+        validateProject(projectName, productionYear);
+
+        this.projectName = projectName;
+        this.productionYear = productionYear;
+        this.teamMembers = teamMembers;
+        this.skills = skills;
+        this.projectContent = projectContent;
+        this.projectUrl = projectUrl;
+    }
+
+    @Builder
+    private Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
+            String projectContent, String projectUrl, Component component) {
+        super(component);
         validateProject(projectName, productionYear);
 
         this.projectName = projectName;
@@ -66,7 +79,7 @@ public class Project implements Converter {
                 null, resumeId, List.of(url, content, memberCount, skill));
     }
 
-    private static Project of(List<Component> components) {
+    public static Project of(List<Component> components) {
         ProjectConverter converter = ProjectConverter.of(components);
 
         return Project.of(converter);

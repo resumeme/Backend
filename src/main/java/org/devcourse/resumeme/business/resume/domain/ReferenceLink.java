@@ -4,10 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
-import java.sql.Ref;
 import java.util.List;
 import java.util.Map;
 
@@ -18,14 +16,20 @@ import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReferenceLink implements Converter {
+public class ReferenceLink extends Converter {
 
     private LinkType linkType;
 
     private String address;
 
-    @Builder
     public ReferenceLink(LinkType linkType, String address) {
+        this.linkType = linkType;
+        this.address = address;
+    }
+
+    @Builder
+    private ReferenceLink(LinkType linkType, String address, Component component) {
+        super(component);
         this.linkType = linkType;
         this.address = address;
     }
@@ -37,7 +41,7 @@ public class ReferenceLink implements Converter {
         return new Component(TYPE, linkType.name(), null, null, resumeId, List.of(address));
     }
 
-    private static ReferenceLink of(List<Component> components) {
+    public static ReferenceLink of(List<Component> components) {
         ReferenceLinkConverter converter = ReferenceLinkConverter.of(components);
 
         return ReferenceLink.of(converter);

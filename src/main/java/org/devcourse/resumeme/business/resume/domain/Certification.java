@@ -21,7 +21,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Certification implements Converter {
+public class Certification extends Converter {
 
     private String certificationTitle;
 
@@ -33,8 +33,19 @@ public class Certification implements Converter {
 
     private String description;
 
-    @Builder
     public Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
+        notNull(certificationTitle);
+
+        this.certificationTitle = certificationTitle;
+        this.acquisitionDate = acquisitionDate;
+        this.issuingAuthority = issuingAuthority;
+        this.link = link;
+        this.description = description;
+    }
+
+    @Builder
+    private Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description, Component component) {
+        super(component);
         notNull(certificationTitle);
 
         this.certificationTitle = certificationTitle;

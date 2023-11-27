@@ -1,25 +1,42 @@
 package org.devcourse.resumeme.business.resume.domain;
 
-import org.devcourse.resumeme.business.resume.domain.model.Components;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
-import static java.util.stream.Collectors.toMap;
+import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.resume.domain.Property.DUTY;
 
-public interface Converter {
+@NoArgsConstructor(access = PROTECTED)
+public abstract class Converter {
 
-    Component of(Long resumeId);
+    @Getter
+    protected Long componentId;
 
-    static Components convert(Component component) {
-        Map<Property, Component> components = flatComponents(component).stream()
-                .collect(toMap(c -> Property.valueOf(c.getProperty()), Function.identity()));
+    @Getter
+    protected Long originComponentId;
 
-        return new Components(components);
+    @Getter
+    protected boolean reflectFeedback;
+
+    public Converter(Component component) {
+        this.componentId = component.getId();
+        this.originComponentId = component.getOriginComponentId();
+        this.reflectFeedback = component.isReflectFeedBack();
+    }
+
+    public abstract Component toComponent(Long resumeId);
+
+    public static Converter of(Component component) {
+        List<Component> components = flatComponents(component);
+
+        return switch (component.getProperty()) {
+            case ACTIVITIES -> Activity.of(components);
+            default -> throw new IllegalStateException("Unexpected value: " + component.getProperty());
+        };
     }
 
     private static List<Component> flatComponents(Component component) {

@@ -19,7 +19,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ForeignLanguage implements Converter {
+public class ForeignLanguage extends Converter {
 
     private String language;
 
@@ -27,8 +27,19 @@ public class ForeignLanguage implements Converter {
 
     private String scoreOrGrade;
 
-    @Builder
     public ForeignLanguage(String language, String examName, String scoreOrGrade) {
+        notNull(language);
+        notNull(examName);
+        notNull(scoreOrGrade);
+
+        this.language = language;
+        this.examName = examName;
+        this.scoreOrGrade = scoreOrGrade;
+    }
+
+    @Builder
+    private ForeignLanguage(String language, String examName, String scoreOrGrade, Component component) {
+        super(component);
         notNull(language);
         notNull(examName);
         notNull(scoreOrGrade);

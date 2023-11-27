@@ -22,7 +22,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Training implements Converter {
+public class Training extends Converter {
 
     private String explanation;
 
@@ -32,9 +32,18 @@ public class Training implements Converter {
 
     private GPADetails gpaDetails;
 
-    @Builder
     public Training(String organization, String major, String degree, LocalDate admissionDate,
             LocalDate graduationDate, double gpa, double maxGpa, String explanation) {
+        this.educationalDetails = new EducationalDetails(organization, major, degree);
+        this.dateDetails = new DateDetails(admissionDate, graduationDate);
+        this.gpaDetails = new GPADetails(gpa, maxGpa);
+        this.explanation = explanation;
+    }
+
+    @Builder
+    private Training(String organization, String major, String degree, LocalDate admissionDate,
+            LocalDate graduationDate, double gpa, double maxGpa, String explanation, Component component) {
+        super(component);
         this.educationalDetails = new EducationalDetails(organization, major, degree);
         this.dateDetails = new DateDetails(admissionDate, graduationDate);
         this.gpaDetails = new GPADetails(gpa, maxGpa);
@@ -53,7 +62,7 @@ public class Training implements Converter {
                 resumeId, List.of(explanation, degree, major, gpa, maxGpa));
     }
 
-    private static Training of(List<Component> components) {
+    public static Training of(List<Component> components) {
         TrainingConverter converter = TrainingConverter.of(components);
 
         return Training.of(converter);

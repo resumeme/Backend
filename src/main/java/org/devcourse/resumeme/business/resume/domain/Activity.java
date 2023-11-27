@@ -20,7 +20,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Activity implements Converter {
+public class Activity extends Converter {
 
     private String activityName;
 
@@ -32,8 +32,20 @@ public class Activity implements Converter {
 
     private String description;
 
-    @Builder
     public Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description) {
+        notNull(activityName);
+        notNull(startDate);
+
+        this.activityName = activityName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.link = link;
+        this.description = description;
+    }
+
+    @Builder
+    private Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description, Component component) {
+        super(component);
         notNull(activityName);
         notNull(startDate);
 
@@ -60,6 +72,7 @@ public class Activity implements Converter {
 
     private static Activity of(ActivityConverter converter) {
         return Activity.builder()
+                .component(converter.activity)
                 .activityName(converter.activity.getContent())
                 .startDate(converter.activity.getStartDate())
                 .endDate(converter.activity.getEndDate())

@@ -28,7 +28,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.SKILL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Career implements Converter {
+public class Career extends Converter {
 
     private String companyName;
 
