@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.resume.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public abstract class Converter {
     @Getter
     protected boolean reflectFeedback;
 
-    public Converter(Component component) {
+    protected Converter(Component component) {
         this.componentId = component.getId();
         this.originComponentId = component.getOriginComponentId();
         this.reflectFeedback = component.isReflectFeedBack();
@@ -30,11 +31,21 @@ public abstract class Converter {
 
     public abstract Component toComponent(Long resumeId);
 
-    public static Converter of(Component component) {
-        List<Component> components = flatComponents(component);
+    public static List<Converter> of(Component component) {
+        return component.getComponents().stream()
+                .map(subComponent -> getConverters(component, flatComponents(subComponent)))
+                .toList();
+    }
 
+    private static Converter getConverters(Component component, List<Component> components) {
         return switch (component.getProperty()) {
             case ACTIVITIES -> Activity.of(components);
+            case CAREERS -> Career.of(components);
+            case CERTIFICATIONS -> Certification.of(components);
+            case FOREIGNLANGUAGES -> ForeignLanguage.of(components);
+            case PROJECTS -> Project.of(components);
+            case TRAININGS -> Training.of(components);
+            case LINKS -> ReferenceLink.of(components);
             default -> throw new IllegalStateException("Unexpected value: " + component.getProperty());
         };
     }
@@ -45,10 +56,9 @@ public abstract class Converter {
         }
 
         List<Component> result = new ArrayList<>();
-
         result.add(component);
-        for (Component subComponent : component.getComponents()) {
-            if (subComponent.getComponents() != null) {
+        if (component.getComponents() != null) {
+            for (Component subComponent : component.getComponents()) {
                 result.addAll(flatComponents(subComponent));
             }
         }

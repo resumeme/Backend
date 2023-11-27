@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Getter;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
+import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Project;
 
 import java.util.List;
@@ -23,8 +24,9 @@ public class ProjectResponse extends ComponentResponse {
 
     private String projectUrl;
 
-    public ProjectResponse(Project project) {
-        super(project);
+    public ProjectResponse(Converter converter) {
+        super(converter);
+        Project project = (Project) converter;
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
         this.isTeam = !project.getTeamMembers().equals("");

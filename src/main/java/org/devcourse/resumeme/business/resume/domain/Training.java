@@ -70,6 +70,7 @@ public class Training extends Converter {
 
     private static Training of(TrainingConverter converter) {
         return Training.builder()
+                .component(converter.training)
                 .organization(converter.training.getContent())
                 .admissionDate(converter.training.getStartDate())
                 .graduationDate(converter.training.getEndDate())

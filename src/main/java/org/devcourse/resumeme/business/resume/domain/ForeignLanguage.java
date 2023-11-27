@@ -65,6 +65,7 @@ public class ForeignLanguage extends Converter {
 
     private static ForeignLanguage of(ForeignLanguageConverter converter) {
         return ForeignLanguage.builder()
+                .component(converter.foreignLanguage)
                 .language(converter.foreignLanguage.getContent())
                 .examName(converter.details.examName.getContent())
                 .scoreOrGrade(converter.details.scoreOrGrade.getContent())

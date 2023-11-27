@@ -1,11 +1,11 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
-import org.devcourse.resumeme.business.resume.entity.Component;
+import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
+import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Comparator.comparing;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,13 +30,9 @@ public class ComponentController {
 
     @GetMapping({"/{resumeId}", "/{resumeId}/{type}"})
     public AllComponentResponse getComponent(@PathVariable Long resumeId, @PathVariable(required = false) Property type) {
-        List<Converter> all = blockService.getAll(resumeId, type);
+        ResumeTemplate template = blockService.getAll(resumeId, type);
 
-        for (List<ComponentResponse> responses : result.values()) {
-            responses.sort(comparing(ComponentResponse::getCreatedDate));
-        }
-
-        return result;
+        return AllComponentResponse.from(template);
     }
 
     @PatchMapping("/{resumeId}/{type}/components/{componentId}")

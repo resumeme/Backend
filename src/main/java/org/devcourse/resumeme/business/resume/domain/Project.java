@@ -87,6 +87,7 @@ public class Project extends Converter {
 
     private static Project of(ProjectConverter converter) {
         return Project.builder()
+                .component(converter.project)
                 .projectName(converter.project.getContent())
                 .productionYear((long) converter.project.getStartDate().getYear())
                 .teamMembers(converter.details.members.getContent())

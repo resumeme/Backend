@@ -42,9 +42,22 @@ public class Career extends Converter {
 
     private CareerPeriod careerPeriod;
 
-    @Builder
     public Career(String companyName, String position, List<String> skills, List<Duty> duties,
             LocalDate careerStartDate, LocalDate endDate, String careerContent) {
+        validateCareer(companyName, position);
+
+        this.companyName = companyName;
+        this.position = position;
+        this.skills = skills;
+        this.duties = duties;
+        this.careerPeriod = new CareerPeriod(careerStartDate, endDate);
+        this.careerContent = careerContent;
+    }
+
+    @Builder
+    private Career(String companyName, String position, List<String> skills, List<Duty> duties,
+            LocalDate careerStartDate, LocalDate endDate, String careerContent, Component component) {
+        super(component);
         validateCareer(companyName, position);
 
         this.companyName = companyName;
@@ -87,6 +100,7 @@ public class Career extends Converter {
 
     private static Career of(CareerConverter converter) {
         return Career.builder()
+                .component(converter.career)
                 .companyName(converter.career.getContent())
                 .careerStartDate(converter.career.getStartDate())
                 .endDate(converter.career.getEndDate())

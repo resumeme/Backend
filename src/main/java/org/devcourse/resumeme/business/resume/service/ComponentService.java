@@ -6,13 +6,17 @@ import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
+import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toMap;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
 
 @Service
@@ -44,15 +48,24 @@ public class ComponentService {
         return new Component(type, null, null, null, resumeId, List.of(newComponent));
     }
 
-    public List<Converter> getAll(Long resumeId, Property type) {
+    public ResumeTemplate getAll(Long resumeId, Property type) {
         List<Component> components = componentRepository.findAllByResumeId(resumeId).stream()
                 .filter(component -> component.getComponent() == null)
-                .filter(component -> component.getProperty().equals(type))
+                .filter(component -> component.getProperty().isType(type))
                 .toList();
 
-        return components.stream()
-                .map(Converter::of)
-                .toList();
+        Map<Property, List<Converter>> response = components.stream()
+                .collect(toMap(Component::getProperty, Converter::of));
+
+        return ResumeTemplate.builder()
+                .activity(response.getOrDefault(Property.ACTIVITIES, new ArrayList<>()))
+                .career(response.getOrDefault(Property.CAREERS, new ArrayList<>()))
+                .certification(response.getOrDefault(Property.CERTIFICATIONS, new ArrayList<>()))
+                .foreignLanguage(response.getOrDefault(Property.FOREIGNLANGUAGES, new ArrayList<>()))
+                .project(response.getOrDefault(Property.PROJECTS, new ArrayList<>()))
+                .training(response.getOrDefault(Property.TRAININGS, new ArrayList<>()))
+                .referenceLink(response.getOrDefault(Property.LINKS, new ArrayList<>()))
+                .build();
     }
 
     public Component getOne(Long componentId) {

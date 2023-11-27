@@ -72,6 +72,7 @@ public class Certification extends Converter {
 
     private static Certification of(CertificationConverter converter) {
         return Certification.builder()
+                .component(converter.certification)
                 .certificationTitle(converter.certification.getContent())
                 .acquisitionDate(converter.certification.getStartDate().toString())
                 .issuingAuthority(converter.details.getAuthority().getContent())

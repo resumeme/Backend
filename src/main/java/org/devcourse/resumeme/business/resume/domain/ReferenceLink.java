@@ -49,6 +49,7 @@ public class ReferenceLink extends Converter {
 
     private static ReferenceLink of(ReferenceLinkConverter converter) {
         return ReferenceLink.builder()
+                .component(converter.type)
                 .linkType(LinkType.valueOf(converter.type.getContent()))
                 .address(converter.details.address.getContent())
                 .build();

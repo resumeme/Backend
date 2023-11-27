@@ -39,4 +39,8 @@ public enum Property {
         return this.name() + END_DATE.name();
     }
 
+    public boolean isType(Property property) {
+        return property == null || equals(property);
+    }
+
 }
