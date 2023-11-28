@@ -156,7 +156,7 @@ class FollowControllerTest extends ControllerUnitTest {
         Optional<Follow> follow = Optional.of(new Follow(1L, 1L));
         setId(follow.get(), 1L);
 
-        given(followService.getFollow(any(Long.class), any(Long.class))).willReturn(follow);
+        given(followService.getFollow(any(Long.class), any(Long.class))).willReturn(any(Long.class));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/follows/mentors/{mentorId}", 1L));
