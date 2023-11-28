@@ -41,7 +41,8 @@ public enum ExceptionCode implements DocsEnumType {
     NOT_FOUND_SNAPSHOT("저장된 스냅샷이 없습니다"),
     EXCEEDED_FOLLOW_MAX("팔로우 가능한 멘토 인원이 초과되었습니다"),
     ALREADY_FOLLOWING("이미 팔로우 중인 멘토입니다"),
-    NOT_FOLLOWING_NOW("현재 팔로우 하고있지 않은 멘토입니다")
+    NOT_FOLLOWING_NOW("현재 팔로우 하고있지 않은 멘토입니다"),
+    NOT_AVAILABLE_COMMENT_TIME("첨삭 가능한 시간이 아닙니다")
     ;
 
     private final String message;
