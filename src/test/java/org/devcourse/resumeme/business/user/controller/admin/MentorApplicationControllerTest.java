@@ -66,7 +66,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
         given(mentorApplicationService.getAll()).willReturn(List.of(mentorApplication));
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/admin/applications"));
+        ResultActions result = mvc.perform(get("/admin/applications"));
 
         // then
         result.andExpect(status().isOk())
@@ -97,7 +97,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
         doNothing().when(emailService).sendEmail(any());
 
         // when
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.post("/api/v1/admin/applications/{applicationId}/approve", applicationId));
+        ResultActions result = mvc.perform(MockMvcRequestBuilders.post("/admin/applications/{applicationId}/approve", applicationId));
 
         // then
         result.andExpect(status().is3xxRedirection())
