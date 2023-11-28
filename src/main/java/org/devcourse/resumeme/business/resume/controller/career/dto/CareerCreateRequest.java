@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
+import org.devcourse.resumeme.business.resume.service.vo.CareerDomainVo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -54,12 +55,14 @@ public class CareerCreateRequest extends ComponentCreateRequest {
     }
 
     @Override
-    public Career toEntity() {
+    public CareerDomainVo toVo() {
         List<Duty> duties = this.duties.stream()
                 .map(DutyRequest::toEntity)
                 .toList();
 
-        return new Career(companyName, position, skills, duties, careerStartDate, endDate, careerContent);
+        Career career = new Career(companyName, position, skills, duties, careerStartDate, endDate, careerContent);
+
+        return new CareerDomainVo(career);
     }
 
     public record DutyRequest(

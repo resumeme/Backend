@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.certification.dto.CertificationCreateRequest;
-import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.service.v2.ComponentDomain;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -22,6 +22,6 @@ import org.devcourse.resumeme.business.resume.domain.Converter;
 })
 public abstract class ComponentCreateRequest {
 
-    public abstract Converter toEntity();
+    public abstract ComponentDomain toVo();
 
 }

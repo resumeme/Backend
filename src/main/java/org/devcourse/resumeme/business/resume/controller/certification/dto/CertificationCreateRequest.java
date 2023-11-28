@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.Certification;
+import org.devcourse.resumeme.business.resume.service.vo.CertificationDomainVo;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -37,8 +38,10 @@ public class CertificationCreateRequest extends ComponentCreateRequest {
     }
 
     @Override
-    public Certification toEntity() {
-        return new Certification(certificationTitle, acquisitionDate, issuingAuthority, link, description);
+    public CertificationDomainVo toVo() {
+        Certification certification = new Certification(certificationTitle, acquisitionDate, issuingAuthority, link, description);
+
+        return new CertificationDomainVo(certification);
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.devcourse.resumeme.business.resume.domain.Project;
+import org.devcourse.resumeme.business.resume.service.vo.ProjectDomainVo;
 
 import java.util.List;
 
@@ -46,12 +47,14 @@ public class ProjectCreateRequest extends ComponentCreateRequest {
     }
 
     @Override
-    public Project toEntity() {
+    public ProjectDomainVo toVo() {
         if (teamMembers == null) {
             teamMembers = "";
         }
 
-        return new Project(projectName, productionYear, teamMembers, skills, projectContent, projectUrl);
+        Project project = new Project(projectName, productionYear, teamMembers, skills, projectContent, projectUrl);
+
+        return new ProjectDomainVo(project);
     }
 
 }

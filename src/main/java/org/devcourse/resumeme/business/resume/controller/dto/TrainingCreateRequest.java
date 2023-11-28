@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.service.vo.TrainingDomainVo;
 
 import java.time.LocalDate;
 
@@ -50,8 +51,10 @@ public class TrainingCreateRequest extends ComponentCreateRequest {
     }
 
     @Override
-    public Training toEntity() {
-        return new Training(organization, major, degree, admissionDate, graduationDate, gpa, maxGpa, explanation);
+    public TrainingDomainVo toVo() {
+        Training training = new Training(organization, major, degree, admissionDate, graduationDate, gpa, maxGpa, explanation);
+
+        return new TrainingDomainVo(training);
     }
 
 }
