@@ -31,6 +31,7 @@ import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
 import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.common.support.NullableHttpRequestSnippet;
+import org.devcourse.resumeme.common.support.NullableHttpResponseSnippet;
 import org.devcourse.resumeme.global.auth.filter.FilterTestController;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
@@ -179,6 +180,10 @@ public abstract class ControllerUnitTest {
 
     protected static NullableHttpRequestSnippet nullableHttpRequestSnippet() {
         return new NullableHttpRequestSnippet();
+    }
+
+    protected static NullableHttpResponseSnippet nullableHttpResponseSnippet() {
+        return new NullableHttpResponseSnippet();
     }
 
     protected static class ExceptionResponseFieldsSnippet extends TemplatedSnippet {

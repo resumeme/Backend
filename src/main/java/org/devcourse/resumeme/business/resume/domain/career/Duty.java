@@ -1,14 +1,23 @@
 package org.devcourse.resumeme.business.resume.domain.career;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
+import static org.devcourse.resumeme.business.resume.domain.Property.TITLE;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +33,7 @@ public class Duty {
 
     private String description;
 
+    @Builder
     public Duty(String title, LocalDate startDate, LocalDate endDate, String description) {
         validateDuty(title, startDate, endDate);
 
@@ -33,10 +43,6 @@ public class Duty {
         this.description = description;
     }
 
-    public Duty(Component subComponent) {
-        this(subComponent.getContent(), subComponent.getStartDate(), subComponent.getEndDate(), subComponent.getComponents().get(0).getContent());
-    }
-
     private void validateDuty(String title, LocalDate startDate, LocalDate endDate) {
         Validator.check(title == null, ExceptionCode.NO_EMPTY_VALUE);
         Validator.check(startDate == null, ExceptionCode.NO_EMPTY_VALUE);
@@ -44,6 +50,50 @@ public class Duty {
 
         if (startDate.isAfter(endDate)) {
             throw new CustomException("TIME_ERROR", "시작일은 종료일보다 먼저여야 합니다.");
+        }
+    }
+
+    public Component toComponent(Long resumeId) {
+        Component description = new Component(DESCRIPTION, this.description, resumeId);
+
+        return new Component(TITLE, this.title, this.startDate, this.endDate, resumeId, List.of(description));
+    }
+
+    static Duty of(DutyConverter converter) {
+        return Duty.builder()
+                .title(converter.title.getContent())
+                .startDate(converter.title.getStartDate())
+                .endDate(converter.title.getEndDate())
+                .description(converter.details.description.getContent())
+                .build();
+    }
+
+    @Builder
+    static class DutyConverter {
+
+        private Component title;
+
+        private DutyDetails details;
+
+        @Builder
+        private static class DutyDetails {
+
+            private Component description;
+
+        }
+
+        static DutyConverter of(List<Component> components) {
+            Map<Property, Component> componentMap = components.stream()
+                    .collect(toMap(Component::getProperty, identity()));
+
+            DutyDetails details = DutyDetails.builder()
+                    .description(componentMap.get(DESCRIPTION))
+                    .build();
+
+            return DutyConverter.builder()
+                    .title(componentMap.get(TITLE))
+                    .details(details)
+                    .build();
         }
     }
 

@@ -1,12 +1,11 @@
 package org.devcourse.resumeme.business.comment.domain;
 
-import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,6 +20,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.devcourse.resumeme.business.resume.domain.Property.CAREERS;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class CommentTest {
@@ -29,7 +29,6 @@ class CommentTest {
     void 리뷰_작성에_성공한다() {
         // given
         String content = "내용 수정해주세요";
-        BlockType type = BlockType.CAREER;
         Mentee mentee = Mentee.builder()
                 .id(1L)
                 .imageUrl("menteeimage.png")
@@ -42,7 +41,7 @@ class CommentTest {
                 .introduce(null)
                 .build();
         Resume resume = new Resume("title", mentee);
-        Component component = new Component("career", "career", null, null, 1L, List.of());
+        Component component = new Component(CAREERS, "career", null, null, 1L, List.of());
 
         // when
         Comment comment = new Comment(content, 1L, resume);
@@ -61,7 +60,6 @@ class CommentTest {
 
     static Stream<Arguments> reviewCreate() {
         String content = "내용 수정해주세요";
-        BlockType type = BlockType.CAREER;
         Mentee mentee = Mentee.builder()
                 .id(1L)
                 .imageUrl("menteeimage.png")

@@ -1,18 +1,17 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Training;
-import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@JsonTypeName("trainings")
+import static lombok.AccessLevel.PRIVATE;
+
+@Getter
+@NoArgsConstructor(access = PRIVATE)
 public class TrainingResponse extends ComponentResponse {
 
     private String organization;
@@ -31,9 +30,9 @@ public class TrainingResponse extends ComponentResponse {
 
     private String explanation;
 
-    public TrainingResponse(Component component) {
-        super("trainings", component);
-        Training training = new Training(Converter.convert(component));
+    public TrainingResponse(Converter converter) {
+        super(converter);
+        Training training = (Training) converter;
         this.organization = training.getEducationalDetails().getOrganization();
         this.major = training.getEducationalDetails().getMajor();
         this.degree = training.getEducationalDetails().getDegree();

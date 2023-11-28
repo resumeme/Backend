@@ -1,6 +1,13 @@
 package org.devcourse.resumeme.business.resume.domain;
 
 public enum Property {
+    ACTIVITIES,
+    CAREERS,
+    CERTIFICATIONS,
+    FOREIGNLANGUAGES,
+    PROJECTS,
+    TRAININGS,
+    LINKS,
     COMPANY,
     POSITION,
     SKILL,
@@ -30,6 +37,10 @@ public enum Property {
 
     public String endDate() {
         return this.name() + END_DATE.name();
+    }
+
+    public boolean isType(Property property) {
+        return property == null || equals(property);
     }
 
 }

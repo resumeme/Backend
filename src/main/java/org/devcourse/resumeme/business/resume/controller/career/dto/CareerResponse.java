@@ -1,19 +1,18 @@
 package org.devcourse.resumeme.business.resume.controller.career.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
-import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@JsonTypeName("careers")
+import static lombok.AccessLevel.PRIVATE;
+
+@Getter
+@NoArgsConstructor(access = PRIVATE)
 public class CareerResponse extends ComponentResponse {
 
     private String companyName;
@@ -24,7 +23,7 @@ public class CareerResponse extends ComponentResponse {
 
     private List<DutyResponse> duties;
 
-    private boolean isCurrentlyEmployed;
+    private boolean currentlyEmployed;
 
     private LocalDate careerStartDate;
 
@@ -32,15 +31,14 @@ public class CareerResponse extends ComponentResponse {
 
     private String careerContent;
 
-    public CareerResponse(Component component) {
-        super("careers", component);
-
-        Career career = new Career(Converter.convert(component));
+    public CareerResponse(Converter converter) {
+        super(converter);
+        Career career = (Career) converter;
         this.companyName = career.getCompanyName();
         this.position = career.getPosition();
         this.skills = career.getSkills();
         this.duties = mapDuties(career.getDuties());
-        this.isCurrentlyEmployed = career.getCareerPeriod().getEndDate() == null;
+        this.currentlyEmployed = career.getCareerPeriod().getEndDate() == null;
         this.careerStartDate = career.getCareerPeriod().getStartDate();
         this.endDate = career.getCareerPeriod().getEndDate();
         this.careerContent = career.getCareerContent();

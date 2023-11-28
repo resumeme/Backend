@@ -1,14 +1,18 @@
 package org.devcourse.resumeme.business.resume.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.model.Components;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
+import static java.lang.Double.parseDouble;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import static org.devcourse.resumeme.business.resume.domain.Property.DEGREE;
 import static org.devcourse.resumeme.business.resume.domain.Property.DESCRIPTION;
 import static org.devcourse.resumeme.business.resume.domain.Property.MAJOR;
@@ -18,7 +22,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Training implements Converter {
+public class Training extends Converter {
 
     private String explanation;
 
@@ -36,15 +40,18 @@ public class Training implements Converter {
         this.explanation = explanation;
     }
 
-    public Training(Components components) {
-        this.educationalDetails = new EducationalDetails(components.getContent(TRAINING), components.getContent(MAJOR), components.getContent(DEGREE));
-        this.dateDetails = new DateDetails(components.getStartDate(TRAINING), components.getEndDate(TRAINING));
-        this.gpaDetails = new GPADetails(components.toDouble(SCORE), components.toDouble(MAX_SCORE));
-        this.explanation = components.getContent(DESCRIPTION);
+    @Builder
+    private Training(String organization, String major, String degree, LocalDate admissionDate,
+            LocalDate graduationDate, double gpa, double maxGpa, String explanation, Component component) {
+        super(component);
+        this.educationalDetails = new EducationalDetails(organization, major, degree);
+        this.dateDetails = new DateDetails(admissionDate, graduationDate);
+        this.gpaDetails = new GPADetails(gpa, maxGpa);
+        this.explanation = explanation;
     }
 
     @Override
-    public Component of(Long resumeId) {
+    public Component toComponent(Long resumeId) {
         Component explanation = new Component(DESCRIPTION, this.explanation, resumeId);
         Component degree = new Component(DEGREE, educationalDetails.getDegree(), resumeId);
         Component major = new Component(MAJOR, educationalDetails.getMajor(), resumeId);
@@ -53,6 +60,68 @@ public class Training implements Converter {
 
         return new Component(TRAINING, this.educationalDetails.getOrganization(), this.dateDetails.getAdmissionDate(), this.dateDetails.getGraduationDate(),
                 resumeId, List.of(explanation, degree, major, gpa, maxGpa));
+    }
+
+    public static Training of(List<Component> components) {
+        TrainingConverter converter = TrainingConverter.of(components);
+
+        return Training.of(converter);
+    }
+
+    private static Training of(TrainingConverter converter) {
+        return Training.builder()
+                .component(converter.training)
+                .organization(converter.training.getContent())
+                .admissionDate(converter.training.getStartDate())
+                .graduationDate(converter.training.getEndDate())
+                .major(converter.details.major.getContent())
+                .degree(converter.details.degree.getContent())
+                .gpa(parseDouble(converter.details.gpa.getContent()))
+                .maxGpa(parseDouble(converter.details.maxGpa.getContent()))
+                .explanation(converter.details.explanation.getContent())
+                .build();
+    }
+
+    @Builder
+    private static class TrainingConverter {
+
+        private Component training;
+
+        private TrainingDetails details;
+
+        @Builder
+        private static class TrainingDetails {
+
+            private Component explanation;
+
+            private Component degree;
+
+            private Component major;
+
+            private Component gpa;
+
+            private Component maxGpa;
+
+        }
+
+        private static TrainingConverter of(List<Component> components) {
+            Map<Property, Component> componentMap = components.stream()
+                    .collect(toMap(Component::getProperty, identity()));
+
+            TrainingDetails details = TrainingDetails.builder()
+                    .explanation(componentMap.get(DESCRIPTION))
+                    .degree(componentMap.get(DEGREE))
+                    .major(componentMap.get(MAJOR))
+                    .gpa(componentMap.get(SCORE))
+                    .maxGpa(componentMap.get(MAX_SCORE))
+                    .build();
+
+            return TrainingConverter.builder()
+                    .training(componentMap.get(TRAINING))
+                    .details(details)
+                    .build();
+        }
+
     }
 
 }

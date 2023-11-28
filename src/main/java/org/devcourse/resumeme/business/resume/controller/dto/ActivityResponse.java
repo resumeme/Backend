@@ -1,18 +1,17 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
 import org.devcourse.resumeme.business.resume.domain.Converter;
-import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@JsonTypeName("activities")
+import static lombok.AccessLevel.PRIVATE;
+
+@Getter
+@NoArgsConstructor(access = PRIVATE)
 public class ActivityResponse extends ComponentResponse {
 
     private String activityName;
@@ -27,9 +26,9 @@ public class ActivityResponse extends ComponentResponse {
 
     private String description;
 
-    public ActivityResponse(Component component) {
-        super("activities", component);
-        Activity activity = new Activity(Converter.convert(component));
+    public ActivityResponse(Converter converter) {
+        super(converter);
+        Activity activity = (Activity) converter;
         this.activityName = activity.getActivityName();
         this.startDate = activity.getStartDate();
         this.endDate = activity.getEndDate();

@@ -4,7 +4,6 @@ import org.devcourse.resumeme.common.domain.DocsEnumType;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.domain.Progress;
-import org.devcourse.resumeme.business.resume.domain.BlockType;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.devcourse.resumeme.business.user.domain.Role;
@@ -24,7 +23,6 @@ public class EnumController {
                 to(Position.values()),
                 to(EventStatus.values()),
                 to(Progress.values()),
-                to(BlockType.values()),
                 to(Provider.values()),
                 to(Role.values()),
                 to(ExceptionCode.values())
@@ -37,9 +35,8 @@ public class EnumController {
     }
 
     public record EnumDocsResponse(Map<String, String> position, Map<String, String> eventStatus,
-                                   Map<String, String> progress, Map<String, String> blockType,
-                                   Map<String, String> provider, Map<String, String> role,
-                                   Map<String, String> exceptionCode) {
+                                   Map<String, String> progress, Map<String, String> provider,
+                                   Map<String, String> role, Map<String, String> exceptionCode) {
 
     }
 

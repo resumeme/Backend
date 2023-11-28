@@ -1,25 +1,24 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Project;
-import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@JsonTypeName("projects")
+import static lombok.AccessLevel.PRIVATE;
+
+@Getter
+@NoArgsConstructor(access = PRIVATE)
 public class ProjectResponse extends ComponentResponse {
 
     private String projectName;
 
     private Long productionYear;
 
-    private boolean isTeam;
+    private boolean team;
 
     private String teamMembers;
 
@@ -29,12 +28,12 @@ public class ProjectResponse extends ComponentResponse {
 
     private String projectUrl;
 
-    public ProjectResponse(Component component) {
-        super("projects", component);
-        Project project = new Project(Converter.convert(component));
+    public ProjectResponse(Converter converter) {
+        super(converter);
+        Project project = (Project) converter;
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
-        this.isTeam = !project.getTeamMembers().equals("");
+        this.team = !project.getTeamMembers().equals("");
         this.teamMembers = project.getTeamMembers();
         this.skills = project.getSkills();
         this.projectContent = project.getProjectContent();

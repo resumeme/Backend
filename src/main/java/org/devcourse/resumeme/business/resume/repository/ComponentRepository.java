@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.repository;
 
+import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
     List<Component> findAllByResumeId(Long resumeId);
 
     @Query("select c from Component c where c.resumeId = :resumeId and c.property = :type")
-    Optional<Component> findExistBlock(@Param("resumeId") Long resumeId, @Param("type") String type);
+    Optional<Component> findExistBlock(@Param("resumeId") Long resumeId, @Param("type") Property type);
 
     @EntityGraph(attributePaths = "components")
     Optional<Component> findById(Long componentId);
