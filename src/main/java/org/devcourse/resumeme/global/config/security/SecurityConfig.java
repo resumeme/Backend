@@ -51,7 +51,7 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(c -> c.defaultSuccessUrl("/api/v1/admin/applications"))
+                .formLogin(c -> c.defaultSuccessUrl("/admin/applications"))
                 .headers(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable)

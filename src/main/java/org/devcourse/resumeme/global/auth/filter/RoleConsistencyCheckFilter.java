@@ -32,6 +32,10 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
     }
 
     private boolean isRoleInconsistent(Authentication auth) {
+        if (!(auth.getPrincipal() instanceof JwtUser)) {
+            return false;
+        }
+
         JwtUser user = (JwtUser) auth.getPrincipal();
 
         return isPending(auth) && mentorService.getOne(user.id()).getRole().equals(ROLE_MENTOR);
