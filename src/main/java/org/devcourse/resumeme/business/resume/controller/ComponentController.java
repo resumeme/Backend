@@ -2,7 +2,7 @@ package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
-import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.v2.ComponentCreateRequestV2;
 import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
@@ -24,8 +24,8 @@ public class ComponentController {
     private final ComponentService componentService;
 
     @PostMapping("/{resumeId}/{type}")
-    public IdResponse createComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequest request, @PathVariable Property type) {
-        return new IdResponse(componentService.create(request.toVo().toComponent(resumeId), type));
+    public IdResponse createComponent(@PathVariable Long resumeId, @RequestBody ComponentCreateRequestV2 request, @PathVariable Property type) {
+        return new IdResponse(componentService.create(request.toVo(type).toComponent(resumeId), type));
     }
 
     @GetMapping({"/{resumeId}", "/{resumeId}/{type}"})
@@ -36,8 +36,8 @@ public class ComponentController {
     }
 
     @PatchMapping("/{resumeId}/{type}/components/{componentId}")
-    public IdResponse updateComponent(@PathVariable Long resumeId, @PathVariable Property type, @RequestBody ComponentCreateRequest request, @PathVariable Long componentId) {
-        return new IdResponse(componentService.update(componentId, request.toVo().toComponent(resumeId), type));
+    public IdResponse updateComponent(@PathVariable Long resumeId, @PathVariable Property type, @RequestBody ComponentCreateRequestV2 request, @PathVariable Long componentId) {
+        return new IdResponse(componentService.update(componentId, request.toVo(type).toComponent(resumeId), type));
     }
 
     @DeleteMapping("/{resumeId}/components/{componentId}")
