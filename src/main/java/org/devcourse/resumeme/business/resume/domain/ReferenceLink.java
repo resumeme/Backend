@@ -16,11 +16,13 @@ import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReferenceLink extends Converter {
+public class ReferenceLink {
 
     private LinkType linkType;
 
     private String address;
+
+    private ComponentInfo componentInfo;
 
     public ReferenceLink(LinkType linkType, String address) {
         this.linkType = linkType;
@@ -29,12 +31,11 @@ public class ReferenceLink extends Converter {
 
     @Builder
     private ReferenceLink(LinkType linkType, String address, Component component) {
-        super(component);
         this.linkType = linkType;
         this.address = address;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component address = new Component(URL, this.address, resumeId);
 

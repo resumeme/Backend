@@ -22,7 +22,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Training extends Converter {
+public class Training {
 
     private String explanation;
 
@@ -31,6 +31,8 @@ public class Training extends Converter {
     private DateDetails dateDetails;
 
     private GPADetails gpaDetails;
+
+    private ComponentInfo componentInfo;
 
     public Training(String organization, String major, String degree, LocalDate admissionDate,
             LocalDate graduationDate, double gpa, double maxGpa, String explanation) {
@@ -43,14 +45,13 @@ public class Training extends Converter {
     @Builder
     private Training(String organization, String major, String degree, LocalDate admissionDate,
             LocalDate graduationDate, double gpa, double maxGpa, String explanation, Component component) {
-        super(component);
         this.educationalDetails = new EducationalDetails(organization, major, degree);
         this.dateDetails = new DateDetails(admissionDate, graduationDate);
         this.gpaDetails = new GPADetails(gpa, maxGpa);
         this.explanation = explanation;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component explanation = new Component(DESCRIPTION, this.explanation, resumeId);
         Component degree = new Component(DEGREE, educationalDetails.getDegree(), resumeId);

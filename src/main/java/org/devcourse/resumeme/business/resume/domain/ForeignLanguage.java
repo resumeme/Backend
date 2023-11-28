@@ -19,13 +19,15 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ForeignLanguage extends Converter {
+public class ForeignLanguage {
 
     private String language;
 
     private String examName;
 
     private String scoreOrGrade;
+
+    private ComponentInfo componentInfo;
 
     public ForeignLanguage(String language, String examName, String scoreOrGrade) {
         notNull(language);
@@ -39,7 +41,6 @@ public class ForeignLanguage extends Converter {
 
     @Builder
     private ForeignLanguage(String language, String examName, String scoreOrGrade, Component component) {
-        super(component);
         notNull(language);
         notNull(examName);
         notNull(scoreOrGrade);
@@ -47,9 +48,9 @@ public class ForeignLanguage extends Converter {
         this.language = language;
         this.examName = examName;
         this.scoreOrGrade = scoreOrGrade;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component examName = new Component(EXAM_NAME, this.examName, resumeId);
         Component scoreOrGrade = new Component(SCORE, this.scoreOrGrade, resumeId);

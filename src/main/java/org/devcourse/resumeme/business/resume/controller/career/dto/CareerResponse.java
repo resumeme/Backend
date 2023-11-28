@@ -31,7 +31,7 @@ public class CareerResponse extends ComponentResponse {
     private String careerContent;
 
     public CareerResponse(Career career) {
-        super(career);
+        super(career.getComponentInfo());
         this.companyName = career.getCompanyName();
         this.position = career.getPosition();
         this.skills = career.getSkills();

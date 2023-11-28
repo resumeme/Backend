@@ -23,7 +23,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Project extends Converter {
+public class Project {
 
     private String projectName;
 
@@ -36,6 +36,8 @@ public class Project extends Converter {
     private String projectContent;
 
     private String projectUrl;
+
+    private ComponentInfo componentInfo;
 
     public Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
             String projectContent, String projectUrl) {
@@ -52,7 +54,6 @@ public class Project extends Converter {
     @Builder
     private Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
             String projectContent, String projectUrl, Component component) {
-        super(component);
         validateProject(projectName, productionYear);
 
         this.projectName = projectName;
@@ -61,6 +62,7 @@ public class Project extends Converter {
         this.skills = skills;
         this.projectContent = projectContent;
         this.projectUrl = projectUrl;
+        this.componentInfo = new ComponentInfo(component);
     }
 
     private void validateProject(String projectName, Long productionYear) {
@@ -68,7 +70,6 @@ public class Project extends Converter {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component url = new Component(URL, projectUrl, resumeId);
         Component content = new Component(CONTENT, projectContent, resumeId);

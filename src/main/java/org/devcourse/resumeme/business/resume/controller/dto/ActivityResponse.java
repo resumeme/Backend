@@ -26,7 +26,7 @@ public class ActivityResponse extends ComponentResponse {
     private String description;
 
     public ActivityResponse(Activity activity) {
-        super(activity);
+        super(activity.getComponentInfo());
         this.activityName = activity.getActivityName();
         this.startDate = activity.getStartDate();
         this.endDate = activity.getEndDate();

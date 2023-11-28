@@ -18,7 +18,7 @@ public class ForeignLanguageResponse extends ComponentResponse {
     private String scoreOrGrade;
 
     public ForeignLanguageResponse(ForeignLanguage foreignLanguage) {
-        super(foreignLanguage);
+        super(foreignLanguage.getComponentInfo());
         this.language = foreignLanguage.getLanguage();
         this.examName = foreignLanguage.getExamName();
         this.scoreOrGrade = foreignLanguage.getScoreOrGrade();

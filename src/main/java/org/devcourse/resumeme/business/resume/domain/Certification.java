@@ -21,7 +21,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Certification extends Converter {
+public class Certification {
 
     private String certificationTitle;
 
@@ -32,6 +32,8 @@ public class Certification extends Converter {
     private String link;
 
     private String description;
+
+    private ComponentInfo componentInfo;
 
     public Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
         notNull(certificationTitle);
@@ -45,7 +47,6 @@ public class Certification extends Converter {
 
     @Builder
     private Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description, Component component) {
-        super(component);
         notNull(certificationTitle);
 
         this.certificationTitle = certificationTitle;
@@ -53,9 +54,9 @@ public class Certification extends Converter {
         this.issuingAuthority = issuingAuthority;
         this.link = link;
         this.description = description;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component authority = new Component(AUTHORITY, issuingAuthority, resumeId);
         Component link = new Component(LINK, this.link, resumeId);

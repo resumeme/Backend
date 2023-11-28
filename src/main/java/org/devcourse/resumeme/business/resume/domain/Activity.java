@@ -20,7 +20,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Activity extends Converter {
+public class Activity {
 
     private String activityName;
 
@@ -31,6 +31,8 @@ public class Activity extends Converter {
     private String link;
 
     private String description;
+
+    private ComponentInfo componentInfo;
 
     public Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description) {
         notNull(activityName);
@@ -45,7 +47,6 @@ public class Activity extends Converter {
 
     @Builder
     private Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description, Component component) {
-        super(component);
         notNull(activityName);
         notNull(startDate);
 
@@ -54,9 +55,9 @@ public class Activity extends Converter {
         this.endDate = endDate;
         this.link = link;
         this.description = description;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component link = new Component(LINK, this.link, resumeId);
         Component description = new Component(DESCRIPTION, this.description, resumeId);

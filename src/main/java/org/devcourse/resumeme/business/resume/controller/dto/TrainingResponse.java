@@ -30,7 +30,7 @@ public class TrainingResponse extends ComponentResponse {
     private String explanation;
 
     public TrainingResponse(Training training) {
-        super(training);
+        super(training.getComponentInfo());
         this.organization = training.getEducationalDetails().getOrganization();
         this.major = training.getEducationalDetails().getMajor();
         this.degree = training.getEducationalDetails().getDegree();

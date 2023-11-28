@@ -22,7 +22,7 @@ public class CertificationResponse extends ComponentResponse {
     private String description;
 
     public CertificationResponse(Certification certification) {
-        super(certification);
+        super(certification.getComponentInfo());
         this.certificationTitle = certification.getCertificationTitle();
         this.acquisitionDate = certification.getAcquisitionDate();
         this.issuingAuthority = certification.getIssuingAuthority();

@@ -16,7 +16,7 @@ public class ResumeLinkResponse extends ComponentResponse {
     private String url;
 
     public ResumeLinkResponse(ReferenceLink referenceLink) {
-        super(referenceLink);
+        super(referenceLink.getComponentInfo());
         this.linkType = referenceLink.getLinkType().name();
         this.url = referenceLink.getAddress();
     }

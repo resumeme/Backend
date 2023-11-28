@@ -28,7 +28,7 @@ public class ProjectResponse extends ComponentResponse {
     private String projectUrl;
 
     public ProjectResponse(Project project) {
-        super(project);
+        super(project.getComponentInfo());
         this.projectName = project.getProjectName();
         this.productionYear = project.getProductionYear();
         this.team = !project.getTeamMembers().equals("");

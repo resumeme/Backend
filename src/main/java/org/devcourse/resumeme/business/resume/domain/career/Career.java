@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.ComponentInfo;
 import org.devcourse.resumeme.business.resume.domain.Property;
 import org.devcourse.resumeme.business.resume.domain.career.Duty.DutyConverter;
 import org.devcourse.resumeme.business.resume.entity.Component;
@@ -28,7 +28,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.SKILL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Career extends Converter {
+public class Career {
 
     private String companyName;
 
@@ -41,6 +41,8 @@ public class Career extends Converter {
     private List<Duty> duties;
 
     private CareerPeriod careerPeriod;
+
+    private ComponentInfo componentInfo;
 
     public Career(String companyName, String position, List<String> skills, List<Duty> duties,
             LocalDate careerStartDate, LocalDate endDate, String careerContent) {
@@ -57,7 +59,6 @@ public class Career extends Converter {
     @Builder
     private Career(String companyName, String position, List<String> skills, List<Duty> duties,
             LocalDate careerStartDate, LocalDate endDate, String careerContent, Component component) {
-        super(component);
         validateCareer(companyName, position);
 
         this.companyName = companyName;
@@ -66,6 +67,7 @@ public class Career extends Converter {
         this.duties = duties;
         this.careerPeriod = new CareerPeriod(careerStartDate, endDate);
         this.careerContent = careerContent;
+        this.componentInfo = new ComponentInfo(component);
     }
 
     private void validateCareer(String companyName, String position) {
@@ -73,7 +75,6 @@ public class Career extends Converter {
         Validator.check(position == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component position = new Component(POSITION, this.position, resumeId);
         Component skills = new Component(SKILL, String.join(",", this.skills), resumeId);
