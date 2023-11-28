@@ -80,6 +80,15 @@ public class Duty {
 
             private Component description;
 
+            public static DutyDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return DutyDetails.builder()
+                        .description(componentMap.get(DESCRIPTION))
+                        .build();
+            }
+
         }
 
         static DutyConverter of(List<Component> components) {
@@ -95,6 +104,14 @@ public class Duty {
                     .details(details)
                     .build();
         }
+
+        static DutyConverter of(Component component) {
+            return DutyConverter.builder()
+                    .title(component)
+                    .details(DutyDetails.of(component))
+                    .build();
+        }
+
     }
 
 }

@@ -68,6 +68,13 @@ public class Training extends Converter {
         return Training.of(converter);
     }
 
+    public static List<Training> of(Component component) {
+        return component.getComponents().stream()
+                .map(TrainingConverter::of)
+                .map(Training::of)
+                .toList();
+    }
+
     private static Training of(TrainingConverter converter) {
         return Training.builder()
                 .component(converter.training)
@@ -102,6 +109,19 @@ public class Training extends Converter {
 
             private Component maxGpa;
 
+            public static TrainingDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return TrainingDetails.builder()
+                        .explanation(componentMap.get(DESCRIPTION))
+                        .degree(componentMap.get(DEGREE))
+                        .major(componentMap.get(MAJOR))
+                        .gpa(componentMap.get(SCORE))
+                        .maxGpa(componentMap.get(MAX_SCORE))
+                        .build();
+            }
+
         }
 
         private static TrainingConverter of(List<Component> components) {
@@ -119,6 +139,13 @@ public class Training extends Converter {
             return TrainingConverter.builder()
                     .training(componentMap.get(TRAINING))
                     .details(details)
+                    .build();
+        }
+
+        private static TrainingConverter of(Component component) {
+            return TrainingConverter.builder()
+                    .training(component)
+                    .details(TrainingDetails.of(component))
                     .build();
         }
 

@@ -85,6 +85,13 @@ public class Project extends Converter {
         return Project.of(converter);
     }
 
+    public static List<Project> of(Component component) {
+        return component.getComponents().stream()
+                .map(ProjectConverter::of)
+                .map(Project::of)
+                .toList();
+    }
+
     private static Project of(ProjectConverter converter) {
         return Project.builder()
                 .component(converter.project)
@@ -115,6 +122,18 @@ public class Project extends Converter {
 
             private Component skill;
 
+            public static ProjectDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ProjectDetails.builder()
+                        .url(componentMap.get(URL))
+                        .content(componentMap.get(CONTENT))
+                        .members(componentMap.get(MEMBER))
+                        .skill(componentMap.get(SKILL))
+                        .build();
+            }
+
         }
 
         private static ProjectConverter of(List<Component> components) {
@@ -131,6 +150,13 @@ public class Project extends Converter {
             return ProjectConverter.builder()
                     .project(componentMap.get(PROJECT))
                     .details(details)
+                    .build();
+        }
+
+        private static ProjectConverter of(Component component) {
+            return ProjectConverter.builder()
+                    .project(component)
+                    .details(ProjectDetails.of(component))
                     .build();
         }
 

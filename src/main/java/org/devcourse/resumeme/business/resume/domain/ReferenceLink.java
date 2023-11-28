@@ -47,6 +47,13 @@ public class ReferenceLink extends Converter {
         return ReferenceLink.of(converter);
     }
 
+    public static List<ReferenceLink> of(Component component) {
+        return component.getComponents().stream()
+                .map(ReferenceLinkConverter::of)
+                .map(ReferenceLink::of)
+                .toList();
+    }
+
     private static ReferenceLink of(ReferenceLinkConverter converter) {
         return ReferenceLink.builder()
                 .component(converter.type)
@@ -67,6 +74,15 @@ public class ReferenceLink extends Converter {
 
             private Component address;
 
+            public static ReferenceLinkDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ReferenceLinkDetails.builder()
+                        .address(componentMap.get(URL))
+                        .build();
+            }
+
         }
 
         private static ReferenceLinkConverter of(List<Component> components) {
@@ -80,6 +96,13 @@ public class ReferenceLink extends Converter {
             return ReferenceLinkConverter.builder()
                     .type(componentMap.get(TYPE))
                     .details(details)
+                    .build();
+        }
+
+        private static ReferenceLinkConverter of(Component component) {
+            return ReferenceLinkConverter.builder()
+                    .type(component)
+                    .details(ReferenceLinkDetails.of(component))
                     .build();
         }
 

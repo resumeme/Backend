@@ -70,6 +70,13 @@ public class Certification extends Converter {
         return Certification.of(converter);
     }
 
+    public static List<Certification> of(Component component) {
+        return component.getComponents().stream()
+                .map(CertificationConverter::of)
+                .map(Certification::of)
+                .toList();
+    }
+
     private static Certification of(CertificationConverter converter) {
         return Certification.builder()
                 .component(converter.certification)
@@ -99,6 +106,17 @@ public class Certification extends Converter {
 
             private Component description;
 
+            public static CertificationDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return CertificationDetails.builder()
+                        .authority(componentMap.get(AUTHORITY))
+                        .link(componentMap.get(LINK))
+                        .description(componentMap.get(DESCRIPTION))
+                        .build();
+            }
+
         }
 
         private static CertificationConverter of(List<Component> components) {
@@ -114,6 +132,13 @@ public class Certification extends Converter {
             return CertificationConverter.builder()
                     .certification(componentMap.get(TITLE))
                     .details(details)
+                    .build();
+        }
+
+        private static CertificationConverter of(Component component) {
+            return CertificationConverter.builder()
+                    .certification(component)
+                    .details(CertificationDetails.of(component))
                     .build();
         }
 

@@ -1,6 +1,13 @@
 package org.devcourse.resumeme.business.resume.controller;
 
+import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.domain.Certification;
 import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
+import org.devcourse.resumeme.business.resume.domain.Project;
+import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
+import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -42,7 +49,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Activity> converters = Activity.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(converters)
@@ -64,7 +71,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Career> converters = Career.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -86,7 +93,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Certification> converters = Certification.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -108,7 +115,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<ForeignLanguage> converters = ForeignLanguage.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -130,7 +137,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<ReferenceLink> converters = ReferenceLink.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -152,7 +159,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Project> converters = Project.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -174,7 +181,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Training> converters = Training.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())

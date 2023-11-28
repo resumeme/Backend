@@ -63,6 +63,13 @@ public class ForeignLanguage extends Converter {
         return ForeignLanguage.of(converter);
     }
 
+    public static List<ForeignLanguage> of(Component component) {
+        return component.getComponents().stream()
+                .map(ForeignLanguageConverter::of)
+                .map(ForeignLanguage::of)
+                .toList();
+    }
+
     private static ForeignLanguage of(ForeignLanguageConverter converter) {
         return ForeignLanguage.builder()
                 .component(converter.foreignLanguage)
@@ -88,6 +95,16 @@ public class ForeignLanguage extends Converter {
 
             private Component scoreOrGrade;
 
+            public static ForeignLanguageDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ForeignLanguageDetails.builder()
+                        .examName(componentMap.get(EXAM_NAME))
+                        .scoreOrGrade(componentMap.get(SCORE))
+                        .build();
+            }
+
         }
 
         public static ForeignLanguageConverter of(List<Component> components) {
@@ -102,6 +119,13 @@ public class ForeignLanguage extends Converter {
             return ForeignLanguageConverter.builder()
                     .foreignLanguage(componentMap.get(LANGUAGE))
                     .details(details)
+                    .build();
+        }
+
+        private static ForeignLanguageConverter of(Component component) {
+            return ForeignLanguageConverter.builder()
+                    .foreignLanguage(component)
+                    .details(ForeignLanguageDetails.of(component))
                     .build();
         }
 

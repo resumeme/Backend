@@ -98,6 +98,13 @@ public class Career extends Converter {
         return Career.of(converter);
     }
 
+    public static List<Career> of(Component component) {
+        return component.getComponents().stream()
+                .map(CareerConverter::of)
+                .map(Career::of)
+                .toList();
+    }
+
     private static Career of(CareerConverter converter) {
         return Career.builder()
                 .component(converter.career)
@@ -135,6 +142,17 @@ public class Career extends Converter {
 
             private Component careerContent;
 
+            public static CareerDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return CareerDetails.builder()
+                        .position(componentMap.get(POSITION))
+                        .skills(componentMap.get(SKILL))
+                        .careerContent(componentMap.get(CONTENT))
+                        .build();
+            }
+
         }
 
         private static CareerConverter of(List<Component> components) {
@@ -166,6 +184,23 @@ public class Career extends Converter {
             flatDuty.add(description);
 
             return flatDuty;
+        }
+
+        private static CareerConverter of(Component component) {
+            return CareerConverter.builder()
+                    .career(component)
+                    .details(CareerDetails.of(component))
+                    .duty(getDutyConverters(component))
+                    .build();
+        }
+
+        private static List<DutyConverter> getDutyConverters(Component component) {
+            Map<Property, Component> componentMap = component.getComponents().stream()
+                    .collect(toMap(Component::getProperty, identity()));
+
+            return componentMap.get(DUTY).getComponents().stream()
+                    .map(DutyConverter::of)
+                    .toList();
         }
 
     }
