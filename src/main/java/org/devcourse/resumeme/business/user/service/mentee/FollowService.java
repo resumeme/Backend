@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ALREADY_FOLLOWING;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EXCEEDED_FOLLOW_MAX;
@@ -50,8 +49,10 @@ public class FollowService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Follow> getFollow(Long menteeId, Long mentorId) {
-        return followRepository.findByMenteeIdAndMentorId(menteeId, mentorId);
+    public Long getFollow(Long menteeId, Long mentorId) {
+        return followRepository.findByMenteeIdAndMentorId(menteeId, mentorId)
+                .map(Follow::getId)
+                .orElse(null);
     }
 
     private boolean isFollowing(List<Follow> followList, Long mentorId) {
