@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import org.devcourse.resumeme.business.resume.service.vo.ReferenceLinkDomainVo;
 
 @Getter @Setter
 @NoArgsConstructor
-@JsonTypeName("links")
 public class ResumeLinkRequest extends ComponentCreateRequest {
 
     private String linkType;

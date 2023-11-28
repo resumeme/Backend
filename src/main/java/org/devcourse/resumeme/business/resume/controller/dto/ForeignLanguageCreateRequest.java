@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +8,6 @@ import org.devcourse.resumeme.business.resume.service.vo.ForeignLanguageDomainVo
 
 @Getter @Setter
 @NoArgsConstructor
-@JsonTypeName("foreignLanguages")
 public class ForeignLanguageCreateRequest extends ComponentCreateRequest {
 
     private String language;

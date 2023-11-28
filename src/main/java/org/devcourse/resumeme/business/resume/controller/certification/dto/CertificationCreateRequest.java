@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.controller.certification.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import org.devcourse.resumeme.business.resume.service.vo.CertificationDomainVo;
 
 @Getter @Setter
 @NoArgsConstructor
-@JsonTypeName("certifications")
 public class CertificationCreateRequest extends ComponentCreateRequest {
 
     private String certificationTitle;
