@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +20,15 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ForeignLanguage extends Converter {
+public class ForeignLanguage {
 
     private String language;
 
     private String examName;
 
     private String scoreOrGrade;
+
+    private ComponentInfo componentInfo;
 
     public ForeignLanguage(String language, String examName, String scoreOrGrade) {
         notNull(language);
@@ -39,7 +42,6 @@ public class ForeignLanguage extends Converter {
 
     @Builder
     private ForeignLanguage(String language, String examName, String scoreOrGrade, Component component) {
-        super(component);
         notNull(language);
         notNull(examName);
         notNull(scoreOrGrade);
@@ -47,9 +49,9 @@ public class ForeignLanguage extends Converter {
         this.language = language;
         this.examName = examName;
         this.scoreOrGrade = scoreOrGrade;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component examName = new Component(EXAM_NAME, this.examName, resumeId);
         Component scoreOrGrade = new Component(SCORE, this.scoreOrGrade, resumeId);
@@ -61,6 +63,17 @@ public class ForeignLanguage extends Converter {
         ForeignLanguageConverter converter = ForeignLanguageConverter.of(components);
 
         return ForeignLanguage.of(converter);
+    }
+
+    public static List<ForeignLanguage> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
+        return component.getComponents().stream()
+                .map(ForeignLanguageConverter::of)
+                .map(ForeignLanguage::of)
+                .toList();
     }
 
     private static ForeignLanguage of(ForeignLanguageConverter converter) {
@@ -88,6 +101,16 @@ public class ForeignLanguage extends Converter {
 
             private Component scoreOrGrade;
 
+            public static ForeignLanguageDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ForeignLanguageDetails.builder()
+                        .examName(componentMap.get(EXAM_NAME))
+                        .scoreOrGrade(componentMap.get(SCORE))
+                        .build();
+            }
+
         }
 
         public static ForeignLanguageConverter of(List<Component> components) {
@@ -102,6 +125,13 @@ public class ForeignLanguage extends Converter {
             return ForeignLanguageConverter.builder()
                     .foreignLanguage(componentMap.get(LANGUAGE))
                     .details(details)
+                    .build();
+        }
+
+        private static ForeignLanguageConverter of(Component component) {
+            return ForeignLanguageConverter.builder()
+                    .foreignLanguage(component)
+                    .details(ForeignLanguageDetails.of(component))
                     .build();
         }
 

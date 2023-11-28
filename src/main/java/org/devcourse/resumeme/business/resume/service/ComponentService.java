@@ -2,8 +2,14 @@ package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
-import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.domain.Certification;
+import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
+import org.devcourse.resumeme.business.resume.domain.Project;
 import org.devcourse.resumeme.business.resume.domain.Property;
+import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
+import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
@@ -11,12 +17,19 @@ import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
+import static org.devcourse.resumeme.business.resume.domain.Property.ACTIVITIES;
+import static org.devcourse.resumeme.business.resume.domain.Property.CAREERS;
+import static org.devcourse.resumeme.business.resume.domain.Property.CERTIFICATIONS;
+import static org.devcourse.resumeme.business.resume.domain.Property.FOREIGNLANGUAGES;
+import static org.devcourse.resumeme.business.resume.domain.Property.LINKS;
+import static org.devcourse.resumeme.business.resume.domain.Property.PROJECTS;
+import static org.devcourse.resumeme.business.resume.domain.Property.TRAININGS;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
 
 @Service
@@ -54,17 +67,17 @@ public class ComponentService {
                 .filter(component -> component.getProperty().isType(type))
                 .toList();
 
-        Map<Property, List<Converter>> response = components.stream()
-                .collect(toMap(Component::getProperty, Converter::of));
+        Map<Property, Component> response = components.stream()
+                .collect(toMap(Component::getProperty, Function.identity()));
 
         return ResumeTemplate.builder()
-                .activity(response.getOrDefault(Property.ACTIVITIES, new ArrayList<>()))
-                .career(response.getOrDefault(Property.CAREERS, new ArrayList<>()))
-                .certification(response.getOrDefault(Property.CERTIFICATIONS, new ArrayList<>()))
-                .foreignLanguage(response.getOrDefault(Property.FOREIGNLANGUAGES, new ArrayList<>()))
-                .project(response.getOrDefault(Property.PROJECTS, new ArrayList<>()))
-                .training(response.getOrDefault(Property.TRAININGS, new ArrayList<>()))
-                .referenceLink(response.getOrDefault(Property.LINKS, new ArrayList<>()))
+                .activity(Activity.of(response.get(ACTIVITIES)))
+                .career(Career.of(response.get(CAREERS)))
+                .certification(Certification.of(response.get(CERTIFICATIONS)))
+                .foreignLanguage(ForeignLanguage.of(response.get(FOREIGNLANGUAGES)))
+                .project(Project.of(response.get(PROJECTS)))
+                .training(Training.of(response.get(TRAININGS)))
+                .referenceLink(ReferenceLink.of(response.get(LINKS)))
                 .build();
     }
 

@@ -3,7 +3,6 @@ package org.devcourse.resumeme.business.resume.controller.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
-import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.Training;
 
 import java.time.LocalDate;
@@ -30,9 +29,8 @@ public class TrainingResponse extends ComponentResponse {
 
     private String explanation;
 
-    public TrainingResponse(Converter converter) {
-        super(converter);
-        Training training = (Training) converter;
+    public TrainingResponse(Training training) {
+        super(training.getComponentInfo());
         this.organization = training.getEducationalDetails().getOrganization();
         this.major = training.getEducationalDetails().getMajor();
         this.degree = training.getEducationalDetails().getDegree();

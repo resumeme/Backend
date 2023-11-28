@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.devcourse.resumeme.business.resume.domain.LinkType;
 import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
+import org.devcourse.resumeme.business.resume.service.vo.ReferenceLinkDomainVo;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -21,8 +22,10 @@ public class ResumeLinkRequest extends ComponentCreateRequest {
         this.url = url;
     }
 
-    public ReferenceLink toEntity() {
-        return new ReferenceLink(LinkType.valueOf(linkType), url);
+    public ReferenceLinkDomainVo toVo() {
+        ReferenceLink referenceLink = new ReferenceLink(LinkType.valueOf(linkType), url);
+
+        return new ReferenceLinkDomainVo(referenceLink);
     }
 
 }

@@ -1,11 +1,11 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.service.vo.ActivityDomainVo;
 
 import java.time.LocalDate;
 
@@ -43,8 +43,10 @@ public class ActivityCreateRequest extends ComponentCreateRequest {
     }
 
     @Override
-    public Activity toEntity() {
-        return new Activity(activityName, startDate, endDate, link, description);
+    public ActivityDomainVo toVo() {
+        Activity activity = new Activity(activityName, startDate, endDate, link, description);
+
+        return new ActivityDomainVo(activity);
     }
 
 }

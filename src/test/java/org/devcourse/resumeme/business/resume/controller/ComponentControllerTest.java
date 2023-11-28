@@ -215,7 +215,7 @@ class ComponentControllerTest extends ControllerUnitTest {
     }
 
     private Component getComponent(ComponentCreateRequest request) {
-        return request.toEntity().toComponent(1L);
+        return request.toVo().toComponent(1L);
     }
 
     static Stream<Arguments> componentRequest() {

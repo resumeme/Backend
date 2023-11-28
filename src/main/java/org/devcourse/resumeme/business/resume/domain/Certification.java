@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Certification extends Converter {
+public class Certification {
 
     private String certificationTitle;
 
@@ -32,6 +33,8 @@ public class Certification extends Converter {
     private String link;
 
     private String description;
+
+    private ComponentInfo componentInfo;
 
     public Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description) {
         notNull(certificationTitle);
@@ -45,7 +48,6 @@ public class Certification extends Converter {
 
     @Builder
     private Certification(String certificationTitle, String acquisitionDate, String issuingAuthority, String link, String description, Component component) {
-        super(component);
         notNull(certificationTitle);
 
         this.certificationTitle = certificationTitle;
@@ -53,9 +55,9 @@ public class Certification extends Converter {
         this.issuingAuthority = issuingAuthority;
         this.link = link;
         this.description = description;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component authority = new Component(AUTHORITY, issuingAuthority, resumeId);
         Component link = new Component(LINK, this.link, resumeId);
@@ -68,6 +70,17 @@ public class Certification extends Converter {
         CertificationConverter converter = CertificationConverter.of(components);
 
         return Certification.of(converter);
+    }
+
+    public static List<Certification> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
+        return component.getComponents().stream()
+                .map(CertificationConverter::of)
+                .map(Certification::of)
+                .toList();
     }
 
     private static Certification of(CertificationConverter converter) {
@@ -99,6 +112,17 @@ public class Certification extends Converter {
 
             private Component description;
 
+            public static CertificationDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return CertificationDetails.builder()
+                        .authority(componentMap.get(AUTHORITY))
+                        .link(componentMap.get(LINK))
+                        .description(componentMap.get(DESCRIPTION))
+                        .build();
+            }
+
         }
 
         private static CertificationConverter of(List<Component> components) {
@@ -114,6 +138,13 @@ public class Certification extends Converter {
             return CertificationConverter.builder()
                     .certification(componentMap.get(TITLE))
                     .details(details)
+                    .build();
+        }
+
+        private static CertificationConverter of(Component component) {
+            return CertificationConverter.builder()
+                    .certification(component)
+                    .details(CertificationDetails.of(component))
                     .build();
         }
 

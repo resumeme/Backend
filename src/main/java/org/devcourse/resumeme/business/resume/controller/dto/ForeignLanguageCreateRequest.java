@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
+import org.devcourse.resumeme.business.resume.service.vo.ForeignLanguageDomainVo;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -28,8 +29,10 @@ public class ForeignLanguageCreateRequest extends ComponentCreateRequest {
     }
 
     @Override
-    public ForeignLanguage toEntity() {
-        return new ForeignLanguage(language, examName, scoreOrGrade);
+    public ForeignLanguageDomainVo toVo() {
+        ForeignLanguage foreignLanguage = new ForeignLanguage(language, examName, scoreOrGrade);
+
+        return new ForeignLanguageDomainVo(foreignLanguage);
     }
 
 }

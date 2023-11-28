@@ -9,6 +9,7 @@ import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Project extends Converter {
+public class Project {
 
     private String projectName;
 
@@ -36,6 +37,8 @@ public class Project extends Converter {
     private String projectContent;
 
     private String projectUrl;
+
+    private ComponentInfo componentInfo;
 
     public Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
             String projectContent, String projectUrl) {
@@ -52,7 +55,6 @@ public class Project extends Converter {
     @Builder
     private Project(String projectName, Long productionYear, String teamMembers, List<String> skills,
             String projectContent, String projectUrl, Component component) {
-        super(component);
         validateProject(projectName, productionYear);
 
         this.projectName = projectName;
@@ -61,6 +63,7 @@ public class Project extends Converter {
         this.skills = skills;
         this.projectContent = projectContent;
         this.projectUrl = projectUrl;
+        this.componentInfo = new ComponentInfo(component);
     }
 
     private void validateProject(String projectName, Long productionYear) {
@@ -68,7 +71,6 @@ public class Project extends Converter {
         Validator.check(productionYear == null, ExceptionCode.NO_EMPTY_VALUE);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component url = new Component(URL, projectUrl, resumeId);
         Component content = new Component(CONTENT, projectContent, resumeId);
@@ -83,6 +85,17 @@ public class Project extends Converter {
         ProjectConverter converter = ProjectConverter.of(components);
 
         return Project.of(converter);
+    }
+
+    public static List<Project> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
+        return component.getComponents().stream()
+                .map(ProjectConverter::of)
+                .map(Project::of)
+                .toList();
     }
 
     private static Project of(ProjectConverter converter) {
@@ -115,6 +128,18 @@ public class Project extends Converter {
 
             private Component skill;
 
+            public static ProjectDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ProjectDetails.builder()
+                        .url(componentMap.get(URL))
+                        .content(componentMap.get(CONTENT))
+                        .members(componentMap.get(MEMBER))
+                        .skill(componentMap.get(SKILL))
+                        .build();
+            }
+
         }
 
         private static ProjectConverter of(List<Component> components) {
@@ -131,6 +156,13 @@ public class Project extends Converter {
             return ProjectConverter.builder()
                     .project(componentMap.get(PROJECT))
                     .details(details)
+                    .build();
+        }
+
+        private static ProjectConverter of(Component component) {
+            return ProjectConverter.builder()
+                    .project(component)
+                    .details(ProjectDetails.of(component))
                     .build();
         }
 

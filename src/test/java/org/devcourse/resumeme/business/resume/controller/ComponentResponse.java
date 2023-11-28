@@ -1,6 +1,12 @@
 package org.devcourse.resumeme.business.resume.controller;
 
-import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.domain.Certification;
+import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
+import org.devcourse.resumeme.business.resume.domain.Project;
+import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
+import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -34,7 +40,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 public class ComponentResponse {
 
     public static ResumeTemplate activityResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = activityCreateRequest().toEntity().toComponent(1L);
+        Component component = activityCreateRequest().toVo().toComponent(1L);
         Component superComponent = new Component(ACTIVITIES, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -42,7 +48,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Activity> converters = Activity.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(converters)
@@ -56,7 +62,7 @@ public class ComponentResponse {
     }
 
     public static ResumeTemplate careerResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = careerCreateRequest().toEntity().toComponent(1L);
+        Component component = careerCreateRequest().toVo().toComponent(1L);
         Component superComponent = new Component(CAREERS, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -64,7 +70,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Career> converters = Career.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -78,7 +84,7 @@ public class ComponentResponse {
     }
 
     public static ResumeTemplate certificationResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = certificationCreateRequest().toEntity().toComponent(1L);
+        Component component = certificationCreateRequest().toVo().toComponent(1L);
         Component superComponent = new Component(CERTIFICATIONS, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -86,7 +92,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Certification> converters = Certification.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -100,7 +106,7 @@ public class ComponentResponse {
     }
 
     public static ResumeTemplate foreignLanguageResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = foreignLanguageCreateRequest().toEntity().toComponent(1L);
+        Component component = foreignLanguageCreateRequest().toVo().toComponent(1L);
         Component superComponent = new Component(FOREIGNLANGUAGES, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -108,7 +114,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<ForeignLanguage> converters = ForeignLanguage.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -122,7 +128,7 @@ public class ComponentResponse {
     }
 
     public static ResumeTemplate referenceLinkResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = resumeLinkRequest().toEntity().toComponent(1L);
+        Component component = resumeLinkRequest().toVo().toComponent(1L);
         Component superComponent = new Component(LINKS, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -130,7 +136,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<ReferenceLink> converters = ReferenceLink.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -144,7 +150,7 @@ public class ComponentResponse {
     }
 
     public static ResumeTemplate projectResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = projectCreateRequest().toEntity().toComponent(1L);
+        Component component = projectCreateRequest().toVo().toComponent(1L);
         Component superComponent = new Component(PROJECTS, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -152,7 +158,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Project> converters = Project.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())
@@ -166,7 +172,7 @@ public class ComponentResponse {
     }
 
     public static ResumeTemplate trainingResumeTemplate() throws NoSuchFieldException, IllegalAccessException {
-        Component component = trainingCreateRequest().toEntity().toComponent(1L);
+        Component component = trainingCreateRequest().toVo().toComponent(1L);
         Component superComponent = new Component(TRAININGS, null, null, null, 1L, List.of(component));
         Field id = component.getClass().getDeclaredField("id");
         id.setAccessible(true);
@@ -174,7 +180,7 @@ public class ComponentResponse {
         Field field = component.getClass().getDeclaredField("originComponentId");
         field.setAccessible(true);
         field.set(component, 2L);
-        List<Converter> converters = Converter.of(superComponent);
+        List<Training> converters = Training.of(superComponent);
 
         return ResumeTemplate.builder()
                 .activity(List.of())

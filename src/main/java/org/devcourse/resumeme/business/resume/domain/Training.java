@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ import static org.devcourse.resumeme.business.resume.domain.Property.TRAINING;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Training extends Converter {
+public class Training {
 
     private String explanation;
 
@@ -31,6 +32,8 @@ public class Training extends Converter {
     private DateDetails dateDetails;
 
     private GPADetails gpaDetails;
+
+    private ComponentInfo componentInfo;
 
     public Training(String organization, String major, String degree, LocalDate admissionDate,
             LocalDate graduationDate, double gpa, double maxGpa, String explanation) {
@@ -43,14 +46,13 @@ public class Training extends Converter {
     @Builder
     private Training(String organization, String major, String degree, LocalDate admissionDate,
             LocalDate graduationDate, double gpa, double maxGpa, String explanation, Component component) {
-        super(component);
         this.educationalDetails = new EducationalDetails(organization, major, degree);
         this.dateDetails = new DateDetails(admissionDate, graduationDate);
         this.gpaDetails = new GPADetails(gpa, maxGpa);
         this.explanation = explanation;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component explanation = new Component(DESCRIPTION, this.explanation, resumeId);
         Component degree = new Component(DEGREE, educationalDetails.getDegree(), resumeId);
@@ -66,6 +68,17 @@ public class Training extends Converter {
         TrainingConverter converter = TrainingConverter.of(components);
 
         return Training.of(converter);
+    }
+
+    public static List<Training> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
+        return component.getComponents().stream()
+                .map(TrainingConverter::of)
+                .map(Training::of)
+                .toList();
     }
 
     private static Training of(TrainingConverter converter) {
@@ -102,6 +115,19 @@ public class Training extends Converter {
 
             private Component maxGpa;
 
+            public static TrainingDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return TrainingDetails.builder()
+                        .explanation(componentMap.get(DESCRIPTION))
+                        .degree(componentMap.get(DEGREE))
+                        .major(componentMap.get(MAJOR))
+                        .gpa(componentMap.get(SCORE))
+                        .maxGpa(componentMap.get(MAX_SCORE))
+                        .build();
+            }
+
         }
 
         private static TrainingConverter of(List<Component> components) {
@@ -119,6 +145,13 @@ public class Training extends Converter {
             return TrainingConverter.builder()
                     .training(componentMap.get(TRAINING))
                     .details(details)
+                    .build();
+        }
+
+        private static TrainingConverter of(Component component) {
+            return TrainingConverter.builder()
+                    .training(component)
+                    .details(TrainingDetails.of(component))
                     .build();
         }
 

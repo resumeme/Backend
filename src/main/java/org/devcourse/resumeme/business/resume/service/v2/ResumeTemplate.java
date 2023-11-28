@@ -2,31 +2,37 @@ package org.devcourse.resumeme.business.resume.service.v2;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.devcourse.resumeme.business.resume.domain.Converter;
+import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.domain.Certification;
+import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
+import org.devcourse.resumeme.business.resume.domain.Project;
+import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
+import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.domain.career.Career;
 
 import java.util.List;
 
 @Getter
 public class ResumeTemplate {
 
-    private List<Converter> activity;
+    private List<Activity> activity;
 
-    private List<Converter> career;
+    private List<Career> career;
 
-    private List<Converter> certification;
+    private List<Certification> certification;
 
-    private List<Converter> foreignLanguage;
+    private List<ForeignLanguage> foreignLanguage;
 
-    private List<Converter> project;
+    private List<Project> project;
 
-    private List<Converter> training;
+    private List<Training> training;
 
-    private List<Converter> referenceLink;
+    private List<ReferenceLink> referenceLink;
 
     @Builder
-    public ResumeTemplate(List<Converter> activity, List<Converter> career,
-            List<Converter> certification, List<Converter> foreignLanguage,
-            List<Converter> project, List<Converter> training, List<Converter> referenceLink) {
+    public ResumeTemplate(List<Activity> activity, List<Career> career,
+            List<Certification> certification, List<ForeignLanguage> foreignLanguage,
+            List<Project> project, List<Training> training, List<ReferenceLink> referenceLink) {
         this.activity = activity;
         this.career = career;
         this.certification = certification;

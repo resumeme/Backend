@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +17,13 @@ import static org.devcourse.resumeme.business.resume.domain.Property.URL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReferenceLink extends Converter {
+public class ReferenceLink {
 
     private LinkType linkType;
 
     private String address;
+
+    private ComponentInfo componentInfo;
 
     public ReferenceLink(LinkType linkType, String address) {
         this.linkType = linkType;
@@ -29,12 +32,11 @@ public class ReferenceLink extends Converter {
 
     @Builder
     private ReferenceLink(LinkType linkType, String address, Component component) {
-        super(component);
         this.linkType = linkType;
         this.address = address;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component address = new Component(URL, this.address, resumeId);
 
@@ -45,6 +47,17 @@ public class ReferenceLink extends Converter {
         ReferenceLinkConverter converter = ReferenceLinkConverter.of(components);
 
         return ReferenceLink.of(converter);
+    }
+
+    public static List<ReferenceLink> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
+        return component.getComponents().stream()
+                .map(ReferenceLinkConverter::of)
+                .map(ReferenceLink::of)
+                .toList();
     }
 
     private static ReferenceLink of(ReferenceLinkConverter converter) {
@@ -67,6 +80,15 @@ public class ReferenceLink extends Converter {
 
             private Component address;
 
+            public static ReferenceLinkDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ReferenceLinkDetails.builder()
+                        .address(componentMap.get(URL))
+                        .build();
+            }
+
         }
 
         private static ReferenceLinkConverter of(List<Component> components) {
@@ -80,6 +102,13 @@ public class ReferenceLink extends Converter {
             return ReferenceLinkConverter.builder()
                     .type(componentMap.get(TYPE))
                     .details(details)
+                    .build();
+        }
+
+        private static ReferenceLinkConverter of(Component component) {
+            return ReferenceLinkConverter.builder()
+                    .type(component)
+                    .details(ReferenceLinkDetails.of(component))
                     .build();
         }
 

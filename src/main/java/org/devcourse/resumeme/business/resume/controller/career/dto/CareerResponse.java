@@ -2,7 +2,6 @@ package org.devcourse.resumeme.business.resume.controller.career.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.Converter;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
 
@@ -31,9 +30,8 @@ public class CareerResponse extends ComponentResponse {
 
     private String careerContent;
 
-    public CareerResponse(Converter converter) {
-        super(converter);
-        Career career = (Career) converter;
+    public CareerResponse(Career career) {
+        super(career.getComponentInfo());
         this.companyName = career.getCompanyName();
         this.position = career.getPosition();
         this.skills = career.getSkills();

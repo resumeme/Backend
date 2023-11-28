@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Activity extends Converter {
+public class Activity {
 
     private String activityName;
 
@@ -31,6 +32,8 @@ public class Activity extends Converter {
     private String link;
 
     private String description;
+
+    private ComponentInfo componentInfo;
 
     public Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description) {
         notNull(activityName);
@@ -45,7 +48,6 @@ public class Activity extends Converter {
 
     @Builder
     private Activity(String activityName, LocalDate startDate, LocalDate endDate, String link, String description, Component component) {
-        super(component);
         notNull(activityName);
         notNull(startDate);
 
@@ -54,9 +56,9 @@ public class Activity extends Converter {
         this.endDate = endDate;
         this.link = link;
         this.description = description;
+        this.componentInfo = new ComponentInfo(component);
     }
 
-    @Override
     public Component toComponent(Long resumeId) {
         Component link = new Component(LINK, this.link, resumeId);
         Component description = new Component(DESCRIPTION, this.description, resumeId);
@@ -70,14 +72,25 @@ public class Activity extends Converter {
         return Activity.of(converter);
     }
 
+    public static List<Activity> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
+        return component.getComponents().stream()
+                .map(ActivityConverter::of)
+                .map(Activity::of)
+                .toList();
+    }
+
     private static Activity of(ActivityConverter converter) {
         return Activity.builder()
                 .component(converter.activity)
                 .activityName(converter.activity.getContent())
                 .startDate(converter.activity.getStartDate())
                 .endDate(converter.activity.getEndDate())
-                .link(converter.activityName.link.getContent())
-                .description(converter.activityName.description.getContent())
+                .link(converter.details.link.getContent())
+                .description(converter.details.description.getContent())
                 .build();
     }
 
@@ -86,14 +99,24 @@ public class Activity extends Converter {
 
         private Component activity;
 
-        private ActivityNameComponent activityName;
+        private ActivityDetails details;
 
         @Builder
-        private static class ActivityNameComponent {
+        private static class ActivityDetails {
 
             private Component link;
 
             private Component description;
+
+            private static ActivityDetails of(Component component) {
+                Map<Property, Component> componentMap = component.getComponents().stream()
+                        .collect(toMap(Component::getProperty, identity()));
+
+                return ActivityDetails.builder()
+                        .link(componentMap.get(LINK))
+                        .description(componentMap.get(DESCRIPTION))
+                        .build();
+            }
 
         }
 
@@ -101,16 +124,24 @@ public class Activity extends Converter {
             Map<Property, Component> componentMap = components.stream()
                     .collect(toMap(Component::getProperty, identity()));
 
-            ActivityNameComponent activityName = ActivityNameComponent.builder()
+            ActivityDetails activityName = ActivityDetails.builder()
                     .link(requireNonNull(componentMap.get(LINK)))
                     .description(requireNonNull(componentMap.get(DESCRIPTION)))
                     .build();
 
             return ActivityConverter.builder()
-                    .activityName(activityName)
+                    .details(activityName)
                     .activity(requireNonNull(componentMap.get(TITLE)))
                     .build();
         }
+
+        private static ActivityConverter of(Component component) {
+            return ActivityConverter.builder()
+                    .activity(component)
+                    .details(ActivityDetails.of(component))
+                    .build();
+        }
+
     }
 
 }
