@@ -32,7 +32,7 @@ endpoint:
         delete: /api/v1/resumes/**
       role: own_mentee
     - matcher:
-        get: /api/v1/admin/**
-        post: /api/v1/admin/**
+        get: /admin/**
+        post: /admin/**
       role: admin
   ignores: /docs/**
