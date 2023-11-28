@@ -74,7 +74,7 @@ public class EventService {
         updateVo.update(event);
     }
 
-    public void checkCommentAvailiableDate(Long eventId) {
+    public void checkCommentAvailableDate(Long eventId) {
         Event event = getOne(eventId);
         event.checkDate();
     }

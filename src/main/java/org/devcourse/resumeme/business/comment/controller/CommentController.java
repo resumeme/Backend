@@ -35,7 +35,7 @@ public class CommentController {
 
     @PostMapping
     public CommentResponse createReview(@PathVariable Long eventId, @PathVariable Long resumeId, @RequestBody CommentCreateRequest request) {
-        eventService.checkCommentAvailiableDate(eventId);
+        eventService.checkCommentAvailableDate(eventId);
         Resume resume = resumeService.getOne(resumeId);
         Comment review = commentService.create(request.toEntity(resume), resumeId);
 
