@@ -14,10 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.InstanceOfAssertFactories.INTEGER;
 import static org.assertj.core.api.InstanceOfAssertFactories.LONG;
+import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ALREADY_FOLLOWING;
@@ -145,6 +147,34 @@ class FollowControllerTest extends ControllerUnitTest {
                         )
                 );
 
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 멘티는_멘토_아이디로_팔로우_여부를_조회할_수_있다() throws Exception {
+        // given
+        Optional<Follow> follow = Optional.of(new Follow(1L, 1L));
+        setId(follow.get(), 1L);
+
+        given(followService.getFollow(any(Long.class), any(Long.class))).willReturn(any(Long.class));
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/follows/mentors/{mentorId}", 1L));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("follows/find",
+                                getDocumentRequest(),
+                                pathParameters(
+                                        parameterWithName("mentorId").description("팔로우 여부 조회할 멘토 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("팔로우 아이디").attributes(constraints("팔로우 상태가 아닐경우 null"))
+                                )
+                        )
+                );
     }
 
     @Test

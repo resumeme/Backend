@@ -40,8 +40,14 @@ public class FollowController {
                 .toList();
     }
 
+    @GetMapping("/mentors/{mentorId}")
+    public IdResponse getFollow(@AuthenticationPrincipal JwtUser user, @PathVariable Long mentorId) {
+        return new IdResponse(followService.getFollow(user.id(), mentorId));
+    }
+
     @PostMapping
     public IdResponse doFollow(@RequestBody FollowRequest request, @AuthenticationPrincipal JwtUser user) {
+        mentorService.getOne(request.mentorId());
         Follow follow = new Follow(user.id(), request.mentorId());
         Long followId = followService.create(follow);
 

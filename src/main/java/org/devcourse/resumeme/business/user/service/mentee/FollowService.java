@@ -48,6 +48,13 @@ public class FollowService {
         followRepository.deleteById(followId);
     }
 
+    @Transactional(readOnly = true)
+    public Long getFollow(Long menteeId, Long mentorId) {
+        return followRepository.findByMenteeIdAndMentorId(menteeId, mentorId)
+                .map(Follow::getId)
+                .orElse(null);
+    }
+
     private boolean isFollowing(List<Follow> followList, Long mentorId) {
         return followList.stream().anyMatch(follow -> follow.getMentorId().equals(mentorId));
     }

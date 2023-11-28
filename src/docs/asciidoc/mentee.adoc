@@ -324,6 +324,16 @@ include::{snippets}/follows/getAll/http-request.adoc[]
 include::{snippets}/follows/getAll/http-response.adoc[]
 include::{snippets}/follows/getAll/response-fields.adoc[]
 
+=== 특정 멘토 팔로우 여부 확인하기
+*Request*
+include::{snippets}/follows/find/http-request.adoc[]
+include::{snippets}/follows/find/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/follows/find/http-response.adoc[]
+include::{snippets}/follows/find/response-fields.adoc[]
+
+
 === 멘토 팔로우 취소하기
 
 *Request*
