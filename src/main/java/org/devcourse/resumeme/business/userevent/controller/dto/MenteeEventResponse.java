@@ -10,7 +10,7 @@ public record MenteeEventResponse(Long eventId, Long resumeId, String status, St
 
     public MenteeEventResponse(MenteeToEvent applicant, Event event) {
         this(event.getId(), applicant.getResumeId(), applicant.getProgress().name(), event.getEventInfo().getTitle(),
-                event.getMentor().getRequiredInfo().getRealName(), event.getEventTimeInfo().getOpenDateTime(), event.getEventTimeInfo().getCloseDateTime());
+                event.getMentor().getNickname(), event.getEventTimeInfo().getOpenDateTime(), event.getEventTimeInfo().getCloseDateTime());
     }
 
 }
