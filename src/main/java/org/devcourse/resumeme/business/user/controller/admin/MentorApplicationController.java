@@ -19,7 +19,7 @@ import static org.devcourse.resumeme.business.mail.service.EmailInfoGenerator.cr
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/applications")
+@RequestMapping("/admin/applications")
 public class MentorApplicationController {
 
     private final MentorService mentorService;
