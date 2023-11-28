@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Certification;
-import org.devcourse.resumeme.business.resume.domain.Converter;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -22,9 +21,8 @@ public class CertificationResponse extends ComponentResponse {
 
     private String description;
 
-    public CertificationResponse(Converter converter) {
-        super(converter);
-        Certification certification = (Certification) converter;
+    public CertificationResponse(Certification certification) {
+        super(certification);
         this.certificationTitle = certification.getCertificationTitle();
         this.acquisitionDate = certification.getAcquisitionDate();
         this.issuingAuthority = certification.getIssuingAuthority();

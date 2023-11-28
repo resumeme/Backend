@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
-import org.devcourse.resumeme.business.resume.domain.Converter;
 
 import java.time.LocalDate;
 
@@ -26,9 +25,8 @@ public class ActivityResponse extends ComponentResponse {
 
     private String description;
 
-    public ActivityResponse(Converter converter) {
-        super(converter);
-        Activity activity = (Activity) converter;
+    public ActivityResponse(Activity activity) {
+        super(activity);
         this.activityName = activity.getActivityName();
         this.startDate = activity.getStartDate();
         this.endDate = activity.getEndDate();
