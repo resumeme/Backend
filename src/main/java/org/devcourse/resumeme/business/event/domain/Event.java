@@ -1,13 +1,6 @@
 package org.devcourse.resumeme.business.event.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.event.exception.EventException;
@@ -26,11 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.EventStatus.FINISH;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_OPEN_TIME;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.*;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -211,4 +200,8 @@ public class Event extends BaseEntity implements Comparable<Event> {
         this.eventTimeInfo.update(openDateTime, closeDateTime, endDateTime);
     }
 
+    public void checkDate() {
+        LocalDateTime now = LocalDateTime.now();
+        eventTimeInfo.checkDate(now);
+    }
 }

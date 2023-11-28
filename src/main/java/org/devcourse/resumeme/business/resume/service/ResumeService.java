@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.event.service.ParticipantProvider;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.domain.model.ResumeUpdateModel;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
@@ -19,6 +20,8 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_F
 public class ResumeService {
 
     private final ResumeRepository resumeRepository;
+
+    private final ParticipantProvider participantProvider;
 
     public Long create(Resume resume) {
         Resume saved = resumeRepository.save(resume);
@@ -55,6 +58,8 @@ public class ResumeService {
         ResumeUpdateModel model = update.toModel();
 
         model.update(resume);
+
+        participantProvider.finishProgress(resume.menteeId(), resumeId);
     }
 
 }

@@ -74,6 +74,11 @@ public class EventService {
         updateVo.update(event);
     }
 
+    public void checkCommentAvailableDate(Long eventId) {
+        Event event = getOne(eventId);
+        event.checkDate();
+    }
+
     @Scheduled(cron = "0 0/1 * * * *")
     public void openBookedEvents() {
         log.info("scheduler 실행 됨");
@@ -81,5 +86,4 @@ public class EventService {
         eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
         eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
     }
-
 }

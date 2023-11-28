@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.CAN_NOT_RESERVATION;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.TIME_ERROR;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.*;
 
 @Embeddable
 @NoArgsConstructor(access = PROTECTED)
@@ -67,4 +66,8 @@ public class EventTimeInfo {
         this.endDate = endDateTime;
     }
 
+    public void checkDate(LocalDateTime now) {
+        check(now.isBefore(openDateTime) || now.isAfter(endDate), NOT_AVAILABLE_COMMENT_TIME);
+
+    }
 }
