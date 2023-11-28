@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,10 @@ public class Activity {
     }
 
     public static List<Activity> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
         return component.getComponents().stream()
                 .map(ActivityConverter::of)
                 .map(Activity::of)

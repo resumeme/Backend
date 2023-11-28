@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.resume.entity.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +66,10 @@ public class ForeignLanguage {
     }
 
     public static List<ForeignLanguage> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
         return component.getComponents().stream()
                 .map(ForeignLanguageConverter::of)
                 .map(ForeignLanguage::of)

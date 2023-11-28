@@ -8,11 +8,14 @@ import org.devcourse.resumeme.business.resume.controller.career.dto.ComponentRes
 import org.devcourse.resumeme.business.resume.controller.dto.ActivityCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.ActivityResponse;
 import org.devcourse.resumeme.business.resume.domain.Activity;
+import org.devcourse.resumeme.business.resume.domain.ComponentInfo;
+import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.entity.Snapshot;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +40,11 @@ class SnapshotControllerTest extends ControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         ActivityCreateRequest request = activityCreateRequest();
-        Activity entity = request.toEntity();
+        Component component = request.toVo().toComponent(1L);
+        Activity entity = new Activity(request.getActivityName(), request.getStartDate(), request.getEndDate(), request.getLink(), request.getDescription());
+        Field field = entity.getClass().getDeclaredField("componentInfo");
+        field.setAccessible(true);
+        field.set(entity, new ComponentInfo(component));
         ActivityResponse response = new ActivityResponse(entity);
 
         List<ComponentResponse> response1 = List.of(response);

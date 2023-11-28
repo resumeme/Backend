@@ -9,6 +9,7 @@ import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,10 @@ public class Project {
     }
 
     public static List<Project> of(Component component) {
+        if (component == null) {
+            return new ArrayList<>();
+        }
+
         return component.getComponents().stream()
                 .map(ProjectConverter::of)
                 .map(Project::of)
