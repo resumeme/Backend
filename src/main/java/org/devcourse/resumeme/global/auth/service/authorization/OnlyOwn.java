@@ -8,18 +8,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
 public class OnlyOwn implements AuthorizationManager<RequestAuthorizationContext> {
 
-    private final String target;
+    private final List<String> target;
 
     private final String role;
 
     private final AuthorizationResolver resolver;
 
-    public OnlyOwn(String target, String role, AuthorizationResolver resolver) {
+    public OnlyOwn(List<String> target, String role, AuthorizationResolver resolver) {
         this.target = target;
         this.role = role;
         this.resolver = resolver;
@@ -33,8 +34,8 @@ public class OnlyOwn implements AuthorizationManager<RequestAuthorizationContext
             String[] parameters = uri.split("/");
 
             for (int i = 0; i < parameters.length; i++) {
-                if (parameters[i].equals(target)) {
-                    return new AuthorizationDecision(resolver.resolve(userId, Long.valueOf(parameters[i + 1]), target));
+                if (target.contains(parameters[i])) {
+                    return new AuthorizationDecision(resolver.resolve(userId, Long.valueOf(parameters[i + 1]), parameters[i]));
                 }
             }
             log.debug("해당 사용자의 개인 리소스가 아님");
