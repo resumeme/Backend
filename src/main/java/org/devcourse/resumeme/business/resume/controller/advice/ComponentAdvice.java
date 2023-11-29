@@ -2,7 +2,7 @@ package org.devcourse.resumeme.business.resume.controller.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.v2.ComponentCreateRequestV2;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -32,18 +32,28 @@ public class ComponentAdvice implements RequestBodyAdvice {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return methodParameter.getParameterType().equals(ComponentCreateRequest.class);
+        return methodParameter.getParameterType().equals(ComponentCreateRequestV2.class);
     }
 
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
         Map<String, Object> result = objectMapper.readValue(inputMessage.getBody(), HashMap.class);
-        result.put(TYPE, getTypeFromPathVariable());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("activities", null);
+        response.put("careers", null);
+        response.put("certifications", null);
+        response.put("foreignLanguages", null);
+        response.put("projects", null);
+        response.put("trainings", null);
+        response.put("links", null);
+
+        response.put(getTypeFromPathVariable(), result);
 
         return new HttpInputMessage() {
             @Override
             public InputStream getBody() throws IOException {
-                String inputString = objectMapper.writeValueAsString(result);
+                String inputString = objectMapper.writeValueAsString(response);
 
                 return new ByteArrayInputStream(inputString.getBytes(UTF_8));
             }

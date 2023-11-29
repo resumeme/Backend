@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.controller.career.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
-@JsonTypeName("careers")
 public class CareerCreateRequest extends ComponentCreateRequest {
 
     private String companyName;

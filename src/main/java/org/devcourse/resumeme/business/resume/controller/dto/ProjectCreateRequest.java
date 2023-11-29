@@ -1,6 +1,5 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
-@JsonTypeName("projects")
 public class ProjectCreateRequest extends ComponentCreateRequest {
 
     private String projectName;
