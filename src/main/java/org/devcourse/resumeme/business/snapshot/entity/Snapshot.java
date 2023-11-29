@@ -40,12 +40,11 @@ public class Snapshot {
         this.commentData = commentData;
     }
 
-    public String get(String type) {
-        if (type.equals("resume")) {
-            return resumeData;
-        }
-
-        return commentData;
+    public String get(SnapshotType type) {
+        return switch (type) {
+            case RESUME -> resumeData;
+            case COMMENT -> commentData;
+        };
     }
 
 }

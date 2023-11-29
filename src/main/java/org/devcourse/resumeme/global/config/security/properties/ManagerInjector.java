@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.global.auth.service.authorization.AuthorizationTarget.EVENTS;
+import static org.devcourse.resumeme.global.auth.service.authorization.AuthorizationTarget.MENTEES;
+import static org.devcourse.resumeme.global.auth.service.authorization.AuthorizationTarget.MENTORS;
+import static org.devcourse.resumeme.global.auth.service.authorization.AuthorizationTarget.RESUMES;
 import static org.devcourse.resumeme.global.config.security.properties.Manager.OWN_MENTEE;
 import static org.devcourse.resumeme.global.config.security.properties.Manager.OWN_MENTOR;
 
@@ -35,8 +39,8 @@ public class ManagerInjector {
     @PostConstruct
     public void postConstruct() {
         AuthorizationResolver resolver = new AuthorizationResolver(resumeRepository, eventRepository, menteeRepository, mentorRepository);
-        OWN_MENTEE.authorizationManager = new OnlyOwn(List.of("resumes", "mentees"), "ROLE_MENTEE", resolver);
-        OWN_MENTOR.authorizationManager = new OnlyOwn(List.of("events", "mentors"), "ROLE_MENTOR", resolver);
+        OWN_MENTEE.authorizationManager = new OnlyOwn(List.of(RESUMES, MENTEES), "ROLE_MENTEE", resolver);
+        OWN_MENTOR.authorizationManager = new OnlyOwn(List.of(EVENTS, MENTORS), "ROLE_MENTOR", resolver);
     }
 
 }

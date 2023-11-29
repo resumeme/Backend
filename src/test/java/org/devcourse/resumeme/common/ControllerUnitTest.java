@@ -24,6 +24,7 @@ import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
 import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
+import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
@@ -90,6 +91,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public abstract class ControllerUnitTest {
+
+    @MockBean
+    protected AccountService accountService;
 
     @MockBean
     protected EventPositionService eventPositionService;
