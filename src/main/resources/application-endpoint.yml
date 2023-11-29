@@ -5,7 +5,7 @@ endpoint:
         post: /api/v1/mentees, /api/v1/mentors
       role: all
     - matcher:
-        get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/mentees/*/events, /api/v1/snapshot, /api/v1/follows, /api/v1/follows/mentors/*
+        get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/mentees/*/events, /api/v1/snapshot, /api/v1/follows, /api/v1/follows/mentors/*, /api/v1/appliments/events/*
         post: /api/v1/resumes, /api/v1/results, /api/v1/pdf/resumes/*, /api/v1/resumes/*/**, /api/v1/appliments/events/*, /api/v1/follows
         patch: /api/v1/mentees/*, /api/v1/resumes/*, /api/v1/resumes/*/**
         delete: /api/v1/follows/*
