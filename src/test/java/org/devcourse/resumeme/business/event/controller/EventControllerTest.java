@@ -1,17 +1,14 @@
 package org.devcourse.resumeme.business.event.controller;
 
-import org.devcourse.resumeme.business.event.controller.dto.CompleteEventRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventInfoRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest.EventTimeRequest;
-import org.devcourse.resumeme.business.event.controller.dto.EventRejectRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventUpdateRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
-import org.devcourse.resumeme.business.event.service.vo.EventReject;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -30,7 +27,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.devcourse.resumeme.common.domain.Position.BACK;
@@ -42,11 +38,9 @@ import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.PO
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.CAN_NOT_RESERVATION;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_REJECTED;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RANGE_MAXIMUM_ATTENDEE;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.TIME_ERROR;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -260,7 +254,7 @@ class EventControllerTest extends ControllerUnitTest {
         setId(resume1, 1L);
         setId(resume2, 4L);
         given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));
-        given(eventPositionService.getAll(eventId)).willReturn(List.of(new EventPosition(BACK, event)));
+        given(eventPositionService.getAll(eventId)).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/events/{eventId}", eventId));
@@ -306,7 +300,7 @@ class EventControllerTest extends ControllerUnitTest {
         setId(event, 1L);
 
         given(eventService.getAllWithPage(new AllEventFilter(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
-        given(eventPositionService.getAll(List.of(1L))).willReturn(Map.of(1L, List.of(new EventPosition(BACK, event))));
+        given(eventPositionService.getAll(List.of(1L))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/events")

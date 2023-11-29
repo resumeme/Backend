@@ -23,7 +23,7 @@ class EventPositionTest {
     @MethodSource("positionAndEvent")
     void 이벤트포지션_생성_검증조건_미달로인해_생성에_실패한다_null입력_오류(Position position, Event event) {
         // then
-        assertThatThrownBy(() -> new EventPosition(position, event))
+        assertThatThrownBy(() -> new EventPosition(position, event, 1))
                 .isInstanceOf(CustomException.class);
     }
 

@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,13 +58,13 @@ class EventPositionServiceTest {
         field.setAccessible(true);
         field.set(event, 1L);
 
-        given(repository.findAllByEventIds(List.of(1L))).willReturn(List.of(new EventPosition(Position.BACK, event), new EventPosition(Position.DEVOPS, event)));
+        given(repository.findAllByEventIds(List.of(1L))).willReturn(List.of(new EventPosition(Position.BACK, event, 1), new EventPosition(Position.DEVOPS, event, 2)));
 
         // when
-        Map<Long, List<EventPosition>> positions = eventPositionService.getAll(List.of(1L));
+        List<EventPosition> positions = eventPositionService.getAll(List.of(1L));
 
         // then
-        assertThat(positions.get(1L)).hasSize(2);
+        assertThat(positions).hasSize(2);
     }
 
 

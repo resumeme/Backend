@@ -1,6 +1,13 @@
 package org.devcourse.resumeme.business.event.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.event.exception.EventException;
@@ -12,6 +19,7 @@ import org.devcourse.resumeme.global.exception.CustomException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
@@ -19,7 +27,11 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.EventStatus.FINISH;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.*;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATED_EVENT_OPEN;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.DUPLICATE_APPLICATION_EVENT;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_OPEN_TIME;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -56,8 +68,12 @@ public class Event extends BaseEntity implements Comparable<Event> {
         this.eventInfo = eventInfo;
         this.eventTimeInfo = eventTimeInfo;
         this.mentor = mentor;
-        this.positions = positions.stream()
-                .map(position -> new EventPosition(position, this))
+        this.positions = getPositions(positions);
+    }
+
+    private List<EventPosition> getPositions(List<Position> positions) {
+        return IntStream.range(0, positions.size())
+                .mapToObj(i -> new EventPosition(positions.get(i), this, i))
                 .toList();
     }
 
@@ -191,9 +207,9 @@ public class Event extends BaseEntity implements Comparable<Event> {
     }
 
     private List<EventPosition> getNewPosition(List<Position> positions) {
-        return new ArrayList<>(positions.stream()
-                .map(position -> new EventPosition(position, this))
-                .toList());
+        List<EventPosition> newPositions = getPositions(positions);
+
+        return new ArrayList<>(newPositions);
     }
 
     public void updateTimeInfo(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDateTime) {
