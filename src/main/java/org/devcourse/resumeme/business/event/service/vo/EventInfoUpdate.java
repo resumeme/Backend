@@ -1,7 +1,9 @@
 package org.devcourse.resumeme.business.event.service.vo;
 
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.common.domain.Position;
+import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +38,10 @@ public class EventInfoUpdate extends EventUpdateVo {
 
     @Override
     public void update(Event event) {
+        if (!event.canUpdate()) {
+            throw new EventException(ExceptionCode.NOT_UPDATE_EVENT);
+        }
+
         event.updateInfo(title, content, maximumAttendee);
         event.updatePosition(positions);
         event.updateTimeInfo(openDateTime, closeDateTime, endDateTime);

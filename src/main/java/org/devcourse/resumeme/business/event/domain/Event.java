@@ -182,8 +182,8 @@ public class Event extends BaseEntity implements Comparable<Event> {
     }
 
     public void updatePosition(List<Position> positions) {
-        for (int i = 0; i < this.positions.size(); i++) {
-            this.positions.remove(i--);
+        for (int i = 0; i < this.positions.size();) {
+            this.positions.remove(i);
         }
 
         List<EventPosition> newPositions = getNewPosition(positions);
@@ -204,4 +204,9 @@ public class Event extends BaseEntity implements Comparable<Event> {
         LocalDateTime now = LocalDateTime.now();
         eventTimeInfo.checkDate(now);
     }
+
+    public boolean canUpdate() {
+        return this.eventInfo.getStatus().isReady() || this.applicants.isEmpty();
+    }
+
 }
