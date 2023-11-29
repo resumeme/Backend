@@ -279,6 +279,15 @@ include::{snippets}/user/mentee/events/path-parameters.adoc[]
 include::{snippets}/user/mentee/events/http-response.adoc[]
 include::{snippets}/user/mentee/events/response-fields.adoc[]
 
+=== 첨삭 이벤트 참여 조회
+*Request*
+include::{snippets}/event/record/http-request.adoc[]
+include::{snippets}/event/record/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/record/http-response.adoc[]
+include::{snippets}/event/record/response-fields.adoc[]
+
 === 첨삭 내용 전체 조회
 include::{snippets}/comment/getAll/exception-response.adoc[]
 
