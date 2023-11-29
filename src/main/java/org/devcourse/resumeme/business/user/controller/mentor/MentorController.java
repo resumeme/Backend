@@ -6,13 +6,13 @@ import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoResp
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
-import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
-import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,27 +31,32 @@ import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN
 @RequiredArgsConstructor
 public class MentorController {
 
-    private final JwtService jwtService;
-
     private final MentorService mentorService;
 
-    private final OAuth2InfoRedisService oAuth2InfoRedisService;
+    private final AccountService accountService;
 
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody MentorRegisterInfoRequest registerInfoRequest) {
-        log.debug("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
-        OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisService.getOne(registerInfoRequest.cacheKey());
+        String cacheKey = registerInfoRequest.cacheKey();
+        log.info("registerInfoRequest.cacheKey = {}", cacheKey);
 
+        OAuth2TempInfo oAuth2TempInfo = accountService.getTempInfo(cacheKey);
         Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo);
         Mentor savedMentor = mentorService.create(mentor);
-        Token token = jwtService.createTokens(Claims.of(savedMentor));
+
+        Token token = getToken(cacheKey, savedMentor);
         mentorService.updateRefreshToken(savedMentor.getId(), token.refreshToken());
-        oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return ResponseEntity.status(200)
                 .header(ACCESS_TOKEN_NAME, token.accessToken())
                 .header(REFRESH_TOKEN_NAME, token.refreshToken())
                 .build();
+    }
+
+    private Token getToken(String cacheKey, Mentor savedMentor) {
+        RegisterAccountVo accountVo = new RegisterAccountVo(cacheKey, Claims.of(savedMentor));
+
+        return accountService.registerAccount(accountVo);
     }
 
     @GetMapping("/{mentorId}")

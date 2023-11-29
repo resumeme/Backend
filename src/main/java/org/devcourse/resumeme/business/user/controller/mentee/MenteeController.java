@@ -6,13 +6,13 @@ import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoResp
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
+import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
-import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
-import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,27 +31,32 @@ import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN
 @RequestMapping("/api/v1/mentees")
 public class MenteeController {
 
-    private final JwtService jwtService;
-
     private final MenteeService menteeService;
 
-    private final OAuth2InfoRedisService oAuth2InfoRedisService;
+    private final AccountService accountService;
 
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody MenteeRegisterInfoRequest registerInfoRequest) {
-        log.info("registerInfoRequest.cacheKey = {}", registerInfoRequest.cacheKey());
-        OAuth2TempInfo oAuth2TempInfo = oAuth2InfoRedisService.getOne(registerInfoRequest.cacheKey());
+        String cacheKey = registerInfoRequest.cacheKey();
+        log.info("registerInfoRequest.cacheKey = {}", cacheKey);
 
+        OAuth2TempInfo oAuth2TempInfo = accountService.getTempInfo(cacheKey);
         Mentee mentee = registerInfoRequest.toEntity(oAuth2TempInfo);
         Mentee savedMentee = menteeService.create(mentee);
-        Token token = jwtService.createTokens(Claims.of(savedMentee));
+
+        Token token = getToken(cacheKey, savedMentee);
         menteeService.updateRefreshToken(savedMentee.getId(), token.refreshToken());
-        oAuth2InfoRedisService.delete(oAuth2TempInfo.getId());
 
         return ResponseEntity.status(200)
                 .header(ACCESS_TOKEN_NAME, token.accessToken())
                 .header(REFRESH_TOKEN_NAME, token.refreshToken())
                 .build();
+    }
+
+    private Token getToken(String cacheKey, Mentee savedMentee) {
+        RegisterAccountVo accountVo = new RegisterAccountVo(cacheKey, Claims.of(savedMentee));
+
+        return accountService.registerAccount(accountVo);
     }
 
     @PatchMapping("/{menteeId}")
