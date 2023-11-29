@@ -30,17 +30,45 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_REMAIN_SE
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MenteeToEventControllerTest extends ControllerUnitTest {
+
+    @Test
+    @WithMockCustomUser
+    void 참여_여부를_확인한다() throws Exception {
+        // given
+        long eventId = 1L;
+
+        // when
+        ResultActions result = mvc.perform(get("/api/v1/appliments/events/{eventId}", eventId));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andDo(
+                        document("event/record",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("eventId").description("이벤트 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(NUMBER).description("참여 아이디 (미 참여시 null 값으로 나갑니다)")
+                                )
+                        )
+                );
+    }
 
     @Test
     void 첨삭_이벤트_신청을_반려한다() throws Exception {
