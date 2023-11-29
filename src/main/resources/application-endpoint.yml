@@ -11,7 +11,7 @@ endpoint:
       delete: /api/v1/follows/*
       role: mentee
     - matcher:
-      get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/user, /api/v1/resumes/**, /api/v1/results, /api/v1/snapshot
+      get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/user, /api/v1/resumes/*, /api/v1/resumes/*/**, /api/v1/results, /api/v1/snapshot
       post: /api/v1/events, /api/v1/resumes/*/reviews, /api/v1/events/*/resumes/*/comments
       role: mentor
     - matcher:
@@ -25,7 +25,7 @@ endpoint:
       delete: /api/v1/events/*/resumes/*/comments/*
       role: own_mentor
     - matcher:
-      get: /api/v1/mentees/*/events, /api/v1/resumes/**, /api/v1/events/*/resumes/*/comments
+      get: /api/v1/mentees/*/events, /api/v1/resumes/*, /api/v1/resumes/*/**, /api/v1/events/*/resumes/*/comments
       post: /api/v1/resumes/**
       patch: /api/v1/resumes/**, /api/v2/resumes/*, /api/v1/mentees/*
       delete: /api/v1/resumes/**
