@@ -34,6 +34,7 @@ public class EventPosition implements Comparable<EventPosition> {
     @JoinColumn(name = "event_id")
     private Event event;
 
+    @Column(name = "position_order")
     private int order;
 
     public EventPosition(Position position, Event event, int order) {
