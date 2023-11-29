@@ -5,11 +5,9 @@ import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.repository.EventPositionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +19,11 @@ public class EventPositionService {
         return eventPositionRepository.findAllByEventId(eventId);
     }
 
-    public Map<Long, List<EventPosition>> getAll(List<Long> eventIds) {
-        return eventPositionRepository.findAllByEventIds(eventIds).stream()
-                .collect(groupingBy(position -> position.getEvent().getId(), toList()));
+    public List<EventPosition> getAll(List<Long> eventIds) {
+        List<EventPosition> positions = new ArrayList<>(eventPositionRepository.findAllByEventIds(eventIds));
+        Collections.sort(positions);
+
+        return positions;
     }
 
 }

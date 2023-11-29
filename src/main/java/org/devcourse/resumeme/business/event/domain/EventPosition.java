@@ -18,7 +18,7 @@ import static org.devcourse.resumeme.common.util.Validator.notNull;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class EventPosition {
+public class EventPosition implements Comparable<EventPosition> {
 
     @Id
     @GeneratedValue
@@ -34,12 +34,20 @@ public class EventPosition {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    public EventPosition(Position position, Event event) {
+    private int order;
+
+    public EventPosition(Position position, Event event, int order) {
         notNull(position);
         notNull(event);
 
         this.position = position;
         this.event = event;
+        this.order = order;
+    }
+
+    @Override
+    public int compareTo(EventPosition other) {
+        return Integer.compare(this.order, other.order);
     }
 
 }
