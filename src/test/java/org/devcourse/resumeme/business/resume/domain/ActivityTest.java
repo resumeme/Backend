@@ -1,5 +1,6 @@
 package org.devcourse.resumeme.business.resume.domain;
 
+import org.devcourse.resumeme.business.resume.domain.activity.Activity;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

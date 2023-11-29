@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.resume.domain;
 
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.domain.career.Duty;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;

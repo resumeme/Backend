@@ -1,6 +1,6 @@
 package org.devcourse.resumeme.business.comment.domain;
 
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;

@@ -1,5 +1,7 @@
 package org.devcourse.resumeme.business.resume.domain;
 
+import org.devcourse.resumeme.business.resume.domain.certification.Certification;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;

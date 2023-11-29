@@ -8,7 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.global.exception.CustomException;
 

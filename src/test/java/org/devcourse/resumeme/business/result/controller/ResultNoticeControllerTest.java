@@ -5,7 +5,7 @@ import org.devcourse.resumeme.business.result.controller.dto.CreateResultRequest
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.result.domain.ResultNotice;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.junit.jupiter.api.BeforeEach;

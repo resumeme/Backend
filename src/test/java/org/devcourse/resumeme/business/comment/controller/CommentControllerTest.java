@@ -6,7 +6,7 @@ import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;

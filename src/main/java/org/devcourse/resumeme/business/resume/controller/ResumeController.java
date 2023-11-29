@@ -1,10 +1,10 @@
 package org.devcourse.resumeme.business.resume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.dto.BasicResumeInfo;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeResponse;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.controller.dto.resume.BasicResumeInfo;
+import org.devcourse.resumeme.business.resume.controller.dto.resume.ResumeRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.resume.ResumeResponse;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.common.response.IdResponse;

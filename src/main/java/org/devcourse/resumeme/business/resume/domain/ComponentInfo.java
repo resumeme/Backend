@@ -5,7 +5,6 @@ import org.devcourse.resumeme.business.resume.entity.Component;
 
 public class ComponentInfo {
 
-
     @Getter
     protected Long componentId;
 

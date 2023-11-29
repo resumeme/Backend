@@ -1,19 +1,12 @@
 package org.devcourse.resumeme.business.resume.controller;
 
-import org.devcourse.resumeme.business.event.domain.Event;
-import org.devcourse.resumeme.business.event.domain.EventInfo;
-import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeInfoRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeMemoRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeRequest;
-import org.devcourse.resumeme.business.resume.domain.Resume;
-import org.devcourse.resumeme.business.resume.domain.ResumeInfo;
+import org.devcourse.resumeme.business.resume.controller.dto.resume.ResumeRequest;
+import org.devcourse.resumeme.business.resume.entity.Resume;
+import org.devcourse.resumeme.business.resume.entity.ResumeInfo;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,14 +19,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.common.domain.Position.BACK;
-import static org.devcourse.resumeme.common.domain.Position.DEVOPS;
-import static org.devcourse.resumeme.common.domain.Position.FRONT;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.POSITION;
-import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.generateLinkCode;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;

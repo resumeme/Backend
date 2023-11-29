@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.business.comment.controller.dto;
 
 import org.devcourse.resumeme.business.comment.domain.Comment;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 
 public record CommentCreateRequest(Long componentId, String content) {
 

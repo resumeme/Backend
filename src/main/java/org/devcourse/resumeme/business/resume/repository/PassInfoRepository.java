@@ -1,6 +1,6 @@
 package org.devcourse.resumeme.business.resume.repository;
 
-import org.devcourse.resumeme.business.resume.domain.PassInfo;
+import org.devcourse.resumeme.business.resume.entity.PassInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

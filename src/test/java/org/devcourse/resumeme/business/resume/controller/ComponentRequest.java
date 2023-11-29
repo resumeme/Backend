@@ -1,12 +1,12 @@
 package org.devcourse.resumeme.business.resume.controller;
 
-import org.devcourse.resumeme.business.resume.controller.career.dto.CareerCreateRequest;
-import org.devcourse.resumeme.business.resume.controller.certification.dto.CertificationCreateRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ActivityCreateRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ForeignLanguageCreateRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ProjectCreateRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.ResumeLinkRequest;
-import org.devcourse.resumeme.business.resume.controller.dto.TrainingCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.career.CareerCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.certification.CertificationCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.activity.ActivityCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.language.ForeignLanguageCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.project.ProjectCreateRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.link.ResumeLinkRequest;
+import org.devcourse.resumeme.business.resume.controller.dto.training.TrainingCreateRequest;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 
 import java.time.LocalDate;

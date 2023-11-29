@@ -10,7 +10,7 @@ import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
