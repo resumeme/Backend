@@ -25,12 +25,15 @@ public class EventTimeInfo {
     @Getter
     private LocalDateTime endDate;
 
-    private EventTimeInfo(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {
+    private boolean isBook;
+
+    private EventTimeInfo(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate, boolean isBook) {
         this.closeDateTime = closeDateTime;
         validateInput(openDateTime, closeDateTime, endDate);
 
         this.openDateTime = openDateTime;
         this.endDate = endDate;
+        this.isBook = isBook;
     }
 
     private void validateInput(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {
@@ -42,7 +45,7 @@ public class EventTimeInfo {
     }
 
     public static EventTimeInfo onStart(LocalDateTime nowDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {
-        return new EventTimeInfo(nowDateTime, closeDateTime, endDate);
+        return new EventTimeInfo(nowDateTime, closeDateTime, endDate, true);
     }
 
     public static EventTimeInfo book(LocalDateTime nowDateTime, LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDate) {
@@ -51,7 +54,7 @@ public class EventTimeInfo {
             throw new EventException(CAN_NOT_RESERVATION);
         }
 
-        return new EventTimeInfo(openDateTime, closeDateTime, endDate);
+        return new EventTimeInfo(openDateTime, closeDateTime, endDate, false);
     }
 
     public boolean isAfterOpenTime(LocalDateTime nowDateTime) {
@@ -59,9 +62,15 @@ public class EventTimeInfo {
     }
 
     public void update(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDateTime) {
-        validateInput(openDateTime, closeDateTime, endDateTime);
+        if (isBook) {
+            notNull(openDateTime);
+        }
 
-        this.openDateTime = openDateTime;
+        notNull(closeDateTime);
+        notNull(endDateTime);
+        check(closeDateTime.isAfter(endDateTime), TIME_ERROR);
+
+        this.openDateTime = openDateTime == null ? this.openDateTime : openDateTime;
         this.closeDateTime = closeDateTime;
         this.endDate = endDateTime;
     }
