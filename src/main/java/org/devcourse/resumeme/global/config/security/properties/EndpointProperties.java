@@ -91,13 +91,15 @@ public class EndpointProperties {
         private List<Matcher> getMatchers(List<String> endpoints, String method) {
             Map<Request, List<String>> matchers = new LinkedHashMap<>();
             if (endpoints != null) {
-                for (String endpoint : endpoints) {
-                    Request request = new Request(method, endpoint);
-                    List<String> roles = matchers.getOrDefault(request, new ArrayList<>());
-                    roles.add(role.toUpperCase());
+                return new ArrayList<>();
+            }
 
-                    matchers.put(request, roles);
-                }
+            for (String endpoint : endpoints) {
+                Request request = new Request(method, endpoint);
+                List<String> roles = matchers.getOrDefault(request, new ArrayList<>());
+                roles.add(role.toUpperCase());
+
+                matchers.put(request, roles);
             }
 
             return matchers.entrySet().stream()
