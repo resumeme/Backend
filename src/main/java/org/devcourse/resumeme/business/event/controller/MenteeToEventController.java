@@ -30,7 +30,7 @@ public class MenteeToEventController {
 
     private final MenteeToEventService applyService;
 
-    @GetMapping("/{eventId")
+    @GetMapping("/{eventId}")
     public IdResponse getParticipantRecord(@PathVariable Long eventId, @AuthenticationPrincipal JwtUser user) {
         Long menteeId = user.id();
 

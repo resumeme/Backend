@@ -37,6 +37,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,7 +51,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
         long eventId = 1L;
 
         // when
-        ResultActions result = mvc.perform(get("/api/v1/appliments/event/{eventId}", eventId));
+        ResultActions result = mvc.perform(get("/api/v1/appliments/events/{eventId}", eventId));
 
         // then
         result
@@ -62,7 +63,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
                                 pathParameters(
                                         parameterWithName("eventId").description("이벤트 아이디")
                                 ),
-                                requestFields(
+                                responseFields(
                                         fieldWithPath("id").type(NUMBER).description("참여 아이디 (미 참여시 null 값으로 나갑니다)")
                                 )
                         )
