@@ -32,6 +32,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/events")
@@ -72,10 +75,12 @@ public class EventController {
         Page<Event> pageAbleEvent = eventService.getAllWithPage(new AllEventFilter(null, null), pageable);
 
         List<Event> events = getEvents(pageAbleEvent);
-        Map<Long, List<EventPosition>> positions = getPositions(events);
+        List<EventPosition> positions = getPositions(events);
+        Map<Object, List<EventPosition>> positionsMap = positions.stream()
+                .collect(groupingBy(position -> position.getEvent().getId(), toList()));
 
         List<EventResponse> responses = events.stream()
-                .map(event -> new EventResponse(event, positions.get(event.getId())))
+                .map(event -> new EventResponse(event, positionsMap.get(event.getId())))
                 .toList();
 
         return new EventPageResponse(responses, pageAbleEvent);
@@ -88,7 +93,7 @@ public class EventController {
         return content;
     }
 
-    private Map<Long, List<EventPosition>> getPositions(List<Event> content) {
+    private List<EventPosition> getPositions(List<Event> content) {
         List<Long> eventIds = content.stream()
                 .map(Event::getId)
                 .toList();
