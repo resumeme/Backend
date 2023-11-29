@@ -2,7 +2,13 @@ package org.devcourse.resumeme.business.resume.controller.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.career.dto.CareerResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.career.CareerResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.activity.ActivityResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.certification.CertificationResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.language.ForeignLanguageResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.link.ResumeLinkResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.project.ProjectResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.training.TrainingResponse;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.result.controller.dto.CreateResultRequest;
 import org.devcourse.resumeme.business.result.controller.dto.ResultsResponse;
 import org.devcourse.resumeme.business.result.service.ResultService;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.springframework.data.domain.Pageable;

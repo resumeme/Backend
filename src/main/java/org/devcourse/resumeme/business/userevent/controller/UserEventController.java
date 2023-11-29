@@ -6,7 +6,7 @@ import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.userevent.controller.dto.MenteeEventResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.MentorEventResponse;

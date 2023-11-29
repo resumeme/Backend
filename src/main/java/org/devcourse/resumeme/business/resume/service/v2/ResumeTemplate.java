@@ -2,12 +2,12 @@ package org.devcourse.resumeme.business.resume.service.v2;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.devcourse.resumeme.business.resume.domain.Activity;
-import org.devcourse.resumeme.business.resume.domain.Certification;
-import org.devcourse.resumeme.business.resume.domain.ForeignLanguage;
-import org.devcourse.resumeme.business.resume.domain.Project;
-import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
-import org.devcourse.resumeme.business.resume.domain.Training;
+import org.devcourse.resumeme.business.resume.domain.activity.Activity;
+import org.devcourse.resumeme.business.resume.domain.certification.Certification;
+import org.devcourse.resumeme.business.resume.domain.language.ForeignLanguage;
+import org.devcourse.resumeme.business.resume.domain.project.Project;
+import org.devcourse.resumeme.business.resume.domain.link.ReferenceLink;
+import org.devcourse.resumeme.business.resume.domain.training.Training;
 import org.devcourse.resumeme.business.resume.domain.career.Career;
 
 import java.util.List;

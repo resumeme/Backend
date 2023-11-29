@@ -2,7 +2,7 @@ package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.service.ParticipantProvider;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.domain.model.ResumeUpdateModel;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeUpdateVo;

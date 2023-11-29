@@ -4,7 +4,7 @@ import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
-import org.devcourse.resumeme.business.resume.domain.Resume;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 
 import java.util.List;
 

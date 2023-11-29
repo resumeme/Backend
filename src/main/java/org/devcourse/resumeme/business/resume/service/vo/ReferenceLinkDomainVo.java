@@ -1,6 +1,6 @@
 package org.devcourse.resumeme.business.resume.service.vo;
 
-import org.devcourse.resumeme.business.resume.domain.ReferenceLink;
+import org.devcourse.resumeme.business.resume.domain.link.ReferenceLink;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.service.v2.ComponentDomain;
 
