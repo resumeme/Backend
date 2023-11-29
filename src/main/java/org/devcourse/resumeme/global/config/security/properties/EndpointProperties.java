@@ -3,6 +3,8 @@ package org.devcourse.resumeme.global.config.security.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +21,28 @@ public class EndpointProperties {
         this.ignores = ignores;
     }
 
-    private static List<Matcher> getMatchers(List<PropertyMatcher> matchers) {
-        return matchers.stream()
+    private static List<Matcher> getMatchers(List<PropertyMatcher> propertyMatchers) {
+        List<Matcher> matchers = propertyMatchers.stream()
                 .flatMap(matcher -> matcher.toMatcher().stream())
+                .toList();
+
+        Map<Request, List<Matcher>> resultMap = new HashMap<>();
+        matchers.forEach(matcher -> {
+            List<Matcher> match = resultMap.getOrDefault(matcher.request(), new ArrayList<>());
+            match.add(matcher);
+            resultMap.put(matcher.request(), match);
+        });
+
+        return resultMap.entrySet().stream()
+                .map(entry ->
+                        new Matcher(
+                                entry.getKey(),
+                                entry.getValue().stream()
+                                        .map(Matcher::roles)
+                                        .flatMap(Collection::stream)
+                                        .toList()
+                        )
+                )
                 .toList();
     }
 
