@@ -7,7 +7,7 @@ import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
 import org.devcourse.resumeme.global.auth.filter.RoleConsistencyCheckFilter;
 import org.devcourse.resumeme.global.auth.filter.handler.CustomLogoutHandler;
 import org.devcourse.resumeme.global.config.security.properties.EndpointProperties;
-import org.devcourse.resumeme.global.config.security.properties.EndpointProperties.Matcher;
+import org.devcourse.resumeme.global.config.security.properties.Matcher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -51,15 +51,14 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(c -> c.defaultSuccessUrl("/admin/applications"))
                 .headers(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable)
                 .sessionManagement(AbstractHttpConfigurer::disable)
+                .formLogin(c -> c.defaultSuccessUrl("/admin/applications"))
                 .logout(logout -> logout.logoutUrl("/api/v1/logout")
                         .addLogoutHandler(customLogoutHandler)
                         .logoutSuccessHandler(logoutSuccessHandler)
-                        .permitAll()
                 )
                 .exceptionHandling(AbstractHttpConfigurer::disable);
 
