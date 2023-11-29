@@ -10,18 +10,13 @@ import org.devcourse.resumeme.business.resume.domain.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.userevent.controller.dto.MenteeEventResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.MentorEventResponse;
-import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
-import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
-import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,11 +30,7 @@ public class UserEventController {
     private final EventPositionService eventPositionService;
 
     @GetMapping("/mentors/{mentorId}/events")
-    public List<MentorEventResponse> all(@PathVariable Long mentorId, @AuthenticationPrincipal JwtUser user) {
-        if (!mentorId.equals(user.id())) {
-            throw new CustomException(BAD_REQUEST);
-        }
-
+    public List<MentorEventResponse> all(@PathVariable Long mentorId) {
         return eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged()).stream()
                 .map(event -> new MentorEventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event)))
                 .toList();
@@ -61,14 +52,10 @@ public class UserEventController {
     }
 
     @GetMapping("/mentees/{menteeId}/events")
-    public List<MenteeEventResponse> getOwnEvents(@PathVariable Long menteeId, @AuthenticationPrincipal JwtUser user) {
-        if (!menteeId.equals(user.id())) {
-            throw new CustomException(BAD_REQUEST);
-        }
-
+    public List<MenteeEventResponse> getOwnEvents(@PathVariable Long menteeId) {
         return eventService.getAllWithPage(new AllEventFilter(null, menteeId), Pageable.unpaged()).stream()
                 .flatMap(event -> event.getApplicants().stream()
-                        .filter(applicant -> applicant.isSameMentee(user.id()))
+                        .filter(applicant -> applicant.isSameMentee(menteeId))
                         .map(applicant -> new MenteeEventResponse(applicant, event))
                         .toList().stream())
                 .toList();

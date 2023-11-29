@@ -9,14 +9,11 @@ import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
-import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.devcourse.resumeme.global.auth.service.login.OAuth2InfoRedisService;
-import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.ACCESS_TOKEN_NAME;
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN_NAME;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 
 @Slf4j
 @RestController
@@ -66,10 +62,7 @@ public class MentorController {
     }
 
     @PatchMapping("/{mentorId}")
-    public IdResponse update(@PathVariable Long mentorId, @RequestBody MentorInfoUpdateRequest mentorInfoUpdateRequest, @AuthenticationPrincipal JwtUser user) {
-        if (!mentorId.equals(user.id())) {
-            throw new CustomException(BAD_REQUEST);
-        }
+    public IdResponse update(@PathVariable Long mentorId, @RequestBody MentorInfoUpdateRequest mentorInfoUpdateRequest) {
         Long updatedMentorId = mentorService.update(mentorId, mentorInfoUpdateRequest);
 
         return new IdResponse(updatedMentorId);
