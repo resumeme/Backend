@@ -90,7 +90,7 @@ public class EndpointProperties {
 
         private List<Matcher> getMatchers(List<String> endpoints, String method) {
             Map<Request, List<String>> matchers = new LinkedHashMap<>();
-            if (endpoints != null) {
+            if (endpoints == null) {
                 return new ArrayList<>();
             }
 
