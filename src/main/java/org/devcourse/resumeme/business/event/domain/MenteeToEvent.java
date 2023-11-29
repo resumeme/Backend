@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.event.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -12,6 +13,7 @@ import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.Progress.APPLY;
@@ -42,6 +44,7 @@ public class MenteeToEvent extends BaseEntity {
     private Long resumeId;
 
     @Getter
+    @Enumerated(STRING)
     private Progress progress;
 
     private String rejectMessage;

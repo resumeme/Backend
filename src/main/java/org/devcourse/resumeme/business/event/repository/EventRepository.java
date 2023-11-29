@@ -38,15 +38,15 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> findAllByApplicantsMenteeId(Long menteeId, Pageable pageable);
 
     @Modifying
-    @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.openDateTime <= :now")
+    @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.openDateTime <= :now and e.eventInfo.status = 'READY'")
     void openBookedEvent(@Param("status") EventStatus status, @Param("now")LocalDateTime now);
 
     @Modifying
-    @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.closeDateTime <= :now")
+    @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.closeDateTime <= :now and e.eventInfo.status = 'OPEN'")
     void closeApplyToEvent(@Param("status") EventStatus status, @Param("now")LocalDateTime now);
 
     @Modifying
-    @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.endDate <= :now")
+    @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.endDate <= :now and e.eventInfo.status = 'CLOSE'")
     void finishEvent(@Param("status") EventStatus status, @Param("now")LocalDateTime now);
 
 }
