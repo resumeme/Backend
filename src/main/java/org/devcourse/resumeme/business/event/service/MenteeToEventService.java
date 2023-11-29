@@ -27,6 +27,14 @@ public class MenteeToEventService {
 
     private final CommentSnapService commentSnapService;
 
+    public Long getRecord(Long eventId, Long menteeId) {
+        return menteeToEventRepository.findByMenteeId(menteeId).stream()
+                .filter(record -> record.getEvent().getId().equals(eventId))
+                .findFirst()
+                .map(MenteeToEvent::getId)
+                .orElse(null);
+    }
+
     public void update(Long eventId, ApplyUpdateVo applyUpdateVo) {
         Event event = eventRepository.findWithApplicantsById(eventId)
                 .orElseThrow(() -> new EventException(EVENT_NOT_FOUND));
