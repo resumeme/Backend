@@ -66,7 +66,7 @@ public class Mentor extends BaseEntity {
     private String refreshToken;
 
     @Getter
-    @OneToMany(fetch = LAZY, mappedBy = "mentor", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = LAZY, mappedBy = "mentor", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<MentorPosition> experiencedPositions = new HashSet<>();
 
     @Getter
@@ -122,7 +122,7 @@ public class Mentor extends BaseEntity {
     }
 
     public void updateInfos(MentorInfoUpdateRequest updateRequest) {
-        validateInputs(email, provider, imageUrl, requiredInfo,updateRequest.experiencedPositions(), updateRequest.careerContent(), updateRequest.careerYear(), updateRequest.introduce());
+        validateInputs(email, provider, imageUrl, requiredInfo, updateRequest.experiencedPositions(), updateRequest.careerContent(), updateRequest.careerYear(), updateRequest.introduce());
         this.clearPositions();
         this.requiredInfo.updateNickname(updateRequest.nickname());
         this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
@@ -147,4 +147,5 @@ public class Mentor extends BaseEntity {
     public String getNickname() {
         return requiredInfo.getNickname();
     }
+
 }
