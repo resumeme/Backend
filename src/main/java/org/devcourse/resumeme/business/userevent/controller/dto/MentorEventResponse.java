@@ -19,7 +19,7 @@ public record MentorEventResponse(EventInfoResponse info, List<ResumeResponse> r
     }
 
     public static List<ResumeResponse> toResponse(Event event, List<Resume> resumes, List<Mentee> mentees) {
-        if (resumes == null) {
+        if (resumes.isEmpty()) {
             return List.of();
         }
         Map<Long, Resume> resumesMap = resumes.stream()
