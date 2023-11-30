@@ -46,7 +46,7 @@ public class UserEventController {
     @GetMapping("/mentors/{mentorId}/events")
     public List<MentorEventResponse> all(@PathVariable Long mentorId) {
         Page<Event> events = eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged());
-        List<Resume> resumes = getResumes(events);
+        List<Resume> resumes = getResumes(events.getContent());
         List<Mentee> mentees = getMentees(resumes);
 
         return events.stream()
@@ -54,7 +54,7 @@ public class UserEventController {
                 .toList();
     }
 
-    private List<Resume> getResumes(Page<Event> events) {
+    private List<Resume> getResumes(List<Event> events) {
         List<Long> resumeIds = events.stream()
                 .flatMap(event -> event.getApplicants().stream())
                 .map(MenteeToEvent::getResumeId)
@@ -76,22 +76,27 @@ public class UserEventController {
     @GetMapping("/mentees/{menteeId}/events")
     public List<MenteeEventResponse> getOwnEvents(@PathVariable Long menteeId) {
         List<MenteeToEvent> byMenteeId = menteeToEventService.getByMenteeId(menteeId);
+        List<Event> events = byMenteeId.stream()
+                .map(MenteeToEvent::getEvent)
+                .toList();
         List<Long> mentorIds = byMenteeId.stream()
                 .map(m -> m.getEvent().getMentor().getId())
                 .toList();
 
         Map<Long, Mentor> mentors = mentorService.getAllByIds(mentorIds).stream()
                 .collect(Collectors.toMap(Mentor::getId, Function.identity()));
-
         Map<Long, Mentor> mentorEventMap = byMenteeId.stream()
                 .collect(Collectors.toMap(e -> e.getEvent().getId(), e -> mentors.get(e.getEvent().getMentor().getId())));
+        Map<Long, String> resumeTitles = getResumes(events).stream()
+                .collect(Collectors.toMap(Resume::getId, Resume::getTitle));
 
         return byMenteeId.stream()
                 .map(menteeToEvent -> {
                     Long mentorId = menteeToEvent.getEvent().getId();
                     String nickname = mentorEventMap.get(mentorId).getNickname();
+                    String resumeTitle = resumeTitles.get(menteeToEvent.getResumeId());
 
-                    return new MenteeEventResponse(menteeToEvent, nickname);
+                    return new MenteeEventResponse(menteeToEvent, nickname, resumeTitle);
                 })
                 .toList();
     }

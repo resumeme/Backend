@@ -144,6 +144,7 @@ class UserEventControllerTest extends ControllerUnitTest {
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
         given(mentorService.getAllByIds(List.of(1L))).willReturn(List.of(mentor));
+        given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));
 
@@ -159,6 +160,7 @@ class UserEventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].resumeTitle").type(STRING).description("이력서 제목"),
                                         fieldWithPath("[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
                                         fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
