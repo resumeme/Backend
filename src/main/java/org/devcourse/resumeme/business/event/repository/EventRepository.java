@@ -3,7 +3,6 @@ package org.devcourse.resumeme.business.event.repository;
 import jakarta.persistence.LockModeType;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -28,13 +27,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @EntityGraph(attributePaths = {"applicants"})
     Optional<Event> findWithApplicantsById(Long id);
 
-    @EntityGraph(attributePaths = {"applicants", "mentor"})
+    @EntityGraph(attributePaths = {"applicants"})
     Page<Event> findAllByMentorId(Long mentorId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"applicants", "mentor"})
+    @EntityGraph(attributePaths = {"applicants"})
     Page<Event> findAll(Pageable pageable);
 
-    @EntityGraph(attributePaths = {"applicants", "mentor"})
+    @EntityGraph(attributePaths = {"applicants"})
     Page<Event> findAllByApplicantsMenteeId(Long menteeId, Pageable pageable);
 
     @Modifying
