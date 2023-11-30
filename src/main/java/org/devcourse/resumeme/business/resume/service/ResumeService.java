@@ -61,7 +61,7 @@ public class ResumeService {
 
         model.update(resume);
 
-        participantProvider.finishProgress(resume.menteeId(), resumeId);
+        participantProvider.finishProgress(resume.getMenteeId(), resumeId);
     }
 
 }

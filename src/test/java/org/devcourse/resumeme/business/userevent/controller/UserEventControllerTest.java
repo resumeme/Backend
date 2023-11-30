@@ -8,8 +8,10 @@ import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +51,8 @@ class UserEventControllerTest extends ControllerUnitTest {
 
     private Resume resume;
 
+    private Mentee mentee;
+
     @BeforeEach
     void init() throws NoSuchFieldException, IllegalAccessException {
         mentor =  Mentor.builder()
@@ -61,6 +65,18 @@ class UserEventControllerTest extends ControllerUnitTest {
                 .experiencedPositions(Set.of("FRONT"))
                 .careerContent("금융회사 다님")
                 .careerYear(3)
+                .build();
+
+        mentee = Mentee.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("progrers33@gmail.com")
+                .refreshToken("refreshToken")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of("FRONT"))
+                .interestedFields(Set.of("FINANCE"))
+                .introduce("백엔드 개발자")
                 .build();
 
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
@@ -80,8 +96,8 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long mentorId = 1L;
 
         given(eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
-        given(eventPositionService.getAll(event.getId())).willReturn(List.of());
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentee)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}/events", mentorId));

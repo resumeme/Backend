@@ -9,10 +9,14 @@ import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.dto.MenteeEventResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.MentorEventResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +37,7 @@ public class UserEventController {
 
     private final ResumeService resumeService;
 
-    private final EventPositionService eventPositionService;
+    private final UserService userService;
 
     private final MenteeToEventService menteeToEventService;
 
@@ -41,23 +45,31 @@ public class UserEventController {
 
     @GetMapping("/mentors/{mentorId}/events")
     public List<MentorEventResponse> all(@PathVariable Long mentorId) {
-        return eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged()).stream()
-                .map(event -> new MentorEventResponse(event, eventPositionService.getAll(event.getId()), getResumes(event)))
+        Page<Event> events = eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged());
+        List<Resume> resumes = getResumes(events);
+        List<Mentee> mentees = getMentees(resumes);
+
+        return events.stream()
+                .map(event -> new MentorEventResponse(event, resumes, mentees))
                 .toList();
     }
 
-    private List<Resume> getResumes(Event event) {
-        List<MenteeToEvent> applicants = event.getApplicants();
-        List<Long> menteeIds = applicants.stream()
-                .map(MenteeToEvent::getMenteeId)
-                .toList();
-        List<Long> resumeIds = applicants.stream()
+    private List<Resume> getResumes(Page<Event> events) {
+        List<Long> resumeIds = events.stream()
+                .flatMap(event -> event.getApplicants().stream())
                 .map(MenteeToEvent::getResumeId)
                 .toList();
 
-        return resumeService.getAll(resumeIds)
-                .stream()
-                .filter(resume -> menteeIds.contains(resume.menteeId()))
+        return resumeService.getAll(resumeIds);
+    }
+
+    private List<Mentee> getMentees(List<Resume> resumes) {
+        List<Long> menteeIds = resumes.stream()
+                .map(Resume::getMenteeId)
+                .toList();
+
+        return userService.getByIds(menteeIds).stream()
+                .map(User::toMentee)
                 .toList();
     }
 

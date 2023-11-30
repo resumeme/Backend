@@ -46,7 +46,7 @@ public class PDFController {
         Optional<String> role = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).findAny();
 
-        if (!resumeService.getOne(resumeId).menteeId().equals(user.id())) {
+        if (!resumeService.getOne(resumeId).getMenteeId().equals(user.id())) {
             throw new CustomException(ExceptionCode.BAD_REQUEST);
         }
 
