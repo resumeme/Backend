@@ -54,7 +54,7 @@ public class Event extends BaseEntity implements Comparable<Event> {
     private List<EventPosition> positions = new ArrayList<>();
 
     @Getter
-    @OneToMany(mappedBy = "event", cascade = {PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = {PERSIST})
     private List<MenteeToEvent> applicants = new ArrayList<>();
 
     public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Long mentorId, List<Position> positions) {
