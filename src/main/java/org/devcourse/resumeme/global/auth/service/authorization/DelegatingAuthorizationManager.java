@@ -23,8 +23,6 @@ public class DelegatingAuthorizationManager implements AuthorizationManager<Requ
         String uri = object.getRequest().getRequestURI();
         for (AuthorizationManager<RequestAuthorizationContext> manager : managers) {
             if (manager.check(authentication, object).isGranted()) {
-                log.info("can Access to entry point to {}", uri);
-
                 return new AuthorizationDecision(true);
             }
         }
