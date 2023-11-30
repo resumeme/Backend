@@ -18,6 +18,8 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDate;
+
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
 
@@ -116,6 +118,7 @@ public class Resume extends BaseEntity {
     }
 
     public void makeToOrigin() {
+        this.title = this.title.concat(" - 첨삭 반영 본").concat(LocalDate.now().toString());
         this.originResumeId = null;
     }
 
