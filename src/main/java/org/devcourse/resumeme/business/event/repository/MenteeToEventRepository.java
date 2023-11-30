@@ -13,7 +13,7 @@ public interface MenteeToEventRepository extends JpaRepository<MenteeToEvent, Lo
     @Query("select me from MenteeToEvent me join fetch me.event where me.resumeId = :resumeId")
     List<MenteeToEvent> findAllByResumeId(@Param(value = "resumeId") Long resumeId);
 
-    @EntityGraph(attributePaths = "event")
+    @EntityGraph(attributePaths = {"event", "event.applicants"})
     List<MenteeToEvent> findByMenteeId(Long menteeId);
 
 }
