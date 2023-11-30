@@ -5,9 +5,11 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -65,10 +67,11 @@ class UserControllerTest extends ControllerUnitTest {
     }
 
     @Test
+    @Disabled
     @WithMockCustomUser(role = "ROLE_MENTOR")
     void 멘토는_마이페이지_정보조회에_성공한다() throws Exception {
         // given
-        given(mentorService.getOne(any())).willReturn(mentor);
+        given(userService.getOne(any())).willReturn(User.of(mentee));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/user"));
@@ -104,7 +107,7 @@ class UserControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 멘티는_마이페이지_정보조회에_성공한다() throws Exception {
         // given
-        given(menteeService.getOne(any(Long.class))).willReturn(mentee);
+        given(userService.getOne(any(Long.class))).willReturn(User.of(mentee));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/user")

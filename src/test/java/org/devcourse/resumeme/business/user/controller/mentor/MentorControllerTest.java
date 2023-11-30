@@ -140,7 +140,7 @@ class MentorControllerTest extends ControllerUnitTest {
         // given
         Long mentorId = 1L;
         MentorInfoUpdateRequest request = new MentorInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), "다양한 도메인에서 일한 경력이 있습니다.", 5, "안녕하세요~");
-        given(menteeService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
+        given(userService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/mentors/{mentorId}", mentorId)

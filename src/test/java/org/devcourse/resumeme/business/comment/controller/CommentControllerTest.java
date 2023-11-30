@@ -6,8 +6,8 @@ import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.entity.Component;
+import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -53,8 +53,6 @@ class CommentControllerTest extends ControllerUnitTest {
 
     private Mentor mentor;
 
-    private Mentee mentee;
-
     @BeforeEach
     void setUp() {
         mentor =  Mentor.builder()
@@ -68,18 +66,6 @@ class CommentControllerTest extends ControllerUnitTest {
                 .careerContent("금융회사 다님")
                 .careerYear(3)
                 .build();
-
-        mentee = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
     }
 
     @Test
@@ -89,7 +75,7 @@ class CommentControllerTest extends ControllerUnitTest {
         CommentCreateRequest request = new CommentCreateRequest(1L, "이력서가 맘에 안들어요");
         Long resumeId = 1L;
         Component component = new Component(CAREERS, "career", null, null, resumeId, List.of());
-        Resume resume = new Resume("titlem", mentee);
+        Resume resume = new Resume("titlem", 1L);
 
         Comment comment = request.toEntity(resume);
         setId(comment, 1L);
@@ -142,7 +128,7 @@ class CommentControllerTest extends ControllerUnitTest {
         event.acceptMentee(1L, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Comment comment = new Comment("리뷰 내용내용", 1L, new Resume("title", mentee));
+        Comment comment = new Comment("리뷰 내용내용", 1L, new Resume("title", 1L));
         setId(comment, 1L);
         setId(component, 1L);
         Field lastModifiedAt = comment.getClass().getSuperclass().getDeclaredField("lastModifiedDate");

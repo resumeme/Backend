@@ -5,6 +5,7 @@ import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpda
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
@@ -87,10 +88,11 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .build();
 
+        User savedUser = User.of(savedMentee);
 
         given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
         given(accountService.registerAccount(any())).willReturn(token);
-        given(menteeService.create(any(Mentee.class))).willReturn(savedMentee);
+        given(userService.create(any(User.class))).willReturn(savedUser);
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/mentees")
@@ -144,7 +146,9 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .introduce("안녕하세요")
                 .build();
 
-        given(menteeService.getOne(any(Long.class))).willReturn(savedMentee);
+        User savedUser = User.of(savedMentee);
+
+        given(userService.getOne(any(Long.class))).willReturn(savedUser);
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}", menteeId)
@@ -182,7 +186,7 @@ class MenteeControllerTest extends ControllerUnitTest {
         // given
         Long menteeId = 1L;
         MenteeInfoUpdateRequest request = new MenteeInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), Set.of("SNS"), "안녕하세요!");
-        given(menteeService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
+        given(userService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/mentees/{menteeId}", menteeId)

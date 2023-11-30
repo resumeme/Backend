@@ -8,7 +8,6 @@ import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
@@ -48,8 +47,6 @@ class UserEventControllerTest extends ControllerUnitTest {
 
     private Event event;
 
-    private Mentee mentee;
-
     private Resume resume;
 
     @BeforeEach
@@ -72,19 +69,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         setId(event, 1L);
         event.acceptMentee(1L, 1L);
 
-        mentee = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
-
-        resume = new Resume("title", mentee);
+        resume = new Resume("title", 1L);
         setId(resume, 1L);
     }
 
