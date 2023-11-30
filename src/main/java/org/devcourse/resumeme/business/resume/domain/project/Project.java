@@ -83,12 +83,6 @@ public class Project {
                 null, resumeId, List.of(url, content, memberCount, skill));
     }
 
-    public static Project of(List<Component> components) {
-        ProjectConverter converter = ProjectConverter.of(components);
-
-        return Project.of(converter);
-    }
-
     public static List<Project> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -142,23 +136,6 @@ public class Project {
                         .build();
             }
 
-        }
-
-        private static ProjectConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            ProjectDetails details = ProjectDetails.builder()
-                    .url(componentMap.get(URL))
-                    .content(componentMap.get(CONTENT))
-                    .members(componentMap.get(MEMBER))
-                    .skill(componentMap.get(SKILL))
-                    .build();
-
-            return ProjectConverter.builder()
-                    .project(componentMap.get(PROJECT))
-                    .details(details)
-                    .build();
         }
 
         private static ProjectConverter of(Component component) {

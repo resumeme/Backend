@@ -64,6 +64,7 @@ public class EventController {
         return new EventInfoResponse(event, positions);
     }
 
+    // TODO 수정 필요
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
         Page<Event> pageAbleEvent = eventService.getAllWithPage(new AllEventFilter(null, null), pageable);

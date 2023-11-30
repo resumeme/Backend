@@ -2,14 +2,13 @@ package org.devcourse.resumeme.business.resume.controller.dto.project;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.project.Project;
 import org.devcourse.resumeme.business.resume.service.vo.ProjectDomainVo;
 
 import java.util.List;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class ProjectCreateRequest extends ComponentCreateRequest {
 

@@ -93,12 +93,6 @@ public class Career {
                 .toList();
     }
 
-    public static Career of(List<Component> components) {
-        CareerConverter converter = CareerConverter.of(components);
-
-        return Career.of(converter);
-    }
-
     public static List<Career> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -158,37 +152,6 @@ public class Career {
                         .build();
             }
 
-        }
-
-        private static CareerConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            CareerDetails details = CareerDetails.builder()
-                    .position(componentMap.get(POSITION))
-                    .skills(componentMap.get(SKILL))
-                    .careerContent(componentMap.get(CONTENT))
-                    .build();
-
-            List<DutyConverter> duties = componentMap.get(DUTY).getComponents().stream()
-                    .map(component -> DutyConverter.of(getFlatDuty(component)))
-                    .toList();
-
-            return CareerConverter.builder()
-                    .career(componentMap.get(COMPANY))
-                    .details(details)
-                    .duty(duties)
-                    .build();
-        }
-
-        private static List<Component> getFlatDuty(Component component) {
-            Component description = component.getComponents().get(0);
-
-            List<Component> flatDuty = new ArrayList<>();
-            flatDuty.add(component);
-            flatDuty.add(description);
-
-            return flatDuty;
         }
 
         private static CareerConverter of(Component component) {

@@ -45,12 +45,6 @@ public class ReferenceLink {
         return new Component(TYPE, linkType.name(), null, null, resumeId, List.of(address));
     }
 
-    public static ReferenceLink of(List<Component> components) {
-        ReferenceLinkConverter converter = ReferenceLinkConverter.of(components);
-
-        return ReferenceLink.of(converter);
-    }
-
     public static List<ReferenceLink> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -91,20 +85,6 @@ public class ReferenceLink {
                         .build();
             }
 
-        }
-
-        private static ReferenceLinkConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            ReferenceLinkDetails details = ReferenceLinkDetails.builder()
-                    .address(componentMap.get(URL))
-                    .build();
-
-            return ReferenceLinkConverter.builder()
-                    .type(componentMap.get(TYPE))
-                    .details(details)
-                    .build();
         }
 
         private static ReferenceLinkConverter of(Component component) {

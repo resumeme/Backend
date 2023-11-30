@@ -2,14 +2,13 @@ package org.devcourse.resumeme.business.resume.controller.dto.activity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.activity.Activity;
 import org.devcourse.resumeme.business.resume.service.vo.ActivityDomainVo;
 
 import java.time.LocalDate;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class ActivityCreateRequest extends ComponentCreateRequest {
 

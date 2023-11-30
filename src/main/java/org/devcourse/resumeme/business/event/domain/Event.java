@@ -133,14 +133,6 @@ public class Event extends BaseEntity implements Comparable<Event> {
         return eventInfo.remainSeats(applicants.size());
     }
 
-    public void openReservationEvent(LocalDateTime nowDateTime) {
-        if (!eventTimeInfo.isAfterOpenTime(nowDateTime)) {
-            throw new EventException(NOT_OPEN_TIME);
-        }
-
-        eventInfo.open();
-    }
-
     public void checkOpen() {
         if (eventInfo.isOpen()) {
             throw new EventException(DUPLICATED_EVENT_OPEN);

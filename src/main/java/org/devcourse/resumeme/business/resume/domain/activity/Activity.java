@@ -68,12 +68,6 @@ public class Activity {
         return new Component(TITLE, activityName, startDate, endDate, resumeId, List.of(link, description));
     }
 
-    public static Activity of(List<Component> components) {
-        ActivityConverter converter = ActivityConverter.of(components);
-
-        return Activity.of(converter);
-    }
-
     public static List<Activity> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -120,21 +114,6 @@ public class Activity {
                         .build();
             }
 
-        }
-
-        private static ActivityConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            ActivityDetails activityName = ActivityDetails.builder()
-                    .link(requireNonNull(componentMap.get(LINK)))
-                    .description(requireNonNull(componentMap.get(DESCRIPTION)))
-                    .build();
-
-            return ActivityConverter.builder()
-                    .details(activityName)
-                    .activity(requireNonNull(componentMap.get(TITLE)))
-                    .build();
         }
 
         private static ActivityConverter of(Component component) {

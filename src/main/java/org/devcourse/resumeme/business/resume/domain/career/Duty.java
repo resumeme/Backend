@@ -91,20 +91,6 @@ public class Duty {
 
         }
 
-        static DutyConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            DutyDetails details = DutyDetails.builder()
-                    .description(componentMap.get(DESCRIPTION))
-                    .build();
-
-            return DutyConverter.builder()
-                    .title(componentMap.get(TITLE))
-                    .details(details)
-                    .build();
-        }
-
         static DutyConverter of(Component component) {
             return DutyConverter.builder()
                     .title(component)

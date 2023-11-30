@@ -66,12 +66,6 @@ public class Training {
                 resumeId, List.of(explanation, degree, major, gpa, maxGpa));
     }
 
-    public static Training of(List<Component> components) {
-        TrainingConverter converter = TrainingConverter.of(components);
-
-        return Training.of(converter);
-    }
-
     public static List<Training> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -130,24 +124,6 @@ public class Training {
                         .build();
             }
 
-        }
-
-        private static TrainingConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            TrainingDetails details = TrainingDetails.builder()
-                    .explanation(componentMap.get(DESCRIPTION))
-                    .degree(componentMap.get(DEGREE))
-                    .major(componentMap.get(MAJOR))
-                    .gpa(componentMap.get(SCORE))
-                    .maxGpa(componentMap.get(MAX_SCORE))
-                    .build();
-
-            return TrainingConverter.builder()
-                    .training(componentMap.get(TRAINING))
-                    .details(details)
-                    .build();
         }
 
         private static TrainingConverter of(Component component) {

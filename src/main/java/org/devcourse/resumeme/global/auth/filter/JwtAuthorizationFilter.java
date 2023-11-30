@@ -25,6 +25,7 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCE
 
 @Slf4j
 @RequiredArgsConstructor
+// TODO 수정 필요
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;

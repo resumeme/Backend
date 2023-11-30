@@ -61,12 +61,6 @@ public class ForeignLanguage {
         return new Component(LANGUAGE, this.language, null, null, resumeId, List.of(examName, scoreOrGrade));
     }
 
-    public static ForeignLanguage of(List<Component> components) {
-        ForeignLanguageConverter converter = ForeignLanguageConverter.of(components);
-
-        return ForeignLanguage.of(converter);
-    }
-
     public static List<ForeignLanguage> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -87,7 +81,6 @@ public class ForeignLanguage {
                 .build();
     }
 
-    @Data
     @Builder
     private static class ForeignLanguageConverter {
 
@@ -95,7 +88,6 @@ public class ForeignLanguage {
 
         private ForeignLanguageDetails details;
 
-        @Data
         @Builder
         private static class ForeignLanguageDetails {
 
@@ -113,21 +105,6 @@ public class ForeignLanguage {
                         .build();
             }
 
-        }
-
-        public static ForeignLanguageConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            ForeignLanguageDetails details = ForeignLanguageDetails.builder()
-                    .examName(componentMap.get(EXAM_NAME))
-                    .scoreOrGrade(componentMap.get(SCORE))
-                    .build();
-
-            return ForeignLanguageConverter.builder()
-                    .foreignLanguage(componentMap.get(LANGUAGE))
-                    .details(details)
-                    .build();
         }
 
         private static ForeignLanguageConverter of(Component component) {
