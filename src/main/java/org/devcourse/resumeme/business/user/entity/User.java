@@ -22,6 +22,7 @@ import org.devcourse.resumeme.common.domain.Position;
 import java.util.HashSet;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static java.util.stream.Collectors.toSet;
@@ -62,10 +63,10 @@ public class User {
     @Getter
     private String refreshToken;
 
-    @OneToMany(mappedBy = "user", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {PERSIST, MERGE, REMOVE}, orphanRemoval = true)
     private Set<UserPosition> userPositions = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {PERSIST, MERGE, REMOVE}, orphanRemoval = true)
     private Set<InterestedField> interestedFields = new HashSet<>();
 
     @Getter
@@ -82,9 +83,11 @@ public class User {
         this.careerYear = careerYear;
         this.refreshToken = refreshToken;
         this.introduce = introduce;
+        this.userPositions.clear();
         this.userPositions = userPositions.stream()
                 .map(position -> new UserPosition(this, Position.valueOf(position.toUpperCase())))
                 .collect(toSet());
+        this.interestedFields.clear();
         this.interestedFields = interestedFields.stream()
                 .map(field -> new InterestedField(this, Field.valueOf(field.toUpperCase())))
                 .collect(toSet());
