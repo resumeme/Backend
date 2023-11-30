@@ -109,6 +109,22 @@ public class User {
                 .build();
     }
 
+    public static User of(Mentor mentor) {
+        return User.builder()
+                .id(mentor.getId())
+                .email(mentor.getEmail())
+                .provider(mentor.getProvider())
+                .imageUrl(mentor.getImageUrl())
+                .requiredInfo(mentor.getRequiredInfo())
+                .careerContent(mentor.getCareerContent())
+                .careerYear(mentor.getCareerYear())
+                .refreshToken(mentor.getRefreshToken())
+                .introduce(mentor.getIntroduce())
+                .userPositions(mentor.getExperiencedPositions().stream().map(Enum::name).collect(toSet()))
+                .interestedFields(Set.of())
+                .build();
+    }
+
     public Mentee toMentee() {
         return Mentee.builder()
                 .id(id)
@@ -136,5 +152,4 @@ public class User {
                 .introduce(mentee.getIntroduce())
                 .build();
     }
-
 }

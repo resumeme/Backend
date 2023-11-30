@@ -1,9 +1,12 @@
 package org.devcourse.resumeme.business.user.entity;
 
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
+import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
@@ -51,12 +54,28 @@ public class UserService {
         return userId;
     }
 
+    public Long update(Long mentorId, MentorInfoUpdateRequest mentorInfoUpdateRequest) {
+        User user = getOne(mentorId);
+        Mentor mentor = user.toMentor();
+        mentor.updateInfos(mentorInfoUpdateRequest);
+
+        User updateUser = User.of(mentor);
+        userRepository.save(updateUser);
+
+        return mentorId;
+    }
+
     public void deleteRefreshToken(Long id) {
         updateRefreshToken(id, null);
     }
 
     public List<User> getByIds(List<Long> ids) {
         return userRepository.findAllByIds(ids);
+    }
+
+    public void updateRole(Long mentorId, ApplicationProcessType type) {
+        Mentor mentor = getOne(mentorId).toMentor();
+        mentor.updateRole(type.getRole());
     }
 
 }

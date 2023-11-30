@@ -44,7 +44,7 @@ class EventPositionTest {
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         return Stream.of(
                 Arguments.of(Position.BACK, null),
-                Arguments.of(null, new Event(openEvent, eventTimeInfo, mentor, List.of())),
+                Arguments.of(null, new Event(openEvent, eventTimeInfo, 1L, List.of())),
                 Arguments.of(null, null)
         );
     }

@@ -2,7 +2,6 @@ package org.devcourse.resumeme.global.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.devcourse.resumeme.business.user.entity.UserService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
 import org.devcourse.resumeme.global.auth.filter.OAuthTokenResponseFilter;
@@ -88,8 +87,8 @@ public class SecurityServiceConfig {
     }
 
     @Bean
-    public RoleConsistencyCheckFilter roleConsistencyCheckFilter(MentorService mentorService) {
-        return new RoleConsistencyCheckFilter(mentorService);
+    public RoleConsistencyCheckFilter roleConsistencyCheckFilter(UserService userService) {
+        return new RoleConsistencyCheckFilter(userService);
     }
 
     @Bean

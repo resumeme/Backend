@@ -5,8 +5,9 @@ import org.devcourse.resumeme.business.user.controller.dto.FollowRequest;
 import org.devcourse.resumeme.business.user.controller.dto.FollowResponse;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,13 +28,15 @@ public class FollowController {
 
     private final FollowService followService;
 
-    private final MentorService mentorService;
+    private final UserService userService;
 
     @GetMapping
     public List<FollowResponse> getFollowList(@AuthenticationPrincipal JwtUser user) {
         List<Follow> followings = followService.getFollowings(user.id());
         List<Long> mentorIds = followings.stream().map(Follow::getMentorId).toList();
-        List<Mentor> followingMentors = mentorService.getAllByIds(mentorIds);
+        List<Mentor> followingMentors = userService.getByIds(mentorIds).stream()
+                .map(User::toMentor)
+                .toList();
 
         return followings.stream()
                 .map(follow -> new FollowResponse(follow, followingMentors.stream().filter(mentor -> mentor.getId().equals(follow.getMentorId())).findFirst().get()))
@@ -47,7 +50,6 @@ public class FollowController {
 
     @PostMapping
     public IdResponse doFollow(@RequestBody FollowRequest request, @AuthenticationPrincipal JwtUser user) {
-        mentorService.getOne(request.mentorId());
         Follow follow = new Follow(user.id(), request.mentorId());
         Long followId = followService.create(follow);
 

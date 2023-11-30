@@ -101,8 +101,8 @@ class MenteeToEventServiceTest {
 
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        eventOne = new Event(openEvent, eventTimeInfo, mentorOne, List.of());
-        eventTwo = new Event(openEvent, eventTimeInfo, mentorTwo, List.of());
+        eventOne = new Event(openEvent, eventTimeInfo, 1L, List.of());
+        eventTwo = new Event(openEvent, eventTimeInfo, 2L, List.of());
     }
 
     @Test
@@ -110,7 +110,7 @@ class MenteeToEventServiceTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, mentorOne, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
         given(eventRepository.findWithLockById(1L)).willReturn(Optional.of(event));
         given(menteeToEventRepository.findByMenteeId(1L)).willReturn(List.of(new MenteeToEvent(event, 1L, 1L)));

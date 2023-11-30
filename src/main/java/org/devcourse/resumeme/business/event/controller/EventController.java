@@ -13,7 +13,8 @@ import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -42,14 +45,13 @@ public class EventController {
 
     private final EventService eventService;
 
-    private final MentorService mentorService;
+    private final UserService userService;
 
     private final EventPositionService eventPositionService;
 
     @PostMapping
     public IdResponse createEvent(@RequestBody EventCreateRequest request, @AuthenticationPrincipal JwtUser user) {
-        Mentor mentor = mentorService.getOne(user.id());
-        Event event = request.toEntity(mentor);
+        Event event = request.toEntity(user.id());
 
         return new IdResponse(eventService.create(event));
     }
@@ -79,8 +81,16 @@ public class EventController {
         Map<Object, List<EventPosition>> positionsMap = positions.stream()
                 .collect(groupingBy(position -> position.getEvent().getId(), toList()));
 
+        List<Long> mentorIds = events.stream()
+                .map(Event::getMentorId)
+                .toList();
+
+        Map<Long, Mentor> mentors = userService.getByIds(mentorIds).stream()
+                .map(User::toMentor)
+                .collect(Collectors.toMap(Mentor::getId, Function.identity()));
+
         List<EventResponse> responses = events.stream()
-                .map(event -> new EventResponse(event, positionsMap.get(event.getId())))
+                .map(event -> new EventResponse(event, positionsMap.get(event.getId()), mentors.get(event.getMentorId())))
                 .toList();
 
         return new EventPageResponse(responses, pageAbleEvent);

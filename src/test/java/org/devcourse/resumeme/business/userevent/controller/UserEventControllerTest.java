@@ -81,7 +81,7 @@ class UserEventControllerTest extends ControllerUnitTest {
 
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         setId(event, 1L);
         event.acceptMentee(1L, 1L);
 
@@ -143,7 +143,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long menteeId = 1L;
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
-        given(mentorService.getAllByIds(List.of(1L))).willReturn(List.of(mentor));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentor)));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));

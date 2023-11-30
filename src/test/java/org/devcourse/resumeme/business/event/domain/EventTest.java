@@ -40,7 +40,7 @@ class EventTest {
 
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        event = new Event(openEvent, eventTimeInfo, 1L, List.of());
     }
 
     @Test
@@ -120,7 +120,7 @@ class EventTest {
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         LocalDateTime now = LocalDateTime.now();
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(now, LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event bookEvent = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event bookEvent = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
         // when & then
         assertThatThrownBy(() -> bookEvent.openReservationEvent(now))

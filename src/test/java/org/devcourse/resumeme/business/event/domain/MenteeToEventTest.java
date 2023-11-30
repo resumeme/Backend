@@ -39,7 +39,7 @@ class MenteeToEventTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, mentor, List.of()), 1L, 1L);
+        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, 1L, List.of()), 1L, 1L);
 
         // then
         assertThat(menteeToEvent).isNotNull();
@@ -71,7 +71,7 @@ class MenteeToEventTest {
         return Stream.of(
                 Arguments.of(null, null),
                 Arguments.of(null, 1L),
-                Arguments.of(new Event(openEvent, eventTimeInfo, mentor, List.of()), null)
+                Arguments.of(new Event(openEvent, eventTimeInfo, 1L, List.of()), null)
         );
     }
 
@@ -93,7 +93,7 @@ class MenteeToEventTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, mentor, List.of()), 1L, 1L);
+        MenteeToEvent menteeToEvent = new MenteeToEvent(new Event(openEvent, eventTimeInfo, 1L, List.of()), 1L, 1L);
 
         // when
         boolean sameMentee = menteeToEvent.isSameMentee(menteeId);

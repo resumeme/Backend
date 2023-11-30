@@ -7,6 +7,7 @@ import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegister
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
@@ -95,7 +96,7 @@ class MentorControllerTest extends ControllerUnitTest {
 
         given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
         given(accountService.registerAccount(any())).willReturn(token);
-        given(mentorService.create(any(Mentor.class))).willReturn(savedMentor);
+        given(userService.create(any(User.class))).willReturn(User.of(savedMentor));
 
 
         // when
@@ -192,7 +193,7 @@ class MentorControllerTest extends ControllerUnitTest {
                 .introduce(mentor.getIntroduce())
                 .build();
 
-        given(mentorService.getOne(any(Long.class))).willReturn(savedMentor);
+        given(userService.getOne(any(Long.class))).willReturn(User.of(savedMentor));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}", 1L)

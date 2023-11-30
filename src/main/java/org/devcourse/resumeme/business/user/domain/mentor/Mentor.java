@@ -1,14 +1,5 @@
 package org.devcourse.resumeme.business.user.domain.mentor;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static jakarta.persistence.FetchType.LAZY;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_ADMIN;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
@@ -36,38 +26,31 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VAL
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
 
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mentor extends BaseEntity {
 
     static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
-    @Id
     @Getter
-    @GeneratedValue
-    @Column(name = "mentor_id")
     private Long id;
 
     @Getter
-    @Column(unique = true)
     private String email;
 
-    @Enumerated(EnumType.STRING)
+    @Getter
     private Provider provider;
 
     @Getter
     private String imageUrl;
 
     @Getter
-    @Embedded
     private RequiredInfo requiredInfo;
 
     @Getter
     private String refreshToken;
 
     @Getter
-    @OneToMany(fetch = LAZY, mappedBy = "mentor", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<MentorPosition> experiencedPositions = new HashSet<>();
+    private Set<Position> experiencedPositions = new HashSet<>();
 
     @Getter
     private String careerContent;
@@ -87,7 +70,7 @@ public class Mentor extends BaseEntity {
         this.imageUrl = imageUrl;
         this.requiredInfo = requiredInfo;
         this.refreshToken = refreshToken;
-        this.experiencedPositions = experiencedPositions.stream().map(position -> new MentorPosition(this, Position.valueOf(position.toUpperCase()))).collect(Collectors.toSet());
+        this.experiencedPositions = experiencedPositions.stream().map(position -> Position.valueOf(position.toUpperCase())).collect(Collectors.toSet());
         this.careerContent = careerContent;
         this.careerYear = careerYear;
         this.introduce = introduce;
@@ -122,11 +105,11 @@ public class Mentor extends BaseEntity {
     }
 
     public void updateInfos(MentorInfoUpdateRequest updateRequest) {
-        validateInputs(email, provider, imageUrl, requiredInfo, updateRequest.experiencedPositions(), updateRequest.careerContent(), updateRequest.careerYear(), updateRequest.introduce());
+        validateInputs(email, provider, imageUrl, requiredInfo,updateRequest.experiencedPositions(), updateRequest.careerContent(), updateRequest.careerYear(), updateRequest.introduce());
         this.clearPositions();
         this.requiredInfo.updateNickname(updateRequest.nickname());
         this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
-        updateRequest.experiencedPositions().forEach(position -> this.experiencedPositions.add(new MentorPosition(this, Position.valueOf(position.toUpperCase()))));
+        updateRequest.experiencedPositions().forEach(position -> this.experiencedPositions.add(Position.valueOf(position.toUpperCase())));
         this.careerContent = updateRequest.careerContent();
         this.careerYear = updateRequest.careerYear();
         this.introduce = updateRequest.introduce();

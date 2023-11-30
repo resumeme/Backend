@@ -29,7 +29,6 @@ import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
 import org.devcourse.resumeme.common.controller.EnumController;
 import org.devcourse.resumeme.common.support.NullableHttpRequestSnippet;
@@ -110,9 +109,6 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected ResumeService resumeService;
-
-    @MockBean
-    protected MentorService mentorService;
 
     @MockBean
     protected JwtService jwtService;

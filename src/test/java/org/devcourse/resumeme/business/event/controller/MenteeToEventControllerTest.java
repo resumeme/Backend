@@ -156,7 +156,7 @@ class MenteeToEventControllerTest extends ControllerUnitTest {
 
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         event.acceptMentee(1L, 1L);
 
         ApplyToEventRequest request = new ApplyToEventRequest(1L);

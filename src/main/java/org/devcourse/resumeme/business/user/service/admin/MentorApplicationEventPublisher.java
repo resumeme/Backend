@@ -22,7 +22,7 @@ public class MentorApplicationEventPublisher {
         if (mentor.isApproved()) {
             throw new CustomException(MENTOR_ALREADY_APPROVED);
         }
-        MentorApplicationEvent mentorApplicationEvent = new MentorApplicationEvent(this, new MentorApplication(mentor));
+        MentorApplicationEvent mentorApplicationEvent = new MentorApplicationEvent(this, new MentorApplication(mentor.getId()));
         applicationEventPublisher.publishEvent(mentorApplicationEvent);
     }
 

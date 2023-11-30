@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
@@ -112,7 +113,7 @@ class FollowControllerTest extends ControllerUnitTest {
         setId(followMentorThree, 2L);
 
         given(followService.getFollowings(any(Long.class))).willReturn(List.of(followMentorOne, followMentorThree));
-        given(mentorService.getAllByIds(any())).willReturn(List.of(mentorOne, mentorThree));
+        given(userService.getByIds(any())).willReturn(List.of(User.of(mentorOne), User.of(mentorThree)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/follows"));

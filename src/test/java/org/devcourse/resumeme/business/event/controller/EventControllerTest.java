@@ -15,6 +15,7 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,10 +93,10 @@ class EventControllerTest extends ControllerUnitTest {
         );
         EventCreateRequest eventCreateRequest = new EventCreateRequest(eventInfoRequest, eventTimeRequest, List.of("FRONT", "BACK"));
         /* 로그인 기능 완료 후 멘토 주입 값 추후 변경 예정 */
-        Event event = eventCreateRequest.toEntity(mentor);
+        Event event = eventCreateRequest.toEntity(1L);
 
         given(eventService.create(event)).willReturn(1L);
-        given(mentorService.getOne(1L)).willReturn(mentor);
+        given(userService.getOne(1L)).willReturn(User.of(mentor));
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/events")
@@ -214,7 +215,7 @@ class EventControllerTest extends ControllerUnitTest {
         Long eventId = 1L;
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         event.acceptMentee(1L, 1L);
         event.acceptMentee(2L, 4L);
         setId(event, 1L);
@@ -267,9 +268,10 @@ class EventControllerTest extends ControllerUnitTest {
         // given
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         setId(event, 1L);
 
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentor)));
         given(eventService.getAllWithPage(new AllEventFilter(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
         given(eventPositionService.getAll(List.of(1L))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
