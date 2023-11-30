@@ -84,12 +84,20 @@ public class Event extends BaseEntity implements Comparable<Event> {
         eventInfo.checkAvailableApplication();
         applicants.add(new MenteeToEvent(this, menteeId, resumeId));
 
-        return eventInfo.close(applicants.size());
+        int currentApplicantSize = getApplicantsCount();
+
+        return eventInfo.close(currentApplicantSize);
+    }
+
+    public int getApplicantsCount() {
+        return (int) applicants.stream()
+                .filter(applicant -> !applicant.isReject())
+                .count();
     }
 
     private void checkDuplicateApplicationEvent(Long menteeId) {
         applicants.stream()
-                .filter(applicant -> applicant.isSameMentee(menteeId))
+                .filter(applicant -> applicant.isSameMentee(menteeId) && !applicant.isReject())
                 .findFirst()
                 .ifPresent(applicant -> {
                     throw new EventException(DUPLICATE_APPLICATION_EVENT);

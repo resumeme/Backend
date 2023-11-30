@@ -29,4 +29,7 @@ public enum Progress implements DocsEnumType {
         return this.equals(APPLY);
     }
 
+    public boolean isReject() {
+        return this.equals(REJECT);
+    }
 }
