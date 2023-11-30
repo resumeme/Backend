@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,23 +49,22 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
     @Test
     void 멘토_승인요청을_확인한다() throws Exception {
         // given
-        MentorApplication mentorApplication = new MentorApplication(
-                Mentor.builder()
-                        .id(1L)
-                        .imageUrl(oAuth2TempInfo.getImageUrl())
-                        .provider(Provider.valueOf(oAuth2TempInfo.getProvider()))
-                        .email(oAuth2TempInfo.getEmail())
-                        .refreshToken(refreshToken)
-                        .requiredInfo(new RequiredInfo(requiredInfoRequest.realName(), requiredInfoRequest.nickname(), requiredInfoRequest.phoneNumber(), Role.of(requiredInfoRequest.role())))
-                        .experiencedPositions(mentorRegisterInfoRequest.experiencedPositions())
-                        .careerContent(mentorRegisterInfoRequest.careerContent())
-                        .careerYear(mentorRegisterInfoRequest.careerYear())
-                        .build()
-        );
+        Mentor mentor = Mentor.builder()
+                .id(1L)
+                .imageUrl("profileImage.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("happy123@naver.com")
+                .requiredInfo(new RequiredInfo("박철수", "fePark", "01038337266", Role.ROLE_PENDING))
+                .experiencedPositions(Set.of("FRONT", "BACK"))
+                .careerContent("5년차 멍멍이 넥카라 개발자")
+                .careerYear(5)
+                .build();
+
+        MentorApplication mentorApplication = new MentorApplication(1L);
         setId(mentorApplication, 1L);
 
         given(mentorApplicationService.getAll()).willReturn(List.of(mentorApplication));
-
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentor)));
         // when
         ResultActions result = mvc.perform(get("/admin/applications"));
 
@@ -92,8 +92,8 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
         ApplicationProcessType type = ACCEPT;
 
         given(mentorApplicationService.delete(applicationId)).willReturn(mentorId);
-        doNothing().when(mentorService).updateRole(mentorId, type);
-        given(mentorService.getOne(any())).willReturn(mentor);
+        doNothing().when(userService).updateRole(mentorId, type);
+        given(userService.getOne(any())).willReturn(User.of(mentor));
         doNothing().when(emailService).sendEmail(any());
 
         // when

@@ -3,7 +3,6 @@ package org.devcourse.resumeme.business.event.controller.dto;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.Position;
 
 import java.time.LocalDateTime;
@@ -14,14 +13,14 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VAL
 
 public record EventCreateRequest(EventInfoRequest info, EventTimeRequest time, List<String> positions) {
 
-    public Event toEntity(Mentor mentor) {
+    public Event toEntity(Long mentorId) {
         check(positions == null || positions.isEmpty(), NO_EMPTY_VALUE);
 
         List<Position> positionEntities = positions.stream()
                 .map(position -> Position.valueOf(position.toUpperCase()))
                 .toList();
 
-        return new Event(info.toEntity(time.openDateTime), time.toEntity(), mentor, positionEntities);
+        return new Event(info.toEntity(time.openDateTime), time.toEntity(), mentorId, positionEntities);
     }
 
     public record EventInfoRequest(String title, String content, int maximumAttendee) {

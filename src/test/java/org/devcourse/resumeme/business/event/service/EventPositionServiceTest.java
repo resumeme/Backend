@@ -53,7 +53,7 @@ class EventPositionServiceTest {
 
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         Field field = event.getClass().getDeclaredField("id");
         field.setAccessible(true);
         field.set(event, 1L);

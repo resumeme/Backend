@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,7 @@ import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
 @RequiredArgsConstructor
 public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
 
-    private final MentorService mentorService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -38,7 +38,7 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
 
         JwtUser user = (JwtUser) auth.getPrincipal();
 
-        return isPending(auth) && mentorService.getOne(user.id()).getRole().equals(ROLE_MENTOR);
+        return isPending(auth) && userService.getOne(user.id()).toMentor().getRole().equals(ROLE_MENTOR);
     }
 
     private boolean isPending(Authentication auth) {

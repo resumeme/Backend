@@ -3,7 +3,6 @@ package org.devcourse.resumeme.business.userevent.controller;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
-import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
@@ -13,7 +12,6 @@ import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.dto.MenteeEventResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.MentorEventResponse;
 import org.springframework.data.domain.Page;
@@ -40,8 +38,6 @@ public class UserEventController {
     private final UserService userService;
 
     private final MenteeToEventService menteeToEventService;
-
-    private final MentorService mentorService;
 
     @GetMapping("/mentors/{mentorId}/events")
     public List<MentorEventResponse> all(@PathVariable Long mentorId) {
@@ -80,13 +76,15 @@ public class UserEventController {
                 .map(MenteeToEvent::getEvent)
                 .toList();
         List<Long> mentorIds = byMenteeId.stream()
-                .map(m -> m.getEvent().getMentor().getId())
+                .map(m -> m.getEvent().getMentorId())
                 .toList();
 
-        Map<Long, Mentor> mentors = mentorService.getAllByIds(mentorIds).stream()
+        Map<Long, Mentor> mentors = userService.getByIds(mentorIds).stream()
+                .map(User::toMentor)
                 .collect(Collectors.toMap(Mentor::getId, Function.identity()));
+
         Map<Long, Mentor> mentorEventMap = byMenteeId.stream()
-                .collect(Collectors.toMap(e -> e.getEvent().getId(), e -> mentors.get(e.getEvent().getMentor().getId())));
+                .collect(Collectors.toMap(e -> e.getEvent().getId(), e -> mentors.get(e.getEvent().getMentorId())));
         Map<Long, String> resumeTitles = getResumes(events).stream()
                 .collect(Collectors.toMap(Resume::getId, Resume::getTitle));
 

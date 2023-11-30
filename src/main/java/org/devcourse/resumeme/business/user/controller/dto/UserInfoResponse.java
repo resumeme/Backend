@@ -19,7 +19,7 @@ public record UserInfoResponse(Long id, String imageUrl, String realName, String
     }
 
     private static Set<String> getExperiencedPositions(Mentor mentor) {
-        return mentor.getExperiencedPositions().stream().map(mentorPosition -> mentorPosition.getPosition().name()).collect(Collectors.toSet());
+        return mentor.getExperiencedPositions().stream().map(Enum::name).collect(Collectors.toSet());
     }
 
     private static Set<String> getInterestedPositions(Mentee mentee) {

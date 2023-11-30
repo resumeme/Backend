@@ -6,8 +6,9 @@ import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoResp
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.AccountService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
@@ -31,7 +32,7 @@ import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN
 @RequiredArgsConstructor
 public class MentorController {
 
-    private final MentorService mentorService;
+    private final UserService mentorService;
 
     private final AccountService accountService;
 
@@ -42,7 +43,7 @@ public class MentorController {
 
         OAuth2TempInfo oAuth2TempInfo = accountService.getTempInfo(cacheKey);
         Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo);
-        Mentor savedMentor = mentorService.create(mentor);
+        Mentor savedMentor = mentorService.create(User.of(mentor)).toMentor();
 
         Token token = getToken(cacheKey, savedMentor);
         mentorService.updateRefreshToken(savedMentor.getId(), token.refreshToken());
@@ -61,7 +62,7 @@ public class MentorController {
 
     @GetMapping("/{mentorId}")
     public MentorInfoResponse getOne(@PathVariable Long mentorId) {
-        Mentor findMentor = mentorService.getOne(mentorId);
+        Mentor findMentor = mentorService.getOne(mentorId).toMentor();
 
         return new MentorInfoResponse(findMentor);
     }

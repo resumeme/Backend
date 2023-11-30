@@ -51,9 +51,8 @@ public class Event extends BaseEntity implements Comparable<Event> {
     @Embedded
     private EventTimeInfo eventTimeInfo;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "mentor_id")
-    private Mentor mentor;
+    @Getter
+    private Long mentorId;
 
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<EventPosition> positions = new ArrayList<>();
@@ -62,12 +61,12 @@ public class Event extends BaseEntity implements Comparable<Event> {
     @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<MenteeToEvent> applicants = new ArrayList<>();
 
-    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
-        validateInput(eventInfo, eventTimeInfo, mentor, positions);
+    public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Long mentorId, List<Position> positions) {
+        validateInput(eventInfo, eventTimeInfo, mentorId, positions);
 
         this.eventInfo = eventInfo;
         this.eventTimeInfo = eventTimeInfo;
-        this.mentor = mentor;
+        this.mentorId = mentorId;
         this.positions = getPositions(positions);
     }
 
@@ -77,10 +76,10 @@ public class Event extends BaseEntity implements Comparable<Event> {
                 .toList();
     }
 
-    private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Mentor mentor, List<Position> positions) {
+    private void validateInput(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Long mentorId, List<Position> positions) {
         notNull(eventInfo);
         notNull(eventTimeInfo);
-        notNull(mentor);
+        notNull(mentorId);
         notNull(positions);
     }
 
@@ -136,10 +135,6 @@ public class Event extends BaseEntity implements Comparable<Event> {
         }
 
         eventInfo.open();
-    }
-
-    public Mentor getMentor() {
-        return mentor;
     }
 
     public void checkOpen() {

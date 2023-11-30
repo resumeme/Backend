@@ -27,7 +27,7 @@ public class MentorApplicationService {
     public Long delete(Long applicationId) {
         MentorApplication mentorApplication = repository.findById(applicationId)
                 .orElseThrow(() -> new CustomException(APPLICANT_NOT_FOUND));
-        Long mentorId = mentorApplication.mentorId();
+        Long mentorId = mentorApplication.getMentorId();
 
         repository.delete(mentorApplication);
 

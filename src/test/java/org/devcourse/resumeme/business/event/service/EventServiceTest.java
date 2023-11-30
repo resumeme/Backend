@@ -9,6 +9,8 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -43,6 +45,9 @@ class EventServiceTest {
 
     @Mock
     private EventRepository eventRepository;
+
+    @Mock
+    private UserService userService;
 
     @InjectMocks
     private EventService eventService;
@@ -85,9 +90,10 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
-        given(eventRepository.findAllByMentor(mentor)).willReturn(List.of());
+        given(userService.getOne(1L)).willReturn(User.of(mentor));
+        given(eventRepository.findAllByMentorId(1L)).willReturn(List.of());
         given(eventRepository.save(event)).willReturn(event);
         doNothing().when(eventCreationPublisher).publishEventCreation(any(EventNoticeInfo.class));
 
@@ -103,13 +109,13 @@ class EventServiceTest {
         // given
         EventInfo openEvent = EventInfo.book(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        Event event = new Event(openEvent, eventTimeInfo, mentor, List.of());
+        Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
         EventInfo openEvent1 = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo1 = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event event1 = new Event(openEvent1, eventTimeInfo1, mentor, List.of());
+        Event event1 = new Event(openEvent1, eventTimeInfo1, 1L, List.of());
 
-        given(eventRepository.findAllByMentor(mentor)).willReturn(List.of(event1));
+        given(eventRepository.findAllByMentorId(1L)).willReturn(List.of(event1));
 
         // when & then
         assertThatThrownBy(() -> eventService.create(event))

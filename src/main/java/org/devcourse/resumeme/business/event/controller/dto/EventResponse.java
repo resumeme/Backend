@@ -8,8 +8,8 @@ import java.util.List;
 
 public record EventResponse(EventInfoResponse info, MentorInfo mentorInfo) {
 
-    public EventResponse(Event event, List<EventPosition> positions) {
-        this(new EventInfoResponse(event, positions), new MentorInfo(event.getMentor()));
+    public EventResponse(Event event, List<EventPosition> positions, Mentor mentor) {
+        this(new EventInfoResponse(event, positions), new MentorInfo(mentor));
     }
 
     record MentorInfo(Long mentorId, String nickname, String imageUrl) {
