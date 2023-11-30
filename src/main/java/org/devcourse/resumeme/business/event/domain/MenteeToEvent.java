@@ -78,7 +78,6 @@ public class MenteeToEvent extends BaseEntity {
 
         this.rejectMessage = rejectMessage;
         this.progress = REJECT;
-        this.event = null;
     }
 
     public boolean isRejected() {
@@ -104,6 +103,10 @@ public class MenteeToEvent extends BaseEntity {
 
     public void editComplete() {
         this.progress = COMPLETE;
+    }
+
+    public boolean isReject() {
+        return progress.isReject();
     }
 
 }
