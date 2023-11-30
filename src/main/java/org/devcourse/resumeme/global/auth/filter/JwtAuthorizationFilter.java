@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
 @Slf4j
@@ -31,9 +29,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    private final MentorService mentorService;
-
-    private final MenteeService menteeService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -63,11 +59,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private String findSavedTokenWithClaims(Claims claims) {
         Long id = claims.id();
-        if (claims.role().equals(ROLE_MENTEE.name())) {
-            return menteeService.getOneSimple(id).getRefreshToken();
-        }
-
-        return mentorService.getOneSimple(id).getRefreshToken();
+        return userService.getOne(id).getRefreshToken();
     }
 
     private void saveAuthentication(String accessToken) {

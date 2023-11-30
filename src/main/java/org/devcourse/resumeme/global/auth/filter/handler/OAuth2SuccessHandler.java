@@ -3,14 +3,12 @@ package org.devcourse.resumeme.global.auth.filter.handler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
-import org.devcourse.resumeme.global.exception.CustomException;
-import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
+import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.service.jwt.JwtService;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,9 +20,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtService jwtService;
 
-    private final MentorService mentorService;
-
-    private final MenteeService menteeService;
+    private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -34,11 +30,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             String accessToken = jwtService.createAccessToken(Claims.of(commonInfo));
             String refreshToken = jwtService.createRefreshToken();
 
-            if (commonInfo.role().equals(Role.ROLE_MENTEE)) {
-                menteeService.updateRefreshToken(commonInfo.id(), refreshToken);
-            } else {
-                mentorService.updateRefreshToken(commonInfo.id(), refreshToken);
-            }
+            userService.updateRefreshToken(commonInfo.id(), refreshToken);
 
             response.setCharacterEncoding("UTF-8");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

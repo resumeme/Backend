@@ -3,9 +3,9 @@ package org.devcourse.resumeme.business.event.service;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.mail.service.EmailService;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +19,9 @@ public class EventCreationListener implements ApplicationListener<EventCreation>
 
     private final EmailService emailService;
 
-    private final MenteeService menteeService;
-
     private final FollowService followService;
+
+    private final UserService userService;
 
     @Override
     public void onApplicationEvent(EventCreation eventCreation) {
@@ -30,9 +30,12 @@ public class EventCreationListener implements ApplicationListener<EventCreation>
                 .stream()
                 .map(Follow::getMenteeId)
                 .toList();
-        List<Mentee> followers = menteeService.getAllIn(followerIds);
 
-        emailService.sendEmail(createEventCreationMail(followers, eventCreation.getEventNoticeInfo()));
+        List<String> emails = userService.getByIds(followerIds).stream()
+                .map(User::getEmail)
+                .toList();
+
+        emailService.sendEmail(createEventCreationMail(emails, eventCreation.getEventNoticeInfo()));
     }
 
 }

@@ -3,8 +3,7 @@ package org.devcourse.resumeme.global.auth.service.authorization;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
-import org.devcourse.resumeme.business.user.repository.mentee.MenteeRepository;
-import org.devcourse.resumeme.business.user.repository.mentor.MentorRepository;
+import org.devcourse.resumeme.business.user.entity.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +15,7 @@ public class AuthorizationResolver {
 
     private final EventRepository eventRepository;
 
-    private final MenteeRepository menteeRepository;
-
-    private final MentorRepository mentorRepository;
+    private final UserRepository userRepository;
 
     public boolean resolve(Long userId, Long pathVariable, AuthorizationTarget target) {
         return switch (target) {
@@ -26,8 +23,7 @@ public class AuthorizationResolver {
                     .anyMatch(event -> event.getId().equals(pathVariable));
             case RESUMES -> resumeRepository.findAllByMenteeId(userId).stream()
                     .anyMatch(resume -> resume.getId().equals(pathVariable));
-            case MENTEES -> menteeRepository.findById(pathVariable).isPresent();
-            case MENTORS -> mentorRepository.findById(pathVariable).isPresent();
+            case MENTEES, MENTORS -> userRepository.findById(pathVariable).isPresent();
         };
     }
 

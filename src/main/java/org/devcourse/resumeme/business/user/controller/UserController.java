@@ -2,8 +2,8 @@ package org.devcourse.resumeme.business.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.controller.dto.UserInfoResponse;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
-import org.devcourse.resumeme.business.user.service.mentor.MentorService;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,19 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 public class UserController {
 
-    private final MentorService mentorService;
-
-    private final MenteeService menteeService;
+    private final UserService userService;
 
     @GetMapping
     public UserInfoResponse getMyInfo(@CurrentSecurityContext(expression = "authentication") Authentication auth) {
-        JwtUser user = (JwtUser) auth.getPrincipal();
-
+        JwtUser jwtUser = (JwtUser) auth.getPrincipal();
+        User user = userService.getOne(jwtUser.id());
         if (isMentee(auth)) {
-            return new UserInfoResponse(menteeService.getOne(user.id()));
+            return new UserInfoResponse(user.toMentee());
         }
 
-        return new UserInfoResponse(mentorService.getOne(user.id()));
+        return new UserInfoResponse(user.toMentor());
     }
 
     private boolean isMentee(Authentication auth) {

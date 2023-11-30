@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.global.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.global.auth.filter.ExceptionHandlerFilter;
 import org.devcourse.resumeme.global.auth.filter.JwtAuthorizationFilter;
@@ -83,8 +83,8 @@ public class SecurityServiceConfig {
     }
 
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter(JwtService jwtService, MenteeService menteeService, MentorService mentorService) {
-        return new JwtAuthorizationFilter(jwtService, mentorService, menteeService);
+    public JwtAuthorizationFilter jwtAuthorizationFilter(JwtService jwtService, UserService userService) {
+        return new JwtAuthorizationFilter(jwtService, userService);
     }
 
     @Bean

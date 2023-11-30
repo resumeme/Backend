@@ -6,7 +6,9 @@ import org.devcourse.resumeme.business.resume.controller.dto.resume.ResumeReques
 import org.devcourse.resumeme.business.resume.controller.dto.resume.ResumeResponse;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,11 +29,11 @@ public class ResumeController {
 
     private final ResumeService resumeService;
 
-    private final MenteeService menteeService;
+    private final UserService userService;
 
     @PostMapping
     public IdResponse createResume(@AuthenticationPrincipal JwtUser user, @RequestBody ResumeRequest request) {
-        Resume resume = request.toEntity(menteeService.getOne(user.id()));
+        Resume resume = request.toEntity(user.id());
         Long savedId = resumeService.create(resume);
 
         return new IdResponse(savedId);
@@ -40,8 +42,10 @@ public class ResumeController {
     @GetMapping("/{resumeId}/basic")
     public BasicResumeInfo getBasicInformation(@PathVariable Long resumeId) {
         Resume resume = resumeService.getOne(resumeId);
+        User user = userService.getOne(resume.getMenteeId());
+        Mentee mentee = user.toMentee();
 
-        return new BasicResumeInfo(resume);
+        return new BasicResumeInfo(resume, mentee);
     }
 
     @GetMapping

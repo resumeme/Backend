@@ -6,8 +6,9 @@ import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoResp
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.AccountService;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
@@ -31,7 +32,7 @@ import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN
 @RequestMapping("/api/v1/mentees")
 public class MenteeController {
 
-    private final MenteeService menteeService;
+    private final UserService userService;
 
     private final AccountService accountService;
 
@@ -42,10 +43,12 @@ public class MenteeController {
 
         OAuth2TempInfo oAuth2TempInfo = accountService.getTempInfo(cacheKey);
         Mentee mentee = registerInfoRequest.toEntity(oAuth2TempInfo);
-        Mentee savedMentee = menteeService.create(mentee);
+        User of = User.of(mentee);
+        User user = userService.create(of);
+        Mentee savedMentee = user.toMentee();
 
         Token token = getToken(cacheKey, savedMentee);
-        menteeService.updateRefreshToken(savedMentee.getId(), token.refreshToken());
+        userService.updateRefreshToken(savedMentee.getId(), token.refreshToken());
 
         return ResponseEntity.status(200)
                 .header(ACCESS_TOKEN_NAME, token.accessToken())
@@ -61,14 +64,15 @@ public class MenteeController {
 
     @PatchMapping("/{menteeId}")
     public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest) {
-        Long updatedMenteeId = menteeService.update(menteeId, updateRequest);
+        Long updatedMenteeId = userService.update(menteeId, updateRequest);
 
         return new IdResponse(updatedMenteeId);
     }
 
     @GetMapping("/{menteeId}")
     public MenteeInfoResponse getOne(@PathVariable Long menteeId) {
-        Mentee findMentee = menteeService.getOne(menteeId);
+        User user = userService.getOne(menteeId);
+        Mentee findMentee = user.toMentee();
 
         return new MenteeInfoResponse(findMentee);
     }
