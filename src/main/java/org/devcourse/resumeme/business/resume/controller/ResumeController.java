@@ -47,7 +47,6 @@ public class ResumeController {
     @GetMapping
     public List<ResumeResponse> getAll(@AuthenticationPrincipal JwtUser user) {
         return resumeService.getAllByMenteeId(user.id()).stream()
-                .filter(Resume::isOrigin)
                 .map(ResumeResponse::new)
                 .toList();
     }

@@ -44,7 +44,9 @@ public class ResumeService {
     }
 
     public List<Resume> getAllByMenteeId(Long menteeId) {
-        return resumeRepository.findAllByMenteeId(menteeId);
+        return resumeRepository.findAllByMenteeId(menteeId).stream()
+                .filter(Resume::isOrigin)
+                .toList();
     }
 
     public void delete(Long resumeId) {
