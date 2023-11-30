@@ -3,7 +3,7 @@ package org.devcourse.resumeme.business.snapshot.service;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
-import org.devcourse.resumeme.business.snapshot.controller.SnapshotVo;
+import org.devcourse.resumeme.business.snapshot.service.vo.SnapshotVo;
 import org.devcourse.resumeme.business.snapshot.entity.Snapshot;
 import org.devcourse.resumeme.business.snapshot.entity.SnapshotType;
 import org.devcourse.resumeme.business.snapshot.repository.SnapshotRepository;

@@ -11,7 +11,7 @@ import org.devcourse.resumeme.business.resume.controller.dto.activity.ActivityRe
 import org.devcourse.resumeme.business.resume.domain.ComponentInfo;
 import org.devcourse.resumeme.business.resume.domain.activity.Activity;
 import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.business.snapshot.controller.SnapshotVo;
+import org.devcourse.resumeme.business.snapshot.service.vo.SnapshotVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;

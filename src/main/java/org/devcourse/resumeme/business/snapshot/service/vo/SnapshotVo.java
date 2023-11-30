@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.snapshot.controller;
+package org.devcourse.resumeme.business.snapshot.service.vo;
 
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;

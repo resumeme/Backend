@@ -2,7 +2,6 @@ package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.devcourse.resumeme.business.event.EventCreationPublisher;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
 import org.devcourse.resumeme.business.event.exception.EventException;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static org.devcourse.resumeme.business.event.EventCreation.*;
+import static org.devcourse.resumeme.business.event.service.EventCreation.*;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
