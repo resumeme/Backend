@@ -13,6 +13,8 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 
 @Service
@@ -59,6 +61,10 @@ public class MenteeToEventService {
         return menteeToEventRepository.findByMenteeId(menteeId).stream()
                 .filter(MenteeToEvent::isAttending)
                 .count();
+    }
+
+    public List<MenteeToEvent> getByMenteeId(Long menteeId) {
+        return menteeToEventRepository.findByMenteeId(menteeId);
     }
 
 }

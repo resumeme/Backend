@@ -47,6 +47,7 @@ public class MenteeToEvent extends BaseEntity {
     @Enumerated(STRING)
     private Progress progress;
 
+    @Getter
     private String rejectMessage;
 
     @Getter
