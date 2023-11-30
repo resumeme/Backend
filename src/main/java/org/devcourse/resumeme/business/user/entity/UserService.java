@@ -1,10 +1,10 @@
 package org.devcourse.resumeme.business.user.entity;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
+import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
-import org.devcourse.resumeme.business.user.service.vo.UserInfoUpdateVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class UserService {
     public User create(User user) {
         User savedUser = userRepository.save(user);
         if (user.getRequiredInfo().getRole().equals(Role.ROLE_PENDING)) {
-            mentorApplicationEventPublisher.publishMentorApplicationEvent(savedUser);
+            mentorApplicationEventPublisher.publishMentorApplicationEvent(savedUser.toMentor());
         }
         return savedUser;
     }
@@ -40,9 +40,13 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(MENTEE_NOT_FOUND));
     }
 
-    public Long update(Long userId, UserInfoUpdateVo updateRequest) {
+    public Long update(Long userId, MenteeInfoUpdateRequest updateRequest) {
         User user = getOne(userId);
-        user.updateInfos(updateRequest);
+        Mentee mentee = user.toMentee();
+        mentee.updateInfos(updateRequest);
+
+        User updateUser = User.of(mentee);
+        userRepository.save(updateUser);
 
         return userId;
     }
@@ -53,10 +57,6 @@ public class UserService {
 
     public List<User> getByIds(List<Long> ids) {
         return userRepository.findAllByIds(ids);
-    }
-
-    public void updateRole(Long mentorId, ApplicationProcessType applicationProcessType) {
-        mentor.updateRole(type.getRole());
     }
 
 }

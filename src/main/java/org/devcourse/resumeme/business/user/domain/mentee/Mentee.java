@@ -1,14 +1,5 @@
 package org.devcourse.resumeme.business.user.domain.mentee;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,54 +13,36 @@ import org.devcourse.resumeme.common.domain.Position;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static jakarta.persistence.FetchType.LAZY;
+import static java.util.stream.Collectors.toSet;
 import static org.devcourse.resumeme.common.util.Validator.check;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.INVALID_EMAIL;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NO_EMPTY_VALUE;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.ROLE_NOT_ALLOWED;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.TEXT_OVER_LENGTH;
 
-@Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mentee extends BaseEntity {
 
     static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
-    @Id
-    @Getter
-    @GeneratedValue
-    @Column(name = "mentee_id")
     private Long id;
 
-    @Getter
-    @Column(unique = true)
     private String email;
 
-    @Getter
-    @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Getter
     private String imageUrl;
 
-    @Getter
-    @Embedded
     private RequiredInfo requiredInfo;
 
-    @Getter
     private String refreshToken;
 
-    @Getter
-    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<MenteePosition> interestedPositions = new HashSet<>();
+    private Set<Position> interestedPositions = new HashSet<>();
 
-    @Getter
-    @OneToMany(fetch = LAZY, mappedBy = "mentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<MenteeField> interestedFields = new HashSet<>();
+    private Set<Field> interestedFields = new HashSet<>();
 
-    @Getter
     private String introduce;
 
     @Builder
@@ -81,8 +54,8 @@ public class Mentee extends BaseEntity {
         this.imageUrl = imageUrl;
         this.requiredInfo = requiredInfo;
         this.refreshToken = refreshToken;
-        this.interestedPositions = interestedPositions.stream().map(position -> new MenteePosition(this, Position.valueOf(position.toUpperCase()))).collect(Collectors.toSet());
-        this.interestedFields = interestedFields.stream().map(field -> new MenteeField(this, Field.valueOf(field.toUpperCase()))).collect(Collectors.toSet());
+        this.interestedPositions = interestedPositions.stream().map(Position::valueOf).collect(toSet());
+        this.interestedFields = interestedFields.stream().map(Field::valueOf).collect(toSet());
         this.introduce = introduce;
     }
 
@@ -100,8 +73,8 @@ public class Mentee extends BaseEntity {
         this.clearFields();
         this.requiredInfo.updateNickname(updateRequest.nickname());
         this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
-        updateRequest.interestedPositions().forEach(position -> this.interestedPositions.add(new MenteePosition(this, Position.valueOf(position.toUpperCase()))));
-        updateRequest.interestedFields().forEach(field -> this.interestedFields.add(new MenteeField(this, Field.valueOf(field.toUpperCase()))));
+        updateRequest.interestedPositions().forEach(position -> this.interestedPositions.add(Position.valueOf(position.toUpperCase())));
+        updateRequest.interestedFields().forEach(field -> this.interestedFields.add(Field.valueOf(field.toUpperCase())));
         updateIntroduce(updateRequest.introduce());
     }
 
