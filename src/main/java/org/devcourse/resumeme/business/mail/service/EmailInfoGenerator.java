@@ -19,7 +19,7 @@ public class EmailInfoGenerator {
 
     public static EmailInfo createMentorApprovalMail(Mentor mentor) {
         String[] to = {mentor.getEmail()};
-        Map<String, Object> attributes = Map.of("link", BASE_URL + "/mypage");
+        Map<String, Object> attributes = Map.of("link", BASE_URL);
 
         return new EmailInfo(to, MENTOR_APPROVED, attributes);
     }
@@ -27,7 +27,7 @@ public class EmailInfoGenerator {
     public static EmailInfo createEventCreationMail(List<Mentee> mentees, EventNoticeInfo eventCreationInfo) {
         List<String> menteeList  = mentees.stream().map(Mentee::getEmail).toList();
         String[] to = menteeList.toArray(new String[menteeList.size()]);
-        Map<String, Object> attributes = Map.of("link", BASE_URL + "/event/view/" + eventCreationInfo.eventId(), "mentorNickname", eventCreationInfo.mentorNickname());
+        Map<String, Object> attributes = Map.of("link", BASE_URL + "/event/" + eventCreationInfo.eventId(), "mentorNickname", eventCreationInfo.mentorNickname());
 
         return new EmailInfo(to, EVENT_CREATED, attributes);
     }
