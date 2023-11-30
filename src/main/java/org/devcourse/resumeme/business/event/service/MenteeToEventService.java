@@ -9,7 +9,6 @@ import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
-import org.devcourse.resumeme.business.snapshot.service.SnapshotCapture;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +24,6 @@ public class MenteeToEventService {
 
     private final EventRepository eventRepository;
 
-    private final SnapshotCapture commentCapture;
-
     public Long getRecord(Long eventId, Long menteeId) {
         return menteeToEventRepository.findByMenteeId(menteeId).stream()
                 .filter(record -> record.getEvent().getId().equals(eventId))
@@ -35,14 +32,12 @@ public class MenteeToEventService {
                 .orElse(null);
     }
 
-    public void update(Long eventId, ApplyUpdateVo applyUpdateVo) {
+    public Long update(Long eventId, ApplyUpdateVo applyUpdateVo) {
         Event event = eventRepository.findWithApplicantsById(eventId)
                 .orElseThrow(() -> new EventException(EVENT_NOT_FOUND));
 
         ApplimentUpdate model = applyUpdateVo.toModel();
-        Long resumeId = model.update(event);
-
-        commentCapture.capture(eventId, resumeId);
+        return model.update(event);
     }
 
     public void acceptMentee(AcceptMenteeToEvent ids) {

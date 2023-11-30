@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.snapshot.service.SnapshotCapture;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,6 +31,8 @@ public class MenteeToEventController {
 
     private final MenteeToEventService applyService;
 
+    private final SnapshotCapture commentCapture;
+
     @GetMapping("/{eventId}")
     public IdResponse getParticipantRecord(@PathVariable Long eventId, @AuthenticationPrincipal JwtUser user) {
         Long menteeId = user.id();
@@ -47,7 +50,9 @@ public class MenteeToEventController {
     @PatchMapping("/{eventId}")
     public void updateEvent(@PathVariable Long eventId, @RequestBody ApplyUpdateRequest request) {
         ApplyUpdateVo applyUpdateVo = request.toVo();
-        applyService.update(eventId, applyUpdateVo);
+        Long resumeId = applyService.update(eventId, applyUpdateVo);
+
+        commentCapture.capture(eventId, resumeId);
     }
 
 }
