@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
-import static org.devcourse.resumeme.business.event.EventCreation.*;
+import static org.devcourse.resumeme.business.event.service.EventCreation.*;
 import static org.devcourse.resumeme.business.mail.EmailType.EVENT_CREATED;
 import static org.devcourse.resumeme.business.mail.EmailType.MENTOR_APPROVED;
 

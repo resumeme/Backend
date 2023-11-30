@@ -10,7 +10,6 @@ import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
-import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,9 +93,9 @@ class MentorControllerTest extends ControllerUnitTest {
                 .careerYear(mentorRegisterInfoRequest.careerYear())
                 .build();
 
-        given(oAuth2InfoRedisService.getOne(any())).willReturn((oAuth2TempInfo));
+        given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
+        given(accountService.registerAccount(any())).willReturn(token);
         given(mentorService.create(any(Mentor.class))).willReturn(savedMentor);
-        given(jwtService.createTokens(any(Claims.class))).willReturn(token);
 
 
         // when

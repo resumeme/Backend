@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.event;
+package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.mail.service.EmailService;

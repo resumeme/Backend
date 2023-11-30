@@ -21,7 +21,7 @@ public class ApplimentReject implements ApplimentUpdate {
     public Long update(Event event) {
         event.reject(menteeId, rejectMessage);
 
-        return 0L;
+        return null;
     }
 
 }

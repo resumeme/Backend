@@ -1,7 +1,6 @@
 package org.devcourse.resumeme.business.event.service;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.comment.service.CommentSnapService;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.domain.model.ApplimentUpdate;
@@ -10,6 +9,7 @@ import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
+import org.devcourse.resumeme.business.snapshot.service.SnapshotCapture;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class MenteeToEventService {
 
     private final EventRepository eventRepository;
 
-    private final CommentSnapService commentSnapService;
+    private final SnapshotCapture commentCapture;
 
     public Long getRecord(Long eventId, Long menteeId) {
         return menteeToEventRepository.findByMenteeId(menteeId).stream()
@@ -42,9 +42,7 @@ public class MenteeToEventService {
         ApplimentUpdate model = applyUpdateVo.toModel();
         Long resumeId = model.update(event);
 
-        if (resumeId != 0) {
-            commentSnapService.snapComment(resumeId, eventId);
-        }
+        commentCapture.capture(eventId, resumeId);
     }
 
     public void acceptMentee(AcceptMenteeToEvent ids) {

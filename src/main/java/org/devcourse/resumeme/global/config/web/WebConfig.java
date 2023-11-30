@@ -1,6 +1,7 @@
 package org.devcourse.resumeme.global.config.web;
 
 import org.devcourse.resumeme.business.resume.domain.Property;
+import org.devcourse.resumeme.business.snapshot.entity.SnapshotType;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -16,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new PropertyConverter());
+        registry.addConverter(new SnapshotTypeConverter());
     }
 
     static class PropertyConverter implements Converter<String, Property> {
@@ -23,6 +25,15 @@ public class WebConfig implements WebMvcConfigurer {
         @Override
         public Property convert(String source) {
             return Property.valueOf(source.toUpperCase());
+        }
+
+    }
+
+    static class SnapshotTypeConverter implements Converter<String, SnapshotType> {
+
+        @Override
+        public SnapshotType convert(String source) {
+            return SnapshotType.valueOf(source.toUpperCase());
         }
 
     }

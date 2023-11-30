@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentResponse;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.activity.ActivityCreateRequest;
 import org.devcourse.resumeme.business.resume.controller.dto.activity.ActivityResponse;
-import org.devcourse.resumeme.business.resume.domain.activity.Activity;
 import org.devcourse.resumeme.business.resume.domain.ComponentInfo;
+import org.devcourse.resumeme.business.resume.domain.activity.Activity;
 import org.devcourse.resumeme.business.resume.entity.Component;
-import org.devcourse.resumeme.business.snapshot.entity.Snapshot;
+import org.devcourse.resumeme.business.snapshot.service.vo.SnapshotVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.devcourse.resumeme.business.resume.controller.ComponentRequest.activityCreateRequest;
+import static org.devcourse.resumeme.business.snapshot.entity.SnapshotType.COMMENT;
+import static org.devcourse.resumeme.business.snapshot.entity.SnapshotType.RESUME;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_SNAPSHOT;
@@ -51,7 +54,7 @@ class SnapshotControllerTest extends ControllerUnitTest {
         Map<String, List<ComponentResponse>> activities = new HashMap<>();
         activities.put("activities", response1);
         String s = objectMapper.writeValueAsString(activities);
-        given(snapshotService.getByResumeId(1L)).willReturn(new Snapshot(s, null, 1L));
+        given(snapshotService.getByResumeId(1L, RESUME)).willReturn(SnapshotVo.of(new AllComponentResponse()));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/snapshot?resumeId=" + 1L + "&type=resume"));
@@ -81,7 +84,7 @@ class SnapshotControllerTest extends ControllerUnitTest {
         CommentWithReviewResponse response = new CommentWithReviewResponse(comments, "총평", 1L);
         String s = objectMapper.writeValueAsString(response);
 
-        given(snapshotService.getByResumeId(1L)).willReturn(new Snapshot(null, s, 1L));
+        given(snapshotService.getByResumeId(1L, COMMENT)).willReturn(SnapshotVo.of(new CommentWithReviewResponse(comments, "", 1L)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/snapshot?resumeId=" + 1L + "&type=comment"));
