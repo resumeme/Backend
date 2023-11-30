@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 public record MenteeEventResponse(Long eventId, Long resumeId, String status, String title, String rejectMessage,
                                   String mentorName, LocalDateTime startDate, LocalDateTime endDate) {
 
-    public MenteeEventResponse(MenteeToEvent applicant, Event event) {
+    public MenteeEventResponse(MenteeToEvent applicant, Event event, String mentorName) {
         this(event.getId(), applicant.getResumeId(), applicant.getProgress().name(), event.getEventInfo().getTitle(), applicant.getRejectMessage(),
-                event.getMentor().getNickname(), event.getEventTimeInfo().getOpenDateTime(), event.getEventTimeInfo().getCloseDateTime());
+                mentorName, event.getEventTimeInfo().getOpenDateTime(), event.getEventTimeInfo().getCloseDateTime());
     }
 
-    public MenteeEventResponse(MenteeToEvent menteeToEvent) {
-        this(menteeToEvent, menteeToEvent.getEvent());
+    public MenteeEventResponse(MenteeToEvent menteeToEvent, String mentorName) {
+        this(menteeToEvent, menteeToEvent.getEvent(), mentorName);
     }
 
 }
