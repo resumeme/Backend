@@ -13,7 +13,6 @@ import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.ControllerUnitTest;
@@ -65,10 +64,6 @@ class EventControllerTest extends ControllerUnitTest {
 
     private Mentor mentor;
 
-    private Mentee mentee1;
-
-    private Mentee mentee2;
-
     @BeforeEach
     void setUp() {
         mentor =  Mentor.builder()
@@ -81,30 +76,6 @@ class EventControllerTest extends ControllerUnitTest {
                 .experiencedPositions(Set.of("FRONT"))
                 .careerContent("금융회사 다님")
                 .careerYear(3)
-                .build();
-
-        mentee1 = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
-
-        mentee2 = Mentee.builder()
-                .id(2L)
-                .imageUrl("menteeimage2.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong2@kakao.com")
-                .refreshToken("ddefwefer2frte")
-                .requiredInfo(new RequiredInfo("김백둥이", "백둥둥2", "01072223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
                 .build();
     }
 
@@ -249,8 +220,8 @@ class EventControllerTest extends ControllerUnitTest {
         setId(event, 1L);
 
         given(eventService.getOne(eventId)).willReturn(event);
-        Resume resume1 = new Resume("title", mentee1);
-        Resume resume2 = new Resume("title", mentee2);
+        Resume resume1 = new Resume("title", 1L);
+        Resume resume2 = new Resume("title", 2L);
         setId(resume1, 1L);
         setId(resume2, 4L);
         given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));

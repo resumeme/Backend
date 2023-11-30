@@ -29,18 +29,7 @@ class CommentTest {
     void 리뷰_작성에_성공한다() {
         // given
         String content = "내용 수정해주세요";
-        Mentee mentee = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
-        Resume resume = new Resume("title", mentee);
+        Resume resume = new Resume("title", 1L);
         Component component = new Component(CAREERS, "career", null, null, 1L, List.of());
 
         // when
@@ -60,19 +49,7 @@ class CommentTest {
 
     static Stream<Arguments> reviewCreate() {
         String content = "내용 수정해주세요";
-        Mentee mentee = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
-
-        Resume resume = new Resume("title", mentee);
+        Resume resume = new Resume("title", 1L);
 
         return Stream.of(
                 Arguments.of(null, null),

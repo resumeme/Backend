@@ -3,8 +3,7 @@ package org.devcourse.resumeme.global.config.security.properties;
 import jakarta.annotation.PostConstruct;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
-import org.devcourse.resumeme.business.user.repository.mentee.MenteeRepository;
-import org.devcourse.resumeme.business.user.repository.mentor.MentorRepository;
+import org.devcourse.resumeme.business.user.entity.UserRepository;
 import org.devcourse.resumeme.global.auth.service.authorization.AuthorizationResolver;
 import org.devcourse.resumeme.global.auth.service.authorization.OnlyOwn;
 import org.springframework.stereotype.Component;
@@ -25,20 +24,17 @@ public class ManagerInjector {
 
     private final EventRepository eventRepository;
 
-    private final MenteeRepository menteeRepository;
+    private final UserRepository userRepository;
 
-    private final MentorRepository mentorRepository;
-
-    public ManagerInjector(EventRepository eventRepository, ResumeRepository resumeRepository, MenteeRepository menteeRepository, MentorRepository mentorRepository) {
+    public ManagerInjector(EventRepository eventRepository, ResumeRepository resumeRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.resumeRepository = resumeRepository;
-        this.menteeRepository = menteeRepository;
-        this.mentorRepository = mentorRepository;
+        this.userRepository = userRepository;
     }
 
     @PostConstruct
     public void postConstruct() {
-        AuthorizationResolver resolver = new AuthorizationResolver(resumeRepository, eventRepository, menteeRepository, mentorRepository);
+        AuthorizationResolver resolver = new AuthorizationResolver(resumeRepository, eventRepository, userRepository);
         OWN_MENTEE.authorizationManager = new OnlyOwn(List.of(RESUMES, MENTEES), "ROLE_MENTEE", resolver);
         OWN_MENTOR.authorizationManager = new OnlyOwn(List.of(EVENTS, MENTORS), "ROLE_MENTOR", resolver);
     }

@@ -1,5 +1,8 @@
-package org.devcourse.resumeme.business.user.domain.mentee;
+package org.devcourse.resumeme.business.user.entity;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +13,7 @@ import org.devcourse.resumeme.global.exception.ExceptionCode;
 
 import static org.devcourse.resumeme.common.util.Validator.check;
 
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequiredInfo {
 
@@ -27,6 +31,7 @@ public class RequiredInfo {
     private String phoneNumber;
 
     @Getter
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder

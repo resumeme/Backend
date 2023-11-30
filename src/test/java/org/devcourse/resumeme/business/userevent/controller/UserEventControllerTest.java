@@ -11,6 +11,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,9 +49,9 @@ class UserEventControllerTest extends ControllerUnitTest {
 
     private Event event;
 
-    private Mentee mentee;
-
     private Resume resume;
+
+    private Mentee mentee;
 
     @BeforeEach
     void init() throws NoSuchFieldException, IllegalAccessException {
@@ -66,25 +67,25 @@ class UserEventControllerTest extends ControllerUnitTest {
                 .careerYear(3)
                 .build();
 
+        mentee = Mentee.builder()
+                .id(1L)
+                .imageUrl("profile.png")
+                .provider(Provider.valueOf("KAKAO"))
+                .email("progrers33@gmail.com")
+                .refreshToken("refreshToken")
+                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTEE))
+                .interestedPositions(Set.of("FRONT"))
+                .interestedFields(Set.of("FINANCE"))
+                .introduce("백엔드 개발자")
+                .build();
+
         EventInfo openEvent = EventInfo.open(3, "제목", "내용");
         EventTimeInfo eventTimeInfo = EventTimeInfo.onStart(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
         event = new Event(openEvent, eventTimeInfo, mentor, List.of());
         setId(event, 1L);
         event.acceptMentee(1L, 1L);
 
-        mentee = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
-
-        resume = new Resume("title", mentee);
+        resume = new Resume("title", 1L);
         setId(resume, 1L);
     }
 
@@ -95,8 +96,8 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long mentorId = 1L;
 
         given(eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
-        given(eventPositionService.getAll(event.getId())).willReturn(List.of());
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentee)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}/events", mentorId));
@@ -143,6 +144,7 @@ class UserEventControllerTest extends ControllerUnitTest {
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
         given(mentorService.getAllByIds(List.of(1L))).willReturn(List.of(mentor));
+        given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));
 
@@ -158,6 +160,7 @@ class UserEventControllerTest extends ControllerUnitTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("[].eventId").type(NUMBER).description("이벤트 아이디"),
+                                        fieldWithPath("[].resumeTitle").type(STRING).description("이력서 제목"),
                                         fieldWithPath("[].resumeId").type(NUMBER).description("이력서 아이디"),
                                         fieldWithPath("[].status").type(STRING).description(generateLinkCode(EVENT_STATUS)),
                                         fieldWithPath("[].title").type(STRING).description("이벤트 제목"),

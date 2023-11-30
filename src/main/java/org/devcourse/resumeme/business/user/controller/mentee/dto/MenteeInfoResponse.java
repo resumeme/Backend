@@ -16,11 +16,11 @@ public record MenteeInfoResponse(String imageUrl, String realName, String nickna
     }
 
     private static Set<String> getInterestedPositions(Mentee mentee) {
-        return mentee.getInterestedPositions().stream().map(menteePosition -> menteePosition.getPosition().name()).collect(Collectors.toSet());
+        return mentee.getInterestedPositions().stream().map(Enum::name).collect(Collectors.toSet());
     }
 
     private static Set<String> getInterestedFields(Mentee mentee) {
-        return mentee.getInterestedFields().stream().map(menteeField -> menteeField.getField().name()).collect(Collectors.toSet());
+        return mentee.getInterestedFields().stream().map(Enum::name).collect(Collectors.toSet());
     }
 
 }

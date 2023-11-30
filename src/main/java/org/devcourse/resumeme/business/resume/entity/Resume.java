@@ -5,13 +5,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
@@ -39,9 +36,7 @@ public class Resume extends BaseEntity {
     private String title;
 
     @Getter
-    @ManyToOne
-    @JoinColumn(name = "mentee_id")
-    private Mentee mentee;
+    private Long menteeId;
 
     @Embedded
     private ResumeInfo resumeInfo = new ResumeInfo();
@@ -56,37 +51,29 @@ public class Resume extends BaseEntity {
 
     private boolean deleted = false;
 
-    public Resume(String title, Mentee mentee) {
-        validateResume(title, mentee);
+    public Resume(String title, Long menteeId) {
+        validateResume(title, menteeId);
         this.title = title;
-        this.mentee = mentee;
+        this.menteeId = menteeId;
         this.resumeInfo = new ResumeInfo();
     }
 
-    private static void validateResume(String title, Mentee mentee) {
+    private static void validateResume(String title, Long menteeId) {
         Validator.check(isBlank(title.trim()), ExceptionCode.NO_EMPTY_VALUE);
-        notNull(mentee);
+        notNull(menteeId);
     }
 
     @Builder
-    private Resume(Long id, String title, Mentee mentee, ResumeInfo resumeInfo, Long originResumeId) {
+    private Resume(Long id, String title, Long menteeId, ResumeInfo resumeInfo, Long originResumeId) {
         this.id = id;
         this.title = title;
-        this.mentee = mentee;
+        this.menteeId = menteeId;
         this.resumeInfo = resumeInfo;
         this.originResumeId = originResumeId;
     }
 
     public Resume copy() {
-        return new Resume(null, title, mentee, resumeInfo, id);
-    }
-
-    public Long menteeId() {
-        return this.mentee.getId();
-    }
-
-    public String menteeName() {
-        return this.mentee.getRequiredInfo().getNickname();
+        return new Resume(null, title, menteeId, resumeInfo, id);
     }
 
     public void openStatus() {

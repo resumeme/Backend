@@ -25,10 +25,10 @@ import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.admin.MentorApplicationController;
 import org.devcourse.resumeme.business.user.controller.mentee.MenteeController;
 import org.devcourse.resumeme.business.user.controller.mentor.MentorController;
+import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
-import org.devcourse.resumeme.business.user.service.mentee.MenteeService;
 import org.devcourse.resumeme.business.user.service.mentor.MentorService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
 import org.devcourse.resumeme.common.controller.EnumController;
@@ -115,9 +115,6 @@ public abstract class ControllerUnitTest {
     protected MentorService mentorService;
 
     @MockBean
-    protected MenteeService menteeService;
-
-    @MockBean
     protected JwtService jwtService;
 
     @MockBean
@@ -147,6 +144,9 @@ public abstract class ControllerUnitTest {
     @MockBean
     protected FollowService followService;
 
+    @MockBean
+    protected UserService userService;
+
     protected MockMvc mvc;
 
     @Autowired
@@ -155,12 +155,12 @@ public abstract class ControllerUnitTest {
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
         OAuthTokenResponseFilter oauthTokenResponseFilter = new OAuthTokenResponseFilter(providerManager, mapper);
-        oauthTokenResponseFilter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(new JwtProperties("null", new TokenInfo("Authorization", 20), new TokenInfo("Refresh-Token", 30))), mentorService, menteeService));
+        oauthTokenResponseFilter.setAuthenticationSuccessHandler(new OAuth2SuccessHandler(new JwtService(new JwtProperties("null", new TokenInfo("Authorization", 20), new TokenInfo("Refresh-Token", 30))), userService));
         oauthTokenResponseFilter.setAuthenticationFailureHandler(new OAuth2FailureHandler());
 
-        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtService, mentorService, menteeService);
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtService, userService);
         LogoutFilter logoutFilter =
-                new LogoutFilter(new HttpStatusReturningLogoutSuccessHandler(), new CustomLogoutHandler(mentorService, menteeService));
+                new LogoutFilter(new HttpStatusReturningLogoutSuccessHandler(), new CustomLogoutHandler(userService));
         logoutFilter.setFilterProcessesUrl("/api/v1/logout");
 
         mvc = MockMvcBuilders

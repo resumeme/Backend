@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.user.domain.mentee;
+package org.devcourse.resumeme.business.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.common.domain.Field;
+import org.devcourse.resumeme.common.domain.Position;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
@@ -18,27 +18,27 @@ import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class MenteeField {
+public class UserPosition {
 
     @Id
     @GeneratedValue
-    @Column(name = "mentee_field_id")
+    @Column(name = "user_position_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "mentee_id")
-    private Mentee mentee;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Getter
     @Enumerated(STRING)
-    private Field field;
+    private Position position;
 
-    public MenteeField(Mentee mentee, Field field) {
-        check(field == null, "NO_EMPTY_VALUE", "분야는 필수 값입니다");
-        check(mentee == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
+    public UserPosition(User user, Position position) {
+        check(position == null, "NO_EMPTY_VALUE", "포지션은 필수 값입니다");
+        check(user == null, "NO_EMPTY_VALUE", "사용자는 필수 값입니다");
 
-        this.mentee = mentee;
-        this.field = field;
+        this.position = position;
+        this.user = user;
     }
 
 }

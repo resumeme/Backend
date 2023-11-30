@@ -1,14 +1,9 @@
 package org.devcourse.resumeme.business.result.controller;
 
-import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.business.result.controller.dto.CreateResultRequest;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.result.domain.ResultNotice;
 import org.devcourse.resumeme.business.resume.entity.Resume;
-import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.Role;
-import org.junit.jupiter.api.BeforeEach;
+import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
@@ -40,28 +34,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ResultNoticeControllerTest extends ControllerUnitTest {
 
-    private Mentee mentee;
-
-    @BeforeEach
-    void setUp() {
-        mentee = Mentee.builder()
-                .id(1L)
-                .imageUrl("menteeimage.png")
-                .provider(Provider.valueOf("KAKAO"))
-                .email("backdong1@kakao.com")
-                .refreshToken("ddefweferfrte")
-                .requiredInfo(new RequiredInfo("김백둥", "백둥둥", "01022223722", Role.ROLE_MENTEE))
-                .interestedPositions(Set.of())
-                .interestedFields(Set.of())
-                .introduce(null)
-                .build();
-    }
-
     @Test
     void 합격_자소서_소개글을_작성한다() throws Exception {
         // given
         CreateResultRequest request = new CreateResultRequest(1L, "content");
-        given(resumeService.getOne(request.resumeId())).willReturn(new Resume("title", mentee));
+        given(resumeService.getOne(request.resumeId())).willReturn(new Resume("title", 1L));
         given(resultService.create(any(ResultNotice.class))).willReturn(1L);
 
         // when
@@ -91,7 +68,7 @@ class ResultNoticeControllerTest extends ControllerUnitTest {
     void 합격_자소서_전체를_페이징하여_본다() throws Exception {
         // given
         PageRequest request = PageRequest.of(1, 10);
-        ResultNotice resultNotice = new ResultNotice("content", new Resume("title", mentee));
+        ResultNotice resultNotice = new ResultNotice("content", new Resume("title", 1L));
         setId(resultNotice, 1L);
 
         given(resultService.getAll(request)).willReturn(new PageImpl<>(

@@ -7,6 +7,7 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,16 +64,16 @@ class ResumeControllerTest extends ControllerUnitTest {
                 .introduce(null)
                 .build();
 
-        resume = new Resume("title", mentee);
+        resume = new Resume("title", 1L);
     }
 
     @Test
     @WithMockCustomUser
     void 이력서_생성에_성공한다() throws Exception {
         ResumeRequest request = new ResumeRequest("title");
-        Resume resume = request.toEntity(mentee);
+        Resume resume = request.toEntity(1L);
 
-        given(menteeService.getOne(any())).willReturn(mentee);
+        given(userService.getOne(any())).willReturn(User.of(mentee));
         given(resumeService.create(resume)).willReturn(1L);
 
         // when
@@ -106,12 +107,13 @@ class ResumeControllerTest extends ControllerUnitTest {
         Resume resume = Resume.builder()
                 .title("title")
                 .resumeInfo(new ResumeInfo("백엔드", List.of("자바", "스프링"), "안녕하세요"))
-                .mentee(mentee)
+                .menteeId(1L)
                 .build();
         Field field = resume.getClass().getDeclaredField("originResumeId");
         field.setAccessible(true);
         field.set(resume, 2L);
         given(resumeService.getOne(resumeId)).willReturn(resume);
+        given(userService.getOne(1L)).willReturn(User.of(mentee));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/basic", resumeId));
@@ -144,8 +146,8 @@ class ResumeControllerTest extends ControllerUnitTest {
     @Test
     @WithMockCustomUser
     void 참여한_이력서_리스트를_조회한다() throws Exception {
-        Resume resume1 = new Resume("title1", mentee);
-        Resume resume2 = new Resume("title2", mentee);
+        Resume resume1 = new Resume("title1", 1L);
+        Resume resume2 = new Resume("title2", 2L);
         setId(resume1, 1L);
         setId(resume2, 2L);
         setModifiedAt(resume1, LocalDateTime.now());

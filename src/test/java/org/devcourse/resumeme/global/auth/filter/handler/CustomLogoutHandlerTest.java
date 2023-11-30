@@ -19,7 +19,7 @@ class CustomLogoutHandlerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 로그아웃에_성공한다() throws Exception {
         // given
-        doNothing().when(menteeService).deleteRefreshToken(any(Long.class));
+        doNothing().when(userService).deleteRefreshToken(any(Long.class));
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/logout"));

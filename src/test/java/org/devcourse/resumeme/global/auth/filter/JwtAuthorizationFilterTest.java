@@ -6,6 +6,7 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.exception.TokenException;
@@ -58,7 +59,7 @@ class JwtAuthorizationFilterTest extends ControllerUnitTest {
         given(jwtService.extractClaim(any())).willReturn(new Claims(1L, "ROLE_MENTEE", new Date()));
         given(jwtService.extractRefreshToken(any(HttpServletRequest.class))).willReturn(Optional.of("refreshToken"));
         given(jwtService.isNotManipulated("refreshToken")).willReturn(true);
-        given(menteeService.getOneSimple(1L)).willReturn(mentee);
+        given(userService.getOne(1L)).willReturn(User.of(mentee));
         given(jwtService.compareTokens("refreshToken", "refreshToken")).willReturn(true);
 
         // when
