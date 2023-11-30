@@ -18,6 +18,7 @@ import org.devcourse.resumeme.business.resume.controller.ResumeControllerV2;
 import org.devcourse.resumeme.business.snapshot.controller.SnapshotController;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.snapshot.service.CommentCapture;
 import org.devcourse.resumeme.business.snapshot.service.SnapshotService;
 import org.devcourse.resumeme.business.user.controller.FollowController;
 import org.devcourse.resumeme.business.user.controller.UserController;
@@ -91,6 +92,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public abstract class ControllerUnitTest {
+
+    @MockBean
+    protected CommentCapture commentCapture;
 
     @MockBean
     protected AccountService accountService;

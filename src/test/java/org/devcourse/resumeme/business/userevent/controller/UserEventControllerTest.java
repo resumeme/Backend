@@ -3,6 +3,7 @@ package org.devcourse.resumeme.business.userevent.controller;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
@@ -140,7 +141,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         // given
         Long menteeId = 1L;
 
-        given(eventService.getAllWithPage(new AllEventFilter(null, menteeId), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
+        given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));
@@ -162,7 +163,8 @@ class UserEventControllerTest extends ControllerUnitTest {
                                         fieldWithPath("[].title").type(STRING).description("이벤트 제목"),
                                         fieldWithPath("[].mentorName").type(STRING).description("이벤트 생성 멘토 이름"),
                                         fieldWithPath("[].startDate").type(STRING).description("이벤트 시작 날짜"),
-                                        fieldWithPath("[].endDate").type(STRING).description("이벤트 종료 날짜")
+                                        fieldWithPath("[].endDate").type(STRING).description("이벤트 종료 날짜"),
+                                        fieldWithPath("[].rejectMessage").type(STRING).description("반려 사요")
                                 )
                         )
                 );

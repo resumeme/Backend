@@ -5,6 +5,7 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
+import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
@@ -28,6 +29,8 @@ public class UserEventController {
     private final ResumeService resumeService;
 
     private final EventPositionService eventPositionService;
+
+    private final MenteeToEventService menteeToEventService;
 
     @GetMapping("/mentors/{mentorId}/events")
     public List<MentorEventResponse> all(@PathVariable Long mentorId) {
@@ -53,11 +56,8 @@ public class UserEventController {
 
     @GetMapping("/mentees/{menteeId}/events")
     public List<MenteeEventResponse> getOwnEvents(@PathVariable Long menteeId) {
-        return eventService.getAllWithPage(new AllEventFilter(null, menteeId), Pageable.unpaged()).stream()
-                .flatMap(event -> event.getApplicants().stream()
-                        .filter(applicant -> applicant.isSameMentee(menteeId))
-                        .map(applicant -> new MenteeEventResponse(applicant, event))
-                        .toList().stream())
+        return menteeToEventService.getByMenteeId(menteeId).stream()
+                .map(MenteeEventResponse::new)
                 .toList();
     }
 
