@@ -142,7 +142,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long menteeId = 1L;
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
-
+        given(mentorService.getAllByIds(List.of(1L))).willReturn(List.of(mentor));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));
 
