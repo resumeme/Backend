@@ -8,7 +8,7 @@ public enum AuthorizationTarget {
 
     public static AuthorizationTarget of(String name) {
         try {
-            return valueOf(name);
+            return valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }
