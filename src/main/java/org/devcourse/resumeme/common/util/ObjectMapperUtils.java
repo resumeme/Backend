@@ -26,4 +26,12 @@ public class ObjectMapperUtils {
         }
     }
 
+    public static String getData(Object target) {
+        try {
+            return MAPPER.writeValueAsString(target);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(SERVER_ERROR);
+        }
+    }
+
 }

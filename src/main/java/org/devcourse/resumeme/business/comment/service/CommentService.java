@@ -1,25 +1,16 @@
 package org.devcourse.resumeme.business.comment.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.domain.Comment;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
-import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
-import org.devcourse.resumeme.business.snapshot.entity.Snapshot;
-import org.devcourse.resumeme.business.snapshot.repository.SnapshotRepository;
+import org.devcourse.resumeme.business.snapshot.service.SnapshotCapture;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.devcourse.resumeme.global.exception.ExceptionCode.COMMENT_NOT_FOUND;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.NOT_FOUND_DATA;
 
 @Service
 @Transactional
@@ -28,26 +19,21 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final SnapshotRepository snapshotRepository;
+    private final SnapshotCapture resumeCapture;
 
     public Comment create(Comment comment, Long resumeId) {
-        List<Comment> comments = commentRepository.findAllByResumeId(resumeId);
-        if (comments.isEmpty()) {
-            try {
-                // 이력서 원본 데이터 저장
-                RestTemplate restTemplate = new RestTemplate();
-                AllComponentResponse response = restTemplate.getForObject(new URI("http://localhost:8080/api/v1/resumes/" + resumeId), AllComponentResponse.class);
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
+        captureResume(resumeId);
 
-                String json = objectMapper.writeValueAsString(response);
-
-                snapshotRepository.save(new Snapshot(json, null, resumeId));
-            } catch (URISyntaxException | JsonProcessingException e) {
-                throw new CustomException(NOT_FOUND_DATA);
-            }
-        }
         return commentRepository.save(comment);
+    }
+
+    private void captureResume(Long resumeId) {
+        List<Comment> comments = commentRepository.findAllByResumeId(resumeId);
+        if (!comments.isEmpty()) {
+            return;
+        }
+
+        resumeCapture.capture(null, resumeId);
     }
 
     @Transactional(readOnly = true)
