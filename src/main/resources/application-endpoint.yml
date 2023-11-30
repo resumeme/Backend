@@ -26,8 +26,8 @@ endpoint:
       role: own_mentor
     - matcher:
       get: /api/v1/mentees/*/events, /api/v1/resumes/*, /api/v1/resumes/*/**, /api/v1/events/*/resumes/*/comments
-      post: /api/v1/resumes/**
-      patch: /api/v1/resumes/**, /api/v2/resumes/*, /api/v1/mentees/*
+      post: /api/v1/resumes/*/**
+      patch: /api/v1/resumes/*/**, /api/v2/resumes/*, /api/v1/mentees/*
       delete: /api/v1/resumes/**
       role: own_mentee
     - matcher:
