@@ -5,13 +5,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.event.exception.EventException;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -23,7 +20,6 @@ import java.util.stream.IntStream;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
-import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.business.event.domain.EventStatus.FINISH;
 import static org.devcourse.resumeme.common.util.Validator.notNull;
@@ -58,7 +54,7 @@ public class Event extends BaseEntity implements Comparable<Event> {
     private List<EventPosition> positions = new ArrayList<>();
 
     @Getter
-    @OneToMany(mappedBy = "event", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = {PERSIST}, orphanRemoval = true)
     private List<MenteeToEvent> applicants = new ArrayList<>();
 
     public Event(EventInfo eventInfo, EventTimeInfo eventTimeInfo, Long mentorId, List<Position> positions) {

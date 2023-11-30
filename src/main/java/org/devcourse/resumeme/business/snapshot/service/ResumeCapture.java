@@ -19,7 +19,7 @@ public class ResumeCapture implements SnapshotCapture {
 
     @Override
     public void capture(Long eventId, Long resumeId) {
-        AllComponentResponse response = getLocalResponse("/api/v1/resumes" + resumeId, AllComponentResponse.class);
+        AllComponentResponse response = getLocalResponse("/api/v1/resumes/" + resumeId, AllComponentResponse.class);
         String data = getData(response);
 
         snapshotRepository.save(new Snapshot(data, null, resumeId));

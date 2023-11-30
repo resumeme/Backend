@@ -28,13 +28,13 @@ public class AllComponentResponse {
     public AllComponentResponse(List<ActivityResponse> activities, List<CareerResponse> careers,
             List<CertificationResponse> certifications, List<ForeignLanguageResponse> foreignLanguages,
             List<ProjectResponse> projects, List<TrainingResponse> trainings, List<ResumeLinkResponse> links) {
-        this.activities = activities.isEmpty() ? null : activities;
-        this.careers = careers.isEmpty() ? null : careers;
-        this.certifications = certifications.isEmpty() ? null : certifications;
-        this.foreignLanguages = foreignLanguages.isEmpty() ? null : foreignLanguages;
-        this.projects = projects.isEmpty() ? null : projects;
-        this.trainings = trainings.isEmpty() ? null : trainings;
-        this.links = links.isEmpty() ? null : links;
+        this.activities = activities;
+        this.careers = careers;
+        this.certifications = certifications;
+        this.foreignLanguages = foreignLanguages;
+        this.projects = projects;
+        this.trainings = trainings;
+        this.links = links;
     }
 
 
