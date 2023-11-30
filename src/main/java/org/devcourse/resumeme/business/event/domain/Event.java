@@ -190,7 +190,7 @@ public class Event extends BaseEntity implements Comparable<Event> {
             return -1;
         }
 
-        return eventTimeInfo.getOpenDateTime().compareTo(other.eventTimeInfo.getOpenDateTime());
+        return other.eventTimeInfo.getOpenDateTime().compareTo(eventTimeInfo.getOpenDateTime());
     }
 
     public void updateInfo(String title, String content, int maximumAttendee) {
