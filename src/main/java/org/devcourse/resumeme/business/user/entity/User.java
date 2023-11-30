@@ -51,7 +51,7 @@ public class User {
 
     @Getter
     @Embedded
-    private RequiredInfo requiredInfo;
+    private RequiredInfoEntity requiredInfo;
 
     @Getter
     private String careerContent;
@@ -72,7 +72,7 @@ public class User {
     private String introduce;
 
     @Builder
-    public User(Long id, String email, Provider provider, String imageUrl, RequiredInfo requiredInfo, String careerContent, int careerYear, String refreshToken, String introduce, Set<String> userPositions, Set<String> interestedFields) {
+    public User(Long id, String email, Provider provider, String imageUrl, RequiredInfoEntity requiredInfo, String careerContent, int careerYear, String refreshToken, String introduce, Set<String> userPositions, Set<String> interestedFields) {
         this.id = id;
         this.email = email;
         this.provider = provider;
@@ -100,7 +100,7 @@ public class User {
                 .email(email)
                 .provider(provider)
                 .imageUrl(imageUrl)
-                .requiredInfo(requiredInfo)
+                .requiredInfo(new RequiredInfo(requiredInfo.getRealName(), requiredInfo.getNickname(), requiredInfo.getPhoneNumber(), requiredInfo.getRole()))
                 .refreshToken(refreshToken)
                 .experiencedPositions(userPositions.stream().map(position -> position.getPosition().name()).collect(toSet()))
                 .careerContent(careerContent)
@@ -115,7 +115,7 @@ public class User {
                 .email(mentor.getEmail())
                 .provider(mentor.getProvider())
                 .imageUrl(mentor.getImageUrl())
-                .requiredInfo(mentor.getRequiredInfo())
+                .requiredInfo(new RequiredInfoEntity(mentor.getRequiredInfo()))
                 .careerContent(mentor.getCareerContent())
                 .careerYear(mentor.getCareerYear())
                 .refreshToken(mentor.getRefreshToken())
@@ -131,7 +131,7 @@ public class User {
                 .email(email)
                 .provider(provider)
                 .imageUrl(imageUrl)
-                .requiredInfo(requiredInfo)
+                .requiredInfo(new RequiredInfo(requiredInfo.getRealName(), requiredInfo.getNickname(), requiredInfo.getPhoneNumber(), requiredInfo.getRole()))
                 .refreshToken(refreshToken)
                 .interestedPositions(userPositions.stream().map(position -> position.getPosition().name()).collect(toSet()))
                 .interestedFields(interestedFields.stream().map(field -> field.getField().name()).collect(toSet()))
@@ -145,7 +145,7 @@ public class User {
                 .email(mentee.getEmail())
                 .provider(mentee.getProvider())
                 .imageUrl(mentee.getImageUrl())
-                .requiredInfo(mentee.getRequiredInfo())
+                .requiredInfo(new RequiredInfoEntity(mentee.getRequiredInfo()))
                 .refreshToken(mentee.getRefreshToken())
                 .userPositions(mentee.getInterestedPositions().stream().map(Enum::name).collect(toSet()))
                 .interestedFields(mentee.getInterestedFields().stream().map(Enum::name).collect(toSet()))

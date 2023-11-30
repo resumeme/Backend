@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
@@ -15,7 +16,7 @@ import static org.devcourse.resumeme.common.util.Validator.check;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RequiredInfo {
+public class RequiredInfoEntity {
 
     private static final String REALNAME_REGEX = "^[ㄱ-ㅎ|가-힣]*$";
 
@@ -35,12 +36,16 @@ public class RequiredInfo {
     private Role role;
 
     @Builder
-    public RequiredInfo(String realName, String nickname, String phoneNumber, Role role) {
+    public RequiredInfoEntity(String realName, String nickname, String phoneNumber, Role role) {
         validateRequiredInfo(nickname, realName, phoneNumber, role);
         this.realName = realName;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    public RequiredInfoEntity(RequiredInfo requiredInfo) {
+        this(requiredInfo.getRealName(), requiredInfo.getNickname(), requiredInfo.getPhoneNumber(), requiredInfo.getRole());
     }
 
     private void validateRequiredInfo(String nickname, String realName, String phoneNumber, Role role) {
