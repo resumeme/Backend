@@ -2,6 +2,8 @@ package org.devcourse.resumeme.business.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.controller.dto.UserInfoResponse;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
+import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
@@ -24,10 +26,10 @@ public class UserController {
         JwtUser jwtUser = (JwtUser) auth.getPrincipal();
         User user = userService.getOne(jwtUser.id());
         if (isMentee(auth)) {
-            return new UserInfoResponse(user.toMentee());
+            return new UserInfoResponse(Mentee.of(user));
         }
 
-        return new UserInfoResponse(user.toMentor());
+        return new UserInfoResponse(Mentor.of(user));
     }
 
     private boolean isMentee(Authentication auth) {

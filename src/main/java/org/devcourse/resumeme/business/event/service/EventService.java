@@ -9,6 +9,7 @@ import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,8 @@ public class EventService {
         eventRepository.findAllByMentorId(event.getMentorId())
                 .forEach(Event::checkOpen);
         Event savedEvent = eventRepository.save(event);
-        Mentor mentor = userService.getOne(savedEvent.getMentorId()).toMentor();
+        User user = userService.getOne(savedEvent.getMentorId());
+        Mentor mentor = Mentor.of(user);
         EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, mentor);
         eventCreationPublisher.publishEventCreation(eventNoticeInfo);
 

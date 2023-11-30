@@ -42,7 +42,7 @@ public class MentorApplicationController {
                 .map(application -> application.getMentorId())
                 .toList();
         Map<Long, Mentor> mentors = userService.getByIds(mentorIds).stream()
-                .map(User::toMentor)
+                .map(Mentor::of)
                 .collect(Collectors.toMap(Mentor::getId, Function.identity()));
 
         List<MentorApplicationResponse> mentorApplications = applications.stream()
@@ -67,7 +67,8 @@ public class MentorApplicationController {
     private void processApplication(Long applicationId, String type) {
         Long mentorId = mentorApplicationService.delete(applicationId);
         userService.updateRole(mentorId, ApplicationProcessType.valueOf(type.toUpperCase()));
-        emailService.sendEmail(createMentorApprovalMail(userService.getOne(mentorId).toMentor()));
+        User user = userService.getOne(mentorId);
+        emailService.sendEmail(createMentorApprovalMail(Mentor.of(user)));
     }
 
 }

@@ -64,7 +64,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
         setId(mentorApplication, 1L);
 
         given(mentorApplicationService.getAll()).willReturn(List.of(mentorApplication));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentor)));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentor.from()));
         // when
         ResultActions result = mvc.perform(get("/admin/applications"));
 
@@ -93,7 +93,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
 
         given(mentorApplicationService.delete(applicationId)).willReturn(mentorId);
         doNothing().when(userService).updateRole(mentorId, type);
-        given(userService.getOne(any())).willReturn(User.of(mentor));
+        given(userService.getOne(any())).willReturn(mentor.from());
         doNothing().when(emailService).sendEmail(any());
 
         // when

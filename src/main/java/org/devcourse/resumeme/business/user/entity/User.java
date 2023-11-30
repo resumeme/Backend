@@ -13,9 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.Provider;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.common.domain.Field;
 import org.devcourse.resumeme.common.domain.Position;
 
@@ -97,62 +94,4 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public Mentor toMentor() {
-        return Mentor.builder()
-                .id(id)
-                .email(email)
-                .provider(provider)
-                .imageUrl(imageUrl)
-                .requiredInfo(new RequiredInfo(requiredInfo.getRealName(), requiredInfo.getNickname(), requiredInfo.getPhoneNumber(), requiredInfo.getRole()))
-                .refreshToken(refreshToken)
-                .experiencedPositions(userPositions.stream().map(position -> position.getPosition().name()).collect(toSet()))
-                .careerContent(careerContent)
-                .careerYear(careerYear)
-                .introduce(introduce)
-                .build();
-    }
-
-    public static User of(Mentor mentor) {
-        return User.builder()
-                .id(mentor.getId())
-                .email(mentor.getEmail())
-                .provider(mentor.getProvider())
-                .imageUrl(mentor.getImageUrl())
-                .requiredInfo(new RequiredInfoEntity(mentor.getRequiredInfo()))
-                .careerContent(mentor.getCareerContent())
-                .careerYear(mentor.getCareerYear())
-                .refreshToken(mentor.getRefreshToken())
-                .introduce(mentor.getIntroduce())
-                .userPositions(mentor.getExperiencedPositions().stream().map(Enum::name).collect(toSet()))
-                .interestedFields(Set.of())
-                .build();
-    }
-
-    public Mentee toMentee() {
-        return Mentee.builder()
-                .id(id)
-                .email(email)
-                .provider(provider)
-                .imageUrl(imageUrl)
-                .requiredInfo(new RequiredInfo(requiredInfo.getRealName(), requiredInfo.getNickname(), requiredInfo.getPhoneNumber(), requiredInfo.getRole()))
-                .refreshToken(refreshToken)
-                .interestedPositions(userPositions.stream().map(position -> position.getPosition().name()).collect(toSet()))
-                .interestedFields(interestedFields.stream().map(field -> field.getField().name()).collect(toSet()))
-                .introduce(introduce)
-                .build();
-    }
-
-    public static User of(Mentee mentee) {
-        return User.builder()
-                .id(mentee.getId())
-                .email(mentee.getEmail())
-                .provider(mentee.getProvider())
-                .imageUrl(mentee.getImageUrl())
-                .requiredInfo(new RequiredInfoEntity(mentee.getRequiredInfo()))
-                .refreshToken(mentee.getRefreshToken())
-                .userPositions(mentee.getInterestedPositions().stream().map(Enum::name).collect(toSet()))
-                .interestedFields(mentee.getInterestedFields().stream().map(Enum::name).collect(toSet()))
-                .introduce(mentee.getIntroduce())
-                .build();
-    }
 }

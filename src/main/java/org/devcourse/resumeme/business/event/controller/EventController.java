@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.controller.dto.EventCreateRequest;
 import org.devcourse.resumeme.business.event.controller.dto.EventInfoResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
-import org.devcourse.resumeme.business.event.controller.dto.EventResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventUpdateRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
@@ -12,7 +11,6 @@ import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -31,12 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequiredArgsConstructor
@@ -78,22 +70,9 @@ public class EventController {
 
         List<Event> events = getEvents(pageAbleEvent);
         List<EventPosition> positions = getPositions(events);
-        Map<Object, List<EventPosition>> positionsMap = positions.stream()
-                .collect(groupingBy(position -> position.getEvent().getId(), toList()));
+        List<User> mentors = getMentors(events);
 
-        List<Long> mentorIds = events.stream()
-                .map(Event::getMentorId)
-                .toList();
-
-        Map<Long, Mentor> mentors = userService.getByIds(mentorIds).stream()
-                .map(User::toMentor)
-                .collect(Collectors.toMap(Mentor::getId, Function.identity()));
-
-        List<EventResponse> responses = events.stream()
-                .map(event -> new EventResponse(event, positionsMap.get(event.getId()), mentors.get(event.getMentorId())))
-                .toList();
-
-        return new EventPageResponse(responses, pageAbleEvent);
+        return EventPageResponse.of(positions, mentors, pageAbleEvent);
     }
 
     private static List<Event> getEvents(Page<Event> events) {
@@ -109,6 +88,14 @@ public class EventController {
                 .toList();
 
         return eventPositionService.getAll(eventIds);
+    }
+
+    private List<User> getMentors(List<Event> events) {
+        List<Long> mentorIds = events.stream()
+                .map(Event::getMentorId)
+                .toList();
+
+        return userService.getByIds(mentorIds);
     }
 
 }

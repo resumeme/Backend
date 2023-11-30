@@ -73,7 +73,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         ResumeRequest request = new ResumeRequest("title");
         Resume resume = request.toEntity(1L);
 
-        given(userService.getOne(any())).willReturn(User.of(mentee));
+        given(userService.getOne(any())).willReturn(mentee.from());
         given(resumeService.create(resume)).willReturn(1L);
 
         // when
@@ -113,7 +113,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         field.setAccessible(true);
         field.set(resume, 2L);
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(userService.getOne(1L)).willReturn(User.of(mentee));
+        given(userService.getOne(1L)).willReturn(mentee.from());
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/basic", resumeId));

@@ -43,9 +43,8 @@ public class MenteeController {
 
         OAuth2TempInfo oAuth2TempInfo = accountService.getTempInfo(cacheKey);
         Mentee mentee = registerInfoRequest.toEntity(oAuth2TempInfo);
-        User of = User.of(mentee);
-        User user = userService.create(of);
-        Mentee savedMentee = user.toMentee();
+        User user = userService.create(mentee.from());
+        Mentee savedMentee = Mentee.of(user);
 
         Token token = getToken(cacheKey, savedMentee);
         userService.updateRefreshToken(savedMentee.getId(), token.refreshToken());
@@ -72,7 +71,7 @@ public class MenteeController {
     @GetMapping("/{menteeId}")
     public MenteeInfoResponse getOne(@PathVariable Long menteeId) {
         User user = userService.getOne(menteeId);
-        Mentee findMentee = user.toMentee();
+        Mentee findMentee = Mentee.of(user);
 
         return new MenteeInfoResponse(findMentee);
     }

@@ -32,7 +32,7 @@ import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN
 @RequiredArgsConstructor
 public class MentorController {
 
-    private final UserService mentorService;
+    private final UserService userService;
 
     private final AccountService accountService;
 
@@ -43,10 +43,11 @@ public class MentorController {
 
         OAuth2TempInfo oAuth2TempInfo = accountService.getTempInfo(cacheKey);
         Mentor mentor = registerInfoRequest.toEntity(oAuth2TempInfo);
-        Mentor savedMentor = mentorService.create(User.of(mentor)).toMentor();
+        User createdUser = userService.create(mentor.from());
+        Mentor savedMentor = Mentor.of(createdUser);
 
         Token token = getToken(cacheKey, savedMentor);
-        mentorService.updateRefreshToken(savedMentor.getId(), token.refreshToken());
+        userService.updateRefreshToken(savedMentor.getId(), token.refreshToken());
 
         return ResponseEntity.status(200)
                 .header(ACCESS_TOKEN_NAME, token.accessToken())
@@ -62,14 +63,15 @@ public class MentorController {
 
     @GetMapping("/{mentorId}")
     public MentorInfoResponse getOne(@PathVariable Long mentorId) {
-        Mentor findMentor = mentorService.getOne(mentorId).toMentor();
+        User user = userService.getOne(mentorId);
+        Mentor findMentor = Mentor.of(user);
 
         return new MentorInfoResponse(findMentor);
     }
 
     @PatchMapping("/{mentorId}")
     public IdResponse update(@PathVariable Long mentorId, @RequestBody MentorInfoUpdateRequest mentorInfoUpdateRequest) {
-        Long updatedMentorId = mentorService.update(mentorId, mentorInfoUpdateRequest);
+        Long updatedMentorId = userService.update(mentorId, mentorInfoUpdateRequest);
 
         return new IdResponse(updatedMentorId);
     }

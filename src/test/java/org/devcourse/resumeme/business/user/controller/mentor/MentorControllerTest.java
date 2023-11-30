@@ -96,7 +96,7 @@ class MentorControllerTest extends ControllerUnitTest {
 
         given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
         given(accountService.registerAccount(any())).willReturn(token);
-        given(userService.create(any(User.class))).willReturn(User.of(savedMentor));
+        given(userService.create(any(User.class))).willReturn(savedMentor.from());
 
 
         // when
@@ -193,7 +193,7 @@ class MentorControllerTest extends ControllerUnitTest {
                 .introduce(mentor.getIntroduce())
                 .build();
 
-        given(userService.getOne(any(Long.class))).willReturn(User.of(savedMentor));
+        given(userService.getOne(any(Long.class))).willReturn(savedMentor.from());
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}", 1L)

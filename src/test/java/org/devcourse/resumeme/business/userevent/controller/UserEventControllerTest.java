@@ -97,7 +97,7 @@ class UserEventControllerTest extends ControllerUnitTest {
 
         given(eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentee)));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentee.from()));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}/events", mentorId));
@@ -143,7 +143,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long menteeId = 1L;
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentor)));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentor.from()));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));

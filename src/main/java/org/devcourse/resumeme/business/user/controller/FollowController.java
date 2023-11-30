@@ -5,7 +5,6 @@ import org.devcourse.resumeme.business.user.controller.dto.FollowRequest;
 import org.devcourse.resumeme.business.user.controller.dto.FollowResponse;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -35,7 +34,7 @@ public class FollowController {
         List<Follow> followings = followService.getFollowings(user.id());
         List<Long> mentorIds = followings.stream().map(Follow::getMentorId).toList();
         List<Mentor> followingMentors = userService.getByIds(mentorIds).stream()
-                .map(User::toMentor)
+                .map(Mentor::of)
                 .toList();
 
         return followings.stream()

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.entity.RequiredInfoEntity;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Field;
 import org.devcourse.resumeme.common.domain.Position;
@@ -78,10 +80,6 @@ public class Mentee extends BaseEntity {
         updateIntroduce(updateRequest.introduce());
     }
 
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
     public void clearPositions() {
         this.getInterestedPositions().clear();
     }
@@ -97,6 +95,34 @@ public class Mentee extends BaseEntity {
     private void updateIntroduce(String introduce) {
         check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
         this.introduce = introduce;
+    }
+
+    public static Mentee of(User user) {
+        return Mentee.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .provider(user.getProvider())
+                .imageUrl(user.getImageUrl())
+                .requiredInfo(RequiredInfo.of(user))
+                .refreshToken(user.getRefreshToken())
+                .interestedPositions(user.getUserPositions().stream().map(position -> position.getPosition().name()).collect(toSet()))
+                .interestedFields(user.getInterestedFields().stream().map(field -> field.getField().name()).collect(toSet()))
+                .introduce(user.getIntroduce())
+                .build();
+    }
+
+    public User from() {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .provider(provider)
+                .imageUrl(imageUrl)
+                .requiredInfo(new RequiredInfoEntity(requiredInfo))
+                .refreshToken(refreshToken)
+                .userPositions(interestedPositions.stream().map(Enum::name).collect(toSet()))
+                .interestedFields(interestedFields.stream().map(Enum::name).collect(toSet()))
+                .introduce(introduce)
+                .build();
     }
 
 }

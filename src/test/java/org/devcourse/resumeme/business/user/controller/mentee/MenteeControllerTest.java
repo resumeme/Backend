@@ -88,7 +88,7 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .interestedFields(menteeRegisterInfoRequest.interestedFields())
                 .build();
 
-        User savedUser = User.of(savedMentee);
+        User savedUser = savedMentee.from();
 
         given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
         given(accountService.registerAccount(any())).willReturn(token);
@@ -146,7 +146,7 @@ class MenteeControllerTest extends ControllerUnitTest {
                 .introduce("안녕하세요")
                 .build();
 
-        User savedUser = User.of(savedMentee);
+        User savedUser = savedMentee.from();
 
         given(userService.getOne(any(Long.class))).willReturn(savedUser);
 

@@ -71,7 +71,7 @@ class UserControllerTest extends ControllerUnitTest {
     @WithMockCustomUser(role = "ROLE_MENTOR")
     void 멘토는_마이페이지_정보조회에_성공한다() throws Exception {
         // given
-        given(userService.getOne(any())).willReturn(User.of(mentee));
+        given(userService.getOne(any())).willReturn(mentee.from());
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/user"));
@@ -107,7 +107,7 @@ class UserControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 멘티는_마이페이지_정보조회에_성공한다() throws Exception {
         // given
-        given(userService.getOne(any(Long.class))).willReturn(User.of(mentee));
+        given(userService.getOne(any(Long.class))).willReturn(mentee.from());
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/user")
