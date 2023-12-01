@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.exception.ChangeMentorRoleException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_ALREADY_APPROVED;
@@ -33,6 +33,8 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
             if (auth != null && isRoleInconsistent(auth)) {
                 throw new ChangeMentorRoleException(MENTOR_ALREADY_APPROVED);
             }
+
+            throw e;
         }
     }
 
