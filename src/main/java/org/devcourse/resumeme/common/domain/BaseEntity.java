@@ -26,6 +26,10 @@ public abstract class BaseEntity {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
     public LocalDateTime getLastModifiedDate() {
         if (lastModifiedDate == null) {
             return createdDate;
