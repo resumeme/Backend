@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_ALREADY_APPROVED;
@@ -26,14 +25,12 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            filterChain.doFilter(request, response);
-        } catch (AccessDeniedException e) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && isRoleInconsistent(auth)) {
-                throw new ChangeMentorRoleException(MENTOR_ALREADY_APPROVED);
-            }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && isRoleInconsistent(auth)) {
+            throw new ChangeMentorRoleException(MENTOR_ALREADY_APPROVED);
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private boolean isRoleInconsistent(Authentication auth) {
