@@ -76,6 +76,8 @@ public class UserService {
     public void updateRole(Long mentorId, ApplicationProcessType type) {
         Mentor mentor = getOne(mentorId).toMentor();
         mentor.updateRole(type.getRole());
+        User newUser = User.of(mentor);
+        userRepository.save(newUser);
     }
 
 }
