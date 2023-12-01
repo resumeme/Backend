@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.devcourse.resumeme.global.exception.ChangeMentorRoleException;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.devcourse.resumeme.global.exception.TokenException;
@@ -35,6 +36,8 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (TokenException e) {
             sendErrorResponse(response, 400, INVALID_ACCESS_TOKEN, e);
+        } catch (ChangeMentorRoleException e) {
+            sendErrorResponse(response, 401, ExceptionCode.valueOf(e.getCode()), e);
         } catch (AccessDeniedException e) {
             if (!isAuthenticated()) {
                 sendErrorResponse(response, 401, ExceptionCode.LOGIN_REQUIRED, e);
