@@ -18,14 +18,14 @@ public class EmailInfoGenerator {
 
     public static EmailInfo createMentorApprovalMail(Mentor mentor) {
         String[] to = {mentor.getEmail()};
-        Map<String, Object> attributes = Map.of("link", BASE_URL + "/mypage");
+        Map<String, Object> attributes = Map.of("link", BASE_URL);
 
         return new EmailInfo(to, MENTOR_APPROVED, attributes);
     }
 
     public static EmailInfo createEventCreationMail(List<String> emails, EventNoticeInfo eventCreationInfo) {
         String[] to = emails.toArray(new String[emails.size()]);
-        Map<String, Object> attributes = Map.of("link", BASE_URL + "/event/view/" + eventCreationInfo.eventId(), "mentorNickname", eventCreationInfo.mentorNickname());
+        Map<String, Object> attributes = Map.of("link", BASE_URL + "/event/" + eventCreationInfo.eventId(), "mentorNickname", eventCreationInfo.mentorNickname());
 
         return new EmailInfo(to, EVENT_CREATED, attributes);
     }
