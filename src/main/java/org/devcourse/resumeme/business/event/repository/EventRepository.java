@@ -28,13 +28,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findWithApplicantsById(Long id);
 
     @EntityGraph(attributePaths = {"applicants"})
-    Page<Event> findAllByMentorId(Long mentorId, Pageable pageable);
+    Page<Event> findAllByMentorIdOrderByCreatedDate(Long mentorId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"applicants"})
-    Page<Event> findAll(Pageable pageable);
+    Page<Event> findAllOrderByCreatedDate(Pageable pageable);
 
     @EntityGraph(attributePaths = {"applicants"})
-    Page<Event> findAllByApplicantsMenteeId(Long menteeId, Pageable pageable);
+    Page<Event> findAllByApplicantsMenteeIdOrderByCreatedDate(Long menteeId, Pageable pageable);
 
     @Modifying
     @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.openDateTime <= :now and e.eventInfo.status = 'READY'")
