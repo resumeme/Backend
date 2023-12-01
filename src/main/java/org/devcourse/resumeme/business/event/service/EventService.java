@@ -55,11 +55,11 @@ public class EventService {
     @Transactional(readOnly = true)
     public Page<Event> getAllWithPage(AllEventFilter filter, Pageable pageable) {
         if (filter.mentorId() != null) {
-            return eventRepository.findAllByMentorIdByOrderByCreatedDateDesc(filter.mentorId(), pageable);
+            return eventRepository.findAllByMentorIdOrderByCreatedDateDesc(filter.mentorId(), pageable);
         }
 
         if (filter.menteeId() != null) {
-            return eventRepository.findAllByApplicantsMenteeIdByOrderByCreatedDateDesc(filter.menteeId(), pageable);
+            return eventRepository.findAllByApplicantsMenteeIdOrderByCreatedDateDesc(filter.menteeId(), pageable);
         }
 
         return eventRepository.findAllByOrderByCreatedDateDesc(pageable);
