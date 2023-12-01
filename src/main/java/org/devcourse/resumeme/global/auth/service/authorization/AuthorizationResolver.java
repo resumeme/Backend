@@ -19,7 +19,7 @@ public class AuthorizationResolver {
 
     public boolean resolve(Long userId, Long pathVariable, AuthorizationTarget target) {
         return switch (target) {
-            case EVENTS -> eventRepository.findAllByMentorIdOrderByCreatedDate(userId, Pageable.unpaged()).getContent().stream()
+            case EVENTS -> eventRepository.findAllByMentorIdOrderByCreatedDateDesc(userId, Pageable.unpaged()).getContent().stream()
                     .anyMatch(event -> event.getId().equals(pathVariable));
             case RESUMES -> resumeRepository.findAllByMenteeId(userId).stream()
                     .anyMatch(resume -> resume.getId().equals(pathVariable));

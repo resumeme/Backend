@@ -55,14 +55,14 @@ public class EventService {
     @Transactional(readOnly = true)
     public Page<Event> getAllWithPage(AllEventFilter filter, Pageable pageable) {
         if (filter.mentorId() != null) {
-            return eventRepository.findAllByMentorIdOrderByCreatedDate(filter.mentorId(), pageable);
+            return eventRepository.findAllByMentorIdOrderByCreatedDateDesc(filter.mentorId(), pageable);
         }
 
         if (filter.menteeId() != null) {
-            return eventRepository.findAllByApplicantsMenteeIdOrderByCreatedDate(filter.menteeId(), pageable);
+            return eventRepository.findAllByApplicantsMenteeIdOrderByCreatedDateDesc(filter.menteeId(), pageable);
         }
 
-        return eventRepository.findAllOrderByCreatedDate(pageable);
+        return eventRepository.findAllOrderByCreatedDateDesc(pageable);
     }
 
     public String getOverallReview(Event event, Long resumeId) {
