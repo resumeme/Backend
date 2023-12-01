@@ -7,14 +7,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
+import org.devcourse.resumeme.global.exception.ChangeMentorRoleException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_ALREADY_APPROVED;
 
 @RequiredArgsConstructor
 public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
@@ -23,12 +26,14 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && isRoleInconsistent(auth)) {
-            SecurityContextHolder.getContext().setAuthentication(null);
+        try {
+            filterChain.doFilter(request, response);
+        } catch (AccessDeniedException e) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && isRoleInconsistent(auth)) {
+                throw new ChangeMentorRoleException(MENTOR_ALREADY_APPROVED);
+            }
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private boolean isRoleInconsistent(Authentication auth) {
