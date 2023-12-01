@@ -26,16 +26,12 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            filterChain.doFilter(request, response);
-        } catch (AccessDeniedException e) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && isRoleInconsistent(auth)) {
-                throw new ChangeMentorRoleException(MENTOR_ALREADY_APPROVED);
-            }
-
-            throw e;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && isRoleInconsistent(auth)) {
+            throw new ChangeMentorRoleException(MENTOR_ALREADY_APPROVED);
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private boolean isRoleInconsistent(Authentication auth) {
