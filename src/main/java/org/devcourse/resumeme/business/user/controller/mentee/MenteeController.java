@@ -3,15 +3,11 @@ package org.devcourse.resumeme.business.user.controller.mentee;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoResponse;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
-import org.devcourse.resumeme.common.response.IdResponse;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,13 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MenteeController {
 
     private final UserService userService;
-
-    @PatchMapping("/{menteeId}")
-    public IdResponse update(@PathVariable Long menteeId, @RequestBody MenteeInfoUpdateRequest updateRequest) {
-        Long updatedMenteeId = userService.update(menteeId, updateRequest);
-
-        return new IdResponse(updatedMenteeId);
-    }
 
     @GetMapping("/{menteeId}")
     public MenteeInfoResponse getOne(@PathVariable Long menteeId) {

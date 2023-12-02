@@ -1,5 +1,8 @@
 package org.devcourse.resumeme.business.user.controller.mentee.dto;
 
+import org.devcourse.resumeme.business.user.service.vo.UpdateMenteeVo;
+import org.devcourse.resumeme.business.user.service.vo.UpdateUserVo;
+
 import java.util.Set;
 
 public record MenteeInfoUpdateRequest(String nickname, String phoneNumber, Set<String> interestedPositions, Set<String> interestedFields, String introduce) {
@@ -18,6 +21,10 @@ public record MenteeInfoUpdateRequest(String nickname, String phoneNumber, Set<S
         }
 
         return attributes;
+    }
+
+    public UpdateUserVo toVo() {
+        return new UpdateMenteeVo(nickname, phoneNumber, interestedPositions, interestedFields, introduce);
     }
 
 }

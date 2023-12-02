@@ -55,19 +55,16 @@ public class RequiredInfo {
         validateUserRole(role);
     }
 
-    public void updateNickname(String nickname) {
-        validateNickname(nickname);
-        this.nickname = nickname;
-    }
-
-    public void updatePhoneNumber(String phoneNumber) {
-        validatePhoneNumber(phoneNumber);
-        this.phoneNumber = phoneNumber;
-    }
-
     public void updateRole(Role role) {
         validateUserRole(role);
         this.role = role;
+    }
+
+    public void update(String nickname, String phoneNumber) {
+        validateNickname(nickname);
+        validatePhoneNumber(phoneNumber);
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
     }
 
     private void validateNickname(String nickname) {

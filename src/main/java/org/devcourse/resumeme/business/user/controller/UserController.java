@@ -3,6 +3,7 @@ package org.devcourse.resumeme.business.user.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.user.controller.dto.UserInfoResponse;
+import org.devcourse.resumeme.business.user.controller.dto.UserInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.dto.UserRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -13,6 +14,7 @@ import org.devcourse.resumeme.business.user.entity.UserService;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
+import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
@@ -22,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,6 +84,13 @@ public class UserController {
         return auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(authority -> authority.equals("ROLE_MENTEE"));
+    }
+
+    @PatchMapping("/{role}/{userId}")
+    public IdResponse update(@PathVariable Long userId, @RequestBody UserInfoUpdateRequest request) {
+        Long updatedUserId = userService.update(userId, request.toVo());
+
+        return new IdResponse(updatedUserId);
     }
 
 }
