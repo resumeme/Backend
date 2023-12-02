@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.user.controller.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.devcourse.resumeme.business.user.controller.dto.UserInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.dto.UserRegisterInfoRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -32,7 +33,8 @@ public class UserRegisterAdvice implements RequestBodyAdvice {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return methodParameter.getParameterType().equals(UserRegisterInfoRequest.class);
+        return methodParameter.getParameterType().equals(UserRegisterInfoRequest.class) ||
+                methodParameter.getParameterType().equals(UserInfoUpdateRequest.class);
     }
 
     @Override
