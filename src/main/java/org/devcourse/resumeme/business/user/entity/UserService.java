@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
+import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,13 @@ public class UserService {
 
     private final MentorApplicationEventPublisher mentorApplicationEventPublisher;
 
-    public User create(User user) {
+    public CreatedUserVo create(User user) {
         User savedUser = userRepository.save(user);
         if (user.getRequiredInfo().getRole().equals(Role.ROLE_PENDING)) {
             mentorApplicationEventPublisher.publishMentorApplicationEvent(Mentor.of(savedUser));
         }
-        return savedUser;
+
+        return CreatedUserVo.of(savedUser);
     }
 
     public void updateRefreshToken(Long id, String refreshToken) {
@@ -77,7 +79,7 @@ public class UserService {
         User user = getOne(mentorId);
         Mentor mentor = Mentor.of(user);
         mentor.updateRole(type.getRole());
-        User newUser = User.of(mentor);
+        User newUser = mentor.from();
         userRepository.save(newUser);
     }
 
