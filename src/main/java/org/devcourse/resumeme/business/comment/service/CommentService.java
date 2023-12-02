@@ -29,11 +29,9 @@ public class CommentService {
 
     private void captureResume(Long resumeId) {
         List<Comment> comments = commentRepository.findAllByResumeId(resumeId);
-        if (!comments.isEmpty()) {
-            return;
+        if (comments.isEmpty()) {
+            resumeCapture.capture(null, resumeId);
         }
-
-        resumeCapture.capture(null, resumeId);
     }
 
     @Transactional(readOnly = true)

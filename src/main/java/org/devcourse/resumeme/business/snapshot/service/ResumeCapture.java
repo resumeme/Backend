@@ -7,6 +7,8 @@ import org.devcourse.resumeme.business.snapshot.repository.SnapshotRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.devcourse.resumeme.common.util.ObjectMapperUtils.getData;
 import static org.devcourse.resumeme.common.util.RestTemplateUtils.getLocalResponse;
 
@@ -22,7 +24,11 @@ public class ResumeCapture implements SnapshotCapture {
         AllComponentResponse response = getLocalResponse("/api/v1/resumes/" + resumeId, AllComponentResponse.class);
         String data = getData(response);
 
-        snapshotRepository.save(new Snapshot(data, null, resumeId));
+        Optional<Snapshot> snapshot = snapshotRepository.findByResumeId(resumeId);
+
+        if (snapshot.isEmpty()) {
+            snapshotRepository.save(new Snapshot(data, null, resumeId));
+        }
     }
 
 }
