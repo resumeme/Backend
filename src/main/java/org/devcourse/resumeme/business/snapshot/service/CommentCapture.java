@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.snapshot.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.controller.dto.CommentWithReviewResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.AllComponentResponse;
 import org.devcourse.resumeme.business.snapshot.entity.Snapshot;
 import org.devcourse.resumeme.business.snapshot.repository.SnapshotRepository;
 import org.devcourse.resumeme.common.util.ObjectMapperUtils;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static org.devcourse.resumeme.common.util.ObjectMapperUtils.getData;
+import static org.devcourse.resumeme.common.util.RestTemplateUtils.getLocalResponse;
 
 @Service
 @Transactional
@@ -36,8 +40,9 @@ public class CommentCapture implements SnapshotCapture {
             return;
         }
 
-        snapshotRepository.save(new Snapshot(null, data, resumeId));
-
+        AllComponentResponse componentResponse = getLocalResponse("/api/v1/resumes/" + resumeId, AllComponentResponse.class);
+        String resumeData = getData(componentResponse);
+        snapshotRepository.save(new Snapshot(resumeData, data, resumeId));
     }
 
 }
