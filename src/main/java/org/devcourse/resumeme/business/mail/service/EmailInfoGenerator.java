@@ -18,7 +18,7 @@ public class EmailInfoGenerator {
 
     public static EmailInfo createMentorApprovalMail(Mentor mentor) {
         String[] to = {mentor.getEmail()};
-        Map<String, Object> attributes = Map.of("link", BASE_URL);
+        Map<String, Object> attributes = Map.of("link", BASE_URL, "mentorRealName", mentor.getRequiredInfo().getRealName());
 
         return new EmailInfo(to, MENTOR_APPROVED, attributes);
     }
