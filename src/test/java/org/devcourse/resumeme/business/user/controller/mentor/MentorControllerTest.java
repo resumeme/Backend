@@ -8,6 +8,8 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
+import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
@@ -75,7 +77,8 @@ class MentorControllerTest extends ControllerUnitTest {
         requiredInfoRequest = new RequiredInfoRequest("nickname", "김춘추", "01034548443", "pending");
         mentorRegisterInfoRequest = new MentorRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), "A회사 00팀, B회사 xx팀", 3, "안녕하세요 멘토가 되고싶어요.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "GOOGLE", "지롱", "devcoco@naver.com", "image.png");
-        mentor = mentorRegisterInfoRequest.toEntity(oAuth2TempInfo);
+        UserDomainVo vo = mentorRegisterInfoRequest.toVo(oAuth2TempInfo);
+        mentor = Mentor.of(vo.toUser());
         token = new Token("issuedAccessToken", "issuedRefreshToken");
     }
 
@@ -96,7 +99,7 @@ class MentorControllerTest extends ControllerUnitTest {
 
         given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
         given(accountService.registerAccount(any())).willReturn(token);
-        given(userService.create(any(User.class))).willReturn(savedMentor.from());
+        given(userService.create(any(User.class))).willReturn(CreatedUserVo.of(savedMentor.from()));
 
 
         // when

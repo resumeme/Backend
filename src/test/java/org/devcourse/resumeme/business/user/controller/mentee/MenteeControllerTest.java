@@ -6,6 +6,8 @@ import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegister
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
+import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
@@ -70,7 +72,8 @@ class MenteeControllerTest extends ControllerUnitTest {
         requiredInfoRequest = new RequiredInfoRequest("nickname", "김백둥", "01034548443", "mentee");
         menteeRegisterInfoRequest = new MenteeRegisterInfoRequest("cacheKey", requiredInfoRequest, Set.of("FRONT", "BACK"), Set.of("COMMERCE", "MANUFACTURE"), "안녕하세요 백둥이 4기 머쓱이입니다.");
         oAuth2TempInfo = new OAuth2TempInfo(null, "KAKAO", "지롱", "backdong1@kakao.com", "image.png");
-        mentee = menteeRegisterInfoRequest.toEntity(oAuth2TempInfo);
+        UserDomainVo vo = menteeRegisterInfoRequest.toVo(oAuth2TempInfo);
+        mentee = Mentee.of(vo.toUser());
         token = new Token("issuedAccessToken", "issuedRefreshToken");
     }
 
@@ -92,7 +95,7 @@ class MenteeControllerTest extends ControllerUnitTest {
 
         given(accountService.getTempInfo(any())).willReturn(oAuth2TempInfo);
         given(accountService.registerAccount(any())).willReturn(token);
-        given(userService.create(any(User.class))).willReturn(savedUser);
+        given(userService.create(any(User.class))).willReturn(CreatedUserVo.of(savedUser));
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/mentees")
