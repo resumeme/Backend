@@ -6,19 +6,18 @@ import org.devcourse.resumeme.business.user.controller.dto.UserInfoResponse;
 import org.devcourse.resumeme.business.user.controller.dto.UserInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.dto.UserRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
-import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
+import org.devcourse.resumeme.business.user.service.vo.UserInfoVo;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.devcourse.resumeme.global.auth.service.jwt.Token;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.ACCESS_TOKEN_NAME;
 import static org.devcourse.resumeme.global.auth.service.jwt.Token.REFRESH_TOKEN_NAME;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 
 @Slf4j
 @RestController
@@ -72,18 +72,17 @@ public class UserController {
     @GetMapping("/user")
     public UserInfoResponse getMyInfo(@CurrentSecurityContext(expression = "authentication") Authentication auth) {
         JwtUser jwtUser = (JwtUser) auth.getPrincipal();
-        User user = userService.getOne(jwtUser.id());
-        if (isMentee(auth)) {
-            return new UserInfoResponse(Mentee.of(user));
-        }
+        Role role = getRole(auth);
 
-        return new UserInfoResponse(Mentor.of(user));
+        return getOne(role, jwtUser.id());
     }
 
-    private boolean isMentee(Authentication auth) {
+    private Role getRole(Authentication auth) {
         return auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .anyMatch(authority -> authority.equals("ROLE_MENTEE"));
+                .map(Role::of)
+                .findFirst()
+                .orElseThrow(() -> new CustomException(BAD_REQUEST));
     }
 
     @PatchMapping("/{role}/{userId}")
@@ -91,6 +90,13 @@ public class UserController {
         Long updatedUserId = userService.update(userId, request.toVo());
 
         return new IdResponse(updatedUserId);
+    }
+
+    @GetMapping("/{role}/{userId}")
+    public UserInfoResponse getOne(@PathVariable Role role, @PathVariable Long userId) {
+        UserInfoVo userInfoVo = userService.getOne(role, userId);
+
+        return UserInfoResponse.of(userInfoVo);
     }
 
 }

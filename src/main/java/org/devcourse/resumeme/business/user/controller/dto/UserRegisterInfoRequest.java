@@ -16,9 +16,9 @@ public record UserRegisterInfoRequest(
 
     public UserDomainVo toVo(Role role, OAuth2TempInfo oAuth2TempInfo) {
         return switch (role) {
-            case ROLE_PENDING -> mentors.toVo(oAuth2TempInfo);
+            case ROLE_MENTOR -> mentors.toVo(oAuth2TempInfo);
             case ROLE_MENTEE -> mentees.toVo(oAuth2TempInfo);
-            case ROLE_MENTOR, ROLE_ADMIN -> throw new CustomException(BAD_REQUEST);
+            case ROLE_PENDING, ROLE_ADMIN -> throw new CustomException(BAD_REQUEST);
         };
     }
 

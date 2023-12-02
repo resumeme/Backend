@@ -1,18 +1,21 @@
 package org.devcourse.resumeme.business.user.entity;
 
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
+import org.devcourse.resumeme.business.user.controller.dto.admin.ApplicationProcessType;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.business.user.service.vo.UpdateUserVo;
+import org.devcourse.resumeme.business.user.service.vo.UserInfoVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.devcourse.resumeme.global.exception.ExceptionCode.BAD_REQUEST;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
 
 @Service
@@ -65,6 +68,16 @@ public class UserService {
         userRepository.save(updatedUser);
 
         return updatedUser.getId();
+    }
+
+    public UserInfoVo getOne(Role role, Long userId) {
+        User user = getOne(userId);
+
+        return switch (role) {
+            case ROLE_MENTEE -> new UserInfoVo(Mentee.of(user));
+            case ROLE_MENTOR -> new UserInfoVo(Mentor.of(user));
+            case ROLE_ADMIN, ROLE_PENDING -> throw new CustomException(BAD_REQUEST);
+        };
     }
 
 }

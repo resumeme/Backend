@@ -45,7 +45,7 @@ public class WebConfig implements WebMvcConfigurer {
         @Override
         public Role convert(String source) {
             if (source.equals("mentors")) {
-                return Role.ROLE_PENDING;
+                return Role.ROLE_MENTOR;
             }
 
             return Role.ROLE_MENTEE;
