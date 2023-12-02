@@ -1,9 +1,9 @@
-package org.devcourse.resumeme.business.user.controller.admin;
+package org.devcourse.resumeme.business.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.mail.service.EmailService;
-import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
-import org.devcourse.resumeme.business.user.controller.admin.dto.MentorApplicationResponse;
+import org.devcourse.resumeme.business.user.controller.dto.admin.ApplicationProcessType;
+import org.devcourse.resumeme.business.user.controller.dto.admin.MentorApplicationResponse;
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
@@ -39,7 +39,7 @@ public class MentorApplicationController {
         List<MentorApplication> applications = mentorApplicationService.getAll();
 
         List<Long> mentorIds = applications.stream()
-                .map(application -> application.getMentorId())
+                .map(MentorApplication::getMentorId)
                 .toList();
         Map<Long, Mentor> mentors = userService.getByIds(mentorIds).stream()
                 .map(Mentor::of)

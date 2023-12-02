@@ -1,12 +1,13 @@
 package org.devcourse.resumeme.business.user.controller.mentee;
 
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentee.MenteeInfoUpdateRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentee.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
+import org.devcourse.resumeme.business.user.service.vo.UpdateMenteeVo;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
@@ -189,7 +190,7 @@ class MenteeControllerTest extends ControllerUnitTest {
         // given
         Long menteeId = 1L;
         MenteeInfoUpdateRequest request = new MenteeInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), Set.of("SNS"), "안녕하세요!");
-        given(userService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
+        given(userService.update(any(Long.class), any(UpdateMenteeVo.class))).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/mentees/{menteeId}", menteeId)

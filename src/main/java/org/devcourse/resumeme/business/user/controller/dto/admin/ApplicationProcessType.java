@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.user.controller.admin.dto;
+package org.devcourse.resumeme.business.user.controller.dto.admin;
 
 import lombok.Getter;
 import org.devcourse.resumeme.business.user.domain.Role;

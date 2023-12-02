@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.user.controller.mentee.dto;
+package org.devcourse.resumeme.business.user.controller.dto.mentee;
 
 import org.devcourse.resumeme.business.user.service.vo.UpdateMenteeVo;
 import org.devcourse.resumeme.business.user.service.vo.UpdateUserVo;

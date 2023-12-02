@@ -1,14 +1,13 @@
 package org.devcourse.resumeme.business.user.controller.admin;
 
-import org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType;
+import org.devcourse.resumeme.business.user.controller.dto.admin.ApplicationProcessType;
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 import java.util.Set;
 
-import static org.devcourse.resumeme.business.user.controller.admin.dto.ApplicationProcessType.ACCEPT;
+import static org.devcourse.resumeme.business.user.controller.dto.admin.ApplicationProcessType.ACCEPT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;

@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.user.controller.admin.dto;
+package org.devcourse.resumeme.business.user.controller.dto.admin;
 
 public record MentorApplicationResponse(Long applicationId, String mentorName) {
 

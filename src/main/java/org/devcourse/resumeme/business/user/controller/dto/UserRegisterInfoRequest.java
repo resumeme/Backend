@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.business.user.controller.dto;
 
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentee.MenteeRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;

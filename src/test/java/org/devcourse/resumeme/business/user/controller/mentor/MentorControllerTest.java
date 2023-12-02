@@ -1,14 +1,14 @@
 package org.devcourse.resumeme.business.user.controller.mentor;
 
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorInfoUpdateRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
+import org.devcourse.resumeme.business.user.service.vo.UpdateMentorVo;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
@@ -144,7 +144,7 @@ class MentorControllerTest extends ControllerUnitTest {
         // given
         Long mentorId = 1L;
         MentorInfoUpdateRequest request = new MentorInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), "다양한 도메인에서 일한 경력이 있습니다.", 5, "안녕하세요~");
-        given(userService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
+        given(userService.update(any(Long.class), any(UpdateMentorVo.class))).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/mentors/{mentorId}", mentorId)
