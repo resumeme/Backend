@@ -4,12 +4,14 @@ import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
 import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.business.user.service.vo.UpdateMentorVo;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
+import org.devcourse.resumeme.business.user.service.vo.UserInfoVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.common.util.DocumentLinkGenerator;
@@ -196,7 +198,7 @@ class MentorControllerTest extends ControllerUnitTest {
                 .introduce(mentor.getIntroduce())
                 .build();
 
-        given(userService.getOne(any(Long.class))).willReturn(savedMentor.from());
+        given(userService.getOne(Role.ROLE_MENTOR, 1L)).willReturn(new UserInfoVo(savedMentor));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}", 1L)
@@ -222,7 +224,12 @@ class MentorControllerTest extends ControllerUnitTest {
                                         fieldWithPath("experiencedPositions").type(ARRAY).description("활동 직무").description(generateLinkCode(DocumentLinkGenerator.DocUrl.POSITION)),
                                         fieldWithPath("careerContent").type(STRING).description("경력 사항"),
                                         fieldWithPath("careerYear").type(INTEGER).description("경력 연차"),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional(),
+                                        fieldWithPath("realName").ignored(),
+                                        fieldWithPath("phoneNumber").ignored(),
+                                        fieldWithPath("role").ignored(),
+                                        fieldWithPath("interestedPositions").ignored(),
+                                        fieldWithPath("interestedFields").ignored()
                                 )
                         )
                 );

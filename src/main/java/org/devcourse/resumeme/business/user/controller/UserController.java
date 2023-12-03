@@ -80,7 +80,7 @@ public class UserController {
     private Role getRole(Authentication auth) {
         return auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .map(Role::of)
+                .map(Role::valueOf)
                 .findFirst()
                 .orElseThrow(() -> new CustomException(BAD_REQUEST));
     }
