@@ -6,18 +6,17 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.listener.EventCreationPublisher;
-import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
+import org.devcourse.resumeme.business.user.service.UserProvider;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.devcourse.resumeme.business.event.service.listener.EventCreation.*;
+import static org.devcourse.resumeme.business.event.service.listener.EventCreation.EventNoticeInfo;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
@@ -31,15 +30,14 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    private final UserService userService;
+    private final UserProvider userProvider;
 
     public Long create(Event event) {
         eventRepository.findAllByMentorId(event.getMentorId())
                 .forEach(Event::checkOpen);
         Event savedEvent = eventRepository.save(event);
-        User user = userService.getOne(savedEvent.getMentorId());
-        Mentor mentor = Mentor.of(user);
-        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, mentor);
+        UserResponse user = userProvider.getOne(savedEvent.getMentorId());
+        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, user);
         eventCreationPublisher.publishEventCreation(eventNoticeInfo);
 
         return savedEvent.getId();

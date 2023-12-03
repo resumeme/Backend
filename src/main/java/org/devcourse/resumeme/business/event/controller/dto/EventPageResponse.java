@@ -2,8 +2,7 @@ package org.devcourse.resumeme.business.event.controller.dto;
 
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
@@ -19,12 +18,11 @@ import static java.util.stream.Collectors.toList;
 
 public record EventPageResponse(List<EventResponse> events, PageableResponse pageData) {
 
-    public static EventPageResponse of(List<EventPosition> positions, List<User> mentors, Page<Event> pageAbleEvent) {
+    public static EventPageResponse of(List<EventPosition> positions, List<UserResponse> mentors, Page<Event> pageAbleEvent) {
         Map<Object, List<EventPosition>> positionsMap = positions.stream()
                 .collect(groupingBy(position -> position.getEvent().getId(), toList()));
-        Map<Long, Mentor> mentorsMap = mentors.stream()
-                .map(Mentor::of)
-                .collect(Collectors.toMap(Mentor::getId, Function.identity()));
+        Map<Long, UserResponse> mentorsMap = mentors.stream()
+                .collect(Collectors.toMap(UserResponse::userId, Function.identity()));
 
         List<EventResponse> responses = getEvents(pageAbleEvent).stream()
                 .map(event -> new EventResponse(event, positionsMap.get(event.getId()), mentorsMap.get(event.getMentorId())))
