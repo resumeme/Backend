@@ -8,8 +8,8 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.event.service.vo.AuthorizationRole.ALL;
 import static org.devcourse.resumeme.common.domain.Position.BACK;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
@@ -272,7 +273,7 @@ class EventControllerTest extends ControllerUnitTest {
         setId(event, 1L);
 
         given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
-        given(eventService.getAllWithPage(new EventsFoundCondition(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
+        given(eventService.getAllWithPage(new EventsFoundCondition(null, ALL), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
         given(eventPositionService.getAll(List.of(1L))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
         // when
