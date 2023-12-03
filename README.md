@@ -45,13 +45,7 @@
 &nbsp;
 <h2>📋 ERD</h2>
 <div align="center">
-  <img width="700" alt="ERD" src="">
+  <img width="700" alt="ERD" src="https://github.com/resumeme/Backend/assets/75611167/459939dc-23c1-4874-83a1-df96f5b9e2d3">
+  <img width="700" alt="ERD" src="https://github.com/resumeme/Backend/assets/75611167/c61b949c-69ef-4a67-96e4-f3465303bc80">
 </div>
 
-&nbsp;
-<h2>✍🏻 Collaboration</h2>
-<div align="center">
-  
-  **🧑🏻‍💻 커뮤니케이션 및 Issue Tracking**
-  <img width="700" alt="communication" src="">
-</div>
