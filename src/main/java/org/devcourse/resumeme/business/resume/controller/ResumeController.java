@@ -43,7 +43,7 @@ public class ResumeController {
     public BasicResumeInfo getBasicInformation(@PathVariable Long resumeId) {
         Resume resume = resumeService.getOne(resumeId);
         User user = userService.getOne(resume.getMenteeId());
-        Mentee mentee = user.toMentee();
+        Mentee mentee = Mentee.of(user);
 
         return new BasicResumeInfo(resume, mentee);
     }

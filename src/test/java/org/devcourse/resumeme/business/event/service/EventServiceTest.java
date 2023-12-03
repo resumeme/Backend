@@ -9,7 +9,6 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -92,7 +91,7 @@ class EventServiceTest {
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
         Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
-        given(userService.getOne(1L)).willReturn(User.of(mentor));
+        given(userService.getOne(1L)).willReturn(mentor.from());
         given(eventRepository.findAllByMentorId(1L)).willReturn(List.of());
         given(eventRepository.save(event)).willReturn(event);
         doNothing().when(eventCreationPublisher).publishEventCreation(any(EventNoticeInfo.class));

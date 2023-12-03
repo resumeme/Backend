@@ -68,12 +68,6 @@ public class Certification {
         return new Component(TITLE, certificationTitle, LocalDate.parse(acquisitionDate), null, resumeId, List.of(authority, link, description));
     }
 
-    public static Certification of(List<Component> components) {
-        CertificationConverter converter = CertificationConverter.of(components);
-
-        return Certification.of(converter);
-    }
-
     public static List<Certification> of(Component component) {
         if (component == null) {
             return new ArrayList<>();
@@ -90,13 +84,12 @@ public class Certification {
                 .component(converter.certification)
                 .certificationTitle(converter.certification.getContent())
                 .acquisitionDate(converter.certification.getStartDate().toString())
-                .issuingAuthority(converter.details.getAuthority().getContent())
-                .link(converter.details.getLink().getContent())
-                .description(converter.details.getDescription().getContent())
+                .issuingAuthority(converter.details.authority.getContent())
+                .link(converter.details.link.getContent())
+                .description(converter.details.description.getContent())
                 .build();
     }
 
-    @Data
     @Builder
     private static class CertificationConverter {
 
@@ -104,7 +97,6 @@ public class Certification {
 
         private CertificationDetails details;
 
-        @Data
         @Builder
         private static class CertificationDetails {
 
@@ -125,22 +117,6 @@ public class Certification {
                         .build();
             }
 
-        }
-
-        private static CertificationConverter of(List<Component> components) {
-            Map<Property, Component> componentMap = components.stream()
-                    .collect(toMap(Component::getProperty, identity()));
-
-            CertificationDetails details = CertificationDetails.builder()
-                    .authority(componentMap.get(AUTHORITY))
-                    .link(componentMap.get(LINK))
-                    .description(componentMap.get(DESCRIPTION))
-                    .build();
-
-            return CertificationConverter.builder()
-                    .certification(componentMap.get(TITLE))
-                    .details(details)
-                    .build();
         }
 
         private static CertificationConverter of(Component component) {

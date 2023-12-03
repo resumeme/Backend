@@ -1,9 +1,9 @@
 package org.devcourse.resumeme.business.resume.controller.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.resume.controller.dto.career.CareerResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.activity.ActivityResponse;
+import org.devcourse.resumeme.business.resume.controller.dto.career.CareerResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.certification.CertificationResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.language.ForeignLanguageResponse;
 import org.devcourse.resumeme.business.resume.controller.dto.link.ResumeLinkResponse;
@@ -13,7 +13,7 @@ import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
 
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class AllComponentResponse {
 

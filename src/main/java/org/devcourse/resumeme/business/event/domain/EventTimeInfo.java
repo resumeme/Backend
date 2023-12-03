@@ -57,10 +57,6 @@ public class EventTimeInfo {
         return new EventTimeInfo(openDateTime, closeDateTime, endDate, false);
     }
 
-    public boolean isAfterOpenTime(LocalDateTime nowDateTime) {
-        return nowDateTime.isAfter(this.openDateTime);
-    }
-
     public void update(LocalDateTime openDateTime, LocalDateTime closeDateTime, LocalDateTime endDateTime) {
         if (isBook) {
             notNull(openDateTime);
@@ -77,6 +73,6 @@ public class EventTimeInfo {
 
     public void checkDate(LocalDateTime now) {
         check(now.isBefore(openDateTime) || now.isAfter(endDate), NOT_AVAILABLE_COMMENT_TIME);
-
     }
+
 }

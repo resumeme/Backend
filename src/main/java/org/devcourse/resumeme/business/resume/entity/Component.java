@@ -94,10 +94,6 @@ public class Component {
         this.components.add(component);
     }
 
-    public boolean isType(Property type) {
-        return type == null || property.equals(type);
-    }
-
     public void updateOriginDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
         this.lastModifiedDate = LocalDateTime.now();
@@ -109,11 +105,6 @@ public class Component {
         if (components != null) {
             components.forEach(subComponent -> subComponent.updateOriginDate(createdDate));
         }
-    }
-
-    public void setNewInfo(Long newResumeId) {
-        this.id = null;
-        this.resumeId = newResumeId;
     }
 
     public Component copy(Long newResumeId) {

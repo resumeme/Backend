@@ -67,18 +67,7 @@ public class ComponentService {
                 .filter(component -> component.getProperty().isType(type))
                 .toList();
 
-        Map<Property, Component> response = components.stream()
-                .collect(toMap(Component::getProperty, Function.identity()));
-
-        return ResumeTemplate.builder()
-                .activity(Activity.of(response.get(ACTIVITIES)))
-                .career(Career.of(response.get(CAREERS)))
-                .certification(Certification.of(response.get(CERTIFICATIONS)))
-                .foreignLanguage(ForeignLanguage.of(response.get(FOREIGNLANGUAGES)))
-                .project(Project.of(response.get(PROJECTS)))
-                .training(Training.of(response.get(TRAININGS)))
-                .referenceLink(ReferenceLink.of(response.get(LINKS)))
-                .build();
+        return ResumeTemplate.from(components);
     }
 
     public Component getOne(Long componentId) {

@@ -115,19 +115,6 @@ class EventTest {
     }
 
     @Test
-    void 오픈예약한_시간이_아니라서_이벤트_오픈에_실패한다() {
-        // given
-        EventInfo openEvent = EventInfo.book(3, "제목", "내용");
-        LocalDateTime now = LocalDateTime.now();
-        EventTimeInfo eventTimeInfo = EventTimeInfo.book(now, LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L));
-        Event bookEvent = new Event(openEvent, eventTimeInfo, 1L, List.of());
-
-        // when & then
-        assertThatThrownBy(() -> bookEvent.openReservationEvent(now))
-                .isInstanceOf(EventException.class);
-    }
-
-    @Test
     void 참여자를_반려시키고_잔여자리가_한자리_늘어난다() {
         // given
         for (long i = 0; i < 2; i++) {

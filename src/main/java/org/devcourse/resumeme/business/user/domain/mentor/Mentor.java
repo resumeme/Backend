@@ -8,6 +8,8 @@ import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpda
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
+import org.devcourse.resumeme.business.user.entity.RequiredInfoEntity;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.domain.BaseEntity;
 import org.devcourse.resumeme.common.domain.Position;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -16,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toSet;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_ADMIN;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTEE;
 import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
@@ -89,10 +92,6 @@ public class Mentor extends BaseEntity {
         check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
     }
 
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
     public void updateRole(Role role) {
         if (ROLE_MENTEE.equals(role)) {
             throw new CustomException(ROLE_NOT_ALLOWED);
@@ -129,6 +128,37 @@ public class Mentor extends BaseEntity {
 
     public String getNickname() {
         return requiredInfo.getNickname();
+    }
+
+    public static Mentor of(User user) {
+        return Mentor.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .provider(user.getProvider())
+                .imageUrl(user.getImageUrl())
+                .requiredInfo(RequiredInfo.of(user))
+                .refreshToken(user.getRefreshToken())
+                .experiencedPositions(user.getUserPositions().stream().map(position -> position.getPosition().name()).collect(toSet()))
+                .careerContent(user.getCareerContent())
+                .careerYear(user.getCareerYear())
+                .introduce(user.getIntroduce())
+                .build();
+    }
+
+    public User from() {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .provider(provider)
+                .imageUrl(imageUrl)
+                .requiredInfo(new RequiredInfoEntity(requiredInfo))
+                .careerContent(careerContent)
+                .careerYear(careerYear)
+                .refreshToken(refreshToken)
+                .introduce(introduce)
+                .userPositions(experiencedPositions.stream().map(Enum::name).collect(toSet()))
+                .interestedFields(Set.of())
+                .build();
     }
 
 }

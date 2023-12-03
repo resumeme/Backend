@@ -2,12 +2,11 @@ package org.devcourse.resumeme.business.resume.controller.dto.certification;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.devcourse.resumeme.business.resume.controller.dto.ComponentCreateRequest;
 import org.devcourse.resumeme.business.resume.domain.certification.Certification;
 import org.devcourse.resumeme.business.resume.service.vo.CertificationDomainVo;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class CertificationCreateRequest extends ComponentCreateRequest {
 

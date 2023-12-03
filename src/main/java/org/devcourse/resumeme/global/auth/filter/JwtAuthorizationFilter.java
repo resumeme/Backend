@@ -38,35 +38,38 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             accessToken.filter(jwtService::isNotExpired)
                     .ifPresentOrElse(this::saveAuthentication, () -> checkRefreshToken(jwtService.extractClaim(accessToken.get()), request, response));
         }
+
         filterChain.doFilter(request, response);
     }
 
     private void checkRefreshToken(Claims claims, HttpServletRequest request, HttpServletResponse response) {
         Optional<String> refreshToken = jwtService.extractRefreshToken(request);
-        if (refreshToken.isPresent()) {
-            if (jwtService.isNotExpired(refreshToken.get()) && jwtService.compareTokens(findSavedTokenWithClaims(claims), refreshToken.get())) {
-                log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
-                Claims claimForNewToken = new Claims(claims.id(), claims.role(), new Date());
-                String issuedAccessToken = jwtService.createAccessToken(claimForNewToken);
-                saveAuthentication(issuedAccessToken);
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                jwtService.setAccessTokenHeader(response, issuedAccessToken);
-            }
-        } else {
+        if (refreshToken.isEmpty()) {
             throw new TokenException(INVALID_ACCESS_TOKEN);
+        }
+
+        if (isValidRefreshToken(claims.id(), refreshToken.get())) {
+            log.info("리프레시 토큰 유효. new 액세스 토큰 발급 시작");
+            Claims claimForNewToken = new Claims(claims.id(), claims.role(), new Date());
+            String issuedAccessToken = jwtService.createAccessToken(claimForNewToken);
+            saveAuthentication(issuedAccessToken);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            jwtService.setAccessTokenHeader(response, issuedAccessToken);
         }
     }
 
-    private String findSavedTokenWithClaims(Claims claims) {
-        Long id = claims.id();
-        return userService.getOne(id).getRefreshToken();
+    private boolean isValidRefreshToken(Long userId, String refreshToken) {
+        return jwtService.isNotExpired(refreshToken) && jwtService.compareTokens(findSavedTokenWithUserId(userId), refreshToken);
+    }
+
+    private String findSavedTokenWithUserId(Long userId) {
+        return userService.getOne(userId).getRefreshToken();
     }
 
     private void saveAuthentication(String accessToken) {
         Claims claims = jwtService.extractClaim(accessToken);
         SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
-        log.info("Authentication 을 만들기 위한 Claims = {}", claims);
-        log.info("context에 Authentication를 저장했습니다.");
+        log.info("Authentication를 저장했습니다. Claims = {}", claims);
     }
 
     private UsernamePasswordAuthenticationToken createAuthentication(Claims claims) {

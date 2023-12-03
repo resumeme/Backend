@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.common.util.Validator;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 
@@ -36,6 +37,15 @@ public class RequiredInfo {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    public static RequiredInfo of(User user) {
+        return RequiredInfo.builder()
+                .realName(user.getRequiredInfo().getRealName())
+                .nickname(user.getRequiredInfo().getNickname())
+                .phoneNumber(user.getRequiredInfo().getPhoneNumber())
+                .role(user.getRequiredInfo().getRole())
+                .build();
     }
 
     private void validateRequiredInfo(String nickname, String realName, String phoneNumber, Role role) {

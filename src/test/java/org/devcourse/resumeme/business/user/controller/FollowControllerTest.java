@@ -113,7 +113,7 @@ class FollowControllerTest extends ControllerUnitTest {
         setId(followMentorThree, 2L);
 
         given(followService.getFollowings(any(Long.class))).willReturn(List.of(followMentorOne, followMentorThree));
-        given(userService.getByIds(any())).willReturn(List.of(User.of(mentorOne), User.of(mentorThree)));
+        given(userService.getByIds(any())).willReturn(List.of(mentorOne.from(), mentorThree.from()));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/follows"));

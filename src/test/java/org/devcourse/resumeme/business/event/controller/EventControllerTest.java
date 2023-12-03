@@ -96,7 +96,7 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = eventCreateRequest.toEntity(1L);
 
         given(eventService.create(event)).willReturn(1L);
-        given(userService.getOne(1L)).willReturn(User.of(mentor));
+        given(userService.getOne(1L)).willReturn(mentor.from());
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/events")
@@ -271,7 +271,7 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         setId(event, 1L);
 
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(User.of(mentor)));
+        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentor.from()));
         given(eventService.getAllWithPage(new AllEventFilter(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
         given(eventPositionService.getAll(List.of(1L))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 

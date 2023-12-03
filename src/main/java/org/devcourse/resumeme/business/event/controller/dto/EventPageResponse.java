@@ -1,15 +1,43 @@
 package org.devcourse.resumeme.business.event.controller.dto;
 
 import org.devcourse.resumeme.business.event.domain.Event;
+import org.devcourse.resumeme.business.event.domain.EventPosition;
+import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 public record EventPageResponse(List<EventResponse> events, PageableResponse pageData) {
 
-    public EventPageResponse(List<EventResponse> events, Page<Event> page) {
-        this(events, new PageableResponse(page));
+    public static EventPageResponse of(List<EventPosition> positions, List<User> mentors, Page<Event> pageAbleEvent) {
+        Map<Object, List<EventPosition>> positionsMap = positions.stream()
+                .collect(groupingBy(position -> position.getEvent().getId(), toList()));
+        Map<Long, Mentor> mentorsMap = mentors.stream()
+                .map(Mentor::of)
+                .collect(Collectors.toMap(Mentor::getId, Function.identity()));
+
+        List<EventResponse> responses = getEvents(pageAbleEvent).stream()
+                .map(event -> new EventResponse(event, positionsMap.get(event.getId()), mentorsMap.get(event.getMentorId())))
+                .toList();
+
+        return new EventPageResponse(responses, new PageableResponse(pageAbleEvent));
+    }
+
+    private static List<Event> getEvents(Page<Event> events) {
+        List<Event> content = new ArrayList<>(events.getContent());
+        Collections.sort(content);
+
+        return content;
     }
 
     private record PageableResponse(

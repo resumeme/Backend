@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
+import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,13 @@ public class UserService {
 
     private final MentorApplicationEventPublisher mentorApplicationEventPublisher;
 
-    public User create(User user) {
+    public CreatedUserVo create(User user) {
         User savedUser = userRepository.save(user);
         if (user.getRequiredInfo().getRole().equals(Role.ROLE_PENDING)) {
-            mentorApplicationEventPublisher.publishMentorApplicationEvent(savedUser.toMentor());
+            mentorApplicationEventPublisher.publishMentorApplicationEvent(Mentor.of(savedUser));
         }
-        return savedUser;
+
+        return CreatedUserVo.of(savedUser);
     }
 
     public void updateRefreshToken(Long id, String refreshToken) {
@@ -45,10 +47,10 @@ public class UserService {
 
     public Long update(Long userId, MenteeInfoUpdateRequest updateRequest) {
         User user = getOne(userId);
-        Mentee mentee = user.toMentee();
+        Mentee mentee = Mentee.of(user);
         mentee.updateInfos(updateRequest);
 
-        User updateUser = User.of(mentee);
+        User updateUser = mentee.from();
         userRepository.save(updateUser);
 
         return userId;
@@ -56,10 +58,10 @@ public class UserService {
 
     public Long update(Long mentorId, MentorInfoUpdateRequest mentorInfoUpdateRequest) {
         User user = getOne(mentorId);
-        Mentor mentor = user.toMentor();
+        Mentor mentor = Mentor.of(user);
         mentor.updateInfos(mentorInfoUpdateRequest);
 
-        User updateUser = User.of(mentor);
+        User updateUser = mentor.from();
         userRepository.save(updateUser);
 
         return mentorId;
@@ -74,9 +76,10 @@ public class UserService {
     }
 
     public void updateRole(Long mentorId, ApplicationProcessType type) {
-        Mentor mentor = getOne(mentorId).toMentor();
+        User user = getOne(mentorId);
+        Mentor mentor = Mentor.of(user);
         mentor.updateRole(type.getRole());
-        User newUser = User.of(mentor);
+        User newUser = mentor.from();
         userRepository.save(newUser);
     }
 
