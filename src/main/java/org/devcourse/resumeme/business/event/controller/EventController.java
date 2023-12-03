@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.devcourse.resumeme.business.event.service.vo.AuthorizationRole.ALL;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/events")
@@ -66,7 +68,7 @@ public class EventController {
 
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
-        Page<Event> pageAbleEvent = eventService.getAllWithPage(new EventsFoundCondition(null, null), pageable);
+        Page<Event> pageAbleEvent = eventService.getAllWithPage(new EventsFoundCondition(null, ALL), pageable);
 
         List<Event> events = getEvents(pageAbleEvent);
         List<EventPosition> positions = getPositions(events);
