@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,7 +114,7 @@ class ResumeControllerTest extends ControllerUnitTest {
         field.setAccessible(true);
         field.set(resume, 2L);
         given(resumeService.getOne(resumeId)).willReturn(resume);
-        given(userService.getOne(1L)).willReturn(mentee.from());
+        given(userInfoProvider.getOne(1L)).willReturn(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url"));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/resumes/{resumeId}/basic", resumeId));

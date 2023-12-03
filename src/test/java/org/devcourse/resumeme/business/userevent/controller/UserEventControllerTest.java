@@ -11,6 +11,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,7 +98,7 @@ class UserEventControllerTest extends ControllerUnitTest {
 
         given(eventService.getAllWithPage(new EventsFoundCondition(mentorId, MENTOR), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentee.from()));
+        given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}/events", mentorId));
@@ -143,7 +144,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long menteeId = 1L;
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentor.from()));
+        given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));

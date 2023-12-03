@@ -10,7 +10,9 @@ import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.service.UserInfoProvider;
 import org.devcourse.resumeme.business.user.service.UserService;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -47,18 +49,11 @@ class EventServiceTest {
     private EventRepository eventRepository;
 
     @Mock
-    private UserService userService;
+    private UserInfoProvider userInfoProvider;
 
     @InjectMocks
     private EventService eventService;
 
-    private ExecutorService executorService;
-
-    private CountDownLatch countDownLatch;
-
-    private AtomicInteger successCount;
-
-    private AtomicInteger failCount;
 
     int executeCount;
 
@@ -67,10 +62,6 @@ class EventServiceTest {
     @BeforeEach
     void init() {
         executeCount = 10;
-        executorService = Executors.newFixedThreadPool(3);
-        countDownLatch = new CountDownLatch(executeCount);
-        successCount = new AtomicInteger();
-        failCount = new AtomicInteger();
 
         mentor =  Mentor.builder()
                 .id(1L)
@@ -92,7 +83,7 @@ class EventServiceTest {
         EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
         Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
-        given(userService.getOne(1L)).willReturn(mentor.from());
+        given(userInfoProvider.getOne(1L)).willReturn(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url"));
         given(eventRepository.findAllByMentorId(1L)).willReturn(List.of());
         given(eventRepository.save(event)).willReturn(event);
         doNothing().when(eventCreationPublisher).publishEventCreation(any(EventNoticeInfo.class));
