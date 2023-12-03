@@ -5,11 +5,10 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.UserInfoVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,7 +21,6 @@ import static org.devcourse.resumeme.common.util.ApiDocumentUtils.constraints;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTEE_NOT_FOUND;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.MENTOR_NOT_FOUND;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -67,11 +65,10 @@ class UserControllerTest extends ControllerUnitTest {
     }
 
     @Test
-    @Disabled
     @WithMockCustomUser(role = "ROLE_MENTOR")
     void 멘토는_마이페이지_정보조회에_성공한다() throws Exception {
         // given
-        given(userService.getOne(any())).willReturn(mentee.from());
+        given(userService.getOne(Role.ROLE_MENTOR, 1L)).willReturn(new UserInfoVo(mentor));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/user"));
@@ -107,7 +104,7 @@ class UserControllerTest extends ControllerUnitTest {
     @WithMockCustomUser
     void 멘티는_마이페이지_정보조회에_성공한다() throws Exception {
         // given
-        given(userService.getOne(any(Long.class))).willReturn(mentee.from());
+        given(userService.getOne(Role.ROLE_MENTEE, 1L)).willReturn(new UserInfoVo(mentee));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/user")

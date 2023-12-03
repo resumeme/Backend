@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.entity.RequiredInfoEntity;
@@ -70,14 +69,17 @@ public class Mentee extends BaseEntity {
         check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
     }
 
-    public void updateInfos(MenteeInfoUpdateRequest updateRequest) {
+    public void updateBasicInfo(String nickname, String phoneNumber, String introduce) {
+        check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
+        this.requiredInfo.update(nickname, phoneNumber);
+        this.introduce = introduce;
+    }
+
+    public void updatePositionAndFields(Set<String> interestedPositions, Set<String> interestedFields) {
         this.clearPositions();
         this.clearFields();
-        this.requiredInfo.updateNickname(updateRequest.nickname());
-        this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
-        updateRequest.interestedPositions().forEach(position -> this.interestedPositions.add(Position.valueOf(position.toUpperCase())));
-        updateRequest.interestedFields().forEach(field -> this.interestedFields.add(Field.valueOf(field.toUpperCase())));
-        updateIntroduce(updateRequest.introduce());
+        interestedPositions.forEach(position -> this.interestedPositions.add(Position.valueOf(position.toUpperCase())));
+        interestedFields.forEach(field -> this.interestedFields.add(Field.valueOf(field.toUpperCase())));
     }
 
     public void clearPositions() {
@@ -90,11 +92,6 @@ public class Mentee extends BaseEntity {
 
     public String getRoleName() {
         return requiredInfo.getRole().getRoleName();
-    }
-
-    private void updateIntroduce(String introduce) {
-        check(introduce != null && introduce.length() > 100, TEXT_OVER_LENGTH);
-        this.introduce = introduce;
     }
 
     public static Mentee of(User user) {

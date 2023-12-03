@@ -1,13 +1,16 @@
 package org.devcourse.resumeme.business.user.controller.mentee;
 
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeInfoUpdateRequest;
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentee.MenteeInfoUpdateRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentee.MenteeRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
+import org.devcourse.resumeme.business.user.service.vo.UpdateMenteeVo;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
+import org.devcourse.resumeme.business.user.service.vo.UserInfoVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
@@ -151,7 +154,7 @@ class MenteeControllerTest extends ControllerUnitTest {
 
         User savedUser = savedMentee.from();
 
-        given(userService.getOne(any(Long.class))).willReturn(savedUser);
+        given(userService.getOne(Role.ROLE_MENTEE, 1L)).willReturn(new UserInfoVo(Mentee.of(savedUser)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}", menteeId)
@@ -171,13 +174,18 @@ class MenteeControllerTest extends ControllerUnitTest {
                                         parameterWithName("menteeId").description("멘티 id")
                                 ),
                                 responseFields(
+                                        fieldWithPath("id").ignored(),
+                                        fieldWithPath("role").ignored(),
                                         fieldWithPath("imageUrl").type(STRING).description("프로필 이미지"),
                                         fieldWithPath("realName").type(STRING).description("실명"),
                                         fieldWithPath("nickname").type(STRING).description("닉네임"),
                                         fieldWithPath("phoneNumber").type(STRING).description("전화번호"),
                                         fieldWithPath("interestedPositions").type(ARRAY).description("관심 직무").description(generateLinkCode(DocUrl.POSITION)).optional(),
                                         fieldWithPath("interestedFields").type(ARRAY).description("관심 도메인").description(generateLinkCode(DocUrl.FIELD)).optional(),
-                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional()
+                                        fieldWithPath("introduce").type(STRING).description("자기소개").optional(),
+                                        fieldWithPath("experiencedPositions").ignored(),
+                                        fieldWithPath("careerContent").ignored(),
+                                        fieldWithPath("careerYear").ignored()
                                 )
                         )
                 );
@@ -189,7 +197,7 @@ class MenteeControllerTest extends ControllerUnitTest {
         // given
         Long menteeId = 1L;
         MenteeInfoUpdateRequest request = new MenteeInfoUpdateRequest("newNick", "01033323334", Set.of("FRONT"), Set.of("SNS"), "안녕하세요!");
-        given(userService.update(any(Long.class), any(MenteeInfoUpdateRequest.class))).willReturn(1L);
+        given(userService.update(any(Long.class), any(UpdateMenteeVo.class))).willReturn(1L);
 
         // when
         ResultActions result = mvc.perform(patch("/api/v1/mentees/{menteeId}", menteeId)

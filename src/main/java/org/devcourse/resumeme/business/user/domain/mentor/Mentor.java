@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
@@ -103,15 +102,14 @@ public class Mentor extends BaseEntity {
         return ROLE_MENTOR.equals(this.requiredInfo.getRole());
     }
 
-    public void updateInfos(MentorInfoUpdateRequest updateRequest) {
-        validateInputs(email, provider, imageUrl, requiredInfo,updateRequest.experiencedPositions(), updateRequest.careerContent(), updateRequest.careerYear(), updateRequest.introduce());
+    public void updateInfos(String nickname, String phoneNumber, Set<String> experiencedPositions, String careerContent, int careerYear, String introduce) {
+        validateInputs(email, provider, imageUrl, requiredInfo,experiencedPositions, careerContent, careerYear, introduce);
+        this.requiredInfo.update(nickname, phoneNumber);
+        this.careerContent = careerContent;
+        this.careerYear = careerYear;
+        this.introduce = introduce;
         this.clearPositions();
-        this.requiredInfo.updateNickname(updateRequest.nickname());
-        this.requiredInfo.updatePhoneNumber(updateRequest.phoneNumber());
-        updateRequest.experiencedPositions().forEach(position -> this.experiencedPositions.add(Position.valueOf(position.toUpperCase())));
-        this.careerContent = updateRequest.careerContent();
-        this.careerYear = updateRequest.careerYear();
-        this.introduce = updateRequest.introduce();
+        experiencedPositions.forEach(position -> this.experiencedPositions.add(Position.valueOf(position.toUpperCase())));
     }
 
     public void clearPositions() {

@@ -2,7 +2,7 @@ package org.devcourse.resumeme.business.user.domain.mentor;
 
 import org.assertj.core.api.Assertions;
 import org.devcourse.resumeme.business.user.controller.dto.RequiredInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;

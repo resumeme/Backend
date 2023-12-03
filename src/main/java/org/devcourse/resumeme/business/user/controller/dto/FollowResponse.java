@@ -1,6 +1,6 @@
 package org.devcourse.resumeme.business.user.controller.dto;
 
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorInfoResponse;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorInfoResponse;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 

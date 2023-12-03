@@ -1,7 +1,7 @@
 package org.devcourse.resumeme.business.user.controller.dto;
 
-import org.devcourse.resumeme.business.user.controller.mentee.dto.MenteeRegisterInfoRequest;
-import org.devcourse.resumeme.business.user.controller.mentor.dto.MentorRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentee.MenteeRegisterInfoRequest;
+import org.devcourse.resumeme.business.user.controller.dto.mentor.MentorRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.service.vo.UserDomainVo;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
@@ -16,9 +16,9 @@ public record UserRegisterInfoRequest(
 
     public UserDomainVo toVo(Role role, OAuth2TempInfo oAuth2TempInfo) {
         return switch (role) {
-            case ROLE_PENDING -> mentors.toVo(oAuth2TempInfo);
+            case ROLE_MENTOR -> mentors.toVo(oAuth2TempInfo);
             case ROLE_MENTEE -> mentees.toVo(oAuth2TempInfo);
-            case ROLE_MENTOR, ROLE_ADMIN -> throw new CustomException(BAD_REQUEST);
+            case ROLE_PENDING, ROLE_ADMIN -> throw new CustomException(BAD_REQUEST);
         };
     }
 
