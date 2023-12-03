@@ -6,7 +6,7 @@ import org.devcourse.resumeme.business.user.controller.dto.UserInfoResponse;
 import org.devcourse.resumeme.business.user.controller.dto.UserInfoUpdateRequest;
 import org.devcourse.resumeme.business.user.controller.dto.UserRegisterInfoRequest;
 import org.devcourse.resumeme.business.user.domain.Role;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.business.user.service.vo.RegisterAccountVo;

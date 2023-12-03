@@ -8,14 +8,14 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
-import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -271,8 +271,8 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
         setId(event, 1L);
 
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentor.from()));
-        given(eventService.getAllWithPage(new AllEventFilter(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
+        given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
+        given(eventService.getAllWithPage(new EventsFoundCondition(null, null), PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(event)));
         given(eventPositionService.getAll(List.of(1L))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
         // when

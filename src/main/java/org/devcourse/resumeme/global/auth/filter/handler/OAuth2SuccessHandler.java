@@ -3,7 +3,7 @@ package org.devcourse.resumeme.global.auth.filter.handler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.model.jwt.Claims;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;

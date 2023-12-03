@@ -5,12 +5,13 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
-import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
+import org.devcourse.resumeme.business.event.service.vo.AuthorizationRole;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
-import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
-import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.domain.Role;
+import org.devcourse.resumeme.business.user.service.UserProvider;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.MenteeEventResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.MentorEventResponse;
 import org.devcourse.resumeme.business.userevent.controller.dto.Response;
@@ -32,15 +33,16 @@ public class UserEventController {
 
     private final ResumeService resumeService;
 
-    private final UserService userService;
+    private final UserProvider userProvider;
 
     private final MenteeToEventService menteeToEventService;
 
-    @GetMapping("/mentors/{mentorId}/events")
-    public List<MentorEventResponse> all(@PathVariable Long mentorId) {
-        Page<Event> events = eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged());
+    @GetMapping("/{role}/{mentorId}/events")
+    public List<MentorEventResponse> all(@PathVariable Role role, @PathVariable Long mentorId) {
+        AuthorizationRole authorizationRole = AuthorizationRole.of(role);
+        Page<Event> events = eventService.getAllWithPage(new EventsFoundCondition(mentorId, authorizationRole), Pageable.unpaged());
         List<Resume> resumes = getResumes(events.getContent());
-        List<Mentee> mentees = getMentees(resumes);
+        List<UserResponse> mentees = getMentees(resumes);
 
         return events.stream()
                 .map(event -> new MentorEventResponse(event, resumes, mentees))
@@ -50,7 +52,7 @@ public class UserEventController {
     @GetMapping("/mentees/{menteeId}/events")
     public List<MenteeEventResponse> getOwnEvents(@PathVariable Long menteeId) {
         List<MenteeToEvent> menteeToEvents = menteeToEventService.getByMenteeId(menteeId);
-        List<Mentor> mentors = getMentors(menteeToEvents);
+        List<UserResponse> mentors = getMentors(menteeToEvents);
         List<Event> events = getEvents(menteeToEvents);
         List<Resume> resumes = getResumes(events);
 
@@ -66,24 +68,20 @@ public class UserEventController {
         return resumeService.getAll(resumeIds);
     }
 
-    private List<Mentee> getMentees(List<Resume> resumes) {
+    private List<UserResponse> getMentees(List<Resume> resumes) {
         List<Long> menteeIds = resumes.stream()
                 .map(Resume::getMenteeId)
                 .toList();
 
-        return userService.getByIds(menteeIds).stream()
-                .map(Mentee::of)
-                .toList();
+        return userProvider.getByIds(menteeIds);
     }
 
-    private List<Mentor> getMentors(List<MenteeToEvent> byMenteeId) {
+    private List<UserResponse> getMentors(List<MenteeToEvent> byMenteeId) {
         List<Long> mentorIds = byMenteeId.stream()
                 .map(m -> m.getEvent().getMentorId())
                 .toList();
 
-        return userService.getByIds(mentorIds).stream()
-                .map(Mentor::of)
-                .toList();
+        return userProvider.getByIds(mentorIds);
     }
 
     private List<Event> getEvents(List<MenteeToEvent> menteeToEvents) {

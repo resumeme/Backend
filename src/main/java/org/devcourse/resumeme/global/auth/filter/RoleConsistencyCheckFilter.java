@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.exception.ChangeMentorRoleException;
 import org.springframework.security.core.Authentication;

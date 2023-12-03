@@ -16,15 +16,17 @@ import org.devcourse.resumeme.business.resume.controller.ComponentController;
 import org.devcourse.resumeme.business.resume.controller.ResumeController;
 import org.devcourse.resumeme.business.resume.controller.ResumeControllerV2;
 import org.devcourse.resumeme.business.resume.service.ComponentService;
+import org.devcourse.resumeme.business.resume.service.ResumeCopier;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
 import org.devcourse.resumeme.business.snapshot.controller.SnapshotController;
 import org.devcourse.resumeme.business.snapshot.service.CommentCapture;
 import org.devcourse.resumeme.business.snapshot.service.SnapshotService;
 import org.devcourse.resumeme.business.user.controller.FollowController;
-import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.MentorApplicationController;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.service.AccountService;
+import org.devcourse.resumeme.business.user.service.UserInfoProvider;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
 import org.devcourse.resumeme.business.userevent.controller.UserEventController;
@@ -138,6 +140,12 @@ public abstract class ControllerUnitTest {
 
     @MockBean
     protected UserService userService;
+
+    @MockBean
+    protected UserInfoProvider userInfoProvider;
+
+    @MockBean
+    protected ResumeCopier resumeCopier;
 
     protected MockMvc mvc;
 

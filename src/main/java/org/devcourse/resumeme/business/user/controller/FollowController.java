@@ -5,7 +5,7 @@ import org.devcourse.resumeme.business.user.controller.dto.FollowRequest;
 import org.devcourse.resumeme.business.user.controller.dto.FollowResponse;
 import org.devcourse.resumeme.business.user.domain.mentee.Follow;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;

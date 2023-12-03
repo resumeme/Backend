@@ -39,6 +39,7 @@ public class MenteeToEventService {
                 .orElseThrow(() -> new EventException(EVENT_NOT_FOUND));
 
         ApplimentUpdate model = applyUpdateVo.toModel();
+
         return model.update(event);
     }
 

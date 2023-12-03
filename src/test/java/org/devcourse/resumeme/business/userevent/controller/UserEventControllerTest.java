@@ -4,14 +4,14 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventInfo;
 import org.devcourse.resumeme.business.event.domain.EventTimeInfo;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
-import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.common.support.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static org.devcourse.resumeme.business.event.service.vo.AuthorizationRole.MENTOR;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentRequest;
 import static org.devcourse.resumeme.common.util.ApiDocumentUtils.getDocumentResponse;
 import static org.devcourse.resumeme.common.util.DocumentLinkGenerator.DocUrl.EVENT_STATUS;
@@ -95,9 +96,9 @@ class UserEventControllerTest extends ControllerUnitTest {
         // given
         Long mentorId = 1L;
 
-        given(eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
+        given(eventService.getAllWithPage(new EventsFoundCondition(mentorId, MENTOR), Pageable.unpaged())).willReturn(new PageImpl<>(List.of(event)));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentee.from()));
+        given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentors/{mentorId}/events", mentorId));
@@ -143,7 +144,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         Long menteeId = 1L;
 
         given(menteeToEventService.getByMenteeId(menteeId)).willReturn(List.of(new MenteeToEvent(event, menteeId, 1L)));
-        given(userService.getByIds(List.of(1L))).willReturn(List.of(mentor.from()));
+        given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         // when
         ResultActions result = mvc.perform(get("/api/v1/mentees/{menteeId}/events", menteeId));

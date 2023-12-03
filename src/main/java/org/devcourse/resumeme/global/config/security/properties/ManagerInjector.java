@@ -3,7 +3,7 @@ package org.devcourse.resumeme.global.config.security.properties;
 import jakarta.annotation.PostConstruct;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.resume.repository.ResumeRepository;
-import org.devcourse.resumeme.business.user.entity.UserRepository;
+import org.devcourse.resumeme.business.user.repository.UserRepository;
 import org.devcourse.resumeme.global.auth.service.authorization.AuthorizationResolver;
 import org.devcourse.resumeme.global.auth.service.authorization.OnlyOwn;
 import org.springframework.stereotype.Component;

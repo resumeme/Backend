@@ -7,7 +7,7 @@ import org.devcourse.resumeme.business.user.controller.dto.admin.MentorApplicati
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.User;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
