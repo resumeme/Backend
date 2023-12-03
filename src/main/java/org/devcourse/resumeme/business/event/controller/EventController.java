@@ -9,7 +9,7 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
-import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.entity.UserService;
@@ -66,7 +66,7 @@ public class EventController {
 
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
-        Page<Event> pageAbleEvent = eventService.getAllWithPage(new AllEventFilter(null, null), pageable);
+        Page<Event> pageAbleEvent = eventService.getAllWithPage(new EventsFoundCondition(null, null), pageable);
 
         List<Event> events = getEvents(pageAbleEvent);
         List<EventPosition> positions = getPositions(events);

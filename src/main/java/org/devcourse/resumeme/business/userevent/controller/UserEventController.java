@@ -5,9 +5,11 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
-import org.devcourse.resumeme.business.event.service.vo.AllEventFilter;
+import org.devcourse.resumeme.business.event.service.vo.AuthorizationRole;
+import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
 import org.devcourse.resumeme.business.user.entity.UserService;
@@ -36,9 +38,10 @@ public class UserEventController {
 
     private final MenteeToEventService menteeToEventService;
 
-    @GetMapping("/mentors/{mentorId}/events")
-    public List<MentorEventResponse> all(@PathVariable Long mentorId) {
-        Page<Event> events = eventService.getAllWithPage(new AllEventFilter(mentorId, null), Pageable.unpaged());
+    @GetMapping("/{role}/{mentorId}/events")
+    public List<MentorEventResponse> all(@PathVariable Role role, @PathVariable Long mentorId) {
+        AuthorizationRole authorizationRole = AuthorizationRole.of(role);
+        Page<Event> events = eventService.getAllWithPage(new EventsFoundCondition(mentorId, authorizationRole), Pageable.unpaged());
         List<Resume> resumes = getResumes(events.getContent());
         List<Mentee> mentees = getMentees(resumes);
 
