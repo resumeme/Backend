@@ -1,10 +1,10 @@
-package org.devcourse.resumeme.business.event.service;
+package org.devcourse.resumeme.business.event.service.listener;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import static org.devcourse.resumeme.business.event.service.EventCreation.*;
+import static org.devcourse.resumeme.business.event.service.listener.EventCreation.*;
 
 @Component
 @RequiredArgsConstructor

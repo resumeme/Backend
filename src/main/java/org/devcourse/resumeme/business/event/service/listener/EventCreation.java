@@ -1,4 +1,4 @@
-package org.devcourse.resumeme.business.event.service;
+package org.devcourse.resumeme.business.event.service.listener;
 
 import lombok.Getter;
 import org.devcourse.resumeme.business.event.domain.Event;

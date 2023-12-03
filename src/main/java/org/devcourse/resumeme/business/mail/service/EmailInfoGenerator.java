@@ -1,17 +1,18 @@
 package org.devcourse.resumeme.business.mail.service;
 
+import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.mail.EmailInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.devcourse.resumeme.business.event.service.EventCreation.EventNoticeInfo;
+import static lombok.AccessLevel.PRIVATE;
+import static org.devcourse.resumeme.business.event.service.listener.EventCreation.EventNoticeInfo;
 import static org.devcourse.resumeme.business.mail.EmailType.EVENT_CREATED;
 import static org.devcourse.resumeme.business.mail.EmailType.MENTOR_APPROVED;
 
-@Component
+@NoArgsConstructor(access = PRIVATE)
 public class EmailInfoGenerator {
 
     private static final String BASE_URL = "https://resumeme.vercel.app";

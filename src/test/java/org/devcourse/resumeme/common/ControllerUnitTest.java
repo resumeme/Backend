@@ -23,7 +23,7 @@ import org.devcourse.resumeme.business.snapshot.service.SnapshotService;
 import org.devcourse.resumeme.business.user.controller.FollowController;
 import org.devcourse.resumeme.business.user.controller.UserController;
 import org.devcourse.resumeme.business.user.controller.MentorApplicationController;
-import org.devcourse.resumeme.business.user.entity.UserService;
+import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.business.user.service.AccountService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.devcourse.resumeme.business.user.service.mentee.FollowService;

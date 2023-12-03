@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.entity.User;
-import org.devcourse.resumeme.business.user.entity.UserRepository;
+import org.devcourse.resumeme.business.user.repository.UserRepository;
 import org.devcourse.resumeme.global.auth.model.UserCommonInfo;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2CustomUser;
 import org.devcourse.resumeme.global.auth.model.login.info.OAuth2UserInfo;

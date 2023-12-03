@@ -1,10 +1,12 @@
-package org.devcourse.resumeme.business.user.entity;
+package org.devcourse.resumeme.business.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.controller.dto.admin.ApplicationProcessType;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.entity.User;
+import org.devcourse.resumeme.business.user.repository.UserRepository;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationEventPublisher;
 import org.devcourse.resumeme.business.user.service.vo.CreatedUserVo;
 import org.devcourse.resumeme.business.user.service.vo.UpdateUserVo;
