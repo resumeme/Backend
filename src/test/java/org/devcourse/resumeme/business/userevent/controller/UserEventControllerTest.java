@@ -94,7 +94,7 @@ class UserEventControllerTest extends ControllerUnitTest {
         // given
         Long mentorId = 1L;
 
-        given(eventService.getAllWithPage(Pageable.unpaged())).willReturn(new PageImpl<>(List.of(new MenteeToEvent(event, 1L, 1L))));
+        given(menteeToEventService.getByMentorId(mentorId)).willReturn(List.of(new MenteeToEvent(event, 1L, 1L)));
         given(resumeService.getAll(List.of(1L))).willReturn(List.of(resume));
         given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
 
