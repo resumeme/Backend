@@ -1,0 +1,37 @@
+endpoint:
+  matchers:
+    - matcher:
+      get: /api/v1/mentors/*, /api/v1/events/*, /api/v1/events
+      post: /api/v1/mentees, /api/v1/mentors
+      role: all
+    - matcher:
+      get: /api/v1/mentees/*, /api/v1/user, /api/v1/resumes, /api/v1/results, /api/v1/snapshot, /api/v1/follows, /api/v1/follows/mentors/*, /api/v1/appliments/events/*
+      post: /api/v1/resumes, /api/v1/results, /api/v1/pdf/resumes/*, /api/v1/resumes/*/**, /api/v1/appliments/events/*, /api/v1/follows
+      patch: /api/v1/resumes/*, /api/v1/resumes/*/**
+      delete: /api/v1/follows/*
+      role: mentee
+    - matcher:
+      get: /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/user, /api/v1/resumes/*, /api/v1/resumes/*/**, /api/v1/results, /api/v1/snapshot
+      post: /api/v1/events, /api/v1/resumes/*/reviews, /api/v1/events/*/resumes/*/comments
+      role: mentor
+    - matcher:
+      get: /api/v1/user, /api/v1/mentors/*, /api/v1/mentees/*, /api/v1/events
+      patch: /api/v1/mentors/*
+      role: pending
+    - matcher:
+      get: /api/v1/events/*/resumes/*/comments, /api/v1/mentors/*/events
+      post: /api/v1/events/*/resumes/*/comments
+      patch: /api/v1/mentors/*, /api/v1/events/*/mentee/**, /api/v1/events/*/resumes/**, /api/v1/events/*/resumes/*/comments/*, /api/v1/appliments/events/*, /api/v1/events/*
+      delete: /api/v1/events/*/resumes/*/comments/*
+      role: own_mentor
+    - matcher:
+      get: /api/v1/mentees/*/events, /api/v1/resumes/*, /api/v1/resumes/*/**, /api/v1/events/*/resumes/*/comments
+      post: /api/v1/resumes/*/**
+      patch: /api/v1/resumes/*/**, /api/v2/resumes/*, /api/v1/mentees/*
+      delete: /api/v1/resumes/**
+      role: own_mentee
+    - matcher:
+      get: /admin/**
+      post: /admin/**
+      role: admin
+  ignores: /docs/**

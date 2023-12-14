@@ -1,0 +1,132 @@
+= *멘토's API*
+
+== [회원정보]
+=== 멘토 정보 조회 (마이페이지)
+include::{snippets}/user/mentor/findMy/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentor/findMy/http-request.adoc[]
+
+*Response*
+include::{snippets}/user/mentor/findMy/http-response.adoc[]
+include::{snippets}/user/mentor/findMy/response-fields.adoc[]
+
+=== 멘토 정보 수정
+include::{snippets}/user/mentor/update/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentor/update/http-request.adoc[]
+include::{snippets}/user/mentor/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentor/update/http-response.adoc[]
+include::{snippets}/user/mentor/update/response-fields.adoc[]
+
+== [첨삭 이벤트]
+=== 첨삭 이벤트 생성
+
+include::{snippets}/event/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/create/http-request.adoc[]
+include::{snippets}/event/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/create/http-response.adoc[]
+include::{snippets}/event/create/response-fields.adoc[]
+
+=== 첨삭 이벤트 수정
+
+include::{snippets}/event/update/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/update/http-request.adoc[]
+include::{snippets}/event/update/request-fields.adoc[]
+include::{snippets}/event/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/update/http-response.adoc[]
+include::{snippets}/event/update/response-fields.adoc[]
+
+=== 첨삭 이벤트 재오픈
+
+include::{snippets}/event/reopen/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/reopen/http-request.adoc[]
+include::{snippets}/event/reopen/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/reopen/http-response.adoc[]
+include::{snippets}/event/reopen/response-fields.adoc[]
+
+
+=== 첨삭 이벤트 조회
+
+include::{snippets}/user/mentor/events/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentor/events/http-request.adoc[]
+include::{snippets}/user/mentor/events/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentor/events/http-response.adoc[]
+include::{snippets}/user/mentor/events/response-fields.adoc[]
+
+=== 첨삭 피드백 작성
+
+include::{snippets}/comment/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/comment/create/http-request.adoc[]
+include::{snippets}/comment/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/comment/create/http-response.adoc[]
+include::{snippets}/comment/create/response-fields.adoc[]
+
+=== 첨삭 피드백 수정
+
+include::{snippets}/comment/update/exception-response.adoc[]
+
+*Request*
+include::{snippets}/comment/update/http-request.adoc[]
+include::{snippets}/comment/update/path-parameters.adoc[]
+include::{snippets}/comment/update/request-fields.adoc[]
+
+*Response*
+include::{snippets}/comment/update/http-response.adoc[]
+
+=== 첨삭 피드백 삭제
+
+include::{snippets}/comment/delete/exception-response.adoc[]
+
+*Request*
+include::{snippets}/comment/delete/http-request.adoc[]
+include::{snippets}/comment/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/delete/http-response.adoc[]
+
+=== 첨삭 이벤트 참여 신청 반려 V2
+
+include::{snippets}/event/v2/reject/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/v2/reject/http-request.adoc[]
+include::{snippets}/event/v2/reject/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/v2/reject/http-response.adoc[]
+
+=== 첨삭 종료 총평 작성 V2
+
+include::{snippets}/event/v2/completeReview/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/v2/completeReview/http-request.adoc[]
+include::{snippets}/event/v2/completeReview/path-parameters.adoc[]
+include::{snippets}/event/v2/completeReview/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/v2/completeReview/http-response.adoc[]

@@ -1,0 +1,19 @@
+= *어드민's API*
+
+=== 멘토 승인 요청 전체 조회
+
+*Request*
+include::{snippets}/user/admin/allApplication/http-request.adoc[]
+
+*Response*
+include::{snippets}/user/admin/allApplication/http-response.adoc[]
+include::{snippets}/user/admin/allApplication/response-fields.adoc[]
+
+=== 멘토 승인 여부 결정
+
+*Request*
+include::{snippets}/user/admin/processApplication/http-request.adoc[]
+include::{snippets}/user/admin/processApplication/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/admin/processApplication/http-response.adoc[]

@@ -1,0 +1,24 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+= Resumeme API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:docinfo: shared
+
+// 참고
+// 팝업으로 enum code 등을 띄우고 싶으면 src/docs/asciidoc/common 하위에
+// [filename].adoc 파일을 만들면 됩니다
+
+// filename은 src/test/java/o.d.r/common/DocumentLinkGenerator#DocUrl
+// 필드 중 htmlFileName과 동일한 이름을 주면 됩니다
+include::mentor.adoc[]
+include::mentee.adoc[]
+include::all.adoc[]
+include::admin.adoc[]
+include::reference.adoc[]

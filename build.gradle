@@ -13,6 +13,7 @@ java {
 }
 
 configurations {
+	asciidoctorExt
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -27,16 +28,37 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'com.auth0:java-jwt:4.4.0'
+	// database
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	// email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// selenium
+	implementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
+	// encrypt yml value
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+	implementation 'org.jasypt:jasypt:1.9.3'
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	// configurationProperties Processor
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation "org.testcontainers:testcontainers:1.19.1"
+	testImplementation "org.testcontainers:junit-jupiter:1.19.1"
 }
 
 tasks.named('test') {
@@ -47,4 +69,32 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
+}
+
+tasks.register('copyDocument', Copy) {
+	dependsOn asciidoctor
+	doFirst {
+		delete file('src/main/resources/static/docs')
+	}
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+asciidoctor {
+	dependsOn test
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+
+	baseDirFollowsSourceFile()
+}
+
+build {
+	dependsOn copyDocument
+}
+
+bootJar {
+	dependsOn copyDocument
+	from ("${asciidoctor.outputDir}") {
+		into 'static/docs'
+	}
 }

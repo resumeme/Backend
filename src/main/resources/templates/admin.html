@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>통계 어드민</title>
+</head>
+<body>
+<h1>통계 어드민</h1>
+
+<div>
+    <h2>합격률</h2>
+    <p>합격률: <span th:text="${passRate}"></span>%</p>
+</div>
+
+<div>
+    <h2>기간별 합격률</h2>
+    <form th:action="@{/api/v2/statistics/pass-rate-by-period}" method="get">
+        <label for="startDate">Start Date:</label>
+        <input type="text" id="startDate" name="startDate" required />
+
+        <label for="endDate">End Date:</label>
+        <input type="text" id="endDate" name="endDate" required />
+
+        <button type="submit">Calculate Pass Rate</button>
+    </form>
+
+    <p th:if="${passRateByPeriod} != null">
+        합격률  <span th:text="${startDate}"></span> ~ <span th:text="${endDate}"></span>:
+        <span th:text="${passRateByPeriod}"></span>%
+    </p>
+</div>
+</body>
+</html>

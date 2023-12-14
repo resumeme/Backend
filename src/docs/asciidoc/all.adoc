@@ -1,0 +1,202 @@
+= *공통's API*
+
+== [회원가입]
+=== 멘토 가입
+include::{snippets}/user/mentor/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentor/create/http-request.adoc[]
+include::{snippets}/user/mentor/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/user/mentor/create/http-response.adoc[]
+include::{snippets}/user/mentor/create/response-headers.adoc[]
+
+=== 멘티 가입
+include::{snippets}/user/mentee/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentee/create/http-request.adoc[]
+include::{snippets}/user/mentee/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/user/mentee/create/http-response.adoc[]
+include::{snippets}/user/mentee/create/response-headers.adoc[]
+
+== [로그인 / 로그아웃]
+=== 새로운 사용자 로그인
+**Request**
+include::{snippets}/user/login/newUser/http-request.adoc[]
+include::{snippets}/user/login/newUser/request-fields.adoc[]
+
+*Response*
+include::{snippets}/user/login/newUser/http-response.adoc[]
+include::{snippets}/user/login/newUser/response-headers.adoc[]
+
+=== 기존 사용자 로그인
+**Request**
+include::{snippets}/user/login/alreadyUser/http-request.adoc[]
+include::{snippets}/user/login/alreadyUser/request-fields.adoc[]
+
+*Response*
+include::{snippets}/user/login/alreadyUser/http-response.adoc[]
+include::{snippets}/user/login/alreadyUser/response-headers.adoc[]
+
+=== 로그아웃
+**Request**
+include::{snippets}/logout/http-request.adoc[]
+
+*Response*
+include::{snippets}/logout//http-response.adoc[]
+
+== [회원 정보]
+=== 멘토 정보 조회
+include::{snippets}/user/mentor/find/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentor/find/http-request.adoc[]
+include::{snippets}/user/mentor/find/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentor/find/http-response.adoc[]
+include::{snippets}/user/mentor/find/response-fields.adoc[]
+
+=== 멘티 정보 조회
+include::{snippets}/user/mentee/find/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentee/find/http-request.adoc[]
+include::{snippets}/user/mentee/find/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentee/find/http-response.adoc[]
+include::{snippets}/user/mentee/find/response-fields.adoc[]
+
+== [이력서]
+=== 이력서 기본 정보 조회
+*Request*
+include::{snippets}/resume/basicInfo/http-request.adoc[]
+include::{snippets}/resume/basicInfo/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/basicInfo/http-response.adoc[]
+include::{snippets}/resume/basicInfo/response-fields.adoc[]
+
+=== 이력서 참고링크 조회
+*Request*
+include::{snippets}/resume/component/find/links/http-request.adoc[]
+include::{snippets}/resume/component/find/links/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/links/http-response.adoc[]
+include::{snippets}/resume/component/find/links/response-fields.adoc[]
+
+=== 이력서 블럭 전체 조회
+
+include::{snippets}/resume/component/findAll/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/component/findAll/http-request.adoc[]
+include::{snippets}/resume/component/findAll/path-parameters.adoc[]
+
+*Response*
+전체 조회는 개별 조회를 합친 양식이기 때문에 따로 작성하지 않았습니다
+
+=== 이력서 교육사항 조회
+*Request*
+include::{snippets}/resume/component/find/trainings/http-request.adoc[]
+include::{snippets}/resume/component/find/trainings/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/trainings/http-response.adoc[]
+include::{snippets}/resume/component/find/trainings/response-fields.adoc[]
+
+=== 이력서 수상 및 자격증 조회
+*Request*
+include::{snippets}/resume/component/find/certifications/http-request.adoc[]
+include::{snippets}/resume/component/find/certifications/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/certifications/http-response.adoc[]
+include::{snippets}/resume/component/find/certifications/response-fields.adoc[]
+
+=== 이력서 업무경험 조회
+*Request*
+include::{snippets}/resume/component/find/careers/http-request.adoc[]
+include::{snippets}/resume/component/find/careers/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/careers/http-response.adoc[]
+include::{snippets}/resume/component/find/careers/response-fields.adoc[]
+
+=== 이력서 프로젝트 조회
+*Request*
+include::{snippets}/resume/component/find/projects/http-request.adoc[]
+include::{snippets}/resume/component/find/projects/path-parameters.adoc[]
+
+
+*Response*
+include::{snippets}/resume/component/find/projects/http-response.adoc[]
+include::{snippets}/resume/component/find/projects/response-fields.adoc[]
+
+=== 이력서 어학성적 조회
+*Request*
+include::{snippets}/resume/component/find/foreignLanguages/http-request.adoc[]
+include::{snippets}/resume/component/find/foreignLanguages/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/foreignLanguages/http-response.adoc[]
+include::{snippets}/resume/component/find/foreignLanguages/response-fields.adoc[]
+
+=== 이력서 활동사항 조회
+*Request*
+include::{snippets}/resume/component/find/activities/http-request.adoc[]
+include::{snippets}/resume/component/find/activities/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/find/activities/http-response.adoc[]
+include::{snippets}/resume/component/find/activities/response-fields.adoc[]
+
+== [첨삭 피드백]
+=== 이력서 첨삭 피드백 조회
+
+include::{snippets}/comment/getAll/exception-response.adoc[]
+
+*Request*
+include::{snippets}/comment/getAll/http-request.adoc[]
+include::{snippets}/comment/getAll/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/getAll/http-response.adoc[]
+include::{snippets}/comment/getAll/response-fields.adoc[]
+
+== [이벤트]
+=== 이벤트 전체 조회
+*Request*
+include::{snippets}/event/getAll/http-request.adoc[]
+
+*Response*
+include::{snippets}/event/getAll/http-response.adoc[]
+include::{snippets}/event/getAll/response-fields.adoc[]
+
+=== 이벤트 단건 상세 조회
+include::{snippets}/event/getOne/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/getOne/http-request.adoc[]
+include::{snippets}/event/getOne/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/getOne/http-response.adoc[]
+include::{snippets}/event/getOne/response-fields.adoc[]
+
+
+== [합격 이력서]
+=== 합격이력서 공유 소개글 페이징 조회
+*Request*
+include::{snippets}/result/getAll/http-request.adoc[]
+include::{snippets}/result/getAll/query-parameters.adoc[]
+
+*Response*
+include::{snippets}/result/getAll/http-response.adoc[]
+include::{snippets}/result/getAll/response-fields.adoc[]

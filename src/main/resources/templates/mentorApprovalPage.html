@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>멘토 승인 페이지</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyUtFm8+ndF7lpj8RqGsnjXBydIeBEiQ5y" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        table {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            text-align: center;
+        }
+
+        .btn-approve {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-reject {
+            background-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center mb-4">멘토 승인 페이지</h2>
+
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>승인/거부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mentorApplication : ${mentorApplications}">
+            <td th:text="${mentorApplication.applicationId}"></td>
+            <td th:text="${mentorApplication.mentorName}"></td>
+            <td>
+                <form th:action="@{'/admin/applications/' + ${mentorApplication.applicationId} + '/approve'}" method="post">
+                    <button type="submit" class="btn btn-approve">승인</button>
+                </form>
+                <form th:action="@{'/admin/applications/' + ${mentorApplication.applicationId} + '/reject'}" method="post">
+                    <button type="submit" class="btn btn-reject">거부</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-d41dbU81OC34eb2N6nW9rDEUJngp1uHe2iDRjKV7RGbSdf9P8jWc4qtFjcGYnA5r" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyUtFm8+ndF7lpj8RqGsnjXBydIeBEiQ5y" crossorigin="anonymous"></script>
+
+</body>
+</html>

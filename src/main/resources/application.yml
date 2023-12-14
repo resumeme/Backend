@@ -1,0 +1,54 @@
+spring:
+  jpa:
+    open-in-view: false
+  config:
+    import: application-endpoint.yml, application-auth.yml, application-jwt.yml, application-email.yml
+  data:
+    redis:
+      host: localhost
+      port: 6379
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/resumeme
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: https://resumeme.vercel.app/sign-in/oauth/kakao
+  datasource:
+    url: ENC(nVr6D913Em2RKc2pl9G9uhj96NzWG2/w83OahFWq9X2Iak2ibpzazL2uWSvcr10dWGNyqh7gx504dMX2zMc2VJEXabv4yt7pblm/gGZchkbk4/7MJC3yflpKPhZBZl+9st48D6wVW9XEXoKQBjj/5xwHF5FSbgOG6wWwIPKcFEuLmASP623e3XERgx7cBBn+)
+    username: ENC(gtmvbXzNgrsKobqRpp5+gw==)
+    password: ENC(lPhG9/DaZ2r5T8Bx3/WDXqS+YE9ch3YD)
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+  data:
+    redis:
+      host: ENC(oH6k+iVdgjNgDTOt/YH31umXunLfqBFi5AbTQE90GKZfUs/sJAHCWB49DOvQ78YmljX7WCIKmH13bJ6ENO+3+M4k1oB5MrUl)
+      port: 6379
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: secret/application-db.yml

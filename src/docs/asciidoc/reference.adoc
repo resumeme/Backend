@@ -1,0 +1,4 @@
+= *참고*
+
+=== 예외 코드
+include::{snippets}/enum-response/enum-response-fields-exceptionCode.adoc[]

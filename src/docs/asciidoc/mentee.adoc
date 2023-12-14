@@ -1,0 +1,353 @@
+= *멘티's API*
+
+== [회원정보]
+=== 멘티 정보 조회 (마이페이지)
+include::{snippets}/user/mentee/findMy/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentee/findMy/http-request.adoc[]
+
+*Response*
+include::{snippets}/user/mentee/findMy/http-response.adoc[]
+include::{snippets}/user/mentee/findMy/response-fields.adoc[]
+
+=== 멘티 정보 수정
+include::{snippets}/user/mentee/update/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentee/update/http-request.adoc[]
+include::{snippets}/user/mentee/update/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentee/update/http-response.adoc[]
+include::{snippets}/user/mentee/update/response-fields.adoc[]
+
+== [이력서]
+=== 이력서 작성
+
+include::{snippets}/resume/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/create/http-request.adoc[]
+include::{snippets}/resume/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/create/http-response.adoc[]
+include::{snippets}/resume/create/response-fields.adoc[]
+
+=== 이력서 교육사항 저장
+*Request*
+include::{snippets}/resume/component/create/trainings/http-request.adoc[]
+include::{snippets}/resume/component/create/trainings/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/trainings/http-response.adoc[]
+include::{snippets}/resume/component/create/trainings/response-fields.adoc[]
+
+=== 이력서 수상 및 자격증 저장
+*Request*
+include::{snippets}/resume/component/create/certifications/http-request.adoc[]
+include::{snippets}/resume/component/create/certifications/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/certifications/http-response.adoc[]
+include::{snippets}/resume/component/create/certifications/response-fields.adoc[]
+
+=== 이력서 업무경험 저장
+*Request*
+include::{snippets}/resume/component/create/careers/http-request.adoc[]
+include::{snippets}/resume/component/create/careers/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/careers/http-response.adoc[]
+include::{snippets}/resume/component/create/careers/response-fields.adoc[]
+
+=== 이력서 어학성적 저장
+*Request*
+include::{snippets}/resume/component/create/foreignLanguages/http-request.adoc[]
+include::{snippets}/resume/component/create/foreignLanguages/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/foreignLanguages/http-response.adoc[]
+include::{snippets}/resume/component/create/foreignLanguages/response-fields.adoc[]
+
+=== 이력서 프로젝트 저장
+*Request*
+include::{snippets}/resume/component/create/projects/http-request.adoc[]
+include::{snippets}/resume/component/create/projects/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/projects/http-response.adoc[]
+include::{snippets}/resume/component/create/projects/response-fields.adoc[]
+
+=== 이력서 활동사항 저장
+*Request*
+include::{snippets}/resume/component/create/activities/http-request.adoc[]
+include::{snippets}/resume/component/create/activities/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/activities/http-response.adoc[]
+include::{snippets}/resume/component/create/activities/response-fields.adoc[]
+
+=== 이력서 참고링크 저장
+*Request*
+include::{snippets}/resume/component/create/links/http-request.adoc[]
+include::{snippets}/resume/component/create/links/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/create/links/http-response.adoc[]
+include::{snippets}/resume/component/create/links/response-fields.adoc[]
+
+=== 이력서 교육사항 수정
+*Request*
+include::{snippets}/resume/component/update/trainings/http-request.adoc[]
+include::{snippets}/resume/component/update/trainings/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/trainings/http-response.adoc[]
+include::{snippets}/resume/component/update/trainings/response-fields.adoc[]
+
+=== 이력서 수상 및 자격증 수정
+*Request*
+include::{snippets}/resume/component/update/certifications/http-request.adoc[]
+include::{snippets}/resume/component/update/certifications/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/certifications/http-response.adoc[]
+include::{snippets}/resume/component/update/certifications/response-fields.adoc[]
+
+=== 이력서 업무경험 수정
+*Request*
+include::{snippets}/resume/component/update/careers/http-request.adoc[]
+include::{snippets}/resume/component/update/careers/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/careers/http-response.adoc[]
+include::{snippets}/resume/component/update/careers/response-fields.adoc[]
+
+=== 이력서 어학성적 수정
+*Request*
+include::{snippets}/resume/component/update/foreignLanguages/http-request.adoc[]
+include::{snippets}/resume/component/update/foreignLanguages/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/foreignLanguages/http-response.adoc[]
+include::{snippets}/resume/component/update/foreignLanguages/response-fields.adoc[]
+
+=== 이력서 프로젝트 수정
+*Request*
+include::{snippets}/resume/component/update/projects/http-request.adoc[]
+include::{snippets}/resume/component/update/projects/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/projects/http-response.adoc[]
+include::{snippets}/resume/component/update/projects/response-fields.adoc[]
+
+=== 이력서 활동사항 수정
+*Request*
+include::{snippets}/resume/component/update/activities/http-request.adoc[]
+include::{snippets}/resume/component/update/activities/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/activities/http-response.adoc[]
+include::{snippets}/resume/component/update/activities/response-fields.adoc[]
+
+=== 이력서 참고 링크 수정
+*Request*
+include::{snippets}/resume/component/update/links/http-request.adoc[]
+include::{snippets}/resume/component/update/links/request-fields.adoc[]
+
+*Response*
+include::{snippets}/resume/component/update/links/http-response.adoc[]
+include::{snippets}/resume/component/update/links/response-fields.adoc[]
+
+=== 이력서 블럭 삭제
+*Request*
+include::{snippets}/resume/component/delete/http-request.adoc[]
+include::{snippets}/resume/component/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/component/delete/http-response.adoc[]
+
+=== 이력서 제목 수정 V2
+
+include::{snippets}/resume/v2/updateTitle/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/v2/updateTitle/http-request.adoc[]
+include::{snippets}/resume/v2/updateTitle/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/v2/updateTitle/http-response.adoc[]
+include::{snippets}/resume/v2/updateTitle/response-fields.adoc[]
+
+=== 이력서 기본정보 수정 V2
+
+include::{snippets}/resume/v2/updateBasicInfo/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/v2/updateBasicInfo/http-request.adoc[]
+include::{snippets}/resume/v2/updateBasicInfo/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/v2/updateBasicInfo/http-response.adoc[]
+include::{snippets}/resume/v2/updateBasicInfo/response-fields.adoc[]
+
+=== 이력서 메모 수정 V2
+
+include::{snippets}/resume/v2/updateMemo/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/v2/updateMemo/http-request.adoc[]
+include::{snippets}/resume/v2/updateMemo/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/v2/updateMemo/http-response.adoc[]
+include::{snippets}/resume/v2/updateMemo/response-fields.adoc[]
+
+=== 이력서 피드백 반영 완료
+
+include::{snippets}/resume/v2/reflectFeedback/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/v2/reflectFeedback/http-request.adoc[]
+include::{snippets}/resume/v2/reflectFeedback/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/v2/reflectFeedback/http-response.adoc[]
+include::{snippets}/resume/v2/reflectFeedback/response-fields.adoc[]
+
+=== 멘티 이력서 리스트 조회
+*Request*
+include::{snippets}/resume/getOwn/http-request.adoc[]
+
+*Response*
+include::{snippets}/resume/getOwn/http-response.adoc[]
+include::{snippets}/resume/getOwn/response-fields.adoc[]
+
+=== 이력서 삭제
+include::{snippets}/resume/delete/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/delete/http-request.adoc[]
+include::{snippets}/resume/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/delete/http-response.adoc[]
+
+=== 이력서 스냅샷 조회
+include::{snippets}/resume/snapshot/resume/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/snapshot/resume/http-request.adoc[]
+include::{snippets}/resume/snapshot/resume/query-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/snapshot/resume/response-body.adoc[]
+블럭 전체조회랑 같은 양식입니다
+
+=== 피드백 스냅샷 조회
+include::{snippets}/resume/snapshot/comment/exception-response.adoc[]
+
+*Request*
+include::{snippets}/resume/snapshot/comment/http-request.adoc[]
+include::{snippets}/resume/snapshot/comment/query-parameters.adoc[]
+
+*Response*
+include::{snippets}/resume/snapshot/comment/response-body.adoc[]
+피드백 전체조회랑 같은 양식입니다
+
+== [첨삭]
+=== 첨삭 이벤트 참여 신청
+include::{snippets}/event/apply/exception-response.adoc[]
+
+*Request*
+include::{snippets}/event/apply/http-request.adoc[]
+include::{snippets}/event/apply/request-fields.adoc[]
+
+*Response*
+include::{snippets}/event/apply/http-response.adoc[]
+
+=== 첨삭 이벤트 참여 리스트 조회
+include::{snippets}/user/mentee/events/exception-response.adoc[]
+
+*Request*
+include::{snippets}/user/mentee/events/http-request.adoc[]
+include::{snippets}/user/mentee/events/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/user/mentee/events/http-response.adoc[]
+include::{snippets}/user/mentee/events/response-fields.adoc[]
+
+=== 첨삭 이벤트 참여 조회
+*Request*
+include::{snippets}/event/record/http-request.adoc[]
+include::{snippets}/event/record/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/event/record/http-response.adoc[]
+include::{snippets}/event/record/response-fields.adoc[]
+
+=== 첨삭 내용 전체 조회
+include::{snippets}/comment/getAll/exception-response.adoc[]
+
+*Request*
+include::{snippets}/comment/getAll/http-request.adoc[]
+include::{snippets}/comment/getAll/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/comment/getAll/http-response.adoc[]
+include::{snippets}/comment/getAll/response-fields.adoc[]
+
+
+== [합격 이력서]
+=== 합격이력서 공유 소개글 작성
+include::{snippets}/resume/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/result/create/http-request.adoc[]
+include::{snippets}/result/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/result/create/http-response.adoc[]
+include::{snippets}/result/create/response-fields.adoc[]
+
+== [관심 멘토 팔로우]
+=== 멘토 팔로우하기
+include::{snippets}/follows/create/exception-response.adoc[]
+
+*Request*
+include::{snippets}/follows/create/http-request.adoc[]
+include::{snippets}/follows/create/request-fields.adoc[]
+
+*Response*
+include::{snippets}/follows/create/http-response.adoc[]
+include::{snippets}/follows/create/response-fields.adoc[]
+
+=== 팔로우 중인 멘토 리스트 조회하기
+
+*Request*
+include::{snippets}/follows/getAll/http-request.adoc[]
+
+*Response*
+include::{snippets}/follows/getAll/http-response.adoc[]
+include::{snippets}/follows/getAll/response-fields.adoc[]
+
+=== 특정 멘토 팔로우 여부 확인하기
+*Request*
+include::{snippets}/follows/find/http-request.adoc[]
+include::{snippets}/follows/find/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/follows/find/http-response.adoc[]
+include::{snippets}/follows/find/response-fields.adoc[]
+
+
+=== 멘토 팔로우 취소하기
+
+*Request*
+include::{snippets}/follows/delete/http-request.adoc[]
+include::{snippets}/follows/delete/path-parameters.adoc[]
+
+*Response*
+include::{snippets}/follows/delete/http-response.adoc[]
