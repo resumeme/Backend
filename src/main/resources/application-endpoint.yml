@@ -31,7 +31,7 @@ endpoint:
       delete: /api/v1/resumes/**
       role: own_mentee
     - matcher:
-      get: /admin/**
+      get: /admin/**, /actuator/prometheus
       post: /admin/**
       role: admin
   ignores: /docs/**

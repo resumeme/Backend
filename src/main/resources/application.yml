@@ -7,6 +7,11 @@ spring:
     redis:
       host: localhost
       port: 6379
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ---
 spring:
   config:
@@ -19,7 +24,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
