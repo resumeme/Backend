@@ -12,6 +12,7 @@ spring:
   config:
     activate:
       on-profile: default
+    import: application-endpoint-local.yml
   datasource:
     url: jdbc:h2:tcp://localhost/~/resumeme
     username: sa
