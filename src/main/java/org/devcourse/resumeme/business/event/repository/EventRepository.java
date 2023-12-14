@@ -3,8 +3,6 @@ package org.devcourse.resumeme.business.event.repository;
 import jakarta.persistence.LockModeType;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -26,15 +24,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @EntityGraph(attributePaths = {"applicants"})
     Optional<Event> findWithApplicantsById(Long id);
-
-    @EntityGraph(attributePaths = {"applicants"})
-    Page<Event> findAllByMentorIdOrderByCreatedDateDesc(Long mentorId, Pageable pageable);
-
-    @EntityGraph(attributePaths = {"applicants"})
-    Page<Event> findAllByOrderByCreatedDateDesc(Pageable pageable);
-
-    @EntityGraph(attributePaths = {"applicants"})
-    Page<Event> findAllByApplicantsMenteeIdOrderByCreatedDateDesc(Long menteeId, Pageable pageable);
 
     @Modifying
     @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.openDateTime <= :now and e.eventInfo.status = 'READY'")

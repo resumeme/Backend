@@ -7,10 +7,10 @@ import org.devcourse.resumeme.business.event.controller.dto.EventPageResponse;
 import org.devcourse.resumeme.business.event.controller.dto.EventUpdateRequest;
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
+import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.service.EventPositionService;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
-import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.user.service.UserProvider;
 import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.common.response.IdResponse;
@@ -26,11 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static org.devcourse.resumeme.business.event.service.vo.AuthorizationRole.ALL;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,20 +64,19 @@ public class EventController {
 
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
-        Page<Event> pageAbleEvent = eventService.getAllWithPage(new EventsFoundCondition(null, ALL), pageable);
-
-        List<Event> events = getEvents(pageAbleEvent);
+        Page<MenteeToEvent> menteeToEvents = eventService.getAllWithPage(pageable);
+        List<Event> events = getEvents(menteeToEvents);
         List<EventPosition> positions = getPositions(events);
         List<UserResponse> mentors = getMentors(events);
 
-        return EventPageResponse.of(positions, mentors, pageAbleEvent);
+        return EventPageResponse.of(positions, mentors, menteeToEvents);
     }
 
-    private static List<Event> getEvents(Page<Event> events) {
-        List<Event> content = new ArrayList<>(events.getContent());
-        Collections.sort(content);
-
-        return content;
+    private List<Event> getEvents(Page<MenteeToEvent> menteeToEvents) {
+        return menteeToEvents.stream()
+                .map(MenteeToEvent::getEvent)
+                .sorted()
+                .toList();
     }
 
     private List<EventPosition> getPositions(List<Event> content) {
