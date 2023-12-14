@@ -14,6 +14,11 @@ public record EventInfoResponse(Long id, Long mentorId, String title, String con
                 event.getEventInfo().getStatus().name(), convertToString(positions), new TimeInfo(event.getEventTimeInfo()));
     }
 
+    public EventInfoResponse(Event event, int size, List<EventPosition> positions) {
+        this(event.getId(), event.getMentorId(), event.title(), event.content(), event.maximumCount(), size,
+                event.getEventInfo().getStatus().name(), convertToString(positions), new TimeInfo(event.getEventTimeInfo()));
+    }
+
     private static List<String> convertToString(List<EventPosition> positions) {
         return positions.stream()
                 .map(eventPosition -> eventPosition.getPosition().name())

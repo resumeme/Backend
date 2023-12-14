@@ -26,8 +26,9 @@ public class MenteeToEventService {
 
     private final EventRepository eventRepository;
 
+    @Transactional(readOnly = true)
     public Long getRecord(Long eventId, Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId).stream()
+        return getByMenteeId(menteeId).stream()
                 .filter(record -> record.getEvent().getId().equals(eventId))
                 .findFirst()
                 .map(MenteeToEvent::getId)
@@ -59,13 +60,18 @@ public class MenteeToEventService {
     }
 
     private Long getApplyEventCount(Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId).stream()
+        return getByMenteeId(menteeId).stream()
                 .filter(MenteeToEvent::isAttending)
                 .count();
     }
 
+    @Transactional(readOnly = true)
     public List<MenteeToEvent> getByMenteeId(Long menteeId) {
         return menteeToEventRepository.findByMenteeId(menteeId);
+    }
+
+    public List<MenteeToEvent> getByMentorId(Long mentorId) {
+        return menteeToEventRepository.findByEventMentorId(mentorId);
     }
 
 }

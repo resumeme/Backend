@@ -12,10 +12,26 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+
 public record MentorEventResponse(EventInfoResponse info, List<ResumeResponse> resumes) {
 
-    public MentorEventResponse(Event event, List<Resume> resumes, List<UserResponse> mentees) {
-        this(new EventInfoResponse(event, new ArrayList<>()), toResponse(event, resumes, mentees));
+    public MentorEventResponse(Event event, int size, List<Resume> resumes, List<UserResponse> mentees) {
+        this(new EventInfoResponse(event, size, new ArrayList<>()), toResponse(event, resumes, mentees));
+    }
+
+    public static List<MentorEventResponse> collect(List<MenteeToEvent> menteeToEvents, List<Resume> resumes, List<UserResponse> mentees) {
+        Map<Long, List<MenteeToEvent>> menteeToEventMap = menteeToEvents.stream()
+                .collect(groupingBy(position -> position.getEvent().getId(), toList()));
+
+        List<Event> events = menteeToEvents.stream()
+                .map(MenteeToEvent::getEvent)
+                .toList();
+
+        return events.stream()
+                .map(event -> new MentorEventResponse(event, menteeToEventMap.get(event.getId()).size(), resumes, mentees))
+                .toList();
     }
 
     public static List<ResumeResponse> toResponse(Event event, List<Resume> resumes, List<UserResponse> mentees) {
