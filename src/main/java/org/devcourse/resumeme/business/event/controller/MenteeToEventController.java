@@ -6,7 +6,6 @@ import org.devcourse.resumeme.business.event.controller.dto.v2.ApplyUpdateReques
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
-import org.devcourse.resumeme.business.resume.service.ResumeProvider;
 import org.devcourse.resumeme.business.snapshot.service.SnapshotCapture;
 import org.devcourse.resumeme.common.response.IdResponse;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/appliments/events")
 public class MenteeToEventController {
 
-    private final ResumeProvider resumeProvider;
-
     private final MenteeToEventService applyService;
 
     private final SnapshotCapture commentCapture;
@@ -39,8 +36,7 @@ public class MenteeToEventController {
     
     @PostMapping("/{eventId}")
     public void applyEvent(@PathVariable Long eventId, @RequestBody ApplyToEventRequest request, @AuthenticationPrincipal JwtUser user) {
-        Long copyResumeId = resumeProvider.copy(request.resumeId());
-        applyService.acceptMentee(new AcceptMenteeToEvent(eventId, user.id(), copyResumeId));
+        applyService.acceptMentee(new AcceptMenteeToEvent(eventId, user.id(), request.resumeId()));
     }
 
     @PatchMapping("/{eventId}")
