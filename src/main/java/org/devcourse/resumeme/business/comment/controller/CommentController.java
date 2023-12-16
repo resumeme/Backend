@@ -11,6 +11,7 @@ import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.service.EventService;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,9 +53,17 @@ public class CommentController {
         List<CommentResponse> commentResponses = commentService.getAllWithResumeId(resumeId).stream()
                 .map(CommentResponse::new)
                 .toList();
-        String overallReview = eventService.getOverallReview(event, resumeId);
+        String overallReview = getOverallReview(event, resumeId);
 
         return new CommentWithReviewResponse(commentResponses, overallReview, event.getMentorId());
+    }
+
+    private String getOverallReview(Event event, Long resumeId) {
+        return event.getApplicants().stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
+                .getOverallReview();
     }
 
     @PatchMapping("/{commentId}")

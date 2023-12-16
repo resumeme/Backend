@@ -57,14 +57,6 @@ public class EventService {
         return menteeToEventRepository.findAllByOrderByEventCreatedDateDesc(pageable);
     }
 
-    public String getOverallReview(Event event, Long resumeId) {
-        return event.getApplicants().stream()
-                .filter(m -> m.isSameResume(resumeId))
-                .findFirst()
-                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
-                .getOverallReview();
-    }
-
     public void update(EventUpdateVo updateVo) {
         Event event = getOne(updateVo.getEventId());
         updateVo.update(event);
