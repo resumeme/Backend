@@ -70,6 +70,7 @@ public class MenteeToEventService {
         return menteeToEventRepository.findByMenteeId(menteeId);
     }
 
+    @Transactional(readOnly = true)
     public List<MenteeToEvent> getByMentorId(Long mentorId) {
         return menteeToEventRepository.findByEventMentorId(mentorId);
     }
