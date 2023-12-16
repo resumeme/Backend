@@ -11,7 +11,6 @@ import org.devcourse.resumeme.business.event.service.listener.EventCreationPubli
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.service.UserProvider;
 import org.devcourse.resumeme.business.user.service.vo.UserResponse;
-import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.devcourse.resumeme.business.event.service.listener.EventCreation.EventNoticeInfo;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
-import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -36,14 +34,23 @@ public class EventService {
     private final UserProvider userProvider;
 
     public Long create(Event event) {
-        eventRepository.findAllByMentorId(event.getMentorId())
-                .forEach(Event::checkOpen);
+        checkAlreadyOpenEvent(event);
         Event savedEvent = eventRepository.save(event);
-        UserResponse user = userProvider.getOne(savedEvent.getMentorId());
-        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, user);
-        eventCreationPublisher.publishEventCreation(eventNoticeInfo);
+        sendNotificationMail(savedEvent);
 
         return savedEvent.getId();
+    }
+
+    private void checkAlreadyOpenEvent(Event event) {
+        eventRepository.findAllByMentorId(event.getMentorId())
+                .forEach(Event::checkOpen);
+    }
+
+    private void sendNotificationMail(Event savedEvent) {
+        UserResponse user = userProvider.getOne(savedEvent.getMentorId());
+
+        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, user);
+        eventCreationPublisher.publishEventCreation(eventNoticeInfo);
     }
 
     @Transactional(readOnly = true)
@@ -53,7 +60,7 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MenteeToEvent> getAllWithPage(Pageable pageable) {
+    public Page<MenteeToEvent> getAll(Pageable pageable) {
         return menteeToEventRepository.findAllByOrderByEventCreatedDateDesc(pageable);
     }
 

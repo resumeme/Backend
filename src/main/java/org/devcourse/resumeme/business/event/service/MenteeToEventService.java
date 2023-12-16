@@ -29,7 +29,7 @@ public class MenteeToEventService {
     @Transactional(readOnly = true)
     public Long getRecord(Long eventId, Long menteeId) {
         return getByMenteeId(menteeId).stream()
-                .filter(record -> record.getEvent().getId().equals(eventId))
+                .filter(history -> history.getEvent().getId().equals(eventId))
                 .findFirst()
                 .map(MenteeToEvent::getId)
                 .orElse(null);
