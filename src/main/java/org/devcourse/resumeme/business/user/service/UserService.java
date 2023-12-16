@@ -43,19 +43,6 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
     }
 
-    public User getOne(Long userId) {
-        return userRepository.findWithPositionsAndFields(userId)
-                .orElseThrow(() -> new CustomException(MENTEE_NOT_FOUND));
-    }
-
-    public void deleteRefreshToken(Long id) {
-        updateRefreshToken(id, null);
-    }
-
-    public List<User> getByIds(List<Long> ids) {
-        return userRepository.findAllByIds(ids);
-    }
-
     public void updateRole(Long mentorId, ApplicationProcessType type) {
         User user = getOne(mentorId);
         Mentor mentor = Mentor.of(user);
@@ -72,6 +59,14 @@ public class UserService {
         return updatedUser.getId();
     }
 
+    public void deleteRefreshToken(Long id) {
+        updateRefreshToken(id, null);
+    }
+
+    public List<User> getByIds(List<Long> ids) {
+        return userRepository.findAllByIds(ids);
+    }
+
     public UserInfoVo getOne(Role role, Long userId) {
         User user = getOne(userId);
 
@@ -80,6 +75,15 @@ public class UserService {
             case ROLE_MENTOR -> new UserInfoVo(Mentor.of(user));
             case ROLE_ADMIN, ROLE_PENDING -> throw new CustomException(BAD_REQUEST);
         };
+    }
+
+    public String getRefreshToken(Long userId) {
+        return getOne(userId).getRefreshToken();
+    }
+
+    private User getOne(Long userId) {
+        return userRepository.findWithPositionsAndFields(userId)
+                .orElseThrow(() -> new CustomException(MENTEE_NOT_FOUND));
     }
 
 }

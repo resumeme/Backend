@@ -11,6 +11,7 @@ import org.devcourse.resumeme.business.event.service.listener.EventCreationPubli
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.service.UserProvider;
 import org.devcourse.resumeme.business.user.service.vo.UserResponse;
+import org.devcourse.resumeme.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.devcourse.resumeme.business.event.service.listener.EventCreation.EventNoticeInfo;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.EVENT_NOT_FOUND;
+import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -72,6 +74,14 @@ public class EventService {
     public void checkCommentAvailableDate(Long eventId) {
         Event event = getOne(eventId);
         event.checkDate();
+    }
+
+    public String getOverallReview(Event event, Long resumeId) {
+        return event.getApplicants().stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
+                .getOverallReview();
     }
 
 }

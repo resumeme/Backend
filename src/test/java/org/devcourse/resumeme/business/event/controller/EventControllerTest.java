@@ -96,7 +96,6 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = eventCreateRequest.toEntity(1L);
 
         given(eventService.create(event)).willReturn(1L);
-        given(userService.getOne(1L)).willReturn(mentor.from());
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/events")

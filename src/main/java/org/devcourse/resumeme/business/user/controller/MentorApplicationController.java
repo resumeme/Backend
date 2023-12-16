@@ -6,7 +6,6 @@ import org.devcourse.resumeme.business.user.controller.dto.admin.ApplicationProc
 import org.devcourse.resumeme.business.user.controller.dto.admin.MentorApplicationResponse;
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.business.user.service.admin.MentorApplicationService;
 import org.springframework.stereotype.Controller;
@@ -22,6 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.devcourse.resumeme.business.mail.service.EmailInfoGenerator.createMentorApprovalMail;
+import static org.devcourse.resumeme.business.user.domain.Role.ROLE_MENTOR;
 
 @Controller
 @RequiredArgsConstructor
@@ -67,8 +67,8 @@ public class MentorApplicationController {
     private void processApplication(Long applicationId, String type) {
         Long mentorId = mentorApplicationService.delete(applicationId);
         userService.updateRole(mentorId, ApplicationProcessType.valueOf(type.toUpperCase()));
-        User user = userService.getOne(mentorId);
-        emailService.sendEmail(createMentorApprovalMail(Mentor.of(user)));
+        Mentor mentor = userService.getOne(ROLE_MENTOR, mentorId).getMentor();
+        emailService.sendEmail(createMentorApprovalMail(mentor));
     }
 
 }
