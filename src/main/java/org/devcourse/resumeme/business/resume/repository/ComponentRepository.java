@@ -16,7 +16,7 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
     List<Component> findAllByResumeId(Long resumeId);
 
     @Query("select c from Component c where c.resumeId = :resumeId and c.property = :type")
-    Optional<Component> findExistBlock(@Param("resumeId") Long resumeId, @Param("type") Property type);
+    Optional<Component> findExistComponent(@Param("resumeId") Long resumeId, @Param("type") Property type);
 
     @EntityGraph(attributePaths = "components")
     Optional<Component> findById(Long componentId);
