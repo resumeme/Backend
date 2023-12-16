@@ -15,10 +15,6 @@ public class EventPositionService {
 
     private final EventPositionRepository eventPositionRepository;
 
-    public List<EventPosition> getAll(Long eventId) {
-        return eventPositionRepository.findAllByEventId(eventId);
-    }
-
     public List<EventPosition> getAll(List<Long> eventIds) {
         List<EventPosition> positions = new ArrayList<>(eventPositionRepository.findAllByEventIds(eventIds));
         Collections.sort(positions);

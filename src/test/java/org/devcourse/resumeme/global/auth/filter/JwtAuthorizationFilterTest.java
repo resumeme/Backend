@@ -59,7 +59,7 @@ class JwtAuthorizationFilterTest extends ControllerUnitTest {
         given(jwtService.extractClaim(any())).willReturn(new Claims(1L, "ROLE_MENTEE", new Date()));
         given(jwtService.extractRefreshToken(any(HttpServletRequest.class))).willReturn(Optional.of("refreshToken"));
         given(jwtService.isNotManipulated("refreshToken")).willReturn(true);
-        given(userService.getOne(1L)).willReturn(mentee.from());
+        given(userService.getRefreshToken(1L)).willReturn("refreshToken");
         given(jwtService.compareTokens("refreshToken", "refreshToken")).willReturn(true);
 
         // when

@@ -96,7 +96,6 @@ class EventControllerTest extends ControllerUnitTest {
         Event event = eventCreateRequest.toEntity(1L);
 
         given(eventService.create(event)).willReturn(1L);
-        given(userService.getOne(1L)).willReturn(mentor.from());
 
         // when
         ResultActions result = mvc.perform(post("/api/v1/events")
@@ -226,7 +225,7 @@ class EventControllerTest extends ControllerUnitTest {
         setId(resume1, 1L);
         setId(resume2, 4L);
         given(resumeService.getAll(List.of(1L, 4L))).willReturn(List.of(resume1, resume2));
-        given(eventPositionService.getAll(eventId)).willReturn(List.of(new EventPosition(BACK, event, 1)));
+        given(eventPositionService.getAll(List.of(eventId))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
         // when
         ResultActions result = mvc.perform(get("/api/v1/events/{eventId}", eventId));
@@ -272,7 +271,7 @@ class EventControllerTest extends ControllerUnitTest {
         setId(event, 1L);
 
         given(userInfoProvider.getByIds(List.of(1L))).willReturn(List.of(new UserResponse(1L, "nickname", "name", "email", "01012345678", "url")));
-        given(eventService.getAllWithPage(PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(new MenteeToEvent(event,1L, 1L))));
+        given(eventService.getAll(PageRequest.of(0, 10))).willReturn(new PageImpl<>(List.of(new MenteeToEvent(event,1L, 1L))));
         given(eventPositionService.getAll(List.of(1L))).willReturn(List.of(new EventPosition(BACK, event, 1)));
 
         // when

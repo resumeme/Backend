@@ -74,7 +74,6 @@ class ResumeControllerTest extends ControllerUnitTest {
         ResumeRequest request = new ResumeRequest("title");
         Resume resume = request.toEntity(1L);
 
-        given(userService.getOne(any())).willReturn(mentee.from());
         given(resumeService.create(resume)).willReturn(1L);
 
         // when

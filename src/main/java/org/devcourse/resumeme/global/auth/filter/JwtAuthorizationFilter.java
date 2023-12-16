@@ -63,7 +63,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private String findSavedTokenWithUserId(Long userId) {
-        return userService.getOne(userId).getRefreshToken();
+        return userService.getRefreshToken(userId);
     }
 
     private void saveAuthentication(String accessToken) {

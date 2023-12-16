@@ -8,6 +8,7 @@ import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.admin.MentorApplication;
 import org.devcourse.resumeme.business.user.domain.mentee.RequiredInfo;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
+import org.devcourse.resumeme.business.user.service.vo.UserInfoVo;
 import org.devcourse.resumeme.common.ControllerUnitTest;
 import org.devcourse.resumeme.global.auth.model.login.OAuth2TempInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,7 +93,7 @@ class MentorApplicationControllerTest extends ControllerUnitTest {
 
         given(mentorApplicationService.delete(applicationId)).willReturn(mentorId);
         doNothing().when(userService).updateRole(mentorId, type);
-        given(userService.getOne(any())).willReturn(mentor.from());
+        given(userService.getOne(any(), any())).willReturn(new UserInfoVo(mentor));
         doNothing().when(emailService).sendEmail(any());
 
         // when

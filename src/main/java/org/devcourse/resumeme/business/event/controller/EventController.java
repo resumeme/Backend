@@ -57,14 +57,14 @@ public class EventController {
     @GetMapping("/{eventId}")
     public EventInfoResponse getOne(@PathVariable Long eventId) {
         Event event = eventService.getOne(eventId);
-        List<EventPosition> positions = eventPositionService.getAll(eventId);
+        List<EventPosition> positions = eventPositionService.getAll(List.of(eventId));
 
         return new EventInfoResponse(event, positions);
     }
 
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
-        Page<MenteeToEvent> menteeToEvents = eventService.getAllWithPage(pageable);
+        Page<MenteeToEvent> menteeToEvents = eventService.getAll(pageable);
         List<Event> events = getEvents(menteeToEvents);
         List<EventPosition> positions = getPositions(events);
         List<UserResponse> mentors = getMentors(events);
