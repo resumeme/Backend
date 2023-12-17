@@ -7,6 +7,7 @@ import org.devcourse.resumeme.business.event.domain.model.ApplimentUpdate;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
+import org.devcourse.resumeme.business.event.repository.vo.MenteeToEventCondition;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
 import org.devcourse.resumeme.business.resume.service.ResumeProvider;
@@ -31,11 +32,18 @@ public class MenteeToEventService {
 
     @Transactional(readOnly = true)
     public Long getRecord(Long eventId, Long menteeId) {
-        return getByMenteeId(menteeId).stream()
+        MenteeToEventCondition condition = new MenteeToEventCondition(null, menteeId);
+
+        return getAll(condition).stream()
                 .filter(history -> history.getEvent().getId().equals(eventId))
                 .findFirst()
                 .map(MenteeToEvent::getId)
                 .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MenteeToEvent> getAll(MenteeToEventCondition condition) {
+        return menteeToEventRepository.findAllBy(condition.getExpression());
     }
 
     public Long update(Long eventId, ApplyUpdateVo applyUpdateVo) {
@@ -64,19 +72,11 @@ public class MenteeToEventService {
     }
 
     private Long getApplyEventCount(Long menteeId) {
-        return getByMenteeId(menteeId).stream()
+        MenteeToEventCondition condition = new MenteeToEventCondition(null, menteeId);
+
+        return getAll(condition).stream()
                 .filter(MenteeToEvent::isAttending)
                 .count();
-    }
-
-    @Transactional(readOnly = true)
-    public List<MenteeToEvent> getByMenteeId(Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MenteeToEvent> getByMentorId(Long mentorId) {
-        return menteeToEventRepository.findByEventMentorId(mentorId);
     }
 
 }
