@@ -17,8 +17,8 @@ import static java.util.stream.Collectors.toList;
 
 public record MentorEventResponse(EventInfoResponse info, List<ResumeResponse> resumes) {
 
-    public MentorEventResponse(Event event, int size, List<Resume> resumes, List<UserResponse> mentees) {
-        this(new EventInfoResponse(event, size, new ArrayList<>()), toResponse(event, resumes, mentees));
+    public MentorEventResponse(Event event, int size, List<MenteeToEvent> menteeToEvents, List<Resume> resumes, List<UserResponse> mentees) {
+        this(new EventInfoResponse(event, size, new ArrayList<>()), toResponse(menteeToEvents, resumes, mentees));
     }
 
     public static List<MentorEventResponse> collect(List<MenteeToEvent> menteeToEvents, List<Resume> resumes, List<UserResponse> mentees) {
@@ -30,11 +30,11 @@ public record MentorEventResponse(EventInfoResponse info, List<ResumeResponse> r
                 .toList();
 
         return events.stream()
-                .map(event -> new MentorEventResponse(event, menteeToEventMap.get(event.getId()).size(), resumes, mentees))
+                .map(event -> new MentorEventResponse(event, menteeToEventMap.get(event.getId()).size(), menteeToEvents, resumes, mentees))
                 .toList();
     }
 
-    public static List<ResumeResponse> toResponse(Event event, List<Resume> resumes, List<UserResponse> mentees) {
+    public static List<ResumeResponse> toResponse(List<MenteeToEvent> menteeToEvents, List<Resume> resumes, List<UserResponse> mentees) {
         if (resumes.isEmpty()) {
             return List.of();
         }
@@ -49,7 +49,7 @@ public record MentorEventResponse(EventInfoResponse info, List<ResumeResponse> r
                 .collect(Collectors.toMap(MenteeEvent::resumeId, MenteeEvent::menteeName));
 
 
-        return event.getApplicants().stream()
+        return menteeToEvents.stream()
                 .map(applicant -> {
                     Resume resume = resumesMap.get(applicant.getResumeId());
                     String menteeName = menteeNames.get(applicant.getResumeId());
