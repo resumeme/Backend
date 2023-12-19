@@ -81,7 +81,6 @@ class MenteeToEventServiceTest {
         Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
         given(eventRepository.findWithLockById(1L)).willReturn(Optional.of(event));
-        given(menteeToEventRepository.findByMenteeId(1L)).willReturn(List.of(new MenteeToEvent(event, 1L, 1L)));
 
         // when
         for (int i = 0; i < executeCount; i++) {

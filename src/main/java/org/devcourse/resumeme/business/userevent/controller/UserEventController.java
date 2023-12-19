@@ -2,6 +2,7 @@ package org.devcourse.resumeme.business.userevent.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
+import org.devcourse.resumeme.business.event.repository.vo.MenteeToEventCondition;
 import org.devcourse.resumeme.business.event.service.MenteeToEventService;
 import org.devcourse.resumeme.business.resume.entity.Resume;
 import org.devcourse.resumeme.business.resume.service.ResumeService;
@@ -30,7 +31,8 @@ public class UserEventController {
 
     @GetMapping("/mentors/{mentorId}/events")
     public List<MentorEventResponse> all(@PathVariable Long mentorId) {
-        List<MenteeToEvent> menteeToEvents = menteeToEventService.getByMentorId(mentorId);
+        MenteeToEventCondition condition = new MenteeToEventCondition(mentorId, null);
+        List<MenteeToEvent> menteeToEvents = menteeToEventService.getAll(condition);
         List<Resume> resumes = getResumes(menteeToEvents);
         List<UserResponse> mentees = getMentees(resumes);
 
@@ -39,7 +41,8 @@ public class UserEventController {
 
     @GetMapping("/mentees/{menteeId}/events")
     public List<MenteeEventResponse> getOwnEvents(@PathVariable Long menteeId) {
-        List<MenteeToEvent> menteeToEvents = menteeToEventService.getByMenteeId(menteeId);
+        MenteeToEventCondition condition = new MenteeToEventCondition(null, menteeId);
+        List<MenteeToEvent> menteeToEvents = menteeToEventService.getAll(condition);
         List<UserResponse> mentors = getMentors(menteeToEvents);
         List<Resume> resumes = getResumes(menteeToEvents);
 
