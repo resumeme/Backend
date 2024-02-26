@@ -41,8 +41,12 @@ public class EmailService {
 
             emailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            /* 이메일 전송 실패 관리용 DB 쌓을 예정 */
-            throw new RuntimeException(e);
+            log.error("""
+                            Fail Send Email \
+                            "To : {} \
+                            Subject : {}\"
+                            """
+                    , emailInfo.to(), emailInfo.type().subject);
         }
         log.info("email sent successfully");
     }
