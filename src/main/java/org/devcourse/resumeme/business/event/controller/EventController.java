@@ -64,19 +64,12 @@ public class EventController {
 
     @GetMapping
     public EventPageResponse getAll(Pageable pageable) {
-        Page<MenteeToEvent> menteeToEvents = eventService.getAll(pageable);
-        List<Event> events = getEvents(menteeToEvents);
+        Page<Event> eventsPageable = eventService.getAll(pageable);
+        List<Event> events = eventsPageable.getContent();
         List<EventPosition> positions = getPositions(events);
         List<UserResponse> mentors = getMentors(events);
 
-        return EventPageResponse.of(positions, mentors, menteeToEvents);
-    }
-
-    private List<Event> getEvents(Page<MenteeToEvent> menteeToEvents) {
-        return menteeToEvents.stream()
-                .map(MenteeToEvent::getEvent)
-                .sorted()
-                .toList();
+        return EventPageResponse.of(positions, mentors, eventsPageable);
     }
 
     private List<EventPosition> getPositions(List<Event> content) {

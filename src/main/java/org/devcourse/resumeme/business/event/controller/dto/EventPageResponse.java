@@ -2,7 +2,6 @@ package org.devcourse.resumeme.business.event.controller.dto;
 
 import org.devcourse.resumeme.business.event.domain.Event;
 import org.devcourse.resumeme.business.event.domain.EventPosition;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -17,23 +16,17 @@ import static java.util.stream.Collectors.toList;
 
 public record EventPageResponse(List<EventResponse> events, PageableResponse pageData) {
 
-    public static EventPageResponse of(List<EventPosition> positions, List<UserResponse> mentors, Page<MenteeToEvent> menteeToEvents) {
+    public static EventPageResponse of(List<EventPosition> positions, List<UserResponse> mentors, Page<Event> events) {
         Map<Object, List<EventPosition>> positionsMap = positions.stream()
                 .collect(groupingBy(position -> position.getEvent().getId(), toList()));
         Map<Long, UserResponse> mentorsMap = mentors.stream()
                 .collect(Collectors.toMap(UserResponse::userId, Function.identity()));
-        Map<Long, List<MenteeToEvent>> menteeToEventMap = menteeToEvents.stream()
-                .collect(groupingBy(position -> position.getEvent().getId(), toList()));
-
-        List<Event> events = menteeToEvents.stream()
-                .map(MenteeToEvent::getEvent)
-                .toList();
 
         List<EventResponse> responses = events.stream()
-                .map(event -> new EventResponse(event, menteeToEventMap.get(event.getId()).size(), positionsMap.get(event.getId()), mentorsMap.get(event.getMentorId())))
+                .map(event -> new EventResponse(event, event.getApplicantsCount(), positionsMap.get(event.getId()), mentorsMap.get(event.getMentorId())))
                 .toList();
 
-        return new EventPageResponse(responses, new PageableResponse(menteeToEvents));
+        return new EventPageResponse(responses, new PageableResponse(events));
     }
 
     private record PageableResponse(

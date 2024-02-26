@@ -3,10 +3,8 @@ package org.devcourse.resumeme.business.event.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.devcourse.resumeme.business.event.domain.Event;
-import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
-import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
 import org.devcourse.resumeme.business.event.service.listener.EventCreationPublisher;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
 import org.devcourse.resumeme.business.user.service.UserProvider;
@@ -28,8 +26,6 @@ import static org.devcourse.resumeme.global.exception.ExceptionCode.RESUME_NOT_F
 public class EventService {
 
     private final EventCreationPublisher eventCreationPublisher;
-
-    private final MenteeToEventRepository menteeToEventRepository;
 
     private final EventRepository eventRepository;
 
@@ -62,8 +58,11 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MenteeToEvent> getAll(Pageable pageable) {
-        return menteeToEventRepository.findAllByOrderByEventCreatedDateDesc(pageable);
+    public Page<Event> getAll(Pageable pageable) {
+        Page<Event> events = eventRepository.findAllByOrderByCreatedDateDesc(pageable);
+        events.forEach(Event::getApplicantsCount);
+
+        return events;
     }
 
     public void update(EventUpdateVo updateVo) {

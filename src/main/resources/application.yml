@@ -1,6 +1,9 @@
 spring:
   jpa:
     open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 10
   config:
     import: application-endpoint.yml, application-auth.yml, application-jwt.yml, application-email.yml
   data:
