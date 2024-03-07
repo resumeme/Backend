@@ -1,0 +1,10 @@
+endpoint:
+  matchers:
+    - matcher:
+      get: /**
+      post: /**
+      put: /**
+      patch: /**
+      delete: /**
+      role: all
+  ignores: /docs/**

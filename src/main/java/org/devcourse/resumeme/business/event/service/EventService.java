@@ -7,7 +7,6 @@ import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.service.listener.EventCreationPublisher;
 import org.devcourse.resumeme.business.event.service.vo.EventUpdateVo;
-import org.devcourse.resumeme.business.event.service.vo.EventsFoundCondition;
 import org.devcourse.resumeme.business.user.service.UserProvider;
 import org.devcourse.resumeme.business.user.service.vo.UserResponse;
 import org.devcourse.resumeme.global.exception.CustomException;
@@ -33,14 +32,23 @@ public class EventService {
     private final UserProvider userProvider;
 
     public Long create(Event event) {
-        eventRepository.findAllByMentorId(event.getMentorId())
-                .forEach(Event::checkOpen);
+        checkAlreadyOpenEvent(event);
         Event savedEvent = eventRepository.save(event);
-        UserResponse user = userProvider.getOne(savedEvent.getMentorId());
-        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, user);
-        eventCreationPublisher.publishEventCreation(eventNoticeInfo);
+        sendNotificationMail(savedEvent);
 
         return savedEvent.getId();
+    }
+
+    private void checkAlreadyOpenEvent(Event event) {
+        eventRepository.findAllByMentorId(event.getMentorId())
+                .forEach(Event::checkOpen);
+    }
+
+    private void sendNotificationMail(Event savedEvent) {
+        UserResponse user = userProvider.getOne(savedEvent.getMentorId());
+
+        EventNoticeInfo eventNoticeInfo = new EventNoticeInfo(savedEvent, user);
+        eventCreationPublisher.publishEventCreation(eventNoticeInfo);
     }
 
     @Transactional(readOnly = true)
@@ -50,20 +58,11 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Event> getAllWithPage(EventsFoundCondition condition, Pageable pageable) {
-        return switch (condition.role()) {
-            case MENTEE -> eventRepository.findAllByApplicantsMenteeIdOrderByCreatedDateDesc(condition.userId(), pageable);
-            case MENTOR -> eventRepository.findAllByMentorIdOrderByCreatedDateDesc(condition.userId(), pageable);
-            case ALL -> eventRepository.findAllByOrderByCreatedDateDesc(pageable);
-        };
-    }
+    public Page<Event> getAll(Pageable pageable) {
+        Page<Event> events = eventRepository.findAllByOrderByCreatedDateDesc(pageable);
+        events.forEach(Event::getApplicantsCount);
 
-    public String getOverallReview(Event event, Long resumeId) {
-        return event.getApplicants().stream()
-                .filter(m -> m.isSameResume(resumeId))
-                .findFirst()
-                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
-                .getOverallReview();
+        return events;
     }
 
     public void update(EventUpdateVo updateVo) {
@@ -74,6 +73,14 @@ public class EventService {
     public void checkCommentAvailableDate(Long eventId) {
         Event event = getOne(eventId);
         event.checkDate();
+    }
+
+    public String getOverallReview(Event event, Long resumeId) {
+        return event.getApplicants().stream()
+                .filter(m -> m.isSameResume(resumeId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(RESUME_NOT_FOUND))
+                .getOverallReview();
     }
 
 }

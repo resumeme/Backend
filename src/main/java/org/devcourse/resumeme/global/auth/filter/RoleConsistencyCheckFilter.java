@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.user.domain.mentor.Mentor;
-import org.devcourse.resumeme.business.user.entity.User;
 import org.devcourse.resumeme.business.user.service.UserService;
 import org.devcourse.resumeme.global.auth.model.jwt.JwtUser;
 import org.devcourse.resumeme.global.exception.ChangeMentorRoleException;
@@ -36,14 +35,11 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
     }
 
     private boolean isRoleInconsistent(Authentication auth) {
-        if (!(auth.getPrincipal() instanceof JwtUser)) {
+        if (!(auth.getPrincipal() instanceof JwtUser user)) {
             return false;
         }
 
-        JwtUser user = (JwtUser) auth.getPrincipal();
-
-        User findUser = userService.getOne(user.id());
-        return isPending(auth) && Mentor.of(findUser).getRole().equals(ROLE_MENTOR);
+        return isPending(auth) && checkMentorRole(user);
     }
 
     private boolean isPending(Authentication auth) {
@@ -52,5 +48,10 @@ public class RoleConsistencyCheckFilter extends OncePerRequestFilter {
                 .anyMatch(authority -> authority.equals("ROLE_PENDING"));
     }
 
+    private boolean checkMentorRole(JwtUser user) {
+        Mentor mentor = userService.getOne(ROLE_MENTOR, user.id()).getMentor();
+
+        return mentor.getRole().equals(ROLE_MENTOR);
+    }
 
 }

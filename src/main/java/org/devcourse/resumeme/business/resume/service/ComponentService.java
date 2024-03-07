@@ -2,14 +2,7 @@ package org.devcourse.resumeme.business.resume.service;
 
 import lombok.RequiredArgsConstructor;
 import org.devcourse.resumeme.business.comment.repository.CommentRepository;
-import org.devcourse.resumeme.business.resume.domain.activity.Activity;
-import org.devcourse.resumeme.business.resume.domain.certification.Certification;
-import org.devcourse.resumeme.business.resume.domain.language.ForeignLanguage;
-import org.devcourse.resumeme.business.resume.domain.project.Project;
 import org.devcourse.resumeme.business.resume.domain.Property;
-import org.devcourse.resumeme.business.resume.domain.link.ReferenceLink;
-import org.devcourse.resumeme.business.resume.domain.training.Training;
-import org.devcourse.resumeme.business.resume.domain.career.Career;
 import org.devcourse.resumeme.business.resume.entity.Component;
 import org.devcourse.resumeme.business.resume.repository.ComponentRepository;
 import org.devcourse.resumeme.business.resume.service.v2.ResumeTemplate;
@@ -18,18 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
-import static java.util.stream.Collectors.toMap;
-import static org.devcourse.resumeme.business.resume.domain.Property.ACTIVITIES;
-import static org.devcourse.resumeme.business.resume.domain.Property.CAREERS;
-import static org.devcourse.resumeme.business.resume.domain.Property.CERTIFICATIONS;
-import static org.devcourse.resumeme.business.resume.domain.Property.FOREIGNLANGUAGES;
-import static org.devcourse.resumeme.business.resume.domain.Property.LINKS;
-import static org.devcourse.resumeme.business.resume.domain.Property.PROJECTS;
-import static org.devcourse.resumeme.business.resume.domain.Property.TRAININGS;
 import static org.devcourse.resumeme.global.exception.ExceptionCode.COMPONENT_NOT_FOUND;
 
 @Service
@@ -50,12 +33,12 @@ public class ComponentService {
 
     private Component createComponent(Component newComponent, Property type) {
         Long resumeId = newComponent.getResumeId();
-        Optional<Component> existBlock1 = componentRepository.findExistBlock(resumeId, type);
-        if (existBlock1.isPresent()) {
-            Component existComponent = existBlock1.get();
-            existComponent.addSubComponent(newComponent);
+        Optional<Component> existComponent = componentRepository.findExistComponent(resumeId, type);
+        if (existComponent.isPresent()) {
+            Component component = existComponent.get();
+            component.addSubComponent(newComponent);
 
-            return existComponent;
+            return component;
         }
 
         return new Component(type, null, null, null, resumeId, List.of(newComponent));

@@ -7,8 +7,10 @@ import org.devcourse.resumeme.business.event.domain.model.ApplimentUpdate;
 import org.devcourse.resumeme.business.event.exception.EventException;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
+import org.devcourse.resumeme.business.event.repository.vo.MenteeToEventCondition;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
 import org.devcourse.resumeme.business.event.service.vo.ApplyUpdateVo;
+import org.devcourse.resumeme.business.resume.service.ResumeProvider;
 import org.devcourse.resumeme.global.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +28,22 @@ public class MenteeToEventService {
 
     private final EventRepository eventRepository;
 
+    private final ResumeProvider resumeProvider;
+
+    @Transactional(readOnly = true)
     public Long getRecord(Long eventId, Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId).stream()
-                .filter(record -> record.getEvent().getId().equals(eventId))
+        MenteeToEventCondition condition = new MenteeToEventCondition(null, menteeId);
+
+        return getAll(condition).stream()
+                .filter(history -> history.getEvent().getId().equals(eventId))
                 .findFirst()
                 .map(MenteeToEvent::getId)
                 .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MenteeToEvent> getAll(MenteeToEventCondition condition) {
+        return menteeToEventRepository.findAllBy(condition.getExpression());
     }
 
     public Long update(Long eventId, ApplyUpdateVo applyUpdateVo) {
@@ -48,7 +60,8 @@ public class MenteeToEventService {
         Event event = eventRepository.findWithLockById(ids.eventId())
                 .orElseThrow();
 
-        event.acceptMentee(ids.menteeId(), ids.resumeId());
+        Long copyResumeId = resumeProvider.copy(ids.resumeId());
+        event.acceptMentee(ids.menteeId(), copyResumeId);
     }
 
     private void checkCanApply(Long menteeId) {
@@ -59,13 +72,11 @@ public class MenteeToEventService {
     }
 
     private Long getApplyEventCount(Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId).stream()
+        MenteeToEventCondition condition = new MenteeToEventCondition(null, menteeId);
+
+        return getAll(condition).stream()
                 .filter(MenteeToEvent::isAttending)
                 .count();
-    }
-
-    public List<MenteeToEvent> getByMenteeId(Long menteeId) {
-        return menteeToEventRepository.findByMenteeId(menteeId);
     }
 
 }

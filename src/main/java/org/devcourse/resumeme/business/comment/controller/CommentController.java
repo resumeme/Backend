@@ -55,6 +55,8 @@ public class CommentController {
         return new CommentWithReviewResponse(commentResponses, overallReview, event.getMentorId());
     }
 
+
+
     @PatchMapping("/{commentId}")
     public void updateComment(@RequestBody CommentUpdateRequest request, @PathVariable Long commentId) {
         commentService.update(request.content(), commentId);

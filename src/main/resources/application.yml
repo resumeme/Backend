@@ -1,24 +1,33 @@
 spring:
   jpa:
     open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 10
   config:
     import: application-endpoint.yml, application-auth.yml, application-jwt.yml, application-email.yml
   data:
     redis:
       host: localhost
       port: 6379
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ---
 spring:
   config:
     activate:
       on-profile: default
+    import: application-endpoint-local.yml
   datasource:
     url: jdbc:h2:tcp://localhost/~/resumeme
     username: sa
     password:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true

@@ -7,6 +7,7 @@ import org.devcourse.resumeme.business.event.domain.MenteeToEvent;
 import org.devcourse.resumeme.business.event.repository.EventRepository;
 import org.devcourse.resumeme.business.event.repository.MenteeToEventRepository;
 import org.devcourse.resumeme.business.event.service.vo.AcceptMenteeToEvent;
+import org.devcourse.resumeme.business.resume.service.ResumeCopier;
 import org.devcourse.resumeme.business.user.domain.Provider;
 import org.devcourse.resumeme.business.user.domain.Role;
 import org.devcourse.resumeme.business.user.domain.mentee.Mentee;
@@ -44,18 +45,13 @@ class MenteeToEventServiceTest {
     private MenteeToEventService menteeToEventService;
 
     @Mock
+    private ResumeCopier resumeCopier;
+
+    @Mock
     private EventRepository eventRepository;
 
     @Mock
     private MenteeToEventRepository menteeToEventRepository;
-
-    private Mentor mentorOne;
-
-    private Mentor mentorTwo;
-
-    private Event eventOne;
-
-    private Event eventTwo;
 
     private ExecutorService executorService;
 
@@ -75,34 +71,6 @@ class MenteeToEventServiceTest {
         successCount = new AtomicInteger();
         failCount = new AtomicInteger();
 
-        mentorOne =  Mentor.builder()
-                .id(1L)
-                .imageUrl("profile.png")
-                .provider(Provider.valueOf("GOOGLE"))
-                .email("progrers33@gmail.com")
-                .refreshToken("redididkeeeeegg")
-                .requiredInfo(new RequiredInfo("김주승", "주승멘토", "01022332375", Role.ROLE_MENTOR))
-                .experiencedPositions(Set.of("FRONT"))
-                .careerContent("금융회사 다님")
-                .careerYear(3)
-                .build();
-
-        mentorTwo =  Mentor.builder()
-                .id(2L)
-                .imageUrl("profile.png")
-                .provider(Provider.valueOf("GOOGLE"))
-                .email("mentor222@gmail.com")
-                .refreshToken("redididkeeeeegg")
-                .requiredInfo(new RequiredInfo("김기안", "기안멘토", "01022632375", Role.ROLE_MENTOR))
-                .experiencedPositions(Set.of("FRONT"))
-                .careerContent("유통회사 다님")
-                .careerYear(5)
-                .build();
-
-        EventInfo openEvent = EventInfo.book(3, "제목", "내용");
-        EventTimeInfo eventTimeInfo = EventTimeInfo.book(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), LocalDateTime.now().plusHours(2L), LocalDateTime.now().plusHours(4L));
-        eventOne = new Event(openEvent, eventTimeInfo, 1L, List.of());
-        eventTwo = new Event(openEvent, eventTimeInfo, 2L, List.of());
     }
 
     @Test
@@ -113,7 +81,6 @@ class MenteeToEventServiceTest {
         Event event = new Event(openEvent, eventTimeInfo, 1L, List.of());
 
         given(eventRepository.findWithLockById(1L)).willReturn(Optional.of(event));
-        given(menteeToEventRepository.findByMenteeId(1L)).willReturn(List.of(new MenteeToEvent(event, 1L, 1L)));
 
         // when
         for (int i = 0; i < executeCount; i++) {

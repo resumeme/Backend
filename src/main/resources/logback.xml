@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="FILE_MAIL_PATTERN" value="%d{yy-MM-dd HH:mm:ss} - %msg"/>
+
+    <appender name="failMailSender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/failMail.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/failMail-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_MAIL_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.devcourse.resumeme.business.mail.service" level="error" additivity="false">
+        <appender-ref ref="failMailSender"/>
+    </logger>
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative]  %clr(%-5level) %clr(${PID:-}){magenta} %clr(---){faint} %clr([%15.15thread]){faint} %clr(%-40.40logger{36}){cyan} %clr(:){faint} %msg%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <root level="info">
+        <!--     참조할 appender 설정 - STDOUT -->
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
