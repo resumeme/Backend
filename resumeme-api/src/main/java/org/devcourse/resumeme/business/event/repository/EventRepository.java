@@ -29,7 +29,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Page<Event> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-    @Modifying
+    /*@Modifying
     @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.openDateTime <= :now and e.eventInfo.status = 'READY'")
     void openBookedEvent(@Param("status") EventStatus status, @Param("now")LocalDateTime now);
 
@@ -39,6 +39,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Modifying
     @Query("update Event e set e.eventInfo.status = :status where e.eventTimeInfo.endDate <= :now and e.eventInfo.status = 'CLOSE'")
-    void finishEvent(@Param("status") EventStatus status, @Param("now")LocalDateTime now);
+    void finishEvent(@Param("status") EventStatus status, @Param("now")LocalDateTime now);*/
 
 }

@@ -1,1 +1,6 @@
 rootProject.name = 'resumeme'
+
+include(
+        "resumeme-api",
+        "resumeme-alarm:mail"
+)

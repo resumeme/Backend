@@ -4,8 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-src/main/resources/static/docs/**
-src/main/generated/**
+resumeme-api/src/main/resources/static/docs/**
+resumeme-api/src/main/generated/**
 logs/*
 
 ### STS ###
