@@ -1,5 +1,6 @@
 rootProject.name = 'resumeme'
 
 include(
-        "resumeme-api"
+        "resumeme-api",
+        "resumeme-alarm:mail"
 )
