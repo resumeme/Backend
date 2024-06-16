@@ -1,12 +1,11 @@
 package org.devcourse.resumeme.business.event.domain;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.event.exception.EventException;
 
-import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 import static org.devcourse.resumeme.common.util.Validator.Condition.isBlank;
 import static org.devcourse.resumeme.common.util.Validator.check;
@@ -31,7 +30,7 @@ public class EventInfo {
     private String content;
 
     @Getter
-    @Enumerated(STRING)
+    @Transient
     private EventStatus status;
 
     private EventInfo(int maximumAttendee, String title, String content, EventStatus status) {

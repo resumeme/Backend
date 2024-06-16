@@ -20,12 +20,13 @@ public class EventScheduler {
 
     private final EventRepository eventRepository;
 
+    // 삭제 예정
     @Scheduled(cron = "0 0/1 * * * *")
     public void openBookedEvents() {
-        log.info("scheduler 실행 됨");
-        eventRepository.openBookedEvent(EventStatus.OPEN, LocalDateTime.now());
-        eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
-        eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
+//        log.info("scheduler 실행 됨");
+//        eventRepository.openBookedEvent(EventStatus.OPEN, LocalDateTime.now());
+//        eventRepository.closeApplyToEvent(EventStatus.CLOSE, LocalDateTime.now());
+//        eventRepository.finishEvent(EventStatus.FINISH, LocalDateTime.now());
     }
 
 }

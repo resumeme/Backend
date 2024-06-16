@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.devcourse.resumeme.business.event.exception.EventException;
@@ -64,6 +65,16 @@ public class Event extends BaseEntity implements Comparable<Event> {
         this.eventTimeInfo = eventTimeInfo;
         this.mentorId = mentorId;
         this.positions = getPositions(positions);
+    }
+
+    @PostLoad
+    public void load() {
+        /**
+         * if openDate이 currentDate보다 늦으면
+         *      status = READY
+         * else
+         *      status = OPEN or CLOSE or FINISH
+         */
     }
 
     private List<EventPosition> getPositions(List<Position> positions) {
